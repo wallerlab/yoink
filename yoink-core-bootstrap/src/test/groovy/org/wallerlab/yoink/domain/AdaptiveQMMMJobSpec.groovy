@@ -46,6 +46,6 @@ class AdaptiveQMMMJobSpec extends Specification{
 		job.getMolecularSystem()==ms
 		job.getParameters()==parameters
 		job.getProperties()==properties
-		job.getRegions()==egions //removed the r to test build failure
+		job.getRegions()==regions
 	}
 }
