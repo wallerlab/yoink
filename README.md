@@ -51,29 +51,29 @@ After it starts, it will keep looking for *.xml files in the input folder and ex
 
 
 # Examples
-* 1. after gradle build is finished, go to folder "examples"
+1. after gradle build is finished, go to folder "examples"
 
-        `cd examples `
+ `cd examples `
 
-* 2.  copy the executable jar file "build/libs/Yoink-{version}.jar" to current folder
+2.  copy the executable jar file "build/libs/Yoink-{version}.jar" to current folder
 
-         ` cp  ../build/libs/Yoink-{version}.jar ./ `
+ ` cp  ../build/libs/Yoink-{version}.jar ./ `
 
-* 3. make a new folder called "inputs"
+3. make a new folder called "inputs"
 
-        ` mkdir inputs `
+ ` mkdir inputs `
 
-* 4. copy example input xml files in "src/main/resources" to new built folder "./inputs"
+4. copy example input xml files in "src/main/resources" to new built folder "./inputs"
 
-       `copy ../src/main/resources/* ./inputs`
+ ` copy ../src/main/resources/* ./inputs`
 
-* 5. make a new folder called "outputs"
+5. make a new folder called "outputs"
 
-       ` mkdir outputs`
+ ` mkdir outputs`
 
-* 6. run examples
+6. run examples
 
-       ` java -jar Yoink-{version}.jar`
+ ` java -jar Yoink-{version}.jar`
 
 
 # Features
@@ -91,10 +91,10 @@ Its main feature is to do density based adaptive QM/MM partitioning. Also distan
 ### -	Smoothing methods
  Methods to alleviate the discontinuity problem:
 
-| Adaptive    | Citation           | 
-| -------------   |-------------|
-| Buffered Force      | Bernstein, Noam, et al. "QM/MM simulation of liquid water with an adaptive quantum region." Physical Chemistry Chemical Physics 14.2 (2012): 646-656. | 
-| Difference-Based Adaptive Soltuion      | Bulo, Rosa E., et al. "Toward a practical method for adaptive QM/MM simulations." Journal of Chemical Theory and Computation 5.9 (2009): 2212-2221.|
+| Adaptive | Citation |
+| ------------- |-------------|
+| Buffered Force | Bernstein, Noam, et al. "QM/MM simulation of liquid water with an adaptive quantum region." Physical Chemistry Chemical Physics 14.2 (2012): 646-656. |
+| Difference-Based Adaptive Soltuion | Bulo, Rosa E., et al. "Toward a practical method for adaptive QM/MM simulations." Journal of Chemical Theory and Computation 5.9 (2009): 2212-2221.|
 
 
 # Structure
@@ -114,29 +114,10 @@ Subprojects in total:
 
 # Sequence Diagram
 
-
-
-
-
-
-
-![yoink.png](https://bitbucket.org/repo/G4rz4B/images/242560611-yoink.png)
-
-
-
-
-
-
-
-
-
+![yoink.png](https://github.com/wallerlab/yoink/blob/master/yoink-sequence.png)
 
 
 ### -	Regionizer zoom-in
 
 
-
-
-
-
-![regionizer.png](https://bitbucket.org/repo/G4rz4B/images/4043167164-regionizer.png)
+![regionizer.png](https://github.com/wallerlab/yoink/blob/master/regionizer.png)
