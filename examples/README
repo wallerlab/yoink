@@ -1,0 +1,8 @@
+1. After gradle build is finished, copy the executable jar file "build/libs/Yoink-{version}.jar" to this folder
+    cp  ../build/libs/Yoink-{version}.jar ./
+2. Make a new folder called "inputs"
+	mkdir inputs
+3. copy example input xml files in src/main/resources to new built folder ./inputs
+	cp ../src/main/resources/* ./inputs
+3. run examples
+  	java -jar Yoink-{version}.jar

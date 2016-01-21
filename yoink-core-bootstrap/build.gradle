@@ -1,0 +1,15 @@
+apply plugin: 'spring-boot'
+
+buildscript {
+	repositories {
+		jcenter()
+		mavenCentral()
+	}
+
+	dependencies { classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.7.RELEASE") }
+}
+
+
+dependencies { compile("org.springframework.boot:spring-boot-starter-batch") }
+
+configurations { all*.exclude module : 'spring-boot-starter-logging' }

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<cml xmlns="http://www.xml-cml.org/schema">
+	<moleculeList>
+		<molecule id="QM_CORE_FIXED">
+			<atomArray>
+				<atom id="a1" elementType="C" x3="0.0" y3="0.0" z3="0.0" />
+			</atomArray>
+
+		</molecule>
+
+	</moleculeList>
+	<parameterList title="cube">
+		<parameter id="1" name="property" />
+	</parameterList>
+	<parameterList title="thresholds">
+		<parameter value="1" name="distancethreshold" />
+		<parameter value="2" name="densitythreshold" />
+		<parameter value="3" name="numberthreshold" />
+	</parameterList>
+</cml>

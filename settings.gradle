@@ -1,0 +1,1 @@
+include "yoink-core-molecular","yoink-core-math","yoink-core-density","yoink-core-cube","yoink-core-adaptive","yoink-core-regionizer","yoink-core-bootstrap","yoink-core-api","yoink-core-adaptiveProcessor"

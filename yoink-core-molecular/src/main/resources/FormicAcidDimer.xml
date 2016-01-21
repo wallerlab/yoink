@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<cml xmlns="http://www.xml-cml.org/schema">
+	<molecule id="formicAcidDimer.out">
+		<atomArray>
+			<atom id="a1" elementType="C" x3="-1.934800" y3="-0.205600" z3="0.000000" />
+			<atom id="a2" elementType="O" x3="-1.478500" y3="1.047000" z3="0.000000" />
+			<atom id="a3" elementType="O" x3="-1.191300" y3="-1.179500" z3="0.000000" />
+			<atom id="a4" elementType="H" x3="-3.027800" y3="-0.228500" z3="0.000000" />
+			<atom id="a5" elementType="H" x3="-0.430600" y3="1.137700" z3="0.000000" />
+		</atomArray>
+		<bondArray>
+			<bond atomRefs2="a1 a2" order="1" />
+			<bond atomRefs2="a1 a3" order="2" />
+			<bond atomRefs2="a1 a4" order="1" />
+			<bond atomRefs2="a2 a5" order="1" />
+		</bondArray>
+	</molecule>
+	<molecule id="formicAcidDimer.out">
+		<atomArray>
+			<atom id="a1" elementType="C" x3="1.934800" y3="-0.205600" z3="0.000000" />
+			<atom id="a2" elementType="O" x3="1.478500" y3="1.047000" z3="0.000000" />
+			<atom id="a3" elementType="O" x3="1.191300" y3="-1.179500" z3="0.000000" />
+			<atom id="a4" elementType="H" x3="3.027800" y3="-0.228500" z3="0.000000" />
+			<atom id="a5" elementType="H" x3="0.430600" y3="1.137700" z3="0.000000" />
+		</atomArray>
+		<bondArray>
+			<bond atomRefs2="a1 a2" order="1" />
+			<bond atomRefs2="a1 a3" order="2" />
+			<bond atomRefs2="a1 a4" order="1" />
+			<bond atomRefs2="a2 a5" order="1" />
+		</bondArray>
+	</molecule>
+</cml>
