@@ -40,7 +40,11 @@ class PropertyWrapperSpec extends Specification{
 		properties.containsKey("weightfactors")>>(boolean)false
 		properties.containsKey("smoothfactors")>>(boolean)false
 		job.getProperties()>>properties
-
+		def regions=Mock(Map)
+		def region=Mock(Region)
+		region.getMolecules()>>[Mock(Molecule)]
+		regions.get(_)>>region
+		job.getRegions()>>regions
 		when:"make a new PropertyWrapper"
 		def wrapper=new PropertyWrapper()
 		then:"call method wrap, no error thrown"

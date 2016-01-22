@@ -65,6 +65,7 @@ public class PropertyWrapper implements Wrapper<Job<JAXBElement>> {
 		Map<JobParameter, Object> parameters = job.getParameters();
 		Map<String, Object> properties = job.getProperties();
 		changeMoleculeId(job, cmlElement);
+		putPartitioningResultInProperty(job, cmlElement, parameters, properties);
 		putSmoothingResultInProperty(job, cmlElement, parameters, properties);
 	}
 
@@ -98,17 +99,39 @@ public class PropertyWrapper implements Wrapper<Job<JAXBElement>> {
 		}
 	}
 
+	
+	private void putPartitioningResultInProperty(Job<JAXBElement> job,
+			JAXBElement<Cml> cmlElement, Map<JobParameter, Object> parameters,
+			Map<String, Object> properties) {
+		ObjectFactory objectFactory = new ObjectFactory();
+		PropertyList propertyList = objectFactory.createPropertyList();
+		propertyList.setTitle("Partitioning result  : ");
+		Property property = wrapPartitionResult(job, properties, objectFactory,
+				propertyList);
+		JAXBElement propertyListJAXB = objectFactory
+				.createPropertyList(propertyList);
+		cmlElement.getValue().getAnyCmlOrAnyOrAny().add(propertyListJAXB);
+	}
+	
+	private Property wrapPartitionResult(Job<JAXBElement> job,
+			Map<String, Object> properties, ObjectFactory objectFactory,
+			PropertyList propertyList) {
+		Property property = objectFactory.createProperty();
+		property.setTitle("QM and Buffer molecular indices");
+		loopOverQMAndBufferRegions(job, objectFactory, propertyList, property);	
+		propertyList.getAnyCmlOrAnyOrAny().add(property);
+		return property;
+	}
+	
 	private void putSmoothingResultInProperty(Job<JAXBElement> job,
 			JAXBElement<Cml> cmlElement, Map<JobParameter, Object> parameters,
 			Map<String, Object> properties) {
 		ObjectFactory objectFactory = new ObjectFactory();
 		PropertyList propertyList = objectFactory.createPropertyList();
-		propertyList.setTitle("for buffer region  :");
+		propertyList.setTitle("Smoothing result  :");
 		Property property = wrapSmoothResult(job, properties, objectFactory,
 				propertyList);
-
 		wrapForceAndEnergy(properties, objectFactory, propertyList, property);
-
 		JAXBElement propertyListJAXB = objectFactory
 				.createPropertyList(propertyList);
 		cmlElement.getValue().getAnyCmlOrAnyOrAny().add(propertyListJAXB);
@@ -118,11 +141,10 @@ public class PropertyWrapper implements Wrapper<Job<JAXBElement>> {
 			Map<String, Object> properties, ObjectFactory objectFactory,
 			PropertyList propertyList) {
 		Property property = objectFactory.createProperty();
-		property.setTitle("smooth");
+		property.setTitle("weight and smooth factors ");
 		loopOverAllWeightConfigurations(properties, objectFactory,
 				propertyList, property);
 		loopOverBufferMolecules(job, objectFactory, propertyList, property);
-
 		propertyList.getAnyCmlOrAnyOrAny().add(property);
 		return property;
 	}
@@ -202,7 +224,6 @@ public class PropertyWrapper implements Wrapper<Job<JAXBElement>> {
 					putEveryMoleculeSmoothFactorInScalar(objectFactory,
 							property, bufferIndices.get(counter),
 							smoothFactors.get(counter));
-
 				}
 
 				propertyList.setTitle(propertyList.getTitle()
@@ -211,6 +232,28 @@ public class PropertyWrapper implements Wrapper<Job<JAXBElement>> {
 		}
 	}
 
+	private void loopOverQMAndBufferRegions(Job<JAXBElement> job,
+			ObjectFactory objectFactory, PropertyList propertyList,
+			Property property) {
+		List<Region.Name> regions= new ArrayList<Region.Name>();
+		regions.add(Region.Name.QM);
+		regions.add(Region.Name.BUFFER);	
+		for(Region.Name region:regions){
+			if (job.getRegions().containsKey(region)) {
+				Set<Molecule> molecules = job.getRegions()
+						.get(region).getMolecules();
+				List<Integer> indices = new ArrayList<Integer>();
+				for (Molecule molecule : molecules) {
+					indices.add(molecule.getIndex());
+				}        
+				Scalar scalar = objectFactory.createScalar();
+				scalar.setDataType(region.toString()+" molecules");
+				scalar.setValue(String.valueOf(indices));		
+				property.getAnyCmlOrAnyOrAny().add(scalar);								
+			}
+		}	
+		}
+	
 	private void putEveryMoleculeSmoothFactorInScalar(
 			ObjectFactory objectFactory, Property property,
 			Integer bufferIndex, Double smoothFactor) {
