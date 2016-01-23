@@ -8,9 +8,9 @@
 #Quickstart
 
 ###1. Cloning
-To obtain a copy of the source code, please enter the following [Mercurial](https://mercurial.selenic.com/) command:
+To obtain a copy of the source code, please enter the following [git](https://git-scm.com/) command:
 
- `hg clone https://bitbucket.org/zhengmin317/yoink-multi`
+ `git clone https://bitbucket.org/zhengmin317/yoink-multi`
 
 ` cd yoink-multi`
 
