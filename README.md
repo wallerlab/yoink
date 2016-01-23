@@ -12,7 +12,7 @@ To obtain a copy of the source code, please enter the following [git](https://gi
 
  `git clone https://bitbucket.org/zhengmin317/yoink-multi`
 
-` cd yoink-multi`
+` cd yoink`
 
 ###2. Building
 In order to build the yoink program please use the following [gradle ](https://gradle.org/) command:
