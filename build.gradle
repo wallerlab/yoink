@@ -11,20 +11,20 @@ allprojects {
 			attributes 'Implementation-Title': 'adaptive qm/mm partitioning','Gradle Quickstart', 'Implementation-Version': version,'Main-Class':'org.wallerlab.yoink.Yoink'
 		}
 	}
-	
+
 	/*jar {
-		manifest {
-			attributes 'Implementation-Title': 'adaptive qm/mm partitioning','Gradle Quickstart', 'Implementation-Version': version,'Main-Class':'org.wallerlab.yoink.Yoink'
-		}
-		from{
-			configurations.compile.collect{
-				it.isDirectory() ? it:zipTree(it)
-			}
-			configurations.runtime.collect{
-				it.isDirectory() ? it:zipTree(it)
-			}
-		}
-	}*/
+	 manifest {
+	 attributes 'Implementation-Title': 'adaptive qm/mm partitioning','Gradle Quickstart', 'Implementation-Version': version,'Main-Class':'org.wallerlab.yoink.Yoink'
+	 }
+	 from{
+	 configurations.compile.collect{
+	 it.isDirectory() ? it:zipTree(it)
+	 }
+	 configurations.runtime.collect{
+	 it.isDirectory() ? it:zipTree(it)
+	 }
+	 }
+	 }*/
 	jar.doFirst{
 		sourceSets.main.java.srcDirs.each { from it }
 	}
@@ -54,7 +54,7 @@ allprojects {
 	}
 }
 
-test { systemProperties 'property': 'value' }
+test { systemProperties 'property': 'value'  }
 
 project(':yoink-core-api'){ dependencies{  } }
 
@@ -174,7 +174,8 @@ task allJar(type: Jar, dependsOn: subprojects.assemble) {
 		from subproject.configurations.archives.allArtifacts.files.collect { zipTree(it) }
 	}
 }
-artifacts { archives allJar }
+
+artifacts { archives allJar  }
 
 //generate one java docs for multi projects
 //command-line type: ./gradlew alljavadoc
@@ -194,4 +195,46 @@ task alljavadoc(type: Javadoc) {
 	source exportedProjects.collect { project(it).sourceSets.main.allJava }
 	classpath = files(exportedProjects.collect { project(it).sourceSets.main.compileClasspath })
 	destinationDir = file("${buildDir}/docs/javadoc")
+
 }
+
+task executeExamples << {
+	buildDir="./examples"
+	def jarName="Yoink"+"-"+version+".jar";
+	print "jar name :"
+	println  jarName
+	def proc= "rm -rf ./inputs".execute();
+	proc.waitFor()
+	proc =  "cp -r ./src/main/resources ./inputs".execute();
+	proc.waitFor()
+	proc= "rm -rf ./outputs".execute();
+	proc.waitFor()
+	proc =  "mkdir ./outputs".execute();
+	proc.waitFor()
+	proc = "cp ./build/libs/$jarName ./".execute();
+	proc.waitFor();
+	proc = "cp ./yoink-core-bootstrap/src/main/resources/application.properties ./".execute();
+	proc.waitFor();
+	def command= "java -jar $jarName"
+	print "command: $command "
+	proc = "java -jar $jarName".execute();
+	println " after java -jar"
+	Thread.sleep(100000)
+	def files_in = []
+	fileTree("./inputs").visit { FileVisitDetails details ->
+		files_in << details.file.path
+	}
+	def files_in_size=files_in.size()
+	println "files_in_size:   $files_in_size"
+	if(files_in_size==0){
+		println " pass test examples"
+		delete fileTree('./outputs')
+	}
+	else
+	{
+		throw new GradleException('error occurred in running examples')
+	}
+}
+
+build.finalizedBy(executeExamples)
+
