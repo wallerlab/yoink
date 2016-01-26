@@ -26,5 +26,5 @@ package org.wallerlab.yoink.api.service.molecular;
  */
 public interface FilesWriter<T> {
 
-	public void write(String fileName, T t);
+	void write(String fileName, T t);
 }

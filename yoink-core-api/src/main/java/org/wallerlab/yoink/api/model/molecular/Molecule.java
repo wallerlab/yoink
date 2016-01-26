@@ -33,7 +33,7 @@ public interface Molecule {
 	 * @return name, -
 	 *         {@link org.wallerlab.yoink.api.model.regionizer.Region.Name}
 	 */
-	public abstract Region.Name getName();
+	Region.Name getName();
 
 	/**
 	 * set the name of molecule.
@@ -42,7 +42,7 @@ public interface Molecule {
 	 *            -indicates which the molecule is in,
 	 *            {@link org.wallerlab.yoink.api.model.regionizer.Region.Name}
 	 */
-	public abstract void setName(Region.Name name);
+	void setName(Region.Name name);
 
 	/**
 	 * get all atoms in the molecule
@@ -50,14 +50,14 @@ public interface Molecule {
 	 * @return a List of atoms,
 	 *         {@link org.wallerlab.yoink.api.model.molecular.Atom}
 	 */
-	public abstract List<Atom> getAtoms();
+	List<Atom> getAtoms();
 
 	/**
 	 * get the index of molecule in the molecular system
 	 * 
 	 * @return molecular index, {@link java.lang.Integer}
 	 */
-	public abstract int getIndex();
+	int getIndex();
 
 	/**
 	 * get the center of mass of this molecule.
@@ -65,7 +65,7 @@ public interface Molecule {
 	 * @return center of mass, -
 	 *         {@link org.wallerlab.yoink.api.model.molecular.Coord}
 	 */
-	public abstract Coord getCenterOfMass();
+	 Coord getCenterOfMass();
 
 	/**
 	 * set the center of mass of this molecule.
@@ -73,6 +73,6 @@ public interface Molecule {
 	 * @param centerOfMass
 	 *            - {@link org.wallerlab.yoink.api.model.molecular.Coord}
 	 */
-	public abstract void setCenterOfMass(Coord centerOfMass);
+	 void setCenterOfMass(Coord centerOfMass);
 
 }

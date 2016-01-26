@@ -79,7 +79,6 @@ public class AdaptiveQMMMJob implements Job<JAXBElement> {
 
 	@Override
 	public JAXBElement<Cml> getInput() {
-
 		return this.input;
 	}
 
@@ -91,12 +90,10 @@ public class AdaptiveQMMMJob implements Job<JAXBElement> {
 	@Override
 	public Map<String, Object> getProperties() {
 		return this.properties;
-
 	}
 
 	@Override
 	public void setProperties(Map<String, Object> properties) {
 		this.properties = properties;
-
 	}
 }

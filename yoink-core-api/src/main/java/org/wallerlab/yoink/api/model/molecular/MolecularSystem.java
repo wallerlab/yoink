@@ -31,7 +31,7 @@ public interface MolecularSystem {
 	 * @return a list of atoms, -
 	 *         {@link org.wallerlab.yoink.api.model.molecular.Atom}
 	 */
-	public abstract List<Atom> getAtoms();
+	List<Atom> getAtoms();
 
 	/**
 	 * get all molecules in the molecular system
@@ -39,6 +39,6 @@ public interface MolecularSystem {
 	 * @return a lsit of molecules, -
 	 *         {@link org.wallerlab.yoink.api.model.molecular.Molecule}
 	 */
-	public abstract List<Molecule> getMolecules();
+	 List<Molecule> getMolecules();
 
 }

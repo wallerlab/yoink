@@ -35,7 +35,7 @@ public interface Job<T> {
 	 * @return molecularSystem -
 	 *         {@link org.wallerlab.yoink.api.model.molecular.MolecularSystem }
 	 */
-	public abstract MolecularSystem getMolecularSystem();
+	MolecularSystem getMolecularSystem();
 
 	/**
 	 * set the value of molecular system
@@ -44,7 +44,7 @@ public interface Job<T> {
 	 *            -
 	 *            {@link org.wallerlab.yoink.api.model.molecular.MolecularSystem }
 	 */
-	public abstract void setMolecularSystem(MolecularSystem molecularSystem);
+	void setMolecularSystem(MolecularSystem molecularSystem);
 
 	/**
 	 * get the parameters during the job
@@ -53,7 +53,7 @@ public interface Job<T> {
 	 *         {@link org.wallerlab.yoink.api.model.bootstrap.JobParameter} as
 	 *         key, Object as value
 	 */
-	public abstract Map<JobParameter, Object> getParameters();
+	Map<JobParameter, Object> getParameters();
 
 	/**
 	 * set the value of parameters
@@ -63,7 +63,7 @@ public interface Job<T> {
 	 *            {@link org.wallerlab.yoink.api.model.bootstrap.JobParameter}
 	 *            as key, Object as value
 	 */
-	public abstract void setParameters(Map<JobParameter, Object> parameters);
+	void setParameters(Map<JobParameter, Object> parameters);
 
 	/**
 	 * get the value of regions in the job
@@ -74,7 +74,7 @@ public interface Job<T> {
 	 *         value.
 	 * 
 	 */
-	public abstract Map<Region.Name, Region> getRegions();
+	 Map<Region.Name, Region> getRegions();
 
 	/**
 	 * set the value of regions in the job
@@ -85,14 +85,14 @@ public interface Job<T> {
 	 *            as key,{@link org.wallerlab.yoink.api.model.regionizer.Region}
 	 *            as value.
 	 */
-	public abstract void setRegions(Map<Region.Name, Region> regions);
+	void setRegions(Map<Region.Name, Region> regions);
 
 	/**
 	 * get the value of input in the job
 	 * 
 	 * @return the specified type input
 	 */
-	public abstract T getInput();
+	T getInput();
 
 	/**
 	 * set the value of input in the job
@@ -101,7 +101,7 @@ public interface Job<T> {
 	 *            , the input to start a job. eg. it can be a file ,or
 	 *            JAXBElement from a Cml file
 	 */
-	public abstract void setInput(T input);
+	 void setInput(T input);
 
 	/**
 	 * get the value of properties in the job.
@@ -109,7 +109,7 @@ public interface Job<T> {
 	 * @return a Map contains the result of job. - {@link java.lang.String} as
 	 *         key, {@link java.lang.Object} as value.
 	 */
-	public abstract Map<String, Object> getProperties();
+	Map<String, Object> getProperties();
 
 	/**
 	 * set the value of properties in the job.
@@ -118,6 +118,6 @@ public interface Job<T> {
 	 *            , a Map contains the result of job. - {@link java.lang.String}
 	 *            as key, {@link java.lang.Object} as value.
 	 */
-	public abstract void setProperties(Map<String, Object> properties);
+	void setProperties(Map<String, Object> properties);
 
 }

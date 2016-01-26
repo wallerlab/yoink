@@ -36,58 +36,55 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * this class is configuration for spring batch
- * 
- * @author Min Zheng
  *
+ * @author Min Zheng
  */
 @Configuration
 @EnableBatchProcessing
 @EnableTransactionManagement
 public class BatchConfig {
 
-	/**
-	 * build whole job
-	 * 
-	 * @param jobs
-	 *            -
-	 *            {@link org.springframework.batch.core.configuration.annotation.JobBuilderFactory}
-	 * @param s1
-	 *            -{@link org.springframework.batch.core.Step}
-	 * @return Job -{@link org.springframework.batch.core.Job}
-	 */
-	@Bean
-	public org.springframework.batch.core.Job importJob(JobBuilderFactory jobs,
-			Step s1) {
-		return jobs.get("importYoinkJob").incrementer(new RunIdIncrementer())
-				.flow(s1).end().build();
-	}
+    /**
+     * build whole job
+     *
+     * @param jobs -
+     *             {@link org.springframework.batch.core.configuration.annotation.JobBuilderFactory}
+     * @param s1   -{@link org.springframework.batch.core.Step}
+     * @return Job -{@link org.springframework.batch.core.Job}
+     */
+    @Bean
+    public org.springframework.batch.core.Job importJob(JobBuilderFactory jobs,
+                                                        Step s1) {
+        return jobs.get("importYoinkJob")
+                .incrementer(new RunIdIncrementer())
+                .flow(s1)
+                .end()
+                .build();
+    }
 
-	/**
-	 * build executing steps
-	 * 
-	 * @param stepBuilderFactory
-	 *            -
-	 *            {@link org.springframework.batch.core.configuration.annotation.StepBuilderFactory}
-	 * @param cmlFilesRequest
-	 *            -{@link org.springframework.batch.item.ItemReader}
-	 * @param adaptiveQMMMProcessor
-	 *            -{@link org.springframework.batch.item.ItemProcessor}
-	 * @param cmlFilesResponse
-	 *            -{@link org.springframework.batch.item.ItemWriter}
-	 * @return Step -{@link org.springframework.batch.core.Step}
-	 */
-	@Bean
-	public Step step1(
-			StepBuilderFactory stepBuilderFactory,
-			ItemReader<List<File>> cmlFilesRequest,
-			ItemProcessor<List<File>, List<org.wallerlab.yoink.api.model.bootstrap.Job>> adaptiveQMMMProcessor,
-			ItemWriter<List<org.wallerlab.yoink.api.model.bootstrap.Job>> cmlFilesResponse) {
-		return stepBuilderFactory
-				.get("adaptiveQMMM")
-				.<List<File>, List<org.wallerlab.yoink.api.model.bootstrap.Job>> chunk(
-						1).reader(cmlFilesRequest)
-				.processor(adaptiveQMMMProcessor).writer(cmlFilesResponse)
-				.build();
-	}
+    /**
+     * build executing steps
+     *
+     * @param stepBuilderFactory    -
+     *                              {@link org.springframework.batch.core.configuration.annotation.StepBuilderFactory}
+     * @param cmlFilesRequest       -{@link org.springframework.batch.item.ItemReader}
+     * @param adaptiveQMMMProcessor -{@link org.springframework.batch.item.ItemProcessor}
+     * @param cmlFilesResponse      -{@link org.springframework.batch.item.ItemWriter}
+     * @return Step -{@link org.springframework.batch.core.Step}
+     */
+    @Bean
+    public Step step1(
+            StepBuilderFactory stepBuilderFactory,
+            ItemReader<List<File>> cmlFilesRequest,
+            ItemProcessor<List<File>, List<org.wallerlab.yoink.api.model.bootstrap.Job>> adaptiveQMMMProcessor,
+            ItemWriter<List<org.wallerlab.yoink.api.model.bootstrap.Job>> cmlFilesResponse) {
+        return stepBuilderFactory
+                .get("adaptiveQMMM")
+                .<List<File>, List<org.wallerlab.yoink.api.model.bootstrap.Job>>chunk(1)
+                .reader(cmlFilesRequest)
+                .processor(adaptiveQMMMProcessor)
+                .writer(cmlFilesResponse)
+                .build();
+    }
 
 }

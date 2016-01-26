@@ -41,7 +41,7 @@ public interface GridPoint<String, V> {
 	 * @param v
 	 *            :Object, the value of property
 	 */
-	public abstract void addProperty(String k, V v);
+	void addProperty(String k, V v);
 
 	/**
 	 * get one element's value in properties by key K
@@ -50,14 +50,14 @@ public interface GridPoint<String, V> {
 	 *            {@link java.lang.String}
 	 * @return V :Object, the value of property
 	 */
-	public abstract V getProperty(String k);
+	V getProperty(String k);
 
 	/**
 	 * get the value of coordinate
 	 * 
 	 * @return Coord {@link org.wallerlab.yoink.api.model.molecular.Coord}
 	 */
-	public abstract Coord getCoordinate();
+	Coord getCoordinate();
 
 	/**
 	 * set the coordinate of a grid point
@@ -65,14 +65,14 @@ public interface GridPoint<String, V> {
 	 * @param coordinate
 	 *            {@link org.wallerlab.yoink.api.model.molecular.Coord}
 	 */
-	public abstract void setCoordinate(Coord coordinate);
+	void setCoordinate(Coord coordinate);
 
 	/**
 	 * get the value of properties
 	 * 
 	 * @return properties : {@link java.util.Map}, the key is a String
 	 */
-	public abstract Map<String, V> getProperties();
+	Map<String, V> getProperties();
 
 	/**
 	 * set the value of properties
@@ -81,14 +81,14 @@ public interface GridPoint<String, V> {
 	 *            : {@link java.util.Map}, the key is a String
 	 *
 	 */
-	public abstract void setProperties(Map<String, V> properties);
+	void setProperties(Map<String, V> properties);
 
 	/**
 	 * get the index of a grid point in cube
 	 * 
 	 * @return int
 	 */
-	public abstract int getIndexInCube();
+	int getIndexInCube();
 
 	/**
 	 * set the index of a grid point in cube
@@ -96,7 +96,7 @@ public interface GridPoint<String, V> {
 	 * @param indexInCube
 	 *            , {@link java.lang.Integer}
 	 */
-	public abstract void setIndexInCube(int indexInCube);
+	 void setIndexInCube(int indexInCube);
 
 	/**
 	 * get two closest atoms in properties
@@ -104,7 +104,7 @@ public interface GridPoint<String, V> {
 	 * @return a Set {@link java.util.Set} of Atoms
 	 *         {@link org.wallerlab.yoink.api.model.molecular.Atom}
 	 */
-	public abstract Set<Atom> getTwoClosestAtoms();
+	 Set<Atom> getTwoClosestAtoms();
 
 	/**
 	 * get two closest molecules in properties
@@ -112,7 +112,7 @@ public interface GridPoint<String, V> {
 	 * @return a Set {@link java.util.Set} of Molecules
 	 *         {@link org.wallerlab.yoink.api.model.molecular.Molecule}
 	 */
-	public abstract Set<Molecule> getTwoClosestMolecules();
+	Set<Molecule> getTwoClosestMolecules();
 
 	/**
 	 * get atoms of two closest molecules of a grid point
@@ -120,6 +120,6 @@ public interface GridPoint<String, V> {
 	 * @return a Set {@link java.util.Set} of Atoms
 	 *         {@link org.wallerlab.yoink.api.model.molecular.Atom}
 	 */
-	public abstract Set<Atom> getAtomsInTwoClosestMolecules();
+	 Set<Atom> getAtomsInTwoClosestMolecules();
 
 }

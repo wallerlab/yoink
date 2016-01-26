@@ -29,5 +29,5 @@ public interface CubeBuilder<T> {
 	 *            a Set of molecules, {@link org.wallerlab.yoink.api.model.molecular.Molecule}
 	 * @return cube {@link org.wallerlab.yoink.api.model.cube.Cube}
 	 */
-	public Cube build(double[] xyzStepSize, T t);
+	 Cube build(double[] xyzStepSize, T t);
 }

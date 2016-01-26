@@ -29,37 +29,37 @@ public interface Atom {
 	 * @return element of this atom, -
 	 *         {@link org.wallerlab.yoink.api.model.molecular.Element}
 	 */
-	public abstract Element getElementType();
+	Element getElementType();
 
 	/**
 	 * get the index of this atom in molecular system
 	 * 
 	 * @return atomic index in molecular system -{@link java.lang.Integer}
 	 */
-	public abstract int getIndex();
+	int getIndex();
 
 	/**
 	 * get the coordinate of this atom
 	 * @return {@link org.wallerlab.yoink.api.model.molecular.Coord}
 	 */
-	public abstract Coord getCoordinate();
+	Coord getCoordinate();
 
 	/**
 	 * get the x coordinate of this atom
 	 * @return {@link java.lang.Double}
 	 */
-	public abstract double getX3();
+	double getX3();
 
 	/**
 	 * get the y coordinate of this atom
 	 * @return {@link java.lang.Double}
 	 */
-	public abstract double getY3();
+	double getY3();
 
 	/**
 	 * get the z coordinate of this atom
 	 * @return {@link java.lang.Double}
 	 */
-	public abstract double getZ3();
+	double getZ3();
 
 }
