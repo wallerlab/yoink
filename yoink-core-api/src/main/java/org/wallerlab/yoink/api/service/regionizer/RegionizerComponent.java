@@ -47,6 +47,6 @@ public interface RegionizerComponent<T, K> {
 	 *            -specified argument
 	 * @return return type is specified T
 	 */
-	public T regionize(Map<Region.Name, Region> regions, K k);
+	 T regionize(Map<Region.Name, Region> regions, K k);
 
 }

@@ -48,7 +48,7 @@ public interface Region {
 	 * 
 	 * @return the number of molecules-Integer
 	 */
-	public abstract Integer getSize();
+	Integer getSize();
 
 	/**
 	 * get all molecules in the region
@@ -56,7 +56,7 @@ public interface Region {
 	 * @return a Set of Molecules -
 	 *         {@link org.wallerlab.yoink.api.model.molecular.Molecule}
 	 */
-	public abstract Set<Molecule> getMolecules();
+	 Set<Molecule> getMolecules();
 
 	/**
 	 * add one molecule into molecularMap
@@ -66,7 +66,7 @@ public interface Region {
 	 * @param index
 	 *            - the value
 	 */
-	public abstract void addMolecule(Molecule molecule, Integer index);
+	void addMolecule(Molecule molecule, Integer index);
 
 	/**
 	 * set the value of moleculeMap
@@ -74,7 +74,7 @@ public interface Region {
 	 * @param molecularMap
 	 *            - Molecule as key, Integer as value
 	 */
-	public abstract void setMolecularMap(Map<Molecule, Integer> molecularMap);
+	void setMolecularMap(Map<Molecule, Integer> molecularMap);
 
 	/**
 	 * get the value of molecularMap
@@ -82,14 +82,14 @@ public interface Region {
 	 * @return molecularMap,- {@link java.util.Map} Molecule as key, Integer as
 	 *         value
 	 */
-	public abstract Map<Molecule, Integer> getMolecularMap();
+	 Map<Molecule, Integer> getMolecularMap();
 
 	/**
 	 * get the name of the region
 	 * 
 	 * @return {@link org.wallerlab.yoink.api.model.regionizer.Region.Name}
 	 */
-	public abstract Name getName();
+	 Name getName();
 
 	/**
 	 * set the name of the region
@@ -97,7 +97,7 @@ public interface Region {
 	 * @param name
 	 *            {@link org.wallerlab.yoink.api.model.regionizer.Region.Name}
 	 */
-	public abstract void setName(Name name);
+	void setName(Name name);
 
 	/**
 	 * add a map into the region
@@ -105,7 +105,7 @@ public interface Region {
 	 * @param map
 	 *            - {@link java.util.Map} Molecule as key, Integer as value
 	 */
-	public abstract void addAll(Map<Molecule, Integer> map);
+	 void addAll(Map<Molecule, Integer> map);
 
 	/**
 	 * check if the regions contains all molecules
@@ -115,26 +115,26 @@ public interface Region {
 	 * @return boolean - if the regions contains all molecules, return true,or
 	 *         return false
 	 */
-	public abstract boolean containsAll(Set<Molecule> molecules);
+	boolean containsAll(Set<Molecule> molecules);
 
 	/**
 	 * Convenient method for getting atoms from a region
 	 * 
 	 * @return a List of atoms
 	 */
-	public abstract List<Atom> getAtoms();
+	 List<Atom> getAtoms();
 
 	/**
 	 * get the center of mass of this region
 	 * 
 	 * @return Coord - {@link org.wallerlab.yoink.api.model.molecular.Coord}
 	 */
-	public abstract Coord getCenterOfMass();
+	 Coord getCenterOfMass();
 
 	/**
 	 * set molecular name as same as region name
 	 */
-	public abstract void changeMolecularId();
+	 void changeMolecularId();
 
 	/**
 	 * change molecular name as the given name
@@ -143,7 +143,7 @@ public interface Region {
 	 *            -{@link org.wallerlab.yoink.api.model.regionizer.Region.Name}
 	 *
 	 */
-	public abstract void changeMolecularId(Name name);
+	void changeMolecularId(Name name);
 
 	/**
 	 * set the value of CenterOfMassComputer
@@ -152,7 +152,7 @@ public interface Region {
 	 *            - {@link org.wallerlab.yoink.api.service.Computer}
 	 *
 	 */
-	public abstract void setCenterOfMassComputer(
+	void setCenterOfMassComputer(
 			Computer<Coord, Set<Molecule>> centerOfMassComputer);
 
 }

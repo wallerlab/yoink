@@ -33,5 +33,5 @@ public interface Calculator<T, K, V> {
 	 * @param v -the parameter two, in type V
 	 * @return the return value in type T
 	 */
-	public T calculate(K k, V v);
+	T calculate(K k, V v);
 }

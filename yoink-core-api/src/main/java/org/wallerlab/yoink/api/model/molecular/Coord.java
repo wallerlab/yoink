@@ -30,7 +30,7 @@ public interface Coord {
 	 * 
 	 * @return {@link org.wallerlab.yoink.api.service.math.Vector}
 	 */
-	public abstract Vector getCoords();
+	Vector getCoords();
 
 	/**
 	 * set the value of coordinate
@@ -38,6 +38,6 @@ public interface Coord {
 	 * @param coords
 	 *            {@link org.wallerlab.yoink.api.service.math.Vector}
 	 */
-	public abstract void setCoords(Vector coords);
+	void setCoords(Vector coords);
 
 }

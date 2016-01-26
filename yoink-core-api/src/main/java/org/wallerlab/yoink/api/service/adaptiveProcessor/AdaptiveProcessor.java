@@ -19,6 +19,11 @@ public interface AdaptiveProcessor {
 	 * @param job  - {@link org.wallerlab.yoink.api.model.bootstrap.Job}
 	 */
 	void run(Job<JAXBElement> job);
+
+	//TODO javadocs
 	double getEnergy();
+
+	//TODO javadocs
 	List<Vector> getForces();
+
 }

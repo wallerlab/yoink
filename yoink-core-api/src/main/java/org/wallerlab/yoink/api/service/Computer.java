@@ -31,5 +31,5 @@ public interface Computer<T, K> {
 	 * @param k  -the method parameter 
 	 * @return -one value in type T
 	 */
-	public T calculate(K k);
+	T calculate(K k);
 }

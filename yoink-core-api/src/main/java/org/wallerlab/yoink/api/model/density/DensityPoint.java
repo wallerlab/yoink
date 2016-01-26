@@ -32,7 +32,7 @@ public interface DensityPoint {
 	 * 
 	 * @return density value -{@link java.lang.Double}
 	 */
-	public abstract double getDensity();
+	double getDensity();
 
 	/**
 	 * set the value of density at this point
@@ -40,7 +40,7 @@ public interface DensityPoint {
 	 * @param density
 	 *            -{@link java.lang.Double}, electronic density,
 	 */
-	public abstract void setDensity(double density);
+	void setDensity(double density);
 
 	/**
 	 * get the density gradient vector at this point
@@ -48,7 +48,7 @@ public interface DensityPoint {
 	 * @return density gradient vector -
 	 *         {@link org.wallerlab.yoink.api.service.math.Vector}
 	 */
-	public abstract Vector getGradientVector();
+	Vector getGradientVector();
 
 	/**
 	 * set the value of density gradient vector at this point
@@ -56,7 +56,7 @@ public interface DensityPoint {
 	 * @param gradientVector
 	 *            , - {@link org.wallerlab.yoink.api.service.math.Vector}
 	 */
-	public abstract void setGradientVector(Vector gradientVector);
+	void setGradientVector(Vector gradientVector);
 
 	/**
 	 * get the hessian matrix at this point
@@ -64,7 +64,7 @@ public interface DensityPoint {
 	 * @return hessian matrix -
 	 *         {@link org.wallerlab.yoink.api.service.math.Matrix}
 	 */
-	public abstract Matrix getHessian();
+	Matrix getHessian();
 
 	/**
 	 * set the hessian matrix at this point
@@ -72,14 +72,14 @@ public interface DensityPoint {
 	 * @param hessian
 	 *            - {@link org.wallerlab.yoink.api.service.math.Matrix}
 	 */
-	public abstract void setHessian(Matrix hessian);
+	void setHessian(Matrix hessian);
 
 	/**
 	 * get the density gradient value at this point
 	 * 
 	 * @return density gradient -{@link java.lang.Double}
 	 */
-	public abstract double getGradient();
+	double getGradient();
 
 	/**
 	 * set the density gradient value at this point
@@ -87,14 +87,14 @@ public interface DensityPoint {
 	 * @param gradient
 	 *            , -{@link java.lang.Double}
 	 */
-	public abstract void setGradient(double gradient);
+	void setGradient(double gradient);
 
 	/**
 	 * get the coordinate of the point
 	 * 
 	 * @return current coordinate -{@link org.wallerlab.yoink.api.model.molecular.Coord}
 	 */
-	public abstract Coord getCurrentCoord();
+	 Coord getCurrentCoord();
 
 	public enum DensityType {
 

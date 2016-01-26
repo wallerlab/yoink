@@ -36,7 +36,7 @@ public interface Cube {
 	 * 
 	 * @return {@link org.wallerlab.yoink.api.model.molecular.Coord}
 	 */
-	public abstract Coord getGridOrigin();
+	Coord getGridOrigin();
 
 	/**
 	 * set the value of origin coordinate of the cube
@@ -44,14 +44,14 @@ public interface Cube {
 	 * @param gridOrigin
 	 *            -{@link org.wallerlab.yoink.api.model.molecular.Coord}
 	 */
-	public abstract void setGridOrigin(Coord gridOrigin);
+	void setGridOrigin(Coord gridOrigin);
 
 	/**
 	 * get the number of steps along xyz axes
 	 * 
 	 * @return an int array
 	 */
-	public abstract int[] getNumberOfXYZSteps();
+	int[] getNumberOfXYZSteps();
 
 	/**
 	 * set the number of steps along xyz axes
@@ -59,14 +59,14 @@ public interface Cube {
 	 * @param numberOfXYZSteps
 	 *            , an int array with 3 elements
 	 */
-	public abstract void setNumberOfXYZSteps(int[] numberOfXYZSteps);
+	void setNumberOfXYZSteps(int[] numberOfXYZSteps);
 
 	/**
 	 * get the step size along xyz axes
 	 * 
 	 * @return a double array
 	 */
-	public abstract double[] getXyzStepSize();
+	double[] getXyzStepSize();
 
 	/**
 	 * get the molecules in the cube
@@ -74,7 +74,7 @@ public interface Cube {
 	 * @return a Set of molecules. -
 	 *         {@link org.wallerlab.yoink.api.model.molecular.Molecule}
 	 */
-	public abstract Set<Molecule> getMolecules();
+	Set<Molecule> getMolecules();
 
 	/**
 	 * get the atoms in the cube
@@ -82,7 +82,7 @@ public interface Cube {
 	 * @return a Set of atoms.-
 	 *         {@link org.wallerlab.yoink.api.model.molecular.Atom}
 	 */
-	public abstract Set<Atom> getAtoms();
+	 Set<Atom> getAtoms();
 
 	/**
 	 * set the value of molecules in the cube
@@ -91,14 +91,14 @@ public interface Cube {
 	 *            -a Set of molecules.
 	 *            {@link org.wallerlab.yoink.api.model.molecular.Molecule}
 	 */
-	public abstract void setMolecules(Set<Molecule> molecules);
+	void setMolecules(Set<Molecule> molecules);
 
 	/**
 	 * get the name of the cube
 	 * 
 	 * @return name -{@link java.lang.String}
 	 */
-	public abstract String getName();
+	String getName();
 
 	/**
 	 * set the name of the cube
@@ -106,7 +106,7 @@ public interface Cube {
 	 * @param name
 	 *            -{@link java.lang.String}
 	 */
-	public abstract void setName(String name);
+	void setName(String name);
 
 	/**
 	 * get the value of density types of the cube
@@ -115,7 +115,7 @@ public interface Cube {
 	 *         {@link org.wallerlab.yoink.api.model.density.DensityPoint.DensityType }
 	 *         List
 	 */
-	public abstract List<DensityType> getDensityTypes();
+	List<DensityType> getDensityTypes();
 
 	/**
 	 * set the value of density types of the cube
@@ -125,14 +125,14 @@ public interface Cube {
 	 *            {@link org.wallerlab.yoink.api.model.density.DensityPoint.DensityType }
 	 *            List
 	 */
-	public abstract void setDensityTypes(List<DensityType> densityTypes);
+	void setDensityTypes(List<DensityType> densityTypes);
 
 	/**
 	 * get the number of grid points in the cube
 	 * 
 	 * @return number of grid points -{@link java.lang.Integer}
 	 */
-	public abstract int getSize();
+	int getSize();
 
 	/**
 	 * set the number of grid points in the cube
@@ -140,14 +140,14 @@ public interface Cube {
 	 * @param size
 	 *            , number of grid points -{@link java.lang.Integer}
 	 */
-	public abstract void setSize(int size);
+	void setSize(int size);
 
 	/**
 	 * get the coordinates of grid points in the cube
 	 * 
 	 * @return a {@link org.wallerlab.yoink.api.model.molecular.Coord} List
 	 */
-	public abstract List<Coord> getCoordinates();
+	List<Coord> getCoordinates();
 
 	/**
 	 * set the coordinates of grid points in the cube
@@ -155,14 +155,14 @@ public interface Cube {
 	 * @param coordinates
 	 *            , a {@link org.wallerlab.yoink.api.model.molecular.Coord} List
 	 */
-	public abstract void setCoordinates(List<Coord> coordinates);
+	void setCoordinates(List<Coord> coordinates);
 
 	/**
 	 * get the values of grid points in the cube
 	 * 
 	 * @return a {@link java.lang.Double} List
 	 */
-	public abstract List<Double> getValues();
+	List<Double> getValues();
 
 	/**
 	 * set teh values of grid points in the cube
@@ -170,5 +170,5 @@ public interface Cube {
 	 * @param values
 	 *            , a {@link java.lang.Double} List
 	 */
-	public abstract void setValues(List<Double> values);
+	void setValues(List<Double> values);
 }
