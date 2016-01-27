@@ -3367,7 +3367,6 @@
 		<parameter name="PARTITIONER" value="DISTANCE" />
 		<parameter name="SMOOTHNER" value="DISTANCE_DAS" />
 		<parameter name="JOB_NAME" value="DISTANCE_DAS" />
-		<parameter name="INPUT_FOLDER" value="./inputs" />
 		<parameter name="OUTPUT_FOLDER" value="./outputs" />
 	</parameterList>
 </cml>

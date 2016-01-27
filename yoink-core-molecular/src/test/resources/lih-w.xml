@@ -33,7 +33,6 @@
         <parameter name="PARTITIONER" value="NUMBER"/>
         <parameter name="SMOOTHNER" value="DISTANCE_BUFFERED_FORCE"/>
         <parameter name="JOB_NAME" value="NUMBER_BUFFERED_FORCE"/>
-        <parameter name="INPUT_FOLDER" value="./inputs"/>
         <parameter name="OUTPUT_FOLDER" value="./outputs"/>
     </parameterList>
 </cml>
