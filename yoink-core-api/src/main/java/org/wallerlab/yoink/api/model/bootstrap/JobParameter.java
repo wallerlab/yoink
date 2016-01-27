@@ -45,14 +45,14 @@ package org.wallerlab.yoink.api.model.bootstrap;
  *smoothing 
 	SMOOTHNER: the smoothing type.
  ** smoothing DISTANCE_SCMP
-	DISTANCE_S_QM_IN: distance threshold for QM molecules -> QM region
-	DISTANCE_T_QM_IN: distance threshold for QM molecules -> transition region
-	DISTANCE_S_QM_OU: distance threshold for QM molecules -> out of QM region
-	DISTANCE_T_QM_OUT: distance threshold for QM molecules-> out of transition
-	DISTANCE_S_MM_IN:  distance threshold for MM molecules -> QM region
-	DISTANCE_T_MM_IN: distance threshold for MM molecules -> transition region
-	DISTANCE_S_MM_OUT: distance threshold for MM molecules -> out of QM region
-	DISTANCE_T_MM_OUT: distance threshold for MM molecules-> out of transition
+	DISTANCE_S_QM_IN: distance threshold for QM molecules into QM region
+	DISTANCE_T_QM_IN: distance threshold for QM molecules into transition region
+	DISTANCE_S_QM_OU: distance threshold for QM molecules out of QM region
+	DISTANCE_T_QM_OUT: distance threshold for QM molecules out of transition
+	DISTANCE_S_MM_IN:  distance threshold for MM molecules into QM region
+	DISTANCE_T_MM_IN: distance threshold for MM molecules into transition region
+	DISTANCE_S_MM_OUT: distance threshold for MM molecules  out of QM region
+	DISTANCE_T_MM_OUT: distance threshold for MM molecules out of transition
 	NUMBER_PARTITION: number of partitioning in DISTANCE_SCMP
 	
  * @author Min Zheng
