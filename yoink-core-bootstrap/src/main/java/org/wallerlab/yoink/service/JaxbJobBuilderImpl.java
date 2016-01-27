@@ -42,7 +42,7 @@ import org.xml_cml.schema.Cml;
  *
  */
 @Service
-public class JobBuilderImpl implements JobBuilder<JAXBElement >{
+public class JaxbJobBuilderImpl implements JobBuilder<JAXBElement >{
 
 	@Resource
 	private FilesReader<Object, String> jaxbReader;
@@ -63,17 +63,17 @@ public class JobBuilderImpl implements JobBuilder<JAXBElement >{
 	 *         {@link org.wallerlab.yoink.api.model.bootstrap.Job }
 	 */
 	@Override
-	public Job<JAXBElement> build(String inputfile) {
+	public Job<JAXBElement> build(JAXBElement input) {
 		Job<JAXBElement> job= new AdaptiveQMMMJob();
-		readInCmlElement(inputfile, job);
+		readInCmlElement(input, job);
 		readInMolecularSystem(job);
 		readInParameters(job);
 		return job;
 	}
 
-	private void readInCmlElement(String inputfile, Job job) {
-		JAXBElement<Cml> cmlElement = (JAXBElement<Cml>) jaxbReader.read(
-				inputfile, new Cml());
+	private void readInCmlElement(JAXBElement cmlElement, Job job) {
+		//This is not needed beucase we are using jaxb from SB.
+		//JAXBElement<Cml> cmlElement = (JAXBElement<Cml>) jaxbReader.read(inputfile, new Cml());
 		job.setInput(cmlElement);
 	}
 
@@ -89,10 +89,8 @@ public class JobBuilderImpl implements JobBuilder<JAXBElement >{
 		job.setParameters(parameters);
 	}
 
-	
-	//NOT USED
 	@Override
-	public Job<JAXBElement> build(JAXBElement input) {
+	public Job<JAXBElement> build(String builderInput) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -15,6 +15,8 @@
  */
 package org.wallerlab.yoink.api.service.bootstrap;
 
+import javax.xml.bind.JAXBElement;
+
 import org.wallerlab.yoink.api.model.bootstrap.Job;
 
 /**
@@ -36,4 +38,11 @@ public interface JobBuilder<T> {
 	 * @return {@link org.wallerlab.yoink.api.model.bootstrap.Job}
 	 */
 	Job<T> build(String builderInput);
+
+	/**
+	 * When we use SB, jaxb comes for free.
+	 * @param input
+	 * @return
+	 */
+	Job<JAXBElement> build(JAXBElement input);
 }
