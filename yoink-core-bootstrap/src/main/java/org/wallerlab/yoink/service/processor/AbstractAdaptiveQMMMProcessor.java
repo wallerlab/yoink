@@ -13,10 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wallerlab.yoink.service;
+package org.wallerlab.yoink.service.processor;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -26,13 +24,8 @@ import javax.xml.bind.JAXBElement;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.batch.item.ItemProcessor;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.bootstrap.Job;
 import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
@@ -42,78 +35,36 @@ import org.wallerlab.yoink.api.model.regionizer.Region.Name;
 import org.wallerlab.yoink.api.service.adaptive.Smoothner;
 import org.wallerlab.yoink.api.service.bootstrap.JobBuilder;
 import org.wallerlab.yoink.api.service.bootstrap.Wrapper;
-import org.wallerlab.yoink.api.service.regionizer.Partitioner;
 import org.wallerlab.yoink.api.service.regionizer.Regionizer;
 import org.wallerlab.yoink.api.service.regionizer.RegionizerMath;
-import org.wallerlab.yoink.domain.AdaptiveQMMMJob;
 
 /**
  * This class is to set up and execute adaptive QM/MM partitioning.
  * 
  * @author Min Zheng
+ * @param <I>
+ * @param <O>
  *
  */
-@Service
-public class AdaptiveQMMMProcessor implements
-		ItemProcessor<List<File>, List<Job>> {
+public abstract class AbstractAdaptiveQMMMProcessor<I, O> implements ItemProcessor<I,O> {
+	
+	@Resource
+	protected RegionizerMath<Map<Region.Name, Region>, MolecularSystem> regionizerServiceStarting;
+
+	@Resource
+	protected RegionizerMath<Map<Region.Name, Region>, MolecularSystem> regionizerServiceEnding;
+
+	@Resource
+	protected Smoothner adaptiveQMMMSmoothnerRouter;
+
+	@Resource
+	protected Wrapper propertyWrapper;
 
 	@Autowired
-	@Qualifier("jobBuilderImpl")
-	private JobBuilder<JAXBElement> jobBuilder;
+	protected List<Regionizer<Map<Name, Region>, Map<JobParameter, Object>>> adaptiveQMMMRegionizers;
 
-	@Resource
-	private RegionizerMath<Map<Region.Name, Region>, MolecularSystem> regionizerServiceStarting;
 
-	@Resource
-	private RegionizerMath<Map<Region.Name, Region>, MolecularSystem> regionizerServiceEnding;
-
-	@Resource
-	private Smoothner adaptiveQMMMSmoothnerRouter;
-
-	@Resource
-	private Wrapper propertyWrapper;
-	
-	@Autowired 
-	private List<Regionizer<Map<Name, Region>, Map<JobParameter, Object>>> adaptiveQMMMRegionizers;
-	
-	protected static final Log log = LogFactory
-			.getLog(AdaptiveQMMMProcessor.class);
-
-	/**
-	 * read in a list of requests and execute them.
-	 * 
-	 * @param requests
-	 *            - a list of files
-	 * @return jobs - a list of YoinkJob
-	 *         {@link org.wallerlab.yoink.api.model.bootstrap.Job}
-	 */
-	@Override
-	public List<Job> process(List<File> requests) throws Exception {
-		// Service based approach.
-		List<Job> jobs = new ArrayList<Job>();
-		if (requests.size() != 0) {
-			jobs = execute(requests);
-		}
-		return jobs;
-	}
-
-	/**
-	 * run batch adaptive qmmm partitioning
-	 */
-	private List<Job> execute(List<File> requests) {
-		List<Job> jobs = new ArrayList<Job>();
-		for (File file : requests) {
-			log.info("execute:   " + file.getName());
-			Job job = executeQMMMPartitioning(file);
-			jobs.add(job);
-			file.delete();
-			log.info("finish  and delete  " + file.getName());
-		}
-		return jobs;
-	}
-
-	private Job executeQMMMPartitioning(File file) {
-		Job job = jobBuilder.build(file.getAbsolutePath());
+	protected Job executeQMMMPartitioning(Job job) {
 		regionize(job);
 		smooth(job);
 		wrapResult(job);
@@ -121,18 +72,15 @@ public class AdaptiveQMMMProcessor implements
 	}
 
 	private void regionize(Job job) {
-		
 		Map<Region.Name, Region> regions = job.getRegions();
 		regionizerServiceStarting.regionize(regions, job.getMolecularSystem());
 		regions = adaptiveQMMMRegionizers(job, regions);
 		regionizerServiceEnding.regionize(regions, job.getMolecularSystem());
 	}
 
-	private Map<Region.Name, Region> adaptiveQMMMRegionizers(Job job,
-			Map<Region.Name, Region> regions) {
+	private Map<Region.Name, Region> adaptiveQMMMRegionizers(Job job, Map<Region.Name, Region> regions) {
 		for (Regionizer<Map<Region.Name, Region>, Map<JobParameter, Object>> regionizer : adaptiveQMMMRegionizers) {
-			regions = (Map<Region.Name, Region>) regionizer.regionize(regions,
-					job.getParameters());
+			regions = (Map<Region.Name, Region>) regionizer.regionize(regions, job.getParameters());
 		}
 		return regions;
 	}

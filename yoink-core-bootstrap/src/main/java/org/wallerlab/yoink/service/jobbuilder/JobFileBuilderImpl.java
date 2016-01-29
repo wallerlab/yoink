@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.wallerlab.yoink.service;
+package org.wallerlab.yoink.service.jobbuilder;
 
 import java.io.File;
 import java.util.List;
@@ -38,21 +38,14 @@ import org.xml_cml.schema.Cml;
  * this class is to read in all inputs (like molecular system and parameters)
  * needed for adaptive QM/MM partitioning.
  * 
- * @author Min Zheng
  *
  */
 @Service
-public class JaxbJobBuilderImpl implements JobBuilder<JAXBElement >{
+public class JobFileBuilderImpl extends AbstractJobBuilder<String,JAXBElement>{
 
 	@Resource
-	private FilesReader<Object, String> jaxbReader;
-
-	@Resource
-	private Translator<MolecularSystem, JAXBElement<Cml>> molecularSystemTranslator;
-
-	@Resource
-	private Translator<Map<JobParameter, Object>, JAXBElement<Cml>> parameterTranslator;
-
+	private FilesReader<Object, String> jaxbFileReader;
+	
 	/**
 	 * read in cml file, and convert it to molecular system and parameters for
 	 * building a new adaptive qmmm job.
@@ -63,36 +56,17 @@ public class JaxbJobBuilderImpl implements JobBuilder<JAXBElement >{
 	 *         {@link org.wallerlab.yoink.api.model.bootstrap.Job }
 	 */
 	@Override
-	public Job<JAXBElement> build(JAXBElement input) {
+	public Job<JAXBElement> build(String inputfile) {
 		Job<JAXBElement> job= new AdaptiveQMMMJob();
-		readInCmlElement(input, job);
-		readInMolecularSystem(job);
-		readInParameters(job);
+		readInCmlElement(inputfile, job);
+		process(job);
 		return job;
 	}
 
-	private void readInCmlElement(JAXBElement cmlElement, Job job) {
-		//This is not needed beucase we are using jaxb from SB.
-		//JAXBElement<Cml> cmlElement = (JAXBElement<Cml>) jaxbReader.read(inputfile, new Cml());
+	protected void readInCmlElement(String inputfile, Job job) {
+		JAXBElement<Cml> cmlElement = (JAXBElement<Cml>) jaxbFileReader.read(
+				inputfile, new Cml());
 		job.setInput(cmlElement);
-	}
-
-	private void readInMolecularSystem(Job<JAXBElement> job) {
-		MolecularSystem molecularSystem = molecularSystemTranslator
-				.translate(job.getInput());
-		job.setMolecularSystem(molecularSystem);
-	}
-
-	private void readInParameters(Job<JAXBElement> job) {
-		Map<JobParameter, Object> parameters = parameterTranslator
-				.translate(job.getInput());
-		job.setParameters(parameters);
-	}
-
-	@Override
-	public Job<JAXBElement> build(String builderInput) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

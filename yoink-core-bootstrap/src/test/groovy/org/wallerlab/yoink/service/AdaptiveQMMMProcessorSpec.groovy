@@ -21,9 +21,12 @@ import org.wallerlab.yoink.api.*
 import org.wallerlab.yoink.api.enums.*
 import org.wallerlab.yoink.api.model.*
 import org.wallerlab.yoink.api.service.adaptive.Smoothner
-import org.wallerlab.yoink.api.service.regionizer.*;
+import org.wallerlab.yoink.api.service.regionizer.AdaptiveQMMMProcessor
+import org.wallerlab.yoink.service.processor.AdaptiveQMMMProcessor;
 import org.wallerlab.yoink.api.model.bootstrap.Job
-import org.wallerlab.yoink.api.service.molecular.FilesReader;
+import org.wallerlab.yoink.api.service.molecular.FilesReader
+import org.wallerlab.yoink.api.service.regionizer.Regionizer
+import org.wallerlab.yoink.api.service.regionizer.RegionizerMath;
 import org.wallerlab.yoink.api.service.bootstrap.JobBuilder
 import org.wallerlab.yoink.api.service.bootstrap.Wrapper;
 
@@ -52,7 +55,7 @@ class AdaptiveQMMMProcessorSpec extends Specification{
 		processor.propertyWrapper=propertyWrapper
 		processor.adaptiveQMMMSmoothnerRouter=adaptiveQMMMSmoothnerRouter
 
-		then:"nothing is asserted here, except that no error is thrown"
+		then:"nothing is asserted here, except that no error is not thrown"
 		processor.process(requests)
 	}
 }

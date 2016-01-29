@@ -38,6 +38,8 @@ import org.xml_cml.schema.ObjectFactory;
 import org.xml_cml.schema.Property;
 import org.xml_cml.schema.PropertyList;
 import org.xml_cml.schema.Scalar;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
  * this class is to wrap adaptive qmmm result to JAXB element PropertyList
@@ -48,8 +50,9 @@ import org.xml_cml.schema.Scalar;
 @Service
 public class PropertyWrapper implements Wrapper<Job<JAXBElement>> {
 
-	@Resource
-	private FilesWriter<Object> jaxbWriter;
+	@Autowired
+	@Qualifier("jaxbFileWriter")
+	private FilesWriter<Object> jaxbFileWriter;
 
 	/**
 	 * wrap molecular name(

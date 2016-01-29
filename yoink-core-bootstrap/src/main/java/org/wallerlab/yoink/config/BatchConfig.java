@@ -32,6 +32,7 @@ import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.file.MultiResourceItemReader;
 import org.springframework.batch.item.file.ResourceAwareItemReaderItemStream;
+import org.springframework.batch.item.jms.JmsItemReader;
 import org.springframework.batch.item.xml.StaxEventItemReader;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,16 @@ import org.springframework.oxm.Unmarshaller;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.xml_cml.schema.Cml;
+
+import org.springframework.jms.core.JmsOperations;
+import org.springframework.jms.core.JmsTemplate;
+
+import javax.jms.ConnectionFactory;
+import org.springframework.batch.item.jms.JmsItemWriter;
+import org.springframework.batch.item.jms.JmsItemReader;
+import org.apache.activemq.ActiveMQConnectionFactory;
+import org.wallerlab.yoink.service.request.JmsRequestReader;
+import org.wallerlab.yoink.service.response.JmsJobItemWriter;
 
 /**
  * this class is configuration for spring batch
@@ -60,12 +71,16 @@ public class BatchConfig {
 	ApplicationContext appContext;
 	
 	@Autowired 
-	@Qualifier("batchServiceStep")
-	private Step batchServiceStep;
+	@Qualifier("serviceStep")
+	private Step serviceStep;
 	
 	@Autowired 
 	@Qualifier("batchStep")
 	private Step batchStep;
+	
+	@Autowired 
+	@Qualifier("jmsStep")
+	private Step jmsStep;
 	
     /**
      * build whole job using a service based job
@@ -79,7 +94,7 @@ public class BatchConfig {
     public org.springframework.batch.core.Job importServiceJob(JobBuilderFactory jobs) {
         return jobs.get("service")
                 .incrementer(new RunIdIncrementer())
-                .flow(batchServiceStep)
+                .flow(serviceStep)
                 .end()
                 .build();
     }
@@ -100,6 +115,23 @@ public class BatchConfig {
                 .end()
                 .build();
     }
+    
+    /**
+     * build whole job using a batch based approach.
+     *
+     * @param jobs -
+     *             {@link org.springframework.batch.core.configuration.annotation.JobBuilderFactory}
+     * @param s1   -{@link org.springframework.batch.core.Step}
+     * @return Job -{@link org.springframework.batch.core.Job}
+     */
+    @Bean
+    public org.springframework.batch.core.Job importJmsJob(JobBuilderFactory jobs) {
+        return jobs.get("jms")
+                .incrementer(new RunIdIncrementer())
+                .flow(jmsStep)
+                .end()
+                .build();
+    }
 
     /**
      * build executing steps
@@ -112,7 +144,7 @@ public class BatchConfig {
      * @return Step -{@link org.springframework.batch.core.Step}
      */
     @Bean
-    public Step batchServiceStep(
+    public Step serviceStep(
             StepBuilderFactory stepBuilderFactory,
             ItemReader<List<File>> cmlFilesRequest,
             ItemProcessor<List<File>, List<org.wallerlab.yoink.api.model.bootstrap.Job>> adaptiveQMMMProcessor,
@@ -179,5 +211,85 @@ public class BatchConfig {
 		marshaller.setClassesToBeBound(Cml.class);
 		return (Unmarshaller) marshaller;
 	}
+	
+	
+	 /**
+     * build executing steps
+     *
+     * @param stepBuilderFactory    -
+     *                              {@link org.springframework.batch.core.configuration.annotation.StepBuilderFactory}
+     * @param cmlFilesRequest       -{@link org.springframework.batch.item.ItemReader}
+     * @param adaptiveQMMMProcessor -{@link org.springframework.batch.item.ItemProcessor}
+     * @param cmlFilesResponse      -{@link org.springframework.batch.item.ItemWriter}
+     * @return Step -{@link org.springframework.batch.core.Step}
+     */
+    @Bean
+    public Step jmsStep( StepBuilderFactory stepBuilderFactory ) {
+        return stepBuilderFactory
+                .get("adaptiveQMMMJms")
+                .<String,org.wallerlab.yoink.api.model.bootstrap.Job>chunk(1)
+                .reader(jmsRequestReader())
+                .processor((ItemProcessor<String, org.wallerlab.yoink.api.model.bootstrap.Job>) appContext.getBean("stringAdaptiveQMMMProcessor"))
+                .writer(jmsJobItemWriter())
+                .build();
+    }
+    
+    
+    /**
+     * This is a bean that wraps around the standard jmsItemReader.
+     * It converts it to a long running service.
+     * 
+     * @return
+     */
+    @Bean
+    ItemReader<String> jmsRequestReader(){
+    	JmsRequestReader jmsRequestReader = new JmsRequestReader();
+    	jmsRequestReader.setJmsItemReader(jmsItemReader());
+    	return jmsRequestReader;
+    }
+   
+    @Bean
+    ConnectionFactory connectionFactory(){
+    	ActiveMQConnectionFactory connectionFactory  = new ActiveMQConnectionFactory();
+    	connectionFactory.setBrokerURL("tcp://localhost:61616"); 	
+    	return connectionFactory;
+    }
+    
+    @Bean
+    ItemReader<String> jmsItemReader(){
+    	JmsItemReader<String> jmsItemReader = new JmsItemReader<String>();
+    	jmsItemReader.setJmsTemplate(jmsRequestTemplate());
+    	return jmsItemReader;
+    }
+    
+
+    @Bean
+    JmsOperations jmsRequestTemplate(){
+    	JmsTemplate jmsRequestTemplate = new JmsTemplate(connectionFactory());
+    	jmsRequestTemplate.setDefaultDestinationName("yoink-request");
+    	jmsRequestTemplate.setReceiveTimeout(2000l);
+    	return jmsRequestTemplate;
+    }
+	
+    @Bean
+    ItemWriter<org.wallerlab.yoink.api.model.bootstrap.Job> jmsJobItemWriter(){
+    	ItemWriter jmsJobItemWriter = new JmsJobItemWriter();
+    	return jmsJobItemWriter;
+    }
+	
+    @Bean
+    ItemWriter<String> jmsItemWriter(){
+    	JmsItemWriter<String> jmsItemWriter = new JmsItemWriter<String>();
+    	jmsItemWriter.setJmsTemplate(jmsResponseTemplate());
+    	return jmsItemWriter;
+    }
+    
+    @Bean
+    JmsOperations jmsResponseTemplate(){
+    	JmsTemplate jmsResponseTemplate = new JmsTemplate(connectionFactory());
+    	jmsResponseTemplate.setDefaultDestinationName("yoink-response");
+    	jmsResponseTemplate.setReceiveTimeout(2000l);
+    	return jmsResponseTemplate;
+    }
 
 }

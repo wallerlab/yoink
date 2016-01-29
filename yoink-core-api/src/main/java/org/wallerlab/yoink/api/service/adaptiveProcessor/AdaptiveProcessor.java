@@ -20,10 +20,16 @@ public interface AdaptiveProcessor {
 	 */
 	void run(Job<JAXBElement> job);
 
-	//TODO javadocs
+	/**
+	 * This method calls an external program to get an energy
+	 * @return energy
+	 */
 	double getEnergy();
 
-	//TODO javadocs
+	/**
+	 * This method calls an external program to get the forces
+	 * @return forces as a List of Vectors 
+	 */
 	List<Vector> getForces();
 
 }

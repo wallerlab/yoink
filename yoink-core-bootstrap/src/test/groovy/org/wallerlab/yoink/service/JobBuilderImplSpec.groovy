@@ -25,12 +25,13 @@ import org.wallerlab.yoink.api.enums.*
 import org.wallerlab.yoink.api.model.*
 import org.wallerlab.yoink.api.service.molecular.FilesReader;
 import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
-import org.wallerlab.yoink.api.service.molecular.Translator;
+import org.wallerlab.yoink.api.service.molecular.Translator
+import org.wallerlab.yoink.service.jobbuilder.JobFileBuilderImpl;
 import org.wallerlab.yoink.api.model.bootstrap.Job
 
 class JobBuilderImplSpec extends Specification {
 
-	def "test mthod read(String inputfile,YoinkJob<JAXBElement> job)"(){
+	def "test method read(String inputfile,YoinkJob<JAXBElement> job)"(){
 		def jaxbReader=Mock(FilesReader)
 		def  molecularSystemTranslator=Mock(Translator)
 		def  parameterTranslator=Mock(Translator)
@@ -42,8 +43,8 @@ class JobBuilderImplSpec extends Specification {
 		parameterTranslator.translate(_)>>Mock(Map)
 
 		when:"set up a new JobBuilder"
-		def builder=new JobBuilderImpl()
-		builder.jaxbReader=jaxbReader
+		def builder=new JobFileBuilderImpl()
+		builder.jaxbFileReader=jaxbReader
 		builder.molecularSystemTranslator=molecularSystemTranslator
 		builder.parameterTranslator=parameterTranslator
 		def inputfile="./src/test/resources/aro.xml"

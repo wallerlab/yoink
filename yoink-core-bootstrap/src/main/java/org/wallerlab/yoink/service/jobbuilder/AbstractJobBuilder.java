@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.wallerlab.yoink.service;
+package org.wallerlab.yoink.service.jobbuilder;
 
 import java.io.File;
 import java.util.List;
@@ -39,19 +39,19 @@ import org.xml_cml.schema.Cml;
  * needed for adaptive QM/MM partitioning.
  * 
  * @author Min Zheng
+ * @param <O>
+ * @param <I>
+ * @param <O>
+ * @param <I>
  *
  */
-@Service
-public class JobBuilderImpl implements JobBuilder<JAXBElement >{
+public abstract class AbstractJobBuilder<I,O> implements JobBuilder<I,O>{
 
 	@Resource
-	private FilesReader<Object, String> jaxbReader;
+	protected Translator<MolecularSystem, JAXBElement<Cml>> molecularSystemTranslator;
 
 	@Resource
-	private Translator<MolecularSystem, JAXBElement<Cml>> molecularSystemTranslator;
-
-	@Resource
-	private Translator<Map<JobParameter, Object>, JAXBElement<Cml>> parameterTranslator;
+	protected Translator<Map<JobParameter, Object>, JAXBElement<Cml>> parameterTranslator;
 
 	/**
 	 * read in cml file, and convert it to molecular system and parameters for
@@ -63,38 +63,25 @@ public class JobBuilderImpl implements JobBuilder<JAXBElement >{
 	 *         {@link org.wallerlab.yoink.api.model.bootstrap.Job }
 	 */
 	@Override
-	public Job<JAXBElement> build(String inputfile) {
-		Job<JAXBElement> job= new AdaptiveQMMMJob();
-		readInCmlElement(inputfile, job);
+	public abstract Job<O> build(I input);
+	
+	protected abstract void readInCmlElement(I input, Job job);	
+
+	protected void process(Job<JAXBElement> job) {
 		readInMolecularSystem(job);
 		readInParameters(job);
-		return job;
 	}
-
-	private void readInCmlElement(String inputfile, Job job) {
-		JAXBElement<Cml> cmlElement = (JAXBElement<Cml>) jaxbReader.read(
-				inputfile, new Cml());
-		job.setInput(cmlElement);
-	}
-
-	private void readInMolecularSystem(Job<JAXBElement> job) {
+	
+	protected void readInMolecularSystem(Job<JAXBElement> job) {
 		MolecularSystem molecularSystem = molecularSystemTranslator
 				.translate(job.getInput());
 		job.setMolecularSystem(molecularSystem);
 	}
 
-	private void readInParameters(Job<JAXBElement> job) {
+	protected void readInParameters(Job<JAXBElement> job) {
 		Map<JobParameter, Object> parameters = parameterTranslator
 				.translate(job.getInput());
 		job.setParameters(parameters);
-	}
-
-	
-	//NOT USED
-	@Override
-	public Job<JAXBElement> build(JAXBElement input) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

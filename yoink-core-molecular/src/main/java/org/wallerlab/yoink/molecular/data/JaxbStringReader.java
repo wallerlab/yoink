@@ -15,24 +15,24 @@
  */
 package org.wallerlab.yoink.molecular.data;
 
-import java.io.File;
+import java.io.StringReader;
 
-import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.api.service.molecular.FilesReader;
+import org.xml_cml.schema.Cml;
 
 /**
- * this class is to use JAXB to read a file.
+ * this class is to use JAXB to read a xml string.
  * 
  * @author Min Zheng
  *
  */
 @Service
-public class JaxbReader implements FilesReader<Object, String> {
+public class JaxbStringReader extends AbstractJaxbReader {
 
+	protected String input;
+	
 	/**
 	 * jaxb reader to read in an instance from a file.
 	 * 
@@ -42,19 +42,16 @@ public class JaxbReader implements FilesReader<Object, String> {
 	 *            - the instance will be read from the file
 	 * @return jaxbObject - the required instance
 	 */
-	public Object read(String nameOfFile, Object jaxbObject) {
-		File file = new File(nameOfFile);
-		try {
-			JAXBContext jaxbContext = JAXBContext.newInstance(Class
-					.forName(jaxbObject.getClass().getName()));
-			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-			jaxbObject = jaxbUnmarshaller.unmarshal(file);
-		} catch (JAXBException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		return jaxbObject;
+	public JAXBElement<Cml> read(String input, Object jaxbObject) {
+		this.input = input;
+		init(jaxbObject);
+		JAXBElement<Cml> marshalled = init(jaxbObject);
+		return  marshalled;
+	}
+	
+	protected JAXBElement<Cml> unmarshal(Object jaxbObject) throws JAXBException{
+		JAXBElement<Cml> marshalled = (JAXBElement<Cml>) jaxbUnmarshaller.unmarshal(new StringReader(input));
+		return  marshalled;
 	}
 
 }

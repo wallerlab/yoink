@@ -27,7 +27,8 @@ import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
 import org.wallerlab.yoink.api.model.bootstrap.Job;
 import org.wallerlab.yoink.api.service.molecular.FilesWriter;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 /**
  * This class is for job response, to write adaptive qmmm result into a cml
  * file.
@@ -39,7 +40,8 @@ import org.wallerlab.yoink.api.service.molecular.FilesWriter;
 @Service
 public class CmlFilesResponse implements ItemWriter<List<Job<JAXBElement>>> {
 
-	@Resource
+	@Autowired
+	@Qualifier("jaxbFileWriter")
 	private FilesWriter<Object> jaxbWriter;
 
 	protected static final Log log = LogFactory.getLog(CmlFilesResponse.class);

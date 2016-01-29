@@ -107,7 +107,6 @@ public class MolecularSystemTranslator implements
 		this.cml = cml;
 		this.molecules = new ArrayList<Molecule>();
 		this.cmlMolecularSystem = cml.getValue();
-
 	}
 
 	// loop over elements in a cml to find the molcule list??
