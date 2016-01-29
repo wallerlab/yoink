@@ -25,34 +25,36 @@ import org.wallerlab.yoink.api.model.*
 import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
 import org.springframework.batch.item.ItemWriter;
 import org.wallerlab.yoink.api.model.bootstrap.Job
-import org.wallerlab.yoink.api.service.molecular.FilesWriter;
+import org.wallerlab.yoink.api.service.molecular.FilesWriter
+import org.wallerlab.yoink.molecular.data.JaxbStringWriter
 
-class CmlResponseSpec extends Specification{
+class JmsJobItemWriterSpec extends Specification{
 
-	def "test method write(List<? extends List<YoinkJob<JAXBElement>>> jobs)"(){
+	def "test method write(List<? extends YoinkJob<JAXBElement>> jobs)"(){
 		def job=Mock(Job)
 		def jobList=[job, job]
-		def jobs=[[job, job]]
 		def parameters=Mock(Map)
 		parameters.get(JobParameter.JOB_NAME)>>"test"
-		parameters.get(
-				JobParameter.OUTPUT_FOLDER)>>"./src/test/resources"
+		parameters.get(JobParameter.OUTPUT_FOLDER)>>"./src/test/resources"
 		job.getParameters()>>parameters
 		def factory=new ObjectFactory()
 		def cml=factory.createCml()
 		def input=factory.createCml(cml)
 		job.getInput()>>input
-		def jaxbWriter=Mock(FilesWriter)
+		def jaxbWriter= new JaxbStringWriter()
 
+		def jmsItemWriter = Mock(ItemWriter)
+		
 		when:"mock response"
 		def response=Mock(ItemWriter)
 		then:"call method, no error thrown"
-		response.write(jobs)
+		response.write(jobList)
 
 		when:"make a new CmlFilesResponse"
-		def response2=new CmlFilesResponse()
-		response2.jaxbWriter=jaxbWriter
+		def response2 = new JmsJobItemWriter()
+		response2.jaxbStringWriter= jaxbWriter
+		response2.jmsItemWriter = jmsItemWriter
 		then:"call method, no error thrown"
-		response2.write(jobs)
+		response2.write(jobList)
 	}
 }
