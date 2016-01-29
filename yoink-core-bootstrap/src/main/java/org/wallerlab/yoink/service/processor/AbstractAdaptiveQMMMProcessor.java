@@ -19,21 +19,14 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.xml.bind.JAXBElement;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.bootstrap.Job;
 import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
 import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
 import org.wallerlab.yoink.api.model.regionizer.Region;
 import org.wallerlab.yoink.api.model.regionizer.Region.Name;
 import org.wallerlab.yoink.api.service.adaptive.Smoothner;
-import org.wallerlab.yoink.api.service.bootstrap.JobBuilder;
 import org.wallerlab.yoink.api.service.bootstrap.Wrapper;
 import org.wallerlab.yoink.api.service.regionizer.Regionizer;
 import org.wallerlab.yoink.api.service.regionizer.RegionizerMath;
@@ -63,7 +56,6 @@ public abstract class AbstractAdaptiveQMMMProcessor<I, O> implements ItemProcess
 	@Autowired
 	protected List<Regionizer<Map<Name, Region>, Map<JobParameter, Object>>> adaptiveQMMMRegionizers;
 
-
 	protected Job executeQMMMPartitioning(Job job) {
 		regionize(job);
 		smooth(job);
@@ -71,7 +63,7 @@ public abstract class AbstractAdaptiveQMMMProcessor<I, O> implements ItemProcess
 		return job;
 	}
 
-	private void regionize(Job job) {
+	protected void regionize(Job job) {
 		Map<Region.Name, Region> regions = job.getRegions();
 		regionizerServiceStarting.regionize(regions, job.getMolecularSystem());
 		regions = adaptiveQMMMRegionizers(job, regions);

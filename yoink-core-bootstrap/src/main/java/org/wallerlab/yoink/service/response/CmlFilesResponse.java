@@ -16,10 +16,7 @@
 package org.wallerlab.yoink.service.response;
 
 import java.util.List;
-
-import javax.annotation.Resource;
 import javax.xml.bind.JAXBElement;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.batch.item.ItemWriter;

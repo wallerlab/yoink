@@ -65,8 +65,6 @@ public abstract class AbstractJobBuilder<I,O> implements JobBuilder<I,O>{
 	@Override
 	public abstract Job<O> build(I input);
 	
-	protected abstract void readInCmlElement(I input, Job job);	
-
 	protected void process(Job<JAXBElement> job) {
 		readInMolecularSystem(job);
 		readInParameters(job);

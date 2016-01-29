@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wallerlab.yoink.service
+package org.wallerlab.yoink.service.processor
 
 import spock.lang.Specification;
 
@@ -29,12 +29,14 @@ import org.wallerlab.yoink.api.service.regionizer.Regionizer
 import org.wallerlab.yoink.api.service.regionizer.RegionizerMath;
 import org.wallerlab.yoink.api.service.bootstrap.JobBuilder
 import org.wallerlab.yoink.api.service.bootstrap.Wrapper;
+import org.xml_cml.schema.ObjectFactory
 
-class AdaptiveQMMMProcessorSpec extends Specification{
+class SerialAdaptiveQMMMProcessorSpec extends Specification{
 
-	def "test method process(List<File> requests)"(){
-		def file=new File("./src/test/resources/AdaptiveQMMMProcessorSpec.xml")
-		def requests=[file]
+	def "test method process(File request)"(){
+		def  fact = new ObjectFactory()
+		def cml = fact.createCml()
+		def request = fact.createCml(cml)
 		def propertyWrapper=Mock(Wrapper)
 		def  adaptiveQMMMSmoothnerRouter=Mock(Smoothner)
 		def jobBuilder=Mock(JobBuilder)
@@ -47,8 +49,8 @@ class AdaptiveQMMMProcessorSpec extends Specification{
 		jobBuilder.build(_)>>Mock(Job)
 
 		when:"set up a new AdaptiveQMMMProcessor"
-		def processor=new AdaptiveQMMMProcessor()
-		processor.jobBuilder=jobBuilder
+		def processor=new SerialAdaptiveQMMMProcessor()
+		processor.jobJaxbBuilderImpl=jobBuilder
 		processor.regionizerServiceStarting=regionizerServiceStarting
 		processor.regionizerServiceEnding=regionizerServiceEnding
 		processor.adaptiveQMMMRegionizers=adaptiveQMMMRegionizers
@@ -56,6 +58,6 @@ class AdaptiveQMMMProcessorSpec extends Specification{
 		processor.adaptiveQMMMSmoothnerRouter=adaptiveQMMMSmoothnerRouter
 
 		then:"nothing is asserted here, except that no error is not thrown"
-		processor.process(requests)
+		processor.process(request)
 	}
 }

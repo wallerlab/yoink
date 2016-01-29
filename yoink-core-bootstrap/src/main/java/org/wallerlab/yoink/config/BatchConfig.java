@@ -66,139 +66,129 @@ import org.wallerlab.yoink.service.response.JmsJobItemWriter;
 @EnableBatchProcessing
 @EnableTransactionManagement
 public class BatchConfig {
-	
+
 	@Autowired
 	ApplicationContext appContext;
-	
-	@Autowired 
+
+	@Autowired
 	@Qualifier("serviceStep")
 	private Step serviceStep;
-	
-	@Autowired 
+
+	@Autowired
 	@Qualifier("batchStep")
 	private Step batchStep;
-	
-	@Autowired 
+
+	@Autowired
 	@Qualifier("jmsStep")
 	private Step jmsStep;
-	
-    /**
-     * build whole job using a service based job
-     *
-     * @param jobs -
-     *             {@link org.springframework.batch.core.configuration.annotation.JobBuilderFactory}
-     * @param s1   -{@link org.springframework.batch.core.Step}
-     * @return Job -{@link org.springframework.batch.core.Job}
-     */
-    @Bean
-    public org.springframework.batch.core.Job importServiceJob(JobBuilderFactory jobs) {
-        return jobs.get("service")
-                .incrementer(new RunIdIncrementer())
-                .flow(serviceStep)
-                .end()
-                .build();
-    }
-    
-    /**
-     * build whole job using a batch based approach.
-     *
-     * @param jobs -
-     *             {@link org.springframework.batch.core.configuration.annotation.JobBuilderFactory}
-     * @param s1   -{@link org.springframework.batch.core.Step}
-     * @return Job -{@link org.springframework.batch.core.Job}
-     */
-    @Bean
-    public org.springframework.batch.core.Job importBatchJob(JobBuilderFactory jobs) {
-        return jobs.get("batch")
-                .incrementer(new RunIdIncrementer())
-                .flow(batchStep)
-                .end()
-                .build();
-    }
-    
-    /**
-     * build whole job using a batch based approach.
-     *
-     * @param jobs -
-     *             {@link org.springframework.batch.core.configuration.annotation.JobBuilderFactory}
-     * @param s1   -{@link org.springframework.batch.core.Step}
-     * @return Job -{@link org.springframework.batch.core.Job}
-     */
-    @Bean
-    public org.springframework.batch.core.Job importJmsJob(JobBuilderFactory jobs) {
-        return jobs.get("jms")
-                .incrementer(new RunIdIncrementer())
-                .flow(jmsStep)
-                .end()
-                .build();
-    }
 
-    /**
-     * build executing steps
-     *
-     * @param stepBuilderFactory    -
-     *                              {@link org.springframework.batch.core.configuration.annotation.StepBuilderFactory}
-     * @param cmlFilesRequest       -{@link org.springframework.batch.item.ItemReader}
-     * @param adaptiveQMMMProcessor -{@link org.springframework.batch.item.ItemProcessor}
-     * @param cmlFilesResponse      -{@link org.springframework.batch.item.ItemWriter}
-     * @return Step -{@link org.springframework.batch.core.Step}
-     */
-    @Bean
-    public Step serviceStep(
-            StepBuilderFactory stepBuilderFactory,
-            ItemReader<List<File>> cmlFilesRequest,
-            ItemProcessor<List<File>, List<org.wallerlab.yoink.api.model.bootstrap.Job>> adaptiveQMMMProcessor,
-            ItemWriter<List<org.wallerlab.yoink.api.model.bootstrap.Job>> cmlFilesResponse) {
-        return stepBuilderFactory
-                .get("adaptiveQMMM")
-                .<List<File>, List<org.wallerlab.yoink.api.model.bootstrap.Job>>chunk(1)
-                .reader(cmlFilesRequest)
-                .processor(adaptiveQMMMProcessor)
-                .writer(cmlFilesResponse)
-                .build();
-    }
-    
-    
-    /**
-     * build executing steps
-     *
-     * @param stepBuilderFactory    -
-     *                              {@link org.springframework.batch.core.configuration.annotation.StepBuilderFactory}
-     * @param cmlFilesRequest       -{@link org.springframework.batch.item.ItemReader}
-     * @param adaptiveQMMMProcessor -{@link org.springframework.batch.item.ItemProcessor}
-     * @param cmlFilesResponse      -{@link org.springframework.batch.item.ItemWriter}
-     * @return Step -{@link org.springframework.batch.core.Step}
-     */
-    @Bean
-    public Step batchStep(
-            StepBuilderFactory stepBuilderFactory,
-            ItemReader<Cml> cmlFilereader,
-            ItemProcessor<JAXBElement, org.wallerlab.yoink.api.model.bootstrap.Job> serialAdaptiveQMMMProcessor,
-            ItemWriter<org.wallerlab.yoink.api.model.bootstrap.Job> cmlFileResponseWriter) {
-        return stepBuilderFactory
-                .get("adaptiveQMMMBatch")
-                .<javax.xml.bind.JAXBElement,org.wallerlab.yoink.api.model.bootstrap.Job>chunk(1)
-                .reader(cmlFilesReader())
-                .processor(serialAdaptiveQMMMProcessor)
-                .writer(cmlFileResponseWriter)
-                .build();
-    }
-    
-    @Bean 
-    MultiResourceItemReader cmlFilesReader(){
-    	MultiResourceItemReader multiResourceItemReader = new MultiResourceItemReader();
-    	try {
-			multiResourceItemReader.setResources((Resource[]) appContext.getResources("file:./inputs/*.xml"));		
-    	} catch (IOException e) {
+	/**
+	 * build whole job using a service based job
+	 *
+	 * @param jobs
+	 *            -
+	 *            {@link org.springframework.batch.core.configuration.annotation.JobBuilderFactory}
+	 * @param s1
+	 *            -{@link org.springframework.batch.core.Step}
+	 * @return Job -{@link org.springframework.batch.core.Job}
+	 */
+	@Bean
+	public org.springframework.batch.core.Job importServiceJob(JobBuilderFactory jobs) {
+		return jobs.get("service").incrementer(new RunIdIncrementer()).flow(serviceStep).end().build();
+	}
+
+	/**
+	 * build whole job using a batch based approach.
+	 *
+	 * @param jobs
+	 *            -
+	 *            {@link org.springframework.batch.core.configuration.annotation.JobBuilderFactory}
+	 * @param s1
+	 *            -{@link org.springframework.batch.core.Step}
+	 * @return Job -{@link org.springframework.batch.core.Job}
+	 */
+	@Bean
+	public org.springframework.batch.core.Job importBatchJob(JobBuilderFactory jobs) {
+		return jobs.get("batch").incrementer(new RunIdIncrementer()).flow(batchStep).end().build();
+	}
+
+	/**
+	 * build whole job using a batch based approach.
+	 *
+	 * @param jobs
+	 *            -
+	 *            {@link org.springframework.batch.core.configuration.annotation.JobBuilderFactory}
+	 * @param s1
+	 *            -{@link org.springframework.batch.core.Step}
+	 * @return Job -{@link org.springframework.batch.core.Job}
+	 */
+	@Bean
+	public org.springframework.batch.core.Job importJmsJob(JobBuilderFactory jobs) {
+		return jobs.get("jms").incrementer(new RunIdIncrementer()).flow(jmsStep).end().build();
+	}
+
+	/**
+	 * build executing steps
+	 *
+	 * @param stepBuilderFactory
+	 *            -
+	 *            {@link org.springframework.batch.core.configuration.annotation.StepBuilderFactory}
+	 * @param cmlFilesRequest
+	 *            -{@link org.springframework.batch.item.ItemReader}
+	 * @param adaptiveQMMMProcessor
+	 *            -{@link org.springframework.batch.item.ItemProcessor}
+	 * @param cmlFilesResponse
+	 *            -{@link org.springframework.batch.item.ItemWriter}
+	 * @return Step -{@link org.springframework.batch.core.Step}
+	 */
+	@Bean
+	public Step serviceStep(StepBuilderFactory stepBuilderFactory, ItemReader<List<File>> cmlFilesRequest,
+			ItemProcessor<List<File>, List<org.wallerlab.yoink.api.model.bootstrap.Job>> adaptiveQMMMProcessor,
+			ItemWriter<List<org.wallerlab.yoink.api.model.bootstrap.Job>> cmlFilesResponse) {
+		return stepBuilderFactory.get("adaptiveQMMM").<List<File>, List<org.wallerlab.yoink.api.model.bootstrap
+				.Job>> chunk(1).reader(cmlFilesRequest).processor(adaptiveQMMMProcessor).writer(cmlFilesResponse)
+				.build();
+	}
+
+	/**
+	 * build executing steps
+	 *
+	 * @param stepBuilderFactory
+	 *            -
+	 *            {@link org.springframework.batch.core.configuration.annotation.StepBuilderFactory}
+	 * @param cmlFilesRequest
+	 *            -{@link org.springframework.batch.item.ItemReader}
+	 * @param adaptiveQMMMProcessor
+	 *            -{@link org.springframework.batch.item.ItemProcessor}
+	 * @param cmlFilesResponse
+	 *            -{@link org.springframework.batch.item.ItemWriter}
+	 * @return Step -{@link org.springframework.batch.core.Step}
+	 */
+	@Bean
+	public Step batchStep(StepBuilderFactory stepBuilderFactory, ItemReader<Cml> cmlFilereader,
+			ItemProcessor<JAXBElement, org.wallerlab.yoink.api.model.bootstrap.Job> serialAdaptiveQMMMProcessor,
+			ItemWriter<org.wallerlab.yoink.api.model.bootstrap.Job> cmlFileResponseWriter) {
+		return stepBuilderFactory
+				.get("adaptiveQMMMBatch").<JAXBElement, org.wallerlab.yoink.api.model.bootstrap.Job> chunk(1)
+				.reader(cmlFilesReader())
+				.processor(serialAdaptiveQMMMProcessor)
+				.writer(cmlFileResponseWriter).build();
+	}
+
+	@Bean
+	MultiResourceItemReader cmlFilesReader() {
+		MultiResourceItemReader multiResourceItemReader = new MultiResourceItemReader();
+		try {
+			multiResourceItemReader.setResources((Resource[]) appContext.getResources("file:./inputs/*.xml"));
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
-    	multiResourceItemReader.setDelegate( (ResourceAwareItemReaderItemStream) cmlFilereader());
-    	return multiResourceItemReader;
-    }
-    
-    
-    @Bean
-	StaxEventItemReader<Cml> cmlFilereader() {
+		multiResourceItemReader.setDelegate((ResourceAwareItemReaderItemStream) cmlFilereader());
+		return multiResourceItemReader;
+	}
+
+	@Bean
+	StaxEventItemReader<JAXBElement> cmlFilereader() {
 		StaxEventItemReader reader = new StaxEventItemReader();
 		reader.setUnmarshaller(unmarshaller());
 		reader.setFragmentRootElementName("cml");
@@ -211,85 +201,84 @@ public class BatchConfig {
 		marshaller.setClassesToBeBound(Cml.class);
 		return (Unmarshaller) marshaller;
 	}
-	
-	
-	 /**
-     * build executing steps
-     *
-     * @param stepBuilderFactory    -
-     *                              {@link org.springframework.batch.core.configuration.annotation.StepBuilderFactory}
-     * @param cmlFilesRequest       -{@link org.springframework.batch.item.ItemReader}
-     * @param adaptiveQMMMProcessor -{@link org.springframework.batch.item.ItemProcessor}
-     * @param cmlFilesResponse      -{@link org.springframework.batch.item.ItemWriter}
-     * @return Step -{@link org.springframework.batch.core.Step}
-     */
-    @Bean
-    public Step jmsStep( StepBuilderFactory stepBuilderFactory ) {
-        return stepBuilderFactory
-                .get("adaptiveQMMMJms")
-                .<String,org.wallerlab.yoink.api.model.bootstrap.Job>chunk(1)
-                .reader(jmsRequestReader())
-                .processor((ItemProcessor<String, org.wallerlab.yoink.api.model.bootstrap.Job>) appContext.getBean("stringAdaptiveQMMMProcessor"))
-                .writer(jmsJobItemWriter())
-                .build();
-    }
-    
-    
-    /**
-     * This is a bean that wraps around the standard jmsItemReader.
-     * It converts it to a long running service.
-     * 
-     * @return
-     */
-    @Bean
-    ItemReader<String> jmsRequestReader(){
-    	JmsRequestReader jmsRequestReader = new JmsRequestReader();
-    	jmsRequestReader.setJmsItemReader(jmsItemReader());
-    	return jmsRequestReader;
-    }
-   
-    @Bean
-    ConnectionFactory connectionFactory(){
-    	ActiveMQConnectionFactory connectionFactory  = new ActiveMQConnectionFactory();
-    	connectionFactory.setBrokerURL("tcp://localhost:61616"); 	
-    	return connectionFactory;
-    }
-    
-    @Bean
-    ItemReader<String> jmsItemReader(){
-    	JmsItemReader<String> jmsItemReader = new JmsItemReader<String>();
-    	jmsItemReader.setJmsTemplate(jmsRequestTemplate());
-    	return jmsItemReader;
-    }
-    
 
-    @Bean
-    JmsOperations jmsRequestTemplate(){
-    	JmsTemplate jmsRequestTemplate = new JmsTemplate(connectionFactory());
-    	jmsRequestTemplate.setDefaultDestinationName("yoink-request");
-    	jmsRequestTemplate.setReceiveTimeout(2000l);
-    	return jmsRequestTemplate;
-    }
-	
-    @Bean
-    ItemWriter<org.wallerlab.yoink.api.model.bootstrap.Job> jmsJobItemWriter(){
-    	ItemWriter jmsJobItemWriter = new JmsJobItemWriter();
-    	return jmsJobItemWriter;
-    }
-	
-    @Bean
-    ItemWriter<String> jmsItemWriter(){
-    	JmsItemWriter<String> jmsItemWriter = new JmsItemWriter<String>();
-    	jmsItemWriter.setJmsTemplate(jmsResponseTemplate());
-    	return jmsItemWriter;
-    }
-    
-    @Bean
-    JmsOperations jmsResponseTemplate(){
-    	JmsTemplate jmsResponseTemplate = new JmsTemplate(connectionFactory());
-    	jmsResponseTemplate.setDefaultDestinationName("yoink-response");
-    	jmsResponseTemplate.setReceiveTimeout(2000l);
-    	return jmsResponseTemplate;
-    }
+	/**
+	 * build executing steps
+	 *
+	 * @param stepBuilderFactory
+	 *            -
+	 *            {@link org.springframework.batch.core.configuration.annotation.StepBuilderFactory}
+	 * @param cmlFilesRequest
+	 *            -{@link org.springframework.batch.item.ItemReader}
+	 * @param adaptiveQMMMProcessor
+	 *            -{@link org.springframework.batch.item.ItemProcessor}
+	 * @param cmlFilesResponse
+	 *            -{@link org.springframework.batch.item.ItemWriter}
+	 * @return Step -{@link org.springframework.batch.core.Step}
+	 */
+	@Bean
+	public Step jmsStep(StepBuilderFactory stepBuilderFactory) {
+		return stepBuilderFactory.get("adaptiveQMMMJms").<String, org.wallerlab.yoink.api.model.bootstrap.Job> chunk(1)
+				.reader(jmsRequestReader())
+				.processor((ItemProcessor<String, org.wallerlab.yoink.api.model.bootstrap.Job>) appContext
+						.getBean("stringAdaptiveQMMMProcessor"))
+				.writer(jmsJobItemWriter()).build();
+	}
+
+	/**
+	 * This is a bean that wraps around the standard jmsItemReader. It converts
+	 * it to a long running service.
+	 * 
+	 * @return
+	 */
+	@Bean
+	ItemReader<String> jmsRequestReader() {
+		JmsRequestReader jmsRequestReader = new JmsRequestReader();
+		jmsRequestReader.setJmsItemReader(jmsItemReader());
+		return jmsRequestReader;
+	}
+
+	@Bean
+	ConnectionFactory connectionFactory() {
+		ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory();
+		connectionFactory.setBrokerURL("tcp://localhost:61616");
+		return connectionFactory;
+	}
+
+	@Bean
+	ItemReader<String> jmsItemReader() {
+		JmsItemReader<String> jmsItemReader = new JmsItemReader<String>();
+		jmsItemReader.setJmsTemplate(jmsRequestTemplate());
+		return jmsItemReader;
+	}
+
+	@Bean
+	JmsOperations jmsRequestTemplate() {
+		JmsTemplate jmsRequestTemplate = new JmsTemplate(connectionFactory());
+		jmsRequestTemplate.setDefaultDestinationName("yoink-request");
+		jmsRequestTemplate.setReceiveTimeout(2000l);
+		return jmsRequestTemplate;
+	}
+
+	@Bean
+	ItemWriter<org.wallerlab.yoink.api.model.bootstrap.Job> jmsJobItemWriter() {
+		ItemWriter jmsJobItemWriter = new JmsJobItemWriter();
+		return jmsJobItemWriter;
+	}
+
+	@Bean
+	ItemWriter<String> jmsItemWriter() {
+		JmsItemWriter<String> jmsItemWriter = new JmsItemWriter<String>();
+		jmsItemWriter.setJmsTemplate(jmsResponseTemplate());
+		return jmsItemWriter;
+	}
+
+	@Bean
+	JmsOperations jmsResponseTemplate() {
+		JmsTemplate jmsResponseTemplate = new JmsTemplate(connectionFactory());
+		jmsResponseTemplate.setDefaultDestinationName("yoink-response");
+		jmsResponseTemplate.setReceiveTimeout(2000l);
+		return jmsResponseTemplate;
+	}
 
 }

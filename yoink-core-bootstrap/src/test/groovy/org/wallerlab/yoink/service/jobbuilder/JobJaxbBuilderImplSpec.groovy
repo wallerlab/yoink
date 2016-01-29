@@ -14,11 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wallerlab.yoink.service
+package org.wallerlab.yoink.service.jobbuilder
 
 import org.xml_cml.schema.ObjectFactory
 
-import spock.lang.Specification;
+import spock.lang.Specification
+
+import javax.xml.bind.JAXBElement;
 
 import org.wallerlab.yoink.api.*
 import org.wallerlab.yoink.api.enums.*
@@ -29,27 +31,26 @@ import org.wallerlab.yoink.api.service.molecular.Translator
 import org.wallerlab.yoink.service.jobbuilder.JobFileBuilderImpl;
 import org.wallerlab.yoink.api.model.bootstrap.Job
 
-class JobBuilderImplSpec extends Specification {
+class JobJaxbBuilderImplSpec extends Specification {
 
 	def "test method read(String inputfile,YoinkJob<JAXBElement> job)"(){
 		def jaxbReader=Mock(FilesReader)
 		def  molecularSystemTranslator=Mock(Translator)
 		def  parameterTranslator=Mock(Translator)
 		def factory=new ObjectFactory()
-		def cml=factory.createCml()
-		def input=factory.createCml(cml)
-		jaxbReader.read(_,_)>>input
+		def cml=factory.createCml()	
+		def jaxB = factory.createCml(cml)
 		molecularSystemTranslator.translate(_)>>Mock(MolecularSystem)
 		parameterTranslator.translate(_)>>Mock(Map)
+		
 
 		when:"set up a new JobBuilder"
-		def builder=new JobFileBuilderImpl()
+		def builder=new JobJaxbBuilderImpl()
 		builder.jaxbFileReader=jaxbReader
 		builder.molecularSystemTranslator=molecularSystemTranslator
 		builder.parameterTranslator=parameterTranslator
-		def inputfile="./src/test/resources/aro.xml"
-
+		
 		then:"check the return type"
-		builder.build(inputfile) instanceof Job
+		builder.build(jaxB) instanceof Job
 	}
 }

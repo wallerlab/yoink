@@ -56,16 +56,11 @@ public class JobStringBuilderImpl extends AbstractJobBuilder<String,JAXBElement>
 	@Override
 	public Job<JAXBElement> build(String inputfile) {
 		Job<JAXBElement> job= new AdaptiveQMMMJob();
-		readInCmlElement(inputfile, job);
+		JAXBElement<Cml> cmlElement = (JAXBElement<Cml>) jaxbStringReader.read(
+				inputfile, new Cml());
+		job.setInput(cmlElement);
 		process(job);
 		return job;
 	}
 
-	protected void readInCmlElement(String inputfile, Job job) {
-		JAXBElement<Cml> cmlElement = (JAXBElement<Cml>) jaxbStringReader.read(
-				inputfile, new Cml());
-		job.setInput(cmlElement);
-	}
-
-	
 }

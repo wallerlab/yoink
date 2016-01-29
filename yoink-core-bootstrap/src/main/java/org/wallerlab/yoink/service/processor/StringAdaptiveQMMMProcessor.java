@@ -15,28 +15,15 @@
  */
 package org.wallerlab.yoink.service.processor;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
 import javax.xml.bind.JAXBElement;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.bootstrap.Job;
-import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
-import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
-import org.wallerlab.yoink.api.model.regionizer.Region;
-import org.wallerlab.yoink.api.model.regionizer.Region.Name;
-import org.wallerlab.yoink.api.service.adaptive.Smoothner;
 import org.wallerlab.yoink.api.service.bootstrap.JobBuilder;
-import org.wallerlab.yoink.api.service.bootstrap.Wrapper;
-import org.wallerlab.yoink.api.service.regionizer.Regionizer;
-import org.wallerlab.yoink.api.service.regionizer.RegionizerMath;
+
 
 /**
  * This class is to set up and execute adaptive QM/MM partitioning.
@@ -50,7 +37,6 @@ public class StringAdaptiveQMMMProcessor extends AbstractAdaptiveQMMMProcessor<S
 	@Autowired
 	@Qualifier("jobStringBuilderImpl")
 	private JobBuilder<String,JAXBElement> jobStringBuilderImpl;
-
 
 	protected static final Log log = LogFactory.getLog(StringAdaptiveQMMMProcessor.class);
 
