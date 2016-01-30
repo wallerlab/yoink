@@ -1,20 +1,15 @@
 package org.wallerlab.yoink.molecular.data
 
-
 import javax.xml.bind.JAXBElement
-import org.wallerlab.yoink.molecular.domain.SimpleCoord
-import org.wallerlab.yoink.molecular.domain.SimpleMolecularSystem
+import org.apache.commons.io.FileUtils
 import org.xml_cml.schema.Cml
+
 import spock.lang.Specification
-import com.sun.xml.internal.bind.v2.runtime.IllegalAnnotationsException
-import javax.xml.bind.JAXBElement;
-import org.xml_cml.schema.MoleculeList;
 
-class JaxbStringReaderSpec extends Specification{
+class JaxbStringWriterSpec extends Specification {
 
-	def "test method read()"(){
-
-		when:"jaxb reader reads from a string"
+	def"write()"(){
+		when:"jaxb writer writes  an object from jaxb reader"
 			def reader= new JaxbStringReader()
 			def input = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <cml xmlns="http://www.xml-cml.org/schema">
@@ -55,13 +50,11 @@ class JaxbStringReaderSpec extends Specification{
         <parameter name="OUTPUT_FOLDER" value="./outputs"/>
     </parameterList>
 </cml>"""
+			def msr=(JAXBElement<Cml>)reader.read(input, new Cml())
+			def writer= new JaxbStringWriter()
 			
-			JAXBElement<Cml> msr= reader.read(input,new Cml())
-			JAXBElement mlJAXB =((((JAXBElement)msr.getValue().getAnyCmlOrAnyOrAny().get(0))))
-			MoleculeList ml= mlJAXB.getValue()
-		then:"assert the content in the given file"
-			msr.getValue().getAnyCmlOrAnyOrAny().size()==2
-			ml.getAnyCmlOrAnyOrAny().size()==2
-	}	
-	
+			writer.write("not-used", msr.getValue())
+		then:"the out file and the input file are the same"
+			 writer.getOutput() 		
+	}
 }

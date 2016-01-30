@@ -56,15 +56,21 @@ import org.springframework.batch.item.jms.JmsItemReader;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.wallerlab.yoink.service.request.JmsRequestReader;
 import org.wallerlab.yoink.service.response.JmsJobItemWriter;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 /**
- * this class is configuration for spring batch
+ * This class is configuration for spring batch
  *
  * @author Min Zheng
  */
+@Lazy
 @Configuration
 @EnableBatchProcessing
 @EnableTransactionManagement
+@PropertySource("classpath:application.properties")
 public class BatchConfig {
 
 	@Autowired
@@ -74,57 +80,68 @@ public class BatchConfig {
 	@Qualifier("serviceStep")
 	private Step serviceStep;
 
-	@Autowired
-	@Qualifier("batchStep")
-	private Step batchStep;
-
-	@Autowired
-	@Qualifier("jmsStep")
-	private Step jmsStep;
-
+	
 	/**
 	 * build whole job using a service based job
 	 *
 	 * @param jobs
 	 *            -
 	 *            {@link org.springframework.batch.core.configuration.annotation.JobBuilderFactory}
-	 * @param s1
-	 *            -{@link org.springframework.batch.core.Step}
+	 *
 	 * @return Job -{@link org.springframework.batch.core.Job}
 	 */
 	@Bean
 	public org.springframework.batch.core.Job importServiceJob(JobBuilderFactory jobs) {
-		return jobs.get("service").incrementer(new RunIdIncrementer()).flow(serviceStep).end().build();
+		return jobs.get("service")
+				.incrementer(new RunIdIncrementer())
+				.flow(serviceStep)
+				.end()
+				.build();
 	}
 
+	@Autowired
+	@Qualifier("batchStep")
+	private Step batchStep;
+
+	
 	/**
-	 * build whole job using a batch based approach.
+	 * build a batch job using a batch based approach.
 	 *
 	 * @param jobs
 	 *            -
 	 *            {@link org.springframework.batch.core.configuration.annotation.JobBuilderFactory}
-	 * @param s1
-	 *            -{@link org.springframework.batch.core.Step}
+	 *
 	 * @return Job -{@link org.springframework.batch.core.Job}
 	 */
 	@Bean
 	public org.springframework.batch.core.Job importBatchJob(JobBuilderFactory jobs) {
-		return jobs.get("batch").incrementer(new RunIdIncrementer()).flow(batchStep).end().build();
+		return jobs.get("batch")
+				.incrementer(new RunIdIncrementer())
+				.flow(batchStep)
+				.end()
+				.build();
 	}
 
+	@Autowired
+	@Qualifier("jmsStep")
+	private Step jmsStep;
+	
 	/**
-	 * build whole job using a batch based approach.
+	 * build a batch job using a JMS based approach.
 	 *
 	 * @param jobs
 	 *            -
 	 *            {@link org.springframework.batch.core.configuration.annotation.JobBuilderFactory}
-	 * @param s1
-	 *            -{@link org.springframework.batch.core.Step}
+	 *
 	 * @return Job -{@link org.springframework.batch.core.Job}
 	 */
 	@Bean
 	public org.springframework.batch.core.Job importJmsJob(JobBuilderFactory jobs) {
-		return jobs.get("jms").incrementer(new RunIdIncrementer()).flow(jmsStep).end().build();
+		return jobs.get("jms")
+				.incrementer(new RunIdIncrementer())
+				.flow(jmsStep)
+				.end()
+				.build();
 	}
 
 	/**
@@ -145,8 +162,10 @@ public class BatchConfig {
 	public Step serviceStep(StepBuilderFactory stepBuilderFactory, ItemReader<List<File>> cmlFilesRequest,
 			ItemProcessor<List<File>, List<org.wallerlab.yoink.api.model.bootstrap.Job>> adaptiveQMMMProcessor,
 			ItemWriter<List<org.wallerlab.yoink.api.model.bootstrap.Job>> cmlFilesResponse) {
-		return stepBuilderFactory.get("adaptiveQMMM").<List<File>, List<org.wallerlab.yoink.api.model.bootstrap
-				.Job>> chunk(1).reader(cmlFilesRequest).processor(adaptiveQMMMProcessor).writer(cmlFilesResponse)
+		return stepBuilderFactory.get("adaptiveQMMM").<List<File>, List<org.wallerlab.yoink.api.model.bootstrap.Job>> chunk(1)
+				.reader(cmlFilesRequest)
+				.processor(adaptiveQMMMProcessor)
+				.writer(cmlFilesResponse)
 				.build();
 	}
 
@@ -175,6 +194,11 @@ public class BatchConfig {
 				.writer(cmlFileResponseWriter).build();
 	}
 
+	/**
+	 * Standard Spring Batch bean 
+	 * 
+	 * @return a bean to read all xml files within a given folder
+	 */
 	@Bean
 	MultiResourceItemReader cmlFilesReader() {
 		MultiResourceItemReader multiResourceItemReader = new MultiResourceItemReader();
@@ -187,6 +211,11 @@ public class BatchConfig {
 		return multiResourceItemReader;
 	}
 
+	/**
+	 *  Standard Spring Batch item reader for OXM (Object Unmarshalling)
+	 *  
+	 * @return Item Reader bean -{@link org.springframework.batch.item.xml.StaxEventItemReader<T>}
+	 */
 	@Bean
 	StaxEventItemReader<JAXBElement> cmlFilereader() {
 		StaxEventItemReader reader = new StaxEventItemReader();
@@ -195,6 +224,11 @@ public class BatchConfig {
 		return reader;
 	}
 
+	/**
+	 *  Standard Spring Batch item reader for JAXB
+	 *  
+	 * @return  JAXB reader bean -{@link org.springframework.oxm.jaxb.Jaxb2Marshaller}
+	 */
 	@Bean
 	org.springframework.oxm.Unmarshaller unmarshaller() {
 		Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
@@ -227,9 +261,13 @@ public class BatchConfig {
 
 	/**
 	 * This is a bean that wraps around the standard jmsItemReader. It converts
-	 * it to a long running service.
+	 * it to a long running service. I.e. it does not return null, because this 
+	 * would terminate the Spring Batch job. Instead, if no message is received 
+	 * it goes to sleep for some time and tries again later.
 	 * 
-	 * @return
+	 * @return a self made bean that wraps a standard JMS bean 
+	 * 			-{@line org.wallerlab.yoink.service.request.JmsRequestReader}
+     *
 	 */
 	@Bean
 	ItemReader<String> jmsRequestReader() {
@@ -238,6 +276,17 @@ public class BatchConfig {
 		return jmsRequestReader;
 	}
 
+	/**
+	 * Standard connection factory
+	 *   -{@link org.apache.activemq.spring.ActiveMQConnectionFactory}
+     *
+	 * 
+	 * Broker URL is where the ActiveMQ is running. 
+	 * 
+	 * The port used to be 61620 or so, now it is 61616 - careful.
+	 * 
+	 * @return
+	 */
 	@Bean
 	ConnectionFactory connectionFactory() {
 		ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory();
@@ -245,6 +294,10 @@ public class BatchConfig {
 		return connectionFactory;
 	}
 
+	/**
+	 * Standard Spring Batch item reader for jms.
+	 * @return -{@link org.springframework.batch.item.jms.JmsItemReader<T>}
+	 */
 	@Bean
 	ItemReader<String> jmsItemReader() {
 		JmsItemReader<String> jmsItemReader = new JmsItemReader<String>();
@@ -252,6 +305,10 @@ public class BatchConfig {
 		return jmsItemReader;
 	}
 
+	/**
+	 * Standard JMS template for sending request.
+	 * @return -{@link org.springframework.jms.core.JmsTemplate}
+	 */	
 	@Bean
 	JmsOperations jmsRequestTemplate() {
 		JmsTemplate jmsRequestTemplate = new JmsTemplate(connectionFactory());
@@ -260,12 +317,21 @@ public class BatchConfig {
 		return jmsRequestTemplate;
 	}
 
+	/**
+	 * This bean delegates to a standard JMS item writer from Spring Batch,
+	 * after it has converted the job to a string containing the xml output.
+	 * @return a bean to write back to a jms queue
+	 */
 	@Bean
 	ItemWriter<org.wallerlab.yoink.api.model.bootstrap.Job> jmsJobItemWriter() {
 		ItemWriter jmsJobItemWriter = new JmsJobItemWriter();
 		return jmsJobItemWriter;
 	}
 
+	/**
+	 * Standard Spring Batch item writer for jms.
+	 * @return -{@link org.springframework.batch.item.jms.JmsItemWriter<T>}
+	 */
 	@Bean
 	ItemWriter<String> jmsItemWriter() {
 		JmsItemWriter<String> jmsItemWriter = new JmsItemWriter<String>();
@@ -273,6 +339,10 @@ public class BatchConfig {
 		return jmsItemWriter;
 	}
 
+	/**
+	 * Standard JMS template, used to respond.
+	 * @return -{@link org.springframework.jms.core.JmsTemplate}
+	 */	
 	@Bean
 	JmsOperations jmsResponseTemplate() {
 		JmsTemplate jmsResponseTemplate = new JmsTemplate(connectionFactory());
@@ -280,5 +350,10 @@ public class BatchConfig {
 		jmsResponseTemplate.setReceiveTimeout(2000l);
 		return jmsResponseTemplate;
 	}
+	
+	@Bean
+    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+        return new PropertySourcesPlaceholderConfigurer();
+    }
 
 }
