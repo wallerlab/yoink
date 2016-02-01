@@ -20,7 +20,6 @@ public class MMProcessor implements AdaptiveProcessor{
 	@Override
 	public void run(Job<JAXBElement> job) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

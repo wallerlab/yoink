@@ -15,56 +15,61 @@
  */
 package org.wallerlab.yoink.service.response;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.JAXBElement;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
-import org.wallerlab.yoink.api.model.bootstrap.Job;
-import org.wallerlab.yoink.api.service.molecular.FilesWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.wallerlab.yoink.api.model.bootstrap.Job;
+import org.wallerlab.yoink.molecular.data.JaxbStringWriter;
+import org.xml_cml.schema.Cml;
+
 /**
- * This class is for job response, to write adaptive qmmm result into a cml
- * file.
- * 
- * 
- * @author Min Zheng
+ * This class converts a job to a string using JAXB, and then 
+ * delegates to a standard JmsItemWriter from Spring batch.
+ *
  *
  */
 @Service
-public class CmlFilesResponse implements ItemWriter<List<Job<JAXBElement>>> {
+public class JmsJobItemWriter implements ItemWriter<Job> {
 
 	@Autowired
-	@Qualifier("jaxbFileWriter")
-	private FilesWriter<Object> jaxbWriter;
+	@Qualifier("jaxbStringWriter")
+	private JaxbStringWriter  jaxbStringWriter;
+	
+	@Autowired
+	ItemWriter<String> jmsItemWriter;
 
 	protected static final Log log = LogFactory.getLog(CmlFilesResponse.class);
 
 	/**
-	 * write adaptive qmmm result into a cml file.
+	 * write adaptive QM/MM result into a String, and then send to a JMS queue.
 	 * 
 	 * @param jobs
 	 *            - a List of Job
 	 *            {@link org.wallerlab.yoink.api.model.bootstrap.Job } List
 	 */
 	@Override
-	public void write(List<? extends List<Job<JAXBElement>>> jobs)
-			throws Exception {
-		for (List<Job<JAXBElement>> jobList : jobs) {
-			for (Job<JAXBElement> job : jobList) {
-				String name = (String) job.getParameters().get(
-						JobParameter.JOB_NAME);
-				String parentDirName = (String) job.getParameters().get(
-						JobParameter.OUTPUT_FOLDER)
-						+ "/";
-				String outputFileName = parentDirName + name + "-out.xml";
-				jaxbWriter.write(outputFileName, job.getInput().getValue());
-			}
+	public void write(List<? extends Job> jobs) throws Exception {
+		List<String> items = new ArrayList<>();
+		for (Job job : jobs) {
+			JAXBElement<Cml> input = (JAXBElement<Cml>) job.getInput();
+			jaxbStringWriter.write("notused",input.getValue());
+			items.add(jaxbStringWriter.getOutput());
 		}
-		log.info("finish writing all output files");
+		jmsItemWriter.write(items);
+	}
+
+	public ItemWriter<String> getJmsItemWriter() {
+		return jmsItemWriter;
+	}
+
+	public void setJmsItemWriter(ItemWriter<String> jmsItemWriter) {
+		this.jmsItemWriter = jmsItemWriter;
 	}
 
 }

@@ -15,9 +15,7 @@
  */
 package org.wallerlab.yoink.adaptive.config;
 
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
+import javax.annotation.Resource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.wallerlab.yoink.adaptive.smooth.DensitySmoothner;
@@ -32,95 +30,65 @@ import org.wallerlab.yoink.api.service.adaptive.SmoothFunction;
  *
  */
 @Configuration
-public class AdaptiveConfig implements ApplicationContextAware {
+public class AdaptiveConfig {
 
-	private ApplicationContext appContext;
-
-	public void setApplicationContext(ApplicationContext applicationContext)
-			throws BeansException {
-		this.appContext = applicationContext;
-	}
+	@Resource
+	SmoothFunction brooksSmoothFunction;
+	@Resource
+	SmoothFunction buloSmoothFunction;
+	@Resource
+	SmoothFunction morokumaSmoothFunction;
+	@Resource
+	SmoothFunction permutedSmoothFunction;
 
 	@Bean
 	public Smoothner densitySmoothnerBF() {
-		Smoothner densityBufferedForceSmoothner = new DensitySmoothner(
-				(SmoothFunction) appContext.getBean("brooksSmoothFunction"));
-		return densityBufferedForceSmoothner;
+		return new DensitySmoothner(brooksSmoothFunction);
 	}
 
 	@Bean
 	public Smoothner distanceSmoothnerBF() {
-		Smoothner distanceBufferedForceSmoother = new DistanceSmoothner(
-				(SmoothFunction) appContext.getBean("brooksSmoothFunction"));
-		return distanceBufferedForceSmoother;
+		return new DistanceSmoothner(brooksSmoothFunction);
 	}
-
-	
 
 	@Bean
 	public Smoothner densitySmoothnerSPOT() {
-		Smoothner densityBufferedForceSmoothner = new DensitySmoothner(
-				(SmoothFunction) appContext.getBean("brooksSmoothFunction"));
-		return densityBufferedForceSmoothner;
+		return new DensitySmoothner(brooksSmoothFunction);
 	}
 
 	@Bean
 	public Smoothner distanceSmoothnerSPOT() {
-		Smoothner distanceBufferedForceSmoother = new DistanceSmoothner(
-				(SmoothFunction) appContext.getBean("brooksSmoothFunction"));
-		return distanceBufferedForceSmoother;
+		return new DistanceSmoothner(brooksSmoothFunction);
 	}
 
-	
 	@Bean
 	public Smoothner densitySmoothnerDAS() {
-
-		Smoothner densitySmoothnerDAS = new DensitySmoothner(
-				(SmoothFunction) appContext.getBean("buloSmoothFunction"));
-
-		return densitySmoothnerDAS;
+		return new DensitySmoothner(buloSmoothFunction);
 	}
 
 	@Bean
 	public Smoothner distanceSmoothnerDAS() {
-		Smoothner distanceSmoothnerDAS = new DistanceSmoothner(
-				(SmoothFunction) appContext.getBean("buloSmoothFunction"));
-		return distanceSmoothnerDAS;
+		return new DistanceSmoothner(buloSmoothFunction);
 	}
 
-	
 	@Bean
 	public Smoothner densitySmoothnerXS() {
-
-		Smoothner densitySmoothnerXS = new DensitySmoothner(
-				(SmoothFunction) appContext.getBean("morokumaSmoothFunction"));
-
-		return densitySmoothnerXS;
+		return new DensitySmoothner(morokumaSmoothFunction);
 	}
 
 	@Bean
 	public Smoothner distanceSmoothnerXS() {
-		Smoothner distanceSmoothnerXS = new DistanceSmoothner(
-				(SmoothFunction) appContext.getBean("morokumaSmoothFunction"));
-		return distanceSmoothnerXS;
-		
+		return new DistanceSmoothner(morokumaSmoothFunction);
 	}
-	
+
 	@Bean
 	public Smoothner densitySmoothnerPAP() {
-
-		Smoothner densitySmoothnerPAP = new DensitySmoothner(
-				(SmoothFunction) appContext.getBean("permutedSmoothFunction"));
-
-		return densitySmoothnerPAP;
+		return new DensitySmoothner(permutedSmoothFunction);
 	}
 
 	@Bean
 	public Smoothner distanceSmoothnerPAP() {
-		Smoothner distanceSmoothnerPAP = new DistanceSmoothner(
-				(SmoothFunction) appContext.getBean("permutedSmoothFunction"));
-		return distanceSmoothnerPAP;
-		
+		return new DistanceSmoothner(permutedSmoothFunction);
 	}
-	
+
 }

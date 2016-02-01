@@ -14,44 +14,35 @@
  * limitations under the License.
  */
 
-package org.wallerlab.yoink.service;
+package org.wallerlab.yoink.service.jobbuilder;
 
-import java.io.File;
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.xml.bind.JAXBElement;
 
-import org.springframework.batch.item.ItemProcessor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
 import org.wallerlab.yoink.api.model.bootstrap.Job;
-import org.wallerlab.yoink.api.service.molecular.FilesReader;
+import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
 import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
 import org.wallerlab.yoink.api.service.bootstrap.JobBuilder;
+import org.wallerlab.yoink.api.service.molecular.FilesReader;
 import org.wallerlab.yoink.api.service.molecular.Translator;
 import org.wallerlab.yoink.domain.AdaptiveQMMMJob;
 import org.xml_cml.schema.Cml;
-
 /**
  * this class is to read in all inputs (like molecular system and parameters)
  * needed for adaptive QM/MM partitioning.
  * 
- * @author Min Zheng
  *
  */
 @Service
-public class JobBuilderImpl implements JobBuilder<JAXBElement >{
+public class JobStringBuilderImpl extends AbstractJobBuilder<String,JAXBElement>{
 
-	@Resource
-	private FilesReader<Object, String> jaxbReader;
-
-	@Resource
-	private Translator<MolecularSystem, JAXBElement<Cml>> molecularSystemTranslator;
-
-	@Resource
-	private Translator<Map<JobParameter, Object>, JAXBElement<Cml>> parameterTranslator;
+	@Resource 	//Use a string, not a file
+	private FilesReader<Object, String> jaxbStringReader;
 
 	/**
 	 * read in cml file, and convert it to molecular system and parameters for
@@ -65,28 +56,11 @@ public class JobBuilderImpl implements JobBuilder<JAXBElement >{
 	@Override
 	public Job<JAXBElement> build(String inputfile) {
 		Job<JAXBElement> job= new AdaptiveQMMMJob();
-		readInCmlElement(inputfile, job);
-		readInMolecularSystem(job);
-		readInParameters(job);
-		return job;
-	}
-
-	private void readInCmlElement(String inputfile, Job job) {
-		JAXBElement<Cml> cmlElement = (JAXBElement<Cml>) jaxbReader.read(
+		JAXBElement<Cml> cmlElement = (JAXBElement<Cml>) jaxbStringReader.read(
 				inputfile, new Cml());
 		job.setInput(cmlElement);
-	}
-
-	private void readInMolecularSystem(Job<JAXBElement> job) {
-		MolecularSystem molecularSystem = molecularSystemTranslator
-				.translate(job.getInput());
-		job.setMolecularSystem(molecularSystem);
-	}
-
-	private void readInParameters(Job<JAXBElement> job) {
-		Map<JobParameter, Object> parameters = parameterTranslator
-				.translate(job.getInput());
-		job.setParameters(parameters);
+		process(job);
+		return job;
 	}
 
 }

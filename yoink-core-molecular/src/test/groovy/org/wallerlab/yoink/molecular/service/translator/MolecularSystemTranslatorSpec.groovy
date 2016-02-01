@@ -19,7 +19,7 @@ import javax.xml.bind.JAXBElement;
 
 import org.wallerlab.yoink.api.service.molecular.Converter.UnitConverterType;
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
-import org.wallerlab.yoink.molecular.data.JaxbReader
+import org.wallerlab.yoink.molecular.data.JaxbFileReader
 import org.wallerlab.yoink.molecular.domain.SimpleCoordFactory
 import org.xml_cml.schema.Cml;
 import org.xml_cml.schema.ObjectFactory
@@ -34,7 +34,7 @@ class MolecularSystemTranslatorSpec extends Specification {
 
 	def "test method translate(JAXBElement<Cml> cml)"(){
 		when:"make a new  MolecularSystemTranslator for a given file"
-		def cml=(JAXBElement<Cml>)new JaxbReader().read("./src/test/resources/aro.xml", new  Cml())
+		def cml=(JAXBElement<Cml>)new JaxbFileReader().read("./src/test/resources/aro.xml", new  Cml())
 		def molecularSystemTranslator= new MolecularSystemTranslator()
 		molecularSystemTranslator.unitConverterType=UnitConverterType.AngstromToBohr
 		def myVector3D=new SimpleVector3DFactory()
@@ -46,6 +46,7 @@ class MolecularSystemTranslatorSpec extends Specification {
 		centerOfMassComputer.calculate(_)>>Mock(Coord)
 		molecularSystemTranslator.centerOfMassComputer=centerOfMassComputer
 		molecularSystemTranslator.myVector3D=myVector3D
+		
 		then:"translate molecular information in the given file"
 		def ms =molecularSystemTranslator.translate(cml)
 		ms.getMolecules().size()==476

@@ -19,10 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import javax.annotation.Resource;
 import javax.xml.bind.JAXBElement;
-
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
 import org.wallerlab.yoink.api.model.bootstrap.Job;
@@ -38,6 +35,8 @@ import org.xml_cml.schema.ObjectFactory;
 import org.xml_cml.schema.Property;
 import org.xml_cml.schema.PropertyList;
 import org.xml_cml.schema.Scalar;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
  * this class is to wrap adaptive qmmm result to JAXB element PropertyList
@@ -48,8 +47,9 @@ import org.xml_cml.schema.Scalar;
 @Service
 public class PropertyWrapper implements Wrapper<Job<JAXBElement>> {
 
-	@Resource
-	private FilesWriter<Object> jaxbWriter;
+	@Autowired
+	@Qualifier("jaxbFileWriter")
+	private FilesWriter<Object> jaxbFileWriter;
 
 	/**
 	 * wrap molecular name(

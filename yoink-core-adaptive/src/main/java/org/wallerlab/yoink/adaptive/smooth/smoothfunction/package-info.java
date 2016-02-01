@@ -1,4 +1,4 @@
-/**  this packages contains smooth functions
+/**  This packages contains the various smoothing functions
  * @author Min Zheng
  *
  */

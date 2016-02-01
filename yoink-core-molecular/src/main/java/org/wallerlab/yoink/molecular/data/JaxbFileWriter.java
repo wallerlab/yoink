@@ -16,13 +16,8 @@
 package org.wallerlab.yoink.molecular.data;
 
 import java.io.File;
-
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.api.service.molecular.FilesWriter;
 
 /**
  * this class is to use jaxb to write an object into CML file.
@@ -31,8 +26,10 @@ import org.wallerlab.yoink.api.service.molecular.FilesWriter;
  *
  */
 @Service
-public class JaxbWriter implements FilesWriter<Object> {
+public class JaxbFileWriter extends AbstractJaxbWriter {
 
+	private File output;
+	
 	/**
 	 * use JAXB writer to write out an instance to a file.
 	 * 
@@ -42,18 +39,13 @@ public class JaxbWriter implements FilesWriter<Object> {
 	 *            - the instance will be written into a file
 	 */
 	public void write(String nameOfFile, Object jaxbObject) {
-		File file = new File(nameOfFile);
-		try {
-			JAXBContext jaxbContext = JAXBContext.newInstance(Class
-					.forName(jaxbObject.getClass().getName()));
-			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-			jaxbMarshaller.marshal(jaxbObject, file);
-		} catch (JAXBException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
+		this.jaxbObject = jaxbObject;
+		this.output = new File(nameOfFile);
+		marshall();
+	}
+	
+	protected void marshal() throws JAXBException {
+		jaxbMarshaller.marshal(jaxbObject, output);
 	}
 
 }

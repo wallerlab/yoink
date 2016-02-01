@@ -25,7 +25,6 @@ import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
 import org.wallerlab.yoink.api.model.bootstrap.Job;
 import org.wallerlab.yoink.api.service.adaptive.Smoothner;
-import org.wallerlab.yoink.api.service.adaptive.Smoothner;
 
 /**
  * this class is to choose different smoothner to smooth the buffer region
