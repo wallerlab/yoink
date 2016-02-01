@@ -30,6 +30,6 @@ class ParameterTranslatorSpec extends Specification {
 		def cml=new JaxbFileReader().read("./src/test/resources/aro.xml", new  Cml())
 		then:"tranlate all parameters in given file"
 		parameterTranslator.translate(cml)
-		parameterTranslator.translate(cml).size()==22
+		parameterTranslator.translate(cml).size()==21
 	}
 }

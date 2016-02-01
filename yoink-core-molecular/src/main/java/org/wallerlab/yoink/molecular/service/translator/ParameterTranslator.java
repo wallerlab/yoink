@@ -140,7 +140,7 @@ public class ParameterTranslator implements
 			parameters.put(jobParameter, Partitioner.Type.valueOf(value));
 			break;
 		case JOB_NAME:
-		case INPUT_FOLDER:
+		//case INPUT_FOLDER:
 		case OUTPUT_FOLDER:
 			parameters.put(jobParameter, value);
 			break;
