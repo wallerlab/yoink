@@ -290,7 +290,7 @@ public class BatchConfig {
 	@Bean
 	ConnectionFactory connectionFactory() {
 		ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory();
-		connectionFactory.setBrokerURL("tcp://localhost:61616");
+		connectionFactory.setBrokerURL("tcp://den2.uni-muenster.de:61616");
 		return connectionFactory;
 	}
 

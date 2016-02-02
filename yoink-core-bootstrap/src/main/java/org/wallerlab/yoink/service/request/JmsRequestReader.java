@@ -40,6 +40,7 @@ public class JmsRequestReader implements ItemReader<String> {
 		while (jmsResquestReaderServiceRunning) {
 			item = Optional.ofNullable(jmsItemReader.read());		
 			if (!item.isPresent()) {
+				System.out.println("check for job");
 				Thread.sleep(1000);
 			} else
 				break;

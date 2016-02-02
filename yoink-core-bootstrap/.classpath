@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry kind="src" path="src/integration-test/java"/>
+	<classpathentry kind="src" path="src/integration-test/resources"/>
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="src" path="src/main/resources"/>
 	<classpathentry kind="src" path="src/test/groovy"/>
 	<classpathentry kind="src" path="src/test/resources"/>
-	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry exported="true" kind="con" path="org.springsource.ide.eclipse.gradle.classpathcontainer"/>
-	<classpathentry exported="true" kind="con" path="GROOVY_DSL_SUPPORT"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/yoink-core-api"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/yoink-core-density"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/yoink-core-math"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/yoink-core-molecular"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/yoink-core-regionizer"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/yoink-core-adaptive"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

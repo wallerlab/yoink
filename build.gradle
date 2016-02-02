@@ -4,7 +4,7 @@ allprojects {
 	apply plugin:'groovy'
 
 	sourceCompatibility = 1.8
-	version = '0.0.1'
+	version = '0.0.2'
 
 	jar {
 		manifest {
@@ -53,16 +53,14 @@ allprojects {
 		compile 'org.springframework:spring-jms:4.2.4.RELEASE'
 		compile 'org.apache.activemq:activemq-broker:5.13.0'
 		compile 'org.apache.activemq:activemq-core:5.7.0'
-		
-		testCompile group: 'junit', name: 'junit', version: '4.+'		
+
+		testCompile group: 'junit', name: 'junit', version: '4.+'
 	}
 }
 
 test { systemProperties 'property': 'value'  }
 
-project(':yoink-core-api'){
-	 dependencies{  }
-}
+project(':yoink-core-api'){ dependencies{  } }
 
 project(':yoink-core-math'){
 	dependencies{	compile project(':yoink-core-api')  }
@@ -122,6 +120,8 @@ project(':yoink-core-adaptiveProcessor'){
 	}
 }
 
+
+
 project(':yoink-core-bootstrap'){
 	dependencies {
 		compile project(':yoink-core-api')
@@ -150,7 +150,11 @@ project(':yoink-core-bootstrap'){
 	}
 }
 
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin:'groovy'
 
+sourceCompatibility = 1.8
 apply plugin: 'spring-boot'
 apply plugin: 'application'
 mainClassName = "org.wallerlab.yoink.Yoink"
@@ -163,9 +167,16 @@ buildscript {
 	dependencies { classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.7.RELEASE") }
 }
 
-dependencies { compile("org.springframework.boot:spring-boot-starter-batch") }
+dependencies {
+	compile("org.springframework.boot:spring-boot-starter-batch")
+	compile project(':yoink-core-bootstrap')
+}
 
-configurations { all*.exclude module : 'spring-boot-starter-logging' }
+configurations {
+	integrationTestCompile.extendsFrom testCompile
+	integrationTestRuntime.extendsFrom testRuntime
+	all*.exclude module : 'spring-boot-starter-logging'
+}
 
 // generate one jar file for multi projects
 subprojects.each { subproject -> evaluationDependsOn(subproject.path)}
@@ -204,43 +215,4 @@ task alljavadoc(type: Javadoc) {
 
 }
 
-task executeExamples << {
-	buildDir="./examples"
-	def jarName="Yoink"+"-"+version+".jar";
-	print "jar name :"
-	println  jarName
-	def proc= "rm -rf ./inputs".execute();
-	proc.waitFor()
-	proc =  "cp -r ./src/main/resources ./inputs".execute();
-	proc.waitFor()
-	proc= "rm -rf ./outputs".execute();
-	proc.waitFor()
-	proc =  "mkdir ./outputs".execute();
-	proc.waitFor()
-	proc = "cp ./build/libs/$jarName ./".execute();
-	proc.waitFor();
-	proc = "cp ./yoink-core-bootstrap/src/main/resources/application.properties ./".execute();
-	proc.waitFor();
-	def command= "java -jar $jarName"
-	print "command: $command "
-	proc = "java -jar $jarName".execute();
-	println " after java -jar"
-	Thread.sleep(100000)
-	def files_in = []
-	fileTree("./inputs").visit { FileVisitDetails details ->
-		files_in << details.file.path
-	}
-	def files_in_size=files_in.size()
-	println "files_in_size:   $files_in_size"
-	if(files_in_size==0){
-		println " pass test examples"
-		delete fileTree('./outputs')
-	}
-	else
-	{
-		throw new GradleException('error occurred in running examples')
-	}
-}
-
-//build.finalizedBy(executeExamples)
 

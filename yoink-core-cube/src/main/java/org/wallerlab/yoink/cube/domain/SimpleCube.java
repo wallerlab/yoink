@@ -147,7 +147,6 @@ public class SimpleCube implements Cube {
 		this.name = name;
 	}
 
-	@Value("#{'${yoink.cube.densityTypes}'.split(',')}")
 	public List<DensityType> getDensityTypes() {
 		return densityTypes;
 	}
