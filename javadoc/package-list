@@ -41,5 +41,7 @@ org.wallerlab.yoink.regionizer.domain
 org.wallerlab.yoink.regionizer.partitioner
 org.wallerlab.yoink.regionizer.service
 org.wallerlab.yoink.service
+org.wallerlab.yoink.service.jobbuilder
+org.wallerlab.yoink.service.processor
 org.wallerlab.yoink.service.request
 org.wallerlab.yoink.service.response
