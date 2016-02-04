@@ -10,7 +10,7 @@
 ###1. Cloning
 To obtain a copy of the source code, please enter the following [git](https://git-scm.com/) command:
 
- `git clone https://bitbucket.org/zhengmin317/yoink-multi`
+ `git clone https://github.com/wallerlab/yoink.git`
 
 ` cd yoink`
 
