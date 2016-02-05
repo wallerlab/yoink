@@ -12,19 +12,6 @@ allprojects {
 		}
 	}
 
-	/*jar {
-	 manifest {
-	 attributes 'Implementation-Title': 'adaptive qm/mm partitioning','Gradle Quickstart', 'Implementation-Version': version,'Main-Class':'org.wallerlab.yoink.Yoink'
-	 }
-	 from{
-	 configurations.compile.collect{
-	 it.isDirectory() ? it:zipTree(it)
-	 }
-	 configurations.runtime.collect{
-	 it.isDirectory() ? it:zipTree(it)
-	 }
-	 }
-	 }*/
 	jar.doFirst{
 		sourceSets.main.java.srcDirs.each { from it }
 	}
