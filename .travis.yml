@@ -1,4 +1,4 @@
 language: groovy
 jdk:
   - oraclejdk8
-script: ./gradlew clean build jacocoTestReport coveralls
+script: ./gradlew clean build jacocoRootReport coveralls
