@@ -1,8 +1,9 @@
 allprojects {
 	apply plugin: 'java'
 	apply plugin: 'eclipse'
-	apply plugin:'groovy'
+	apply plugin: 'groovy'
         apply plugin: 'jacoco'
+        apply plugin: 'com.github.kt3k.coveralls'
 
 	sourceCompatibility = 1.8
 	version = '0.0.1'
