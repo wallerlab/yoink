@@ -2,6 +2,7 @@ allprojects {
 	apply plugin: 'java'
 	apply plugin: 'eclipse'
 	apply plugin:'groovy'
+        apply plugin: 'jacoco'
 
 	sourceCompatibility = 1.8
 	version = '0.0.1'
@@ -231,3 +232,30 @@ task executeExamples << {
 
 //build.finalizedBy(executeExamples)
 
+
+task jacocoRootReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
+    dependsOn = subprojects.test
+    additionalSourceDirs = files(subprojects.sourceSets.main.allSource.srcDirs)
+    sourceDirectories = files(subprojects.sourceSets.main.allSource.srcDirs)
+    classDirectories = files(subprojects.sourceSets.main.output)
+    executionData = files(subprojects.jacocoTestReport.executionData)
+    reports {
+        html.enabled = true
+        xml.enabled = true
+        csv.enabled = false
+    }
+    onlyIf = {
+        true
+    }
+    doFirst {
+        executionData = files(executionData.findAll {
+            it.exists()
+        })
+    }
+
+  afterEvaluate {
+        classDirectories = files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: ['**/xml_cml/**'])
+            })
+    }
+}
