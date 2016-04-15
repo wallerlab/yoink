@@ -40,13 +40,30 @@ public class SimpleMatrixFactory {
 
 	public Matrix matrix3x3() {
 		Matrix newMatrixInstance;
-		newMatrixInstance = new CommonsMatrix(3, 3);
+		switch (matrixType) {
+		case COMMONS:
+			newMatrixInstance = new CommonsMatrix(3, 3);
+			break;
+		default:
+			newMatrixInstance = null;
+			throw new IllegalArgumentException("Invalid type of matrix: "
+					+ matrixType);
+		}
 		return newMatrixInstance;
 	}
 
 	public Matrix vector3D() {
 		Matrix newMatrixInstance;
+		switch (matrixType) {
+		case COMMONS:
 		newMatrixInstance = new CommonsMatrix(1, 3);
+			break;
+		default:
+			newMatrixInstance = null;
+			throw new IllegalArgumentException("Invalid type of matrix: "
+					+ matrixType);
+		}
+		
 		return newMatrixInstance;
 	}
 
