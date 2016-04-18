@@ -72,7 +72,9 @@ class SingleExponentialDecayDetectorComputerSpec extends Specification{
 		def myVector3D=new SimpleVector3DFactory()
 		myVector3D.myVectorType=Vector3DType.COMMONS
 		dv.getGradientVector()>>myVector3D.create(-3.89586557153796E-6,-2.6225334050902747E-7,-1.217407110440996E-6)
-		def matrix2= new SimpleMatrixFactory().matrix3x3()
+		def myMatrix=new SimpleMatrixFactory()
+                myMatrix.matrixType=Matrix.Type.COMMONS
+		def matrix2= myMatrix.matrix3x3()
 		matrix2.array2DRowRealMatrix((double[][])
 				[
 					[
