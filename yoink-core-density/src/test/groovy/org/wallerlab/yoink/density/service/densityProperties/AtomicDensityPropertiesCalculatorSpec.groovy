@@ -30,7 +30,7 @@ import org.wallerlab.yoink.math.linear.CommonsVector3D
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
 import org.wallerlab.yoink.molecular.domain.SimpleCoord
 import org.wallerlab.yoink.molecular.domain.SimpleCoordFactory
-
+import org.wallerlab.yoink.math.linear.SimpleMatrixFactory
 import spock.lang.Specification;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D
@@ -43,6 +43,8 @@ class AtomicDensityPropertiesCalculatorSpec extends Specification{
 		given:
 		def myVector3D=new SimpleVector3DFactory()
 		myVector3D.myVectorType=Vector.Vector3DType.COMMONS
+		def myMatrix=new SimpleMatrixFactory()
+		myMatrix.matrixType=Matrix.Type.COMMONS
 		def simpleCoordFactory=new  SimpleCoordFactory()
 		simpleCoordFactory.myVector3D= myVector3D
 		def coordinate=  simpleCoordFactory.create((double[])[-5.448858, -1.592916 , -2])
@@ -70,6 +72,7 @@ class AtomicDensityPropertiesCalculatorSpec extends Specification{
 
 		when:"make a new AtomicDensityPropertiesCalculator"
 		def calculator= new AtomicDensityPropertiesCalculator()
+		calculator.myMatrix=myMatrix
 		def dv=new SimpleDensityPoint(coordinate)
 
 		then:"assert gradient vector and hessian matrix"
