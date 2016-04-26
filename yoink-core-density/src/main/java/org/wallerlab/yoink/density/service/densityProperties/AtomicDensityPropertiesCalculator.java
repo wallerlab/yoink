@@ -15,6 +15,7 @@
  */
 package org.wallerlab.yoink.density.service.densityProperties;
 
+import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.density.DensityPoint;
 import org.wallerlab.yoink.api.model.molecular.Atom;
@@ -25,7 +26,7 @@ import org.wallerlab.yoink.api.service.math.Matrix;
 import org.wallerlab.yoink.api.service.math.Vector;
 import org.wallerlab.yoink.math.constants.Constants;
 import org.wallerlab.yoink.math.linear.CommonsMatrix;
-
+import org.wallerlab.yoink.math.linear.SimpleMatrixFactory;
 /**
  * This class is to calculate the Properties of a density point from an atom.
  * 
@@ -35,7 +36,8 @@ import org.wallerlab.yoink.math.linear.CommonsMatrix;
 @Service
 public class AtomicDensityPropertiesCalculator implements
 		Calculator<DensityPoint, DensityPoint, Atom> {
-
+	@Resource
+	private SimpleMatrixFactory myMatrix;
 	/**
 	 * calculate a density point's properties from an atom
 	 * 
@@ -104,7 +106,7 @@ public class AtomicDensityPropertiesCalculator implements
 	private Matrix getHessian(Vector distanceVector, Element atomName,
 			double distanceReciprocal, Vector distanceUnitVector, double exp1,
 			double exp2, double exp3, double fac1) {
-		Matrix hessian = new CommonsMatrix(3, 3);
+		Matrix hessian =  myMatrix.matrix3x3();
 		Vector distanceUnitVector2 = distanceUnitVector
 				.ebeMultiply(distanceUnitVector);
 		double distanceReciprocal2 = distanceReciprocal * distanceReciprocal;
