@@ -176,4 +176,13 @@ public class CommonsMatrix implements Matrix<RealMatrix> {
 		return this.internalMatrix.equals(m.getInternalMatrix());
 	}
 
+	@Override
+	public double dotProduct(Matrix m) {
+		double[] v1 = this.internalMatrix.getRow(0);
+		RealVector vector1 = new ArrayRealVector(v1);
+		double[] v2 = ((RealMatrix) m.getInternalMatrix()).getRow(0);
+		RealVector vector2 = new ArrayRealVector(v2);
+		return vector1.dotProduct(vector2);
+	}
+
 }
