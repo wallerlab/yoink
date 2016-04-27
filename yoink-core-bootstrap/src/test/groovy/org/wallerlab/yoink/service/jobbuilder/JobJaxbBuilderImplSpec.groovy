@@ -21,7 +21,7 @@ import org.xml_cml.schema.ObjectFactory
 import spock.lang.Specification
 
 import javax.xml.bind.JAXBElement;
-
+import org.wallerlab.yoink.api.model.bootstrap.JobParameter
 import org.wallerlab.yoink.api.*
 import org.wallerlab.yoink.api.enums.*
 import org.wallerlab.yoink.api.model.*
@@ -37,11 +37,14 @@ class JobJaxbBuilderImplSpec extends Specification {
 		def jaxbReader=Mock(FilesReader)
 		def  molecularSystemTranslator=Mock(Translator)
 		def  parameterTranslator=Mock(Translator)
+		def gridReader=Mock(FilesReader)
 		def factory=new ObjectFactory()
 		def cml=factory.createCml()	
 		def jaxB = factory.createCml(cml)
 		molecularSystemTranslator.translate(_)>>Mock(MolecularSystem)
-		parameterTranslator.translate(_)>>Mock(Map)
+	def parameter=[:]
+		parameter.put(JobParameter.DGRID, false)
+		parameterTranslator.translate(_)>>parameter
 		
 
 		when:"set up a new JobBuilder"
@@ -49,7 +52,7 @@ class JobJaxbBuilderImplSpec extends Specification {
 		builder.jaxbFileReader=jaxbReader
 		builder.molecularSystemTranslator=molecularSystemTranslator
 		builder.parameterTranslator=parameterTranslator
-		
+		builder.radialGridReader=gridReader
 		then:"check the return type"
 		builder.build(jaxB) instanceof Job
 	}

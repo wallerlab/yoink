@@ -19,7 +19,7 @@ import org.wallerlab.yoink.api.model.molecular.Atom;
 import org.wallerlab.yoink.api.model.molecular.Coord;
 import org.wallerlab.yoink.api.model.molecular.Element;
 import org.wallerlab.yoink.api.service.math.Vector;
-
+import org.wallerlab.yoink.api.model.molecular.RadialGrid;
 import spock.lang.Specification
 
 class SimpleAtomSpec extends Specification {
@@ -29,13 +29,16 @@ class SimpleAtomSpec extends Specification {
 		def coordinate=Mock(Coord)
 		def elementType=Element.B
 		def index=1
+		def grid=Mock(RadialGrid)
 		when:"make a new atom using constructor"
 		def atom=new SimpleAtom(index,elementType,coordinate);
+		atom.setRadialGrid(grid)
 		then:"assert the value of getters"
 		assert atom instanceof SimpleAtom
 		atom.getIndex()==1
 		atom.getElementType()==elementType
 		atom.getCoordinate()==coordinate
+		atom.getRadialGrid()==grid
 	}
 
 
@@ -54,5 +57,6 @@ class SimpleAtomSpec extends Specification {
 		atom.getX3()==1.0
 		atom.getY3()==2.0
 		atom.getZ3()==3.0
+		atom.getRadialGrid()==null
 	}
 }

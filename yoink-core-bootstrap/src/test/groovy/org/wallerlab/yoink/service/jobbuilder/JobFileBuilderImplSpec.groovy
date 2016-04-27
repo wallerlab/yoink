@@ -28,25 +28,62 @@ import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
 import org.wallerlab.yoink.api.service.molecular.Translator
 import org.wallerlab.yoink.service.jobbuilder.JobFileBuilderImpl;
 import org.wallerlab.yoink.api.model.bootstrap.Job
-
+import org.wallerlab.yoink.api.model.bootstrap.JobParameter
+import org.wallerlab.yoink.api.model.molecular.Atom
+import org.wallerlab.yoink.api.model.molecular.Element
+import org.wallerlab.yoink.api.model.molecular.RadialGrid
 class JobFileBuilderImplSpec extends Specification {
 
 	def "test method read(String inputfile,YoinkJob<JAXBElement> job)"(){
 		def jaxbReader=Mock(FilesReader)
 		def  molecularSystemTranslator=Mock(Translator)
 		def  parameterTranslator=Mock(Translator)
+		def gridReader=Mock(FilesReader)
 		def factory=new ObjectFactory()
 		def cml=factory.createCml()
 		def input=factory.createCml(cml)
 		jaxbReader.read(_,_)>>input
 		molecularSystemTranslator.translate(_)>>Mock(MolecularSystem)
-		parameterTranslator.translate(_)>>Mock(Map)
-
+		
+		def parameter=[:]
+		parameter.put(JobParameter.DGRID, false)
+		parameterTranslator.translate(_)>>parameter
 		when:"set up a new JobBuilder"
 		def builder=new JobStringBuilderImpl()
 		builder.jaxbStringReader=jaxbReader
 		builder.molecularSystemTranslator=molecularSystemTranslator
 		builder.parameterTranslator=parameterTranslator
+		builder.radialGridReader=gridReader
+		def inputfile="./src/test/resources/aro.xml"
+
+		then:"check the return type"
+		builder.build(inputfile) instanceof Job
+	}
+	
+	def "test method read(String inputfile,YoinkJob<JAXBElement> job) dgrid is ture"(){
+		def jaxbReader=Mock(FilesReader)
+		def  molecularSystemTranslator=Mock(Translator)
+		def  parameterTranslator=Mock(Translator)
+		def gridReader=Mock(FilesReader)
+		def factory=new ObjectFactory()
+		def cml=factory.createCml()
+		def input=factory.createCml(cml)
+		jaxbReader.read(_,_)>>input
+		def ms=Mock(MolecularSystem)
+		def atom=Mock(Atom)
+		atom.getElementType()>>Element.H
+		ms.getAtoms()>>[atom]
+		molecularSystemTranslator.translate(_)>>ms
+		gridReader.read(_,_)>>Mock(RadialGrid)
+		def parameter=[:]
+		parameter.put(JobParameter.DGRID, true)
+		parameterTranslator.translate(_)>>parameter
+		when:"set up a new JobBuilder"
+		def builder=new JobStringBuilderImpl()
+		builder.jaxbStringReader=jaxbReader
+		builder.molecularSystemTranslator=molecularSystemTranslator
+		builder.parameterTranslator=parameterTranslator
+		builder.radialGridReader=gridReader
 		def inputfile="./src/test/resources/aro.xml"
 
 		then:"check the return type"

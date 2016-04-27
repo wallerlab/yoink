@@ -19,8 +19,9 @@ package org.wallerlab.yoink.molecular.domain;
 import java.util.List;
 
 import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.model.molecular.RadialGrid;
 
-public class RadialGrid {
+public class SimpleRadialGrid implements RadialGrid {
 
 	int[][] node_offsets = new int[][] { 
 			{ 0, -2, -5 }, 
@@ -59,115 +60,195 @@ public class RadialGrid {
 	double[] second_derivative_of_grid_values;// fpp(:)
 	double core_cutdens = 1E-12; // Cutoff contribution for core radial grids
 
+	/* (non-Javadoc)
+	 * @see org.wallerlab.yoink.molecular.domain.RadialGrid#getCore_cutdens()
+	 */
+	@Override
 	public double getCore_cutdens() {
 		return core_cutdens;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.wallerlab.yoink.molecular.domain.RadialGrid#getNode_offsets()
+	 */
+	@Override
 	public int[][] getNode_offsets() {
 		return node_offsets;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.wallerlab.yoink.molecular.domain.RadialGrid#getCoefficients_of_first_derivative()
+	 */
+	@Override
 	public double[][] getCoefficients_of_first_derivative() {
 		return coefficients_of_first_derivative;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.wallerlab.yoink.molecular.domain.RadialGrid#getCoefficients_of_second_derivative()
+	 */
+	@Override
 	public double[][] getCoefficients_of_second_derivative() {
 		return coefficients_of_second_derivative;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.wallerlab.yoink.molecular.domain.RadialGrid#getPrefactor_of_first_derivative()
+	 */
+	@Override
 	public double getPrefactor_of_first_derivative() {
 		return prefactor_of_first_derivative;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.wallerlab.yoink.molecular.domain.RadialGrid#getPrefactor_of_second_derivative()
+	 */
+	@Override
 	public double getPrefactor_of_second_derivative() {
 		return prefactor_of_second_derivative;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.wallerlab.yoink.molecular.domain.RadialGrid#getPosition_max()
+	 */
+	@Override
 	public double getPosition_max() {
 		return position_max;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.wallerlab.yoink.molecular.domain.RadialGrid#setPosition_max(double)
+	 */
+	@Override
 	public void setPosition_max(double position_max) {
 		this.position_max = position_max;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.wallerlab.yoink.molecular.domain.RadialGrid#getSquare_position_max()
+	 */
+	@Override
 	public double getSquare_position_max() {
 		return square_position_max;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.wallerlab.yoink.molecular.domain.RadialGrid#setSquare_position_max(double)
+	 */
+	@Override
 	public void setSquare_position_max(double square_position_max) {
 		this.square_position_max = square_position_max;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.wallerlab.yoink.molecular.domain.RadialGrid#getA()
+	 */
+	@Override
 	public double getA() {
 		return a;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.wallerlab.yoink.molecular.domain.RadialGrid#setA(double)
+	 */
+	@Override
 	public void setA(double a) {
 		this.a = a;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.wallerlab.yoink.molecular.domain.RadialGrid#getB()
+	 */
+	@Override
 	public double getB() {
 		return b;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.wallerlab.yoink.molecular.domain.RadialGrid#setB(double)
+	 */
+	@Override
 	public void setB(double b) {
 		this.b = b;
 	}
 
-	public double getDistance_max() {
-		return position_max;
-	}
-
-	public void setDistance_max(double distance_max) {
-		this.position_max = distance_max;
-	}
-
-	public double getSquare_distance_max() {
-		return square_position_max;
-	}
-
-	public void setSquare_distance_max(double square_distance_max) {
-		this.square_position_max = square_distance_max;
-	}
-
+	/* (non-Javadoc)
+	 * @see org.wallerlab.yoink.molecular.domain.RadialGrid#getNgrid()
+	 */
+	@Override
 	public int getNgrid() {
 		return ngrid;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.wallerlab.yoink.molecular.domain.RadialGrid#setNgrid(int)
+	 */
+	@Override
 	public void setNgrid(int ngrid) {
 		this.ngrid = ngrid;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.wallerlab.yoink.molecular.domain.RadialGrid#getGrid_positions()
+	 */
+	@Override
 	public double[] getGrid_positions() {
 		return grid_positions;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.wallerlab.yoink.molecular.domain.RadialGrid#setGrid_positions(double[])
+	 */
+	@Override
 	public void setGrid_positions(double[] grid_positions) {
 		this.grid_positions = grid_positions;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.wallerlab.yoink.molecular.domain.RadialGrid#getGrid_values()
+	 */
+	@Override
 	public double[] getGrid_values() {
 		return grid_values;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.wallerlab.yoink.molecular.domain.RadialGrid#setGrid_values(double[])
+	 */
+	@Override
 	public void setGrid_values(double[] grid_values) {
 		this.grid_values = grid_values;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.wallerlab.yoink.molecular.domain.RadialGrid#getFirst_derivative_of_grid_values()
+	 */
+	@Override
 	public double[] getFirst_derivative_of_grid_values() {
 		return first_derivative_of_grid_values;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.wallerlab.yoink.molecular.domain.RadialGrid#setFirst_derivative_of_grid_values(double[])
+	 */
+	@Override
 	public void setFirst_derivative_of_grid_values(
 			double[] first_derivative_of_grid_values) {
 		this.first_derivative_of_grid_values = first_derivative_of_grid_values;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.wallerlab.yoink.molecular.domain.RadialGrid#getSecond_derivative_of_grid_values()
+	 */
+	@Override
 	public double[] getSecond_derivative_of_grid_values() {
 		return second_derivative_of_grid_values;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.wallerlab.yoink.molecular.domain.RadialGrid#setSecond_derivative_of_grid_values(double[])
+	 */
+	@Override
 	public void setSecond_derivative_of_grid_values(
 			double[] second_derivative_of_grid_values) {
 		this.second_derivative_of_grid_values = second_derivative_of_grid_values;

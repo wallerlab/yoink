@@ -20,7 +20,7 @@ import org.wallerlab.yoink.api.model.molecular.Coord;
 import org.wallerlab.yoink.api.model.molecular.Element;
 import org.wallerlab.yoink.api.service.math.Vector;
 import org.wallerlab.yoink.math.linear.SimpleMatrixFactory
-import org.wallerlab.yoink.molecular.domain.RadialGrid;
+import org.wallerlab.yoink.molecular.domain.SimpleRadialGrid;
 import org.wallerlab.yoink.api.service.math.Matrix;
 
 import spock.lang.Specification
@@ -28,7 +28,7 @@ import spock.lang.Specification
 class RadialGridReaderSpec extends Specification {
 	def "test read(String wfc_file, RadialGrid radial_grid)"(){
 		when:
-		def grid= new RadialGrid()
+		def grid= new SimpleRadialGrid()
 		 def reader= new RadialGridReader()
 		 def myMatrix= new SimpleMatrixFactory()
 		myMatrix.matrixType=Matrix.Type.COMMONS

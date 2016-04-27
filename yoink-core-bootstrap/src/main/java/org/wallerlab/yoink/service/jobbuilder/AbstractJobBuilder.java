@@ -28,10 +28,13 @@ import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
 import org.wallerlab.yoink.api.model.bootstrap.Job;
 import org.wallerlab.yoink.api.service.molecular.FilesReader;
+import org.wallerlab.yoink.api.model.molecular.Atom;
 import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
+import org.wallerlab.yoink.api.model.molecular.RadialGrid;
 import org.wallerlab.yoink.api.service.bootstrap.JobBuilder;
 import org.wallerlab.yoink.api.service.molecular.Translator;
 import org.wallerlab.yoink.domain.AdaptiveQMMMJob;
+import org.wallerlab.yoink.molecular.domain.SimpleRadialGrid;
 import org.xml_cml.schema.Cml;
 
 /**
@@ -53,6 +56,8 @@ public abstract class AbstractJobBuilder<I,O> implements JobBuilder<I,O>{
 	@Resource
 	protected Translator<Map<JobParameter, Object>, JAXBElement<Cml>> parameterTranslator;
 
+	@Resource
+	protected FilesReader<RadialGrid, String> radialGridReader;
 	/**
 	 * read in cml file, and convert it to molecular system and parameters for
 	 * building a new adaptive qmmm job.
@@ -68,8 +73,10 @@ public abstract class AbstractJobBuilder<I,O> implements JobBuilder<I,O>{
 	protected void process(Job<JAXBElement> job) {
 		readInMolecularSystem(job);
 		readInParameters(job);
+		readInRadialGrids(job);
 	}
 	
+
 	protected void readInMolecularSystem(Job<JAXBElement> job) {
 		MolecularSystem molecularSystem = molecularSystemTranslator
 				.translate(job.getInput());
@@ -81,5 +88,22 @@ public abstract class AbstractJobBuilder<I,O> implements JobBuilder<I,O>{
 				.translate(job.getInput());
 		job.setParameters(parameters);
 	}
-
+	protected  void readInRadialGrids(Job<JAXBElement> job) {
+		if((boolean)job.getParameters().get(JobParameter.DGRID)==true){
+			List<Atom> atoms=job.getMolecularSystem().getAtoms();
+			for(Atom atom:atoms){
+				RadialGrid grid= new SimpleRadialGrid();
+				String wfc_name=atom.getElementType().toString().toLowerCase();
+				if(wfc_name.length()==1){
+					wfc_name=wfc_name+"_";
+				}
+				String wfc_file="/yoink-core-molecular/dat/"+wfc_name+"_lda.wfc";
+				grid=radialGridReader.read( wfc_file,grid);
+				atom.setRadialGrid(grid);
+				
+			}
+		}
+		
+	}
+	
 }
