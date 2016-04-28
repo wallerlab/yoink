@@ -69,6 +69,7 @@ public class DensityCalculator implements
 				density += atomDensityCalculator.calculate(currentCoord, atom);
 			}
 		}
+		
 		return density;
 	}
 

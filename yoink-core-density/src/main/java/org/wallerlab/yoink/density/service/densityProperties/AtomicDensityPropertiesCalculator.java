@@ -93,49 +93,59 @@ public class AtomicDensityPropertiesCalculator implements
 		density = getPromolecularDensity(atomName, exp1, exp2, exp3);
 		}
 		else{
-			double f=0.0;
+			
+
+			double f = 0.0;
 			double fp=0.0;
-		double fpp=0.0;
+		 double fpp=0.0;
 			RadialGrid grid = atom.getRadialGrid();
-			if (distance <= grid.getPosition_max()) {
-				double ir = 0;
+			if (distance < grid.getPosition_max()) {
+
+				int ir = 0;
 				double r = 0;
 				double[] grid_positions = grid.getGrid_positions();
-				//careful with grid limits.
+				// careful with grid limits.
 				if (distance <= grid_positions[0]) {
+					
 					ir = 1;
 					r = grid_positions[0];
 				} else {
-					ir=1+Math.floor(Math.log(distance/grid.getA())/grid.getB());
-					r=distance;
+					ir = (int) (1 + Math.floor(Math.log(distance / grid.getA())
+							/ grid.getB()));
+					r = distance;
 				}
-				double[] rr= new double[4];
-				double[] dr1= new double[4];
+				
+				double[] rr = new double[4];
+				double[] dr1 = new double[4];
 				double[][] x1dr12 = new double[4][4];
-		
-				for(int i=0;i<4;i++){
-					int ii=(int) (Math.min(Math.max(ir, 2), grid.getNgrid())-2+i);
-					rr[i]=grid_positions[ii];
-					dr1[i]=r-rr[i];
-					for(int j=0;j<i-1;j++){
-						x1dr12[i][j]=1.0/(rr[i]-rr[j]);
-						x1dr12[j][i]=-x1dr12[i][j];
+
+				for (int i = 0; i < 4; i++) {
+					int ii = (Math.min(Math.max(ir, 2), grid.getNgrid()) - 3 + i);
+					rr[i] = grid_positions[ii];
+					dr1[i] = r - rr[i];
+					
+					for (int j = 0; j <= i - 1; j++) {
+						x1dr12[i][j] = 1.0 / (rr[i] - rr[j]);
+						x1dr12[j][i] = -x1dr12[i][j];
+						
 					}
 				}
-				//interpolate, lagrange 3rd order, 4 nodes
-				for(int i=0;i<4;i++){
-				int	ii=(int) (Math.min(Math.max(ir, 2), grid.getNgrid())-2+i);
-				double prod=1.0;
-				for(int j=0;j<4;j++){
-					if(i==j){
-						continue;
+				// interpolate, lagrange 3rd order, 4 nodes
+				for (int i = 0; i < 4; i++) {
+					int ii = (Math.min(Math.max(ir, 2), grid.getNgrid()) - 3 + i);
+					double prod = 1.0;
+					for (int j = 0; j < 4; j++) {
+						if (i == j) {
+							continue;
+						}
+						
+						prod = prod * dr1[j] * x1dr12[i][j];
 					}
-					prod=prod*dr1[j]*x1dr12[i][j];
-				}
-				//density=density+grid.getGrid_values()[ii]*prod;
-				f=f+grid.getGrid_values()[ii]*prod;
-				fp=fp+grid.getFirst_derivative_of_grid_values()[ii]*prod;
-			fpp=fpp+grid.getSecond_derivative_of_grid_values()[ii]*prod;
+					// density=density+grid.getGrid_values()[ii]*prod;
+					f = f + grid.getGrid_values()[ii] * prod;
+					fp=fp+grid.getFirst_derivative_of_grid_values()[ii]*prod;
+					 fpp=fpp+grid.getSecond_derivative_of_grid_values()[ii]*prod;
+					
 				}
 			}// end of if distance
 			density=f;

@@ -36,43 +36,39 @@ import org.wallerlab.yoink.molecular.domain.SimpleRadialGrid;
 @Service
 public class RadialGridReader implements FilesReader<RadialGrid, String> {
 
-	private List<String> lines;
-	private int num_orbitals;
-	private Matrix occ_electrons;
-	private Matrix wfcin;
-	private double[][] rr_array;
-	private List<String> orbital_types;
-	private double xmin;
-	private double zz;
-	private double dx;
-	private int ngrid;
 	@Resource
 	private SimpleMatrixFactory myMatrix;
 
 	@Override
 	public RadialGrid read(String wfc_file, RadialGrid radial_grid) {
+		List<String> lines = new ArrayList<String>();
+
+		Matrix occ_electrons = myMatrix.matrix();
+		Matrix wfcin = myMatrix.matrix();
+
 		lines = read_wfc_lines(wfc_file);
-		num_orbitals = Integer.parseInt(lines.get(0).trim().split("\\s+")[0]);
-		orbital_types = Arrays.asList(lines.get(1).trim().split("\\s+"));
+
+		int num_orbitals = Integer
+				.parseInt(lines.get(0).trim().split("\\s+")[0]);
+
 		double[][] occ_electrons_array = new double[1][num_orbitals];
 		String[] line_three = lines.get(2).trim().split("\\s+");
 		for (int i = 0; i < line_three.length; i++) {
 			occ_electrons_array[0][i] = Integer.parseInt(line_three[i]);
 		}
-		occ_electrons = myMatrix.matrix();
+
 		occ_electrons.array2DRowRealMatrix(occ_electrons_array);
 		String[] line_four = lines.get(3).trim().split("\\s+");
-		xmin = Double.parseDouble(line_four[0]);
-		zz = Double.parseDouble(line_four[1]);
-		dx = Double.parseDouble(line_four[2]);
-		ngrid = Integer.parseInt(line_four[3]);
-		
-		
+		double xmin = Double.parseDouble(line_four[0]);
+		double zz = Double.parseDouble(line_four[1]);
+		double dx = Double.parseDouble(line_four[2]);
+		int ngrid = Integer.parseInt(line_four[3]);
+
 		// Read the grid and build the density
 		double[][] temp_rr_array = new double[ngrid][3];
 		double[] temp_r_array = new double[ngrid];
 		double[][] wfcin_array = new double[1][num_orbitals];
-		wfcin = myMatrix.matrix();
+
 		for (int j = 0; j < ngrid; j++) {
 			String[] line = lines.get(4 + j).trim().split("\\s+");
 			temp_r_array[j] = Double.parseDouble(line[0]);
@@ -92,13 +88,12 @@ public class RadialGridReader implements FilesReader<RadialGrid, String> {
 			}
 
 		}
-		
-		rr_array = new double[ngrid][3];
-		
+
+		double[][] rr_array = new double[ngrid][3];
+
 		double[] r_array = new double[ngrid];
 		System.arraycopy(temp_rr_array, 0, rr_array, 0, ngrid);
 		System.arraycopy(temp_r_array, 0, r_array, 0, ngrid);
-
 
 		// calculate derivatives
 		double[] first_derivative_of_grid_values = new double[ngrid];
@@ -123,7 +118,7 @@ public class RadialGridReader implements FilesReader<RadialGrid, String> {
 						* rr_array[i + noef[j][ic]][0];
 			}
 			rr_array[i][1] = rr_array[i][1] * fac1;
-			rr_array[i][2] = rr_array[i][1] * fac2;
+			rr_array[i][2] = rr_array[i][2] * fac2;
 			double r = r_array[i];
 			double r1 = 1.0 / r;
 			double r2 = r1 * r1;
@@ -146,10 +141,12 @@ public class RadialGridReader implements FilesReader<RadialGrid, String> {
 		radial_grid.setNgrid(ngrid);
 		radial_grid.setPosition_max(r_array[ngrid - 1]);
 		radial_grid.setSquare_position_max(Math.pow(r_array[ngrid - 1], 2));
-		radial_grid.setFirst_derivative_of_grid_values(first_derivative_of_grid_values);
-		radial_grid.setSecond_derivative_of_grid_values(second_derivative_of_grid_values);
+		radial_grid
+				.setFirst_derivative_of_grid_values(first_derivative_of_grid_values);
+		radial_grid
+				.setSecond_derivative_of_grid_values(second_derivative_of_grid_values);
 		radial_grid.setGrid_values(grid_values);
-		
+
 		return radial_grid;
 	}
 

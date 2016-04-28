@@ -4,6 +4,9 @@
 	<classpathentry kind="src" path="src/main/resources"/>
 	<classpathentry kind="src" path="src/test/groovy"/>
 	<classpathentry kind="src" path="src/test/resources"/>
+	<classpathentry excluding="resources/|java/" kind="src" path="src/integration-test"/>
+	<classpathentry kind="src" path="src/integration-test/resources"/>
+	<classpathentry kind="src" path="src/integration-test/java"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry exported="true" kind="con" path="org.springsource.ide.eclipse.gradle.classpathcontainer"/>
 	<classpathentry exported="true" kind="con" path="GROOVY_DSL_SUPPORT"/>

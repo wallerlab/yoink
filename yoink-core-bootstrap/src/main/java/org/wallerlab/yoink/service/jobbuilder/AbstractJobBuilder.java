@@ -29,6 +29,7 @@ import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
 import org.wallerlab.yoink.api.model.bootstrap.Job;
 import org.wallerlab.yoink.api.service.molecular.FilesReader;
 import org.wallerlab.yoink.api.model.molecular.Atom;
+import org.wallerlab.yoink.api.model.molecular.Coord;
 import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
 import org.wallerlab.yoink.api.model.molecular.RadialGrid;
 import org.wallerlab.yoink.api.service.bootstrap.JobBuilder;
@@ -91,17 +92,30 @@ public abstract class AbstractJobBuilder<I,O> implements JobBuilder<I,O>{
 	protected  void readInRadialGrids(Job<JAXBElement> job) {
 		if((boolean)job.getParameters().get(JobParameter.DGRID)==true){
 			List<Atom> atoms=job.getMolecularSystem().getAtoms();
-			for(Atom atom:atoms){
+	/*		for(Atom atom:atoms){
 				RadialGrid grid= new SimpleRadialGrid();
 				String wfc_name=atom.getElementType().toString().toLowerCase();
 				if(wfc_name.length()==1){
 					wfc_name=wfc_name+"_";
 				}
-				String wfc_file="/yoink-core-molecular/dat/"+wfc_name+"_lda.wfc";
+				String wfc_file=(String)job.getParameters().get(JobParameter.WFC_PATH)+"/"+wfc_name+"_lda.wfc";
 				grid=radialGridReader.read( wfc_file,grid);
 				atom.setRadialGrid(grid);
 				
-			}
+			}*/
+			
+			
+			atoms.parallelStream().forEach(
+					atom -> {
+						RadialGrid grid= new SimpleRadialGrid();
+						String wfc_name=atom.getElementType().toString().toLowerCase();
+						if(wfc_name.length()==1){
+							wfc_name=wfc_name+"_";
+						}
+						String wfc_file=(String)job.getParameters().get(JobParameter.WFC_PATH)+"/"+wfc_name+"_lda.wfc";
+						grid=radialGridReader.read( wfc_file,grid);
+						atom.setRadialGrid(grid);
+					});
 		}
 		
 	}

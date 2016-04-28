@@ -47,7 +47,7 @@ public class SimpleRadialGrid implements RadialGrid {
 			{ 305, -5, -770 }, 
 			{ -50, 0, 225 } };// coef2
 	double prefactor_of_first_derivative = 1.0 / 120.0;// fac1
-	double prefactor_of_second_derivative = 1.0 / 120.0;// fac2
+	double prefactor_of_second_derivative = 2.0 / 120.0;// fac2
 	double a;// Logarithmic grid parameter ri = a * exp(b * (i-1))//a
 	double b;// !< Logarithmic grid parameter ri = a * exp(b * (i-1))//b
 	double position_max;// Max. grid distance// rmax

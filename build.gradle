@@ -167,6 +167,7 @@ configurations { all*.exclude module : 'spring-boot-starter-logging' }
 // generate one jar file for multi projects
 subprojects.each { subproject -> evaluationDependsOn(subproject.path)}
 task allJar(type: Jar, dependsOn: subprojects.assemble) {
+        zip64 = true
 	baseName = 'Yoink'
 	subprojects.each { subproject ->
 		manifest {
@@ -174,6 +175,15 @@ task allJar(type: Jar, dependsOn: subprojects.assemble) {
 			'Main-Class':'org.wallerlab.yoink.Yoink',
 			"Class-Path": subproject.configurations.compile.collect { it.getName() }.join(' ')
 		}
+             from{
+			configurations.compile.collect{
+				it.isDirectory() ? it:zipTree(it)
+			}
+			configurations.runtime.collect{
+				it.isDirectory() ? it:zipTree(it)
+			}
+		}
+
 		from subproject.configurations.archives.allArtifacts.files.collect { zipTree(it) }
 	}
 }
@@ -201,45 +211,7 @@ task alljavadoc(type: Javadoc) {
 
 }
 
-task executeExamples << {
-	buildDir="./examples"
-	def jarName="Yoink"+"-"+version+".jar";
-	print "jar name :"
-	println  jarName
-	def proc= "rm -rf ./inputs".execute();
-	proc.waitFor()
-	proc =  "cp -r ./src/main/resources ./inputs".execute();
-	proc.waitFor()
-	proc= "rm -rf ./outputs".execute();
-	proc.waitFor()
-	proc =  "mkdir ./outputs".execute();
-	proc.waitFor()
-	proc = "cp ./build/libs/$jarName ./".execute();
-	proc.waitFor();
-	proc = "cp ./yoink-core-bootstrap/src/main/resources/application.properties ./".execute();
-	proc.waitFor();
-	def command= "java -jar $jarName"
-	print "command: $command "
-	proc = "java -jar $jarName".execute();
-	println " after java -jar"
-	Thread.sleep(100000)
-	def files_in = []
-	fileTree("./inputs").visit { FileVisitDetails details ->
-		files_in << details.file.path
-	}
-	def files_in_size=files_in.size()
-	println "files_in_size:   $files_in_size"
-	if(files_in_size==0){
-		println " pass test examples"
-		delete fileTree('./outputs')
-	}
-	else
-	{
-		throw new GradleException('error occurred in running examples')
-	}
-}
 
-//build.finalizedBy(executeExamples)
 
 
 task jacocoRootReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {

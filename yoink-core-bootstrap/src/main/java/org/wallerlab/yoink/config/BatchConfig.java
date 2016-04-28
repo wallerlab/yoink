@@ -46,11 +46,11 @@ import org.springframework.oxm.Unmarshaller;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.xml_cml.schema.Cml;
-
 import org.springframework.jms.core.JmsOperations;
 import org.springframework.jms.core.JmsTemplate;
 
 import javax.jms.ConnectionFactory;
+
 import org.springframework.batch.item.jms.JmsItemWriter;
 import org.springframework.batch.item.jms.JmsItemReader;
 import org.apache.activemq.ActiveMQConnectionFactory;
@@ -122,27 +122,6 @@ public class BatchConfig {
 				.build();
 	}
 
-	@Autowired
-	@Qualifier("jmsStep")
-	private Step jmsStep;
-	
-	/**
-	 * build a batch job using a JMS based approach.
-	 *
-	 * @param jobs
-	 *            -
-	 *            {@link org.springframework.batch.core.configuration.annotation.JobBuilderFactory}
-	 *
-	 * @return Job -{@link org.springframework.batch.core.Job}
-	 */
-	@Bean
-	public org.springframework.batch.core.Job importJmsJob(JobBuilderFactory jobs) {
-		return jobs.get("jms")
-				.incrementer(new RunIdIncrementer())
-				.flow(jmsStep)
-				.end()
-				.build();
-	}
 
 	/**
 	 * build executing steps
@@ -234,6 +213,30 @@ public class BatchConfig {
 		Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
 		marshaller.setClassesToBeBound(Cml.class);
 		return (Unmarshaller) marshaller;
+	}
+	
+	
+
+	@Autowired
+	@Qualifier("jmsStep")
+	private Step jmsStep;
+	
+	/**
+	 * build a batch job using a JMS based approach.
+	 *
+	 * @param jobs
+	 *            -
+	 *            {@link org.springframework.batch.core.configuration.annotation.JobBuilderFactory}
+	 *
+	 * @return Job -{@link org.springframework.batch.core.Job}
+	 */
+	@Bean
+	public org.springframework.batch.core.Job importJmsJob(JobBuilderFactory jobs) {
+		return jobs.get("jms")
+				.incrementer(new RunIdIncrementer())
+				.flow(jmsStep)
+				.end()
+				.build();
 	}
 
 	/**

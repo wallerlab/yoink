@@ -147,7 +147,7 @@ public class CommonsMatrix implements Matrix<RealMatrix> {
 		RealVector vector2 = new ArrayRealVector(v2);
 		RealVector vectorEBE = vector1.ebeMultiply(vector2);
 		double[] vEBE = vectorEBE.toArray();
-		tempMatrix = MatrixUtils.createRealMatrix(1, 3);
+		tempMatrix = MatrixUtils.createRealMatrix(1, vEBE.length);
 		tempMatrix.setRow(0, vEBE);
 		Matrix newMatrix = new CommonsMatrix();
 		newMatrix.setInternalMatrix(tempMatrix);

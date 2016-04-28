@@ -34,7 +34,14 @@ class RadialGridReaderSpec extends Specification {
 		myMatrix.matrixType=Matrix.Type.COMMONS
 		reader.myMatrix=myMatrix
 		then:
-		reader.read("/Users/Zheng/Yoink-git/yoink/yoink-core-molecular/dat/c__lda.wfc",  grid)
+		reader.read("./dat/c__lda.wfc",  grid)
+		Math.abs(grid.a-4.1313E-04)<=1.0E-6
+		Math.abs(grid.b-2.0000E-03)<=1.0E-5
+		grid.ngrid==5326
+		Math.abs(grid.position_max-17.4308)<=1.0E-1
+		Math.abs(grid.grid_values[0]-126.29792471)<=1.0E-1
+		Math.abs(grid.first_derivative_of_grid_values[0]+585.74940956)<=1.0E-1
+		Math.abs(grid.second_derivative_of_grid_values[0]+1178635.73819704)<=1.0E-1
 		 
 	}
 
