@@ -21,6 +21,14 @@ import java.util.List;
 
 import javax.xml.bind.JAXBElement;
 
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.StandardEnvironment;
+import org.springframework.core.io.support.ResourcePropertySource;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.*;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -46,11 +54,11 @@ import org.springframework.oxm.Unmarshaller;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.xml_cml.schema.Cml;
+
 import org.springframework.jms.core.JmsOperations;
 import org.springframework.jms.core.JmsTemplate;
 
 import javax.jms.ConnectionFactory;
-
 import org.springframework.batch.item.jms.JmsItemWriter;
 import org.springframework.batch.item.jms.JmsItemReader;
 import org.apache.activemq.ActiveMQConnectionFactory;
@@ -60,6 +68,13 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.wallerlab.yoink.adaptive.config.AdaptiveConfig;
+import org.wallerlab.yoink.density.config.DensityConfig;
+import org.wallerlab.yoink.math.config.MathConfig;
+import org.wallerlab.yoink.molecular.config.MolecularConfig;
+import org.wallerlab.yoink.regionizer.config.RegionizerConfig;
+
+
 
 /**
  * This class is configuration for spring batch
@@ -71,6 +86,12 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 @EnableBatchProcessing
 @EnableTransactionManagement
 @PropertySource("classpath:application.properties")
+@ComponentScan("org.wallerlab.yoink")
+@Import({AdaptiveConfig.class,
+        MathConfig.class,
+        RegionizerConfig.class,
+        MolecularConfig.class,
+        DensityConfig.class})
 public class BatchConfig {
 
 	@Autowired
@@ -358,5 +379,10 @@ public class BatchConfig {
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
         return new PropertySourcesPlaceholderConfigurer();
     }
+ 
+    public void setApplicationContext(ApplicationContext applicationContext)
+                        throws BeansException {
+                this.appContext = applicationContext;
+        }
 
 }
