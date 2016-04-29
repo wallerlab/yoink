@@ -42,7 +42,7 @@ class JobStringBuilderImplSpec extends Specification {
 		jaxbReader.read(_,_)>>input
 		molecularSystemTranslator.translate(_)>>Mock(MolecularSystem)
 		def parameter=[:]
-		parameter.put(JobParameter.DGRID, false)
+		
 		parameterTranslator.translate(_)>>parameter
 
 		when:"set up a new JobBuilder"
@@ -52,7 +52,7 @@ class JobStringBuilderImplSpec extends Specification {
 		builder.parameterTranslator=parameterTranslator
 		def inputfile="./src/test/resources/aro.xml"
 		String fileContents = new File(inputfile).text	
-		builder.radialGridReader=gridReader
+		
 		then:"check the return type"
 		builder.build(fileContents) instanceof Job
 	}

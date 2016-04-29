@@ -43,7 +43,7 @@ class JobJaxbBuilderImplSpec extends Specification {
 		def jaxB = factory.createCml(cml)
 		molecularSystemTranslator.translate(_)>>Mock(MolecularSystem)
 	def parameter=[:]
-		parameter.put(JobParameter.DGRID, false)
+		
 		parameterTranslator.translate(_)>>parameter
 		
 
@@ -52,7 +52,7 @@ class JobJaxbBuilderImplSpec extends Specification {
 		builder.jaxbFileReader=jaxbReader
 		builder.molecularSystemTranslator=molecularSystemTranslator
 		builder.parameterTranslator=parameterTranslator
-		builder.radialGridReader=gridReader
+		
 		then:"check the return type"
 		builder.build(jaxB) instanceof Job
 	}

@@ -49,7 +49,7 @@ import org.xml_cml.schema.Cml;
  * @param <I>
  *
  */
-public abstract class AbstractJobBuilder<I,O> implements JobBuilder<I,O>{
+public abstract class AbstractJobBuilder<I, O> implements JobBuilder<I, O> {
 
 	@Resource
 	protected Translator<MolecularSystem, JAXBElement<Cml>> molecularSystemTranslator;
@@ -57,8 +57,7 @@ public abstract class AbstractJobBuilder<I,O> implements JobBuilder<I,O>{
 	@Resource
 	protected Translator<Map<JobParameter, Object>, JAXBElement<Cml>> parameterTranslator;
 
-	@Resource
-	protected FilesReader<RadialGrid, String> radialGridReader;
+	
 	/**
 	 * read in cml file, and convert it to molecular system and parameters for
 	 * building a new adaptive qmmm job.
@@ -70,13 +69,12 @@ public abstract class AbstractJobBuilder<I,O> implements JobBuilder<I,O>{
 	 */
 	@Override
 	public abstract Job<O> build(I input);
-	
+
 	protected void process(Job<JAXBElement> job) {
 		readInMolecularSystem(job);
 		readInParameters(job);
-		readInRadialGrids(job);
-	}
 	
+	}
 
 	protected void readInMolecularSystem(Job<JAXBElement> job) {
 		MolecularSystem molecularSystem = molecularSystemTranslator
@@ -89,35 +87,6 @@ public abstract class AbstractJobBuilder<I,O> implements JobBuilder<I,O>{
 				.translate(job.getInput());
 		job.setParameters(parameters);
 	}
-	protected  void readInRadialGrids(Job<JAXBElement> job) {
-		if((boolean)job.getParameters().get(JobParameter.DGRID)==true){
-			List<Atom> atoms=job.getMolecularSystem().getAtoms();
-	/*		for(Atom atom:atoms){
-				RadialGrid grid= new SimpleRadialGrid();
-				String wfc_name=atom.getElementType().toString().toLowerCase();
-				if(wfc_name.length()==1){
-					wfc_name=wfc_name+"_";
-				}
-				String wfc_file=(String)job.getParameters().get(JobParameter.WFC_PATH)+"/"+wfc_name+"_lda.wfc";
-				grid=radialGridReader.read( wfc_file,grid);
-				atom.setRadialGrid(grid);
-				
-			}*/
-			
-			
-			atoms.parallelStream().forEach(
-					atom -> {
-						RadialGrid grid= new SimpleRadialGrid();
-						String wfc_name=atom.getElementType().toString().toLowerCase();
-						if(wfc_name.length()==1){
-							wfc_name=wfc_name+"_";
-						}
-						String wfc_file=(String)job.getParameters().get(JobParameter.WFC_PATH)+"/"+wfc_name+"_lda.wfc";
-						grid=radialGridReader.read( wfc_file,grid);
-						atom.setRadialGrid(grid);
-					});
-		}
-		
-	}
-	
+
+
 }

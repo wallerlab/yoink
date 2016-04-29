@@ -20,14 +20,15 @@ import org.wallerlab.yoink.api.model.*
 import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
 import org.wallerlab.yoink.api.model.density.DensityPoint.DensityType;
 import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.molecular.Atom;
 import org.wallerlab.yoink.api.model.regionizer.Region;
 import org.wallerlab.yoink.api.service.Calculator;
 import org.wallerlab.yoink.api.service.regionizer.*;
 import org.wallerlab.yoink.api.*
 import org.wallerlab.yoink.regionizer.domain.SimpleRegionFactory
-
+import org.wallerlab.yoink.api.service.molecular.FilesReader;
 import spock.lang.Specification;
-
+import org.wallerlab.yoink.api.model.molecular.*;
 
 class DensityPartitionerSpec extends Specification{
 
@@ -55,13 +56,19 @@ class DensityPartitionerSpec extends Specification{
 
 		def parameters=Mock(Map)
 		parameters.get(JobParameter.DENSITY_BUFFER)>>(double)1.0E-9
+		parameters.get(JobParameter.DGRID)>>true
+		parameters.get(JobParameter.WFC_PATH)>>"./src/test/resources"
 		def m1=Mock(Molecule)
 		def m2=Mock(Molecule)
 		def m3=Mock(Molecule)
 		def mMap=new HashMap<Molecule,Integer>()
 		mMap.put(m2, 2)
 		mMap.put(m3,3)
-
+		def atom=Mock(Atom)
+		 atom.getElementType()>>Element.C
+		m1.getAtoms()>>[atom]
+		m2.getAtoms()>>[atom]
+		m3.getAtoms()>>[atom]
 		def mMap0=new HashMap<Molecule,Integer>()
 		mMap0.put(m1, 1)
 		def region0=Mock(Region)
@@ -81,13 +88,15 @@ class DensityPartitionerSpec extends Specification{
 		def densityCalculator=Mock(Calculator)
 		densityCalculator.calculate(_,	_)>>(double)1.0E-5
 		def simpleRegionFactory=new SimpleRegionFactory()
-
+		
+		def radialGridReader= Mock(FilesReader)
+		radialGridReader.read(_,_)>>Mock(RadialGrid)
 		when:"set up a new DensityPartitioner"
 		def partitioner= new DensityPartitioner()
 		partitioner.densityCalculator=densityCalculator
 		partitioner.singleRegionizerService=singleRegionizerService
 		partitioner.simpleRegionFactory=simpleRegionFactory
-
+		partitioner.radialGridReader=radialGridReader
 		then:"method partition  is executable and returns right result"
 		partitioner.partition(regions,parameters,DensityType.ELECTRONIC)
 		regions.get(Region.Name.ADAPTIVE_SEARCH).getSize()==3

@@ -44,22 +44,22 @@ class JobFileBuilderImplSpec extends Specification {
 		def input=factory.createCml(cml)
 		jaxbReader.read(_,_)>>input
 		molecularSystemTranslator.translate(_)>>Mock(MolecularSystem)
-		
+
 		def parameter=[:]
-		parameter.put(JobParameter.DGRID, false)
+
 		parameterTranslator.translate(_)>>parameter
 		when:"set up a new JobBuilder"
 		def builder=new JobStringBuilderImpl()
 		builder.jaxbStringReader=jaxbReader
 		builder.molecularSystemTranslator=molecularSystemTranslator
 		builder.parameterTranslator=parameterTranslator
-		builder.radialGridReader=gridReader
+
 		def inputfile="./src/test/resources/aro.xml"
 
 		then:"check the return type"
 		builder.build(inputfile) instanceof Job
 	}
-	
+
 	def "test method read(String inputfile,YoinkJob<JAXBElement> job) dgrid is ture"(){
 		def jaxbReader=Mock(FilesReader)
 		def  molecularSystemTranslator=Mock(Translator)
@@ -71,19 +71,19 @@ class JobFileBuilderImplSpec extends Specification {
 		jaxbReader.read(_,_)>>input
 		def ms=Mock(MolecularSystem)
 		def atom=Mock(Atom)
-		atom.getElementType()>>Element.H
+
 		ms.getAtoms()>>[atom]
 		molecularSystemTranslator.translate(_)>>ms
 		gridReader.read(_,_)>>Mock(RadialGrid)
 		def parameter=[:]
-		parameter.put(JobParameter.DGRID, true)
+
 		parameterTranslator.translate(_)>>parameter
 		when:"set up a new JobBuilder"
 		def builder=new JobStringBuilderImpl()
 		builder.jaxbStringReader=jaxbReader
 		builder.molecularSystemTranslator=molecularSystemTranslator
 		builder.parameterTranslator=parameterTranslator
-		builder.radialGridReader=gridReader
+
 		def inputfile="./src/test/resources/aro.xml"
 
 		then:"check the return type"
