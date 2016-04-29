@@ -131,12 +131,11 @@ public class DensityPartitioner implements
 		adaptiveSearchRegion.addAll(regions.get(Region.Name.QM_CORE)
 				.getMolecularMap());
 		if ((boolean) parameters.get(JobParameter.DGRID) == true) {
-		
+
 			List<Atom> atoms = adaptiveSearchRegion.getAtoms();
-	
+
 			atoms.parallelStream().forEach(
 					atom -> {
-						System.out.println(atom.getIndex());
 						if (atom.getRadialGrid() == null) {
 							RadialGrid grid = new SimpleRadialGrid();
 							String wfc_name = atom.getElementType().toString()
