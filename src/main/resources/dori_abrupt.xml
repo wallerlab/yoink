@@ -3368,7 +3368,7 @@
 <parameter name="SMOOTHNER" value="ABRUPT" />
 <parameter name="JOB_NAME" value="dori_abrupt" />
 <parameter name="OUTPUT_FOLDER" value="./outputs" />
-<parameter name="DGRID" value="true" />
+<parameter name="DGRID" value="false" />
 <parameter name="WFC_PATH" value="./yoink-core-molecular/dat" />
 </parameterList>
 	

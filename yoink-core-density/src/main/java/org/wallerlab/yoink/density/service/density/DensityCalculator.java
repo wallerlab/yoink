@@ -46,7 +46,7 @@ public class DensityCalculator implements
 	protected static final Log log = LogFactory.getLog(DensityCalculator.class);
 
 	@Value("${yoink.job.functional}")
-	private boolean functional;
+	private boolean functional=false;
 
 	/**
 	 * calculate the density of a point from molecules. during density
@@ -63,7 +63,6 @@ public class DensityCalculator implements
 		
 		double density = 0.0;
 		if (functional == true){
-	
 			density = loopOverEveryAtomFunc(currentCoord, molecules);}
 		else
 			density = loopOverEveryAtom(currentCoord, molecules);

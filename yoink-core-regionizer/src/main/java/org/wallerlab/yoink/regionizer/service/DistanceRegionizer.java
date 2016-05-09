@@ -49,7 +49,7 @@ public class DistanceRegionizer extends ParameterRegionizer {
 	private Calculator<Double, Coord, Molecule> closestDistanceToMoleculeCalculator;
 	
 	@Value("${yoink.job.functional}")
-	private boolean functional;
+	private boolean functional=false;
 	
 	public Map<Region.Name, Region> regionize(Map<Region.Name, Region> regions,
 			Map<JobParameter, Object> parameters) {
@@ -76,7 +76,6 @@ public class DistanceRegionizer extends ParameterRegionizer {
 		double bufferThreshold = distanceThreshold
 				+ (double) parameters.get(JobParameter.DISTANCE_BUFFER);
 		if(functional==true){
-			System.out.println("func call");
 			checkCriteriaFunc(qmAdaptiveRegion, bufferRegion, centerCoord,
 					nonQMCoreMolecules, distanceThreshold, bufferThreshold);
 		}
