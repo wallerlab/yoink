@@ -1,9 +1,20 @@
+buildscript {
+  repositories {
+    jcenter()
+  }
+  dependencies {
+    classpath "gradle.plugin.me.champeau.gradle:jmh-gradle-plugin:0.3.0"
+
+  }
+}
 allprojects {
 	apply plugin: 'java'
 	apply plugin: 'eclipse'
 	apply plugin: 'groovy'
         apply plugin: 'jacoco'
         apply plugin: 'com.github.kt3k.coveralls'
+        apply plugin: "me.champeau.gradle.jmh"
+
 
 	sourceCompatibility = 1.8
 	version = '0.0.1'
@@ -27,7 +38,8 @@ allprojects {
 	}
 
 	dependencies {
-		compile 'log4j:log4j:1.2.16'
+		compile 'org.uncommons:uncommons-maths:1.2'
+ 		compile 'log4j:log4j:1.2.16'
 		compile 'org.springframework:spring-context:4.1.7.RELEASE'
 		compile 'org.hibernate:hibernate-validator:5.2.0.Alpha1'
 		compile 'javax.validation:validation-api:1.0.0.GA'
