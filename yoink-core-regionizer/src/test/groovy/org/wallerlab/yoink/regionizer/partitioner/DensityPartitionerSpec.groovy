@@ -74,7 +74,7 @@ class DensityPartitionerSpec extends Specification{
 		def region0=Mock(Region)
 		region0.getMolecules()>>[m1]
 		region0.getMolecularMap()>>mMap0
-
+		region0.getAtoms()>>[atom]
 		def region=Mock(Region)
 		region.getMolecules()>>[m2, m3]
 

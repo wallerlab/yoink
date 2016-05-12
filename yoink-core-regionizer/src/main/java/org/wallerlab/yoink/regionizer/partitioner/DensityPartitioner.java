@@ -125,11 +125,21 @@ public class DensityPartitioner implements
 	private void calculateAdaptiveSearchRegion(
 			Map<Region.Name, Region> regions, double densityThreshold,
 			Map<JobParameter, Object> parameters) {
+		// initialize wfc for qm_core
+		readWFC(parameters, regions.get(Region.Name.QM_CORE));
 		Region adaptiveSearchRegion = findAdaptiveSearchRegionInNonQmCoreRegion(
 				regions, densityThreshold);
 		// add QM core molecules
 		adaptiveSearchRegion.addAll(regions.get(Region.Name.QM_CORE)
 				.getMolecularMap());
+		// initialize wfc for adaptive search region
+		readWFC(parameters, adaptiveSearchRegion);
+		regions.put(adaptiveSearchRegion.getName(), adaptiveSearchRegion);
+
+	}
+
+	private void readWFC(Map<JobParameter, Object> parameters,
+			Region adaptiveSearchRegion) {
 		if ((boolean) parameters.get(JobParameter.DGRID) == true) {
 
 			List<Atom> atoms = adaptiveSearchRegion.getAtoms();
@@ -153,8 +163,6 @@ public class DensityPartitioner implements
 					});
 
 		}
-		regions.put(adaptiveSearchRegion.getName(), adaptiveSearchRegion);
-
 	}
 
 	private void calculateNonQMCoreInAdaptiveSearchRegion(
