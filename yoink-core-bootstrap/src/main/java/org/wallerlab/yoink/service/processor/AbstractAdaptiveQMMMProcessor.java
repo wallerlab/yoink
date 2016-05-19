@@ -70,6 +70,8 @@ public abstract class AbstractAdaptiveQMMMProcessor<I, O> implements ItemProcess
 		regionizerServiceEnding.regionize(regions, job.getMolecularSystem());
 	}
 
+
+	
 	private Map<Region.Name, Region> adaptiveQMMMRegionizers(Job job, Map<Region.Name, Region> regions) {
 	
 	

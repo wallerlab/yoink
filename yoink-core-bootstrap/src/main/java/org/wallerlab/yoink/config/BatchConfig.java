@@ -143,6 +143,19 @@ public class BatchConfig {
 				.build();
 	}
 
+	@Autowired
+	@Qualifier("clusteringStep")
+	private Step clusteringStep;
+	@Bean
+	public org.springframework.batch.core.Job importClusteringJob(JobBuilderFactory jobs) {
+		System.out.println("importClusteringJob");
+		return jobs.get("clustering")
+				.incrementer(new RunIdIncrementer())
+				.flow(clusteringStep)
+				.end()
+				.build();
+	}
+
 
 	/**
 	 * build executing steps
@@ -194,6 +207,20 @@ public class BatchConfig {
 				.writer(cmlFileResponseWriter).build();
 	}
 
+	
+	@Bean
+	public Step clusteringStep(StepBuilderFactory stepBuilderFactory, ItemReader<Cml> cmlFilereader,
+			ItemProcessor<JAXBElement, org.wallerlab.yoink.api.model.bootstrap.Job> serialClusteringProcessor,
+			ItemWriter<org.wallerlab.yoink.api.model.bootstrap.Job> cmlFileResponseWriter) {
+		System.out.println(" Step clusteringStep");
+		return stepBuilderFactory
+				.get("clustering").<JAXBElement, org.wallerlab.yoink.api.model.bootstrap.Job> chunk(1)
+				.reader(cmlFilesReader())
+				.processor(serialClusteringProcessor)
+				.writer(cmlFileResponseWriter).build();
+	}
+
+	
 	/**
 	 * Standard Spring Batch bean 
 	 * 

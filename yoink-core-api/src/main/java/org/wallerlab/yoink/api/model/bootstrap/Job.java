@@ -15,7 +15,9 @@
  */
 package org.wallerlab.yoink.api.model.bootstrap;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
 import org.wallerlab.yoink.api.model.regionizer.Region;
@@ -120,4 +122,8 @@ public interface Job<T> {
 	 */
 	void setProperties(Map<String, Object> properties);
 
+	Set<Set<Integer>> getInteractionSet();
+	 void SetInteractionSet(Set<Set<Integer>> interactionSet);
+	void setClusters( List<Set<Integer>> clusters);
+	 List<Set<Integer>>   getClusters();
 }

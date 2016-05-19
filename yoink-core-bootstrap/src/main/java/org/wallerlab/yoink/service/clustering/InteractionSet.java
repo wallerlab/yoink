@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wallerlab.yoink.regionizer.service.clustering;
+package org.wallerlab.yoink.service.clustering;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -25,6 +25,7 @@ import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.wallerlab.yoink.api.model.bootstrap.Job;
 import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
 import org.wallerlab.yoink.api.model.cube.GridPoint;
 import org.wallerlab.yoink.api.model.density.DensityPoint;
@@ -54,8 +55,7 @@ import org.wallerlab.yoink.regionizer.partitioner.DensityPartitioner;
  *
  */
 @Service
-public class DoriClustering implements
-		Regionizer<Map<Region.Name, Region>, Map<JobParameter, Object>> {
+public class InteractionSet {
 	@Resource
 	private Partitioner<List<GridPoint>, DensityType> cubePartitioner;
 
@@ -77,52 +77,33 @@ public class DoriClustering implements
 	@Resource
 	private DensityPartitioner densityPartitioner;
 
-	@Override
-	public Map<Region.Name, Region> regionize(Map<Region.Name, Region> regions,
-			Map<JobParameter, Object> parameters) {
-		Partitioner.Type partitionType = (Partitioner.Type) parameters
-				.get(JobParameter.PARTITIONER);
-		if (partitionType == Partitioner.Type.CLUSTER) {
-
-			Set<Set<Integer>> interactionSet = getDoriInteractionSet(regions,
-					parameters);
-			louvainClustering(interactionSet, parameters);
-		}
-
-		return regions;
-	}
-
-	public List<Set<Integer>> louvainClustering(
-			Set<Set<Integer>> interactionSet,
-			Map<JobParameter, Object> parameters) {
-		String parentDirName = (String) parameters
-				.get(JobParameter.OUTPUT_FOLDER) + "/";
-		LouvainClusteringFacade<Integer> louvain = new LouvainClusteringFacade<Integer>(
-				parentDirName + "testDb/databases/graph.db");
-		louvain.populate(interactionSet);
-		int maxCommunities = (int) parameters.get(JobParameter.MAX_COMMS);
-		Map<Long, Integer> result = louvain.cluster(maxCommunities);
-		List<Set<Integer>> clusters = louvain.getResult(result.size() - 1);
-		louvain.shutdown();
-		System.out.println("clusters: " + clusters);
-		return clusters;
+	public InteractionSet() {
 
 	}
 
 	public Set<Set<Integer>> getDoriInteractionSet(
-			Map<Region.Name, Region> regions,
-			Map<JobParameter, Object> parameters) {
-		Region.Name cubeRegionName = (Region.Name) parameters
-				.get(JobParameter.REGION_CUBE);
+			Job job) {
+		Map<JobParameter, Object> parameters = job.getParameters();
+		Map<Region.Name, Region> regions = job.getRegions();
+		Set<Set<Integer>> interactionSet = new HashSet<Set<Integer>>();
+		Partitioner.Type partitionType = (Partitioner.Type) parameters
+				.get(JobParameter.PARTITIONER);
+		if (partitionType == Partitioner.Type.CLUSTER) {
+			Region.Name cubeRegionName = (Region.Name) parameters
+					.get(JobParameter.REGION_CUBE);
 
-		densityPartitioner.readWFC(parameters, regions
-				.get((Region.Name) parameters.get(JobParameter.REGION_CUBE)));
-		List<GridPoint> gridPoints = cubePartitioner.partition(regions,
-				parameters, DensityType.DORI);
+			densityPartitioner.readWFC(parameters,
+					regions.get((Region.Name) parameters
+							.get(JobParameter.REGION_CUBE)));
+			List<GridPoint> gridPoints = cubePartitioner.partition(regions,
+					parameters, DensityType.DORI);
 
-		Set<Set<Integer>> interactionSet = calculateInteractionPairSet(regions,
-				parameters, gridPoints);
-		System.out.println("interaction set: " + interactionSet.size());
+			interactionSet = calculateInteractionPairSet(regions, parameters,
+					gridPoints);
+			System.out.println("interaction set: " + interactionSet.size());
+			
+		}
+		job.SetInteractionSet(interactionSet);
 		return interactionSet;
 	}
 

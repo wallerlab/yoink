@@ -65,6 +65,7 @@ public class RegionizerService implements
 	 *         key, Region
 	 *         {@link org.wallerlab.yoink.api.model.regionizer.Region} as value
 	 */
+	@Override
 	public Map<Region.Name, Region> regionize(Map<Region.Name, Region> regions,
 			MolecularSystem molecularSystem) {
 		for (Region.Name name : regionNames) {
