@@ -15,7 +15,6 @@
  */
 package org.wallerlab.yoink.service.processor;
 
-import java.io.File;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -34,7 +33,6 @@ import org.wallerlab.yoink.api.service.bootstrap.Clustering;
 import org.wallerlab.yoink.api.service.bootstrap.JobBuilder;
 import org.wallerlab.yoink.api.service.regionizer.RegionizerMath;
 import org.wallerlab.yoink.service.clustering.InteractionSet;
-import org.xml_cml.schema.Cml;
 
 
 /**
@@ -44,20 +42,21 @@ import org.xml_cml.schema.Cml;
  *
  */
 @Service
-public class SerialClusteringProcessor extends  AbstractClusteringProcessor<JAXBElement, org.wallerlab.yoink.api.model.bootstrap.Job> {
+public class FileClusteringProcessor extends  AbstractClusteringProcessor<String, org.wallerlab.yoink.api.model.bootstrap.Job> {
 
 	@Autowired
-	@Qualifier("jobJaxbBuilderImpl")
-	private JobBuilder<JAXBElement,JAXBElement> jobJaxbBuilderImpl;
-	@Resource
-	protected RegionizerMath<Map<Region.Name, Region>, MolecularSystem> regionizerServiceStarting;
-	
+	@Qualifier("jobFileBuilderImpl")
+	private JobBuilder<String,JAXBElement> jobFileBuilderImpl;
+
 	@Resource
 	private InteractionSet interactionSet;
 	
 	@Resource
 	private Clustering doriClustering;
-	protected static final Log log = LogFactory.getLog(AbstractAdaptiveQMMMProcessor.class);
+	@Resource
+	protected RegionizerMath<Map<Region.Name, Region>, MolecularSystem> regionizerServiceStarting;
+	
+	protected static final Log log = LogFactory.getLog(FileClusteringProcessor.class);
 
 	/**
 	 * read in a list of requests and execute them.
@@ -68,16 +67,15 @@ public class SerialClusteringProcessor extends  AbstractClusteringProcessor<JAXB
 	 *         {@link org.wallerlab.yoink.api.model.bootstrap.Job}
 	 */
 	@Override
-	public Job process(JAXBElement input) throws Exception {
-		
+	public Job process(String input) throws Exception {
 		return buildAndExecute(input);
 	}
 
-	private Job buildAndExecute(JAXBElement input) {
-		System.out.println("in SerialClusteringProcessor");
-		Job job = jobJaxbBuilderImpl.build(input);
+	protected Job buildAndExecute(String input) {
+		Job job = jobFileBuilderImpl.build(input);
 		executeClustering( job) ;
 		return job;
 	}
-	
+
+
 }
