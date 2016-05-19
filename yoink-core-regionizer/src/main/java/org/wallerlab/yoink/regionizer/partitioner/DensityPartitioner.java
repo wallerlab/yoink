@@ -62,7 +62,7 @@ public class DensityPartitioner implements
 	private Factory<Region, Region.Name> simpleRegionFactory;
 
 	@Resource
-	protected FilesReader<RadialGrid, String> radialGridReader;
+	protected  FilesReader<RadialGrid, String> radialGridReader;
 
 	/**
 	 * based on the density of QM core , define adaptive search region , the
@@ -138,7 +138,7 @@ public class DensityPartitioner implements
 
 	}
 
-	private void readWFC(Map<JobParameter, Object> parameters,
+	public   void readWFC(Map<JobParameter, Object> parameters,
 			Region adaptiveSearchRegion) {
 		if ((boolean) parameters.get(JobParameter.DGRID) == true) {
 

@@ -3,7 +3,13 @@
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="src" path="src/test/groovy"/>
 	<classpathentry kind="src" path="src/test/resources"/>
-	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="/yoink-core-api"/>
+	<classpathentry kind="src" path="/yoink-core-clustering"/>
+	<classpathentry kind="src" path="/yoink-core-cube"/>
+	<classpathentry kind="src" path="/yoink-core-density"/>
+	<classpathentry kind="src" path="/yoink-core-math"/>
+	<classpathentry kind="src" path="/yoink-core-molecular"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry exported="true" kind="con" path="org.springsource.ide.eclipse.gradle.classpathcontainer"/>
 	<classpathentry exported="true" kind="con" path="GROOVY_DSL_SUPPORT"/>
 	<classpathentry kind="output" path="bin"/>

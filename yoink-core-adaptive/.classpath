@@ -8,5 +8,6 @@
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/yoink-core-density"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/yoink-core-math"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/yoink-core-molecular"/>
+	<classpathentry exported="true" kind="con" path="GROOVY_DSL_SUPPORT"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

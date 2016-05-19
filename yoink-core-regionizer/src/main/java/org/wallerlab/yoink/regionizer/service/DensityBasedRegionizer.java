@@ -33,8 +33,8 @@ import org.wallerlab.yoink.api.service.regionizer.Regionizer;
 import org.wallerlab.yoink.api.service.regionizer.RegionizerComponent;
 
 /**
- * this class is to find adaptive QM core region, adaptive QM region and buffer region
- *  busing density based adaptive qm/mm partitioning.
+ * this class is to find adaptive QM core region, adaptive QM region and buffer
+ * region busing density based adaptive qm/mm partitioning.
  * 
  * @author Min Zheng
  *
@@ -45,38 +45,43 @@ public class DensityBasedRegionizer implements
 
 	@Resource
 	private RegionizerComponent<Map<Region.Name, Region>, Map<JobParameter, Object>> adaptiveQMCoreRegionizer;
-	
+
 	@Resource
 	private RegionizerComponent<Map<Region.Name, Region>, Map<JobParameter, Object>> adaptiveQMRegionizer;
-	
-	@Resource 
+
+	@Resource
 	private RegionizerComponent<Map<Region.Name, Region>, Map<JobParameter, Object>> bufferRegionizer;
 
 	/**
-	 * execute density based adaptive regionizer by looping over all regionizer components in it
+	 * execute density based adaptive regionizer by looping over all regionizer
+	 * components in it
 	 * 
-	 * @return regions - a list of region {@link org.wallerlab.yoink.api.model.regionizer.Region}
+	 * @return regions - a list of region
+	 *         {@link org.wallerlab.yoink.api.model.regionizer.Region}
 	 */
 	@Override
 	public Map<Region.Name, Region> regionize(Map<Region.Name, Region> regions,
 			Map<JobParameter, Object> parameters) {
-		for (RegionizerComponent<Map<Region.Name, Region>, Map<JobParameter, Object>> regionizerComponent:  getRegionizerComponents() ){
-			regionizerComponent.regionize(regions, parameters);
+		Partitioner.Type partitionType = (Partitioner.Type) parameters
+				.get(JobParameter.PARTITIONER);
+		if (partitionType == Partitioner.Type.DORI) {
+		
+			for (RegionizerComponent<Map<Region.Name, Region>, Map<JobParameter, Object>> regionizerComponent : getRegionizerComponents()) {
+				regionizerComponent.regionize(regions, parameters);
+			}
 		}
 		return regions;
 	}
 
 	/*
-	 * get all regionizer components(adaptive qm core, adaptive qm and buffer regionizers)
-	 * for density based adaptive QM/MM partitioning.
-	 * 
-	 * 
+	 * get all regionizer components(adaptive qm core, adaptive qm and buffer
+	 * regionizers) for density based adaptive QM/MM partitioning.
 	 */
 	private List<RegionizerComponent<Map<Name, Region>, Map<JobParameter, Object>>> getRegionizerComponents() {
 		List<RegionizerComponent<Map<Region.Name, Region>, Map<JobParameter, Object>>> partitionRegionizers = new ArrayList<RegionizerComponent<Map<Region.Name, Region>, Map<JobParameter, Object>>>();
 		partitionRegionizers.add(adaptiveQMCoreRegionizer);
 		partitionRegionizers.add(adaptiveQMRegionizer);
 		partitionRegionizers.add(bufferRegionizer);
-		return  partitionRegionizers;
+		return partitionRegionizers;
 	}
 }

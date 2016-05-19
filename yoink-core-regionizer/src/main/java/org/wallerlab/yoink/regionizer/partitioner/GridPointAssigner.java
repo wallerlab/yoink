@@ -76,6 +76,7 @@ public class GridPointAssigner implements
 		case SYSTEM:
 			if (notNeighbourPair) {
 				properties.clear();
+				
 			}
 			break;
 		default:

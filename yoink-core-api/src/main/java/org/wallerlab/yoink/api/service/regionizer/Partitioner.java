@@ -62,7 +62,7 @@ public interface Partitioner<K, V> {
 
 	public enum Type {
 
-		DORI, NUMBER, DISTANCE,SIZE,FIRES;
+		DORI, NUMBER, DISTANCE,SIZE,FIRES,CLUSTER;
 
 	}
 }
