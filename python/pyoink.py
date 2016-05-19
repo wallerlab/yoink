@@ -25,9 +25,31 @@ class PYoink(object):
 	self.out_file=out_file
 	self.atoms=self.get_atoms()
 	self.system=system
+	FileInteractionSetProcessor=JClass("org.wallerlab.yoink.service.processor.FileInteractionSetProcessor")
+	self.interactionSetProcessor=javaApplicationContext.getBean(FileInteractionSetProcessor)
+	FileClusteringProcessor=JClass("org.wallerlab.yoink.service.processor.FileClusteringProcessor")	
+        self.clusteringProcessor=javaApplicationContext.getBean(FileClusteringProcessor)
+
 
     def partition(self):
         self.result=self.adaptiveQMMM.process(self.input_file)
+
+    def get_interaction_list(self):
+	interaction_set= self.interactionSetProcessor.process(self.input_file).getInteractionSet()
+	interaction_list=[]
+	interaction_temp=java.util.ArrayList()
+	interaction_temp.addAll(interaction_set)
+	for i in  range (interaction_temp.size()):
+        	temp=java.util.ArrayList()
+        	temp.addAll(interaction_temp.get(i))
+
+                plist=[temp.get(0).intValue(),temp.get(1).intValue()]
+                interaction_list.append(plist)
+	return interaction_list	
+  
+    def get_clusters(self):
+	return self.clusteringProcessor.process(self.input_file).getClusters()	
+  	
 
     def get_qm_indices(self):
         Region=JClass("org.wallerlab.yoink.api.model.regionizer.Region")
