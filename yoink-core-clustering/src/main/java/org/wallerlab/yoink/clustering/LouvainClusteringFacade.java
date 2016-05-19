@@ -94,6 +94,7 @@ public class LouvainClusteringFacade<T>  {
 	public void shutdown(){
 		
 		service.shutdown();
+		service.clearDb();
 		
 	}
 

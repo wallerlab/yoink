@@ -86,16 +86,27 @@ public class DoriClustering implements
 
 			Set<Set<Integer>> interactionSet = getDoriInteractionSet(regions,
 					parameters);
-			louvainClustering(interactionSet);
+			louvainClustering(interactionSet, parameters);
 		}
 
 		return regions;
 	}
 
-	private void louvainClustering(Set<Set<Integer>> interactionSet) {
-		LouvainClusteringFacade louvain = new LouvainClusteringFacade<Object>(
-				"testDb/databases/graph.db");
+	public List<Set<Integer>> louvainClustering(
+			Set<Set<Integer>> interactionSet,
+			Map<JobParameter, Object> parameters) {
+		String parentDirName = (String) parameters
+				.get(JobParameter.OUTPUT_FOLDER) + "/";
+		LouvainClusteringFacade<Integer> louvain = new LouvainClusteringFacade<Integer>(
+				parentDirName + "testDb/databases/graph.db");
 		louvain.populate(interactionSet);
+		int maxCommunities = (int) parameters.get(JobParameter.MAX_COMMS);
+		Map<Long, Integer> result = louvain.cluster(maxCommunities);
+		List<Set<Integer>> clusters = louvain.getResult(result.size() - 1);
+		louvain.shutdown();
+		System.out.println("clusters: " + clusters);
+		return clusters;
+
 	}
 
 	public Set<Set<Integer>> getDoriInteractionSet(
@@ -111,7 +122,7 @@ public class DoriClustering implements
 
 		Set<Set<Integer>> interactionSet = calculateInteractionPairSet(regions,
 				parameters, gridPoints);
-		System.out.println("interaction set: "+interactionSet.size());
+		System.out.println("interaction set: " + interactionSet.size());
 		return interactionSet;
 	}
 

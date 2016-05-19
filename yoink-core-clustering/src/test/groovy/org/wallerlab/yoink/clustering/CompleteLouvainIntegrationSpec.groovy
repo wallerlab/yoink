@@ -115,11 +115,14 @@ class CompleteLouvainIntegrationSpec extends Specification {
 		louvain.populate(interactionSet)
 		
 		println "cluster"
-		def result = louvain.cluster(2);
+		def result = louvain.cluster(3);
 		println result
 		
+		println result.get(result.size()-1)
+		
+		
 		println louvain.getResult(0)
-		println louvain.getResult(1)
+		println louvain.getResult(result.size()-1)
 		
 		louvain.shutdown()
 		

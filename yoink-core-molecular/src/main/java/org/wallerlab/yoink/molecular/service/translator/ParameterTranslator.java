@@ -117,6 +117,7 @@ public class ParameterTranslator implements
 		case NUMBER_QM:
 		case NUMBER_PARTITION:
 		case NUMBER_BUFFER:
+		case MAX_COMMS:	
 			parameters.put(jobParameter, Integer.parseInt(value));
 			break;
 		case DORI_STEPSIZE:

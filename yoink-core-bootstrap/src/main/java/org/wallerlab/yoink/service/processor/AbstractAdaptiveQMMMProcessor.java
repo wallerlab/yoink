@@ -72,7 +72,7 @@ public abstract class AbstractAdaptiveQMMMProcessor<I, O> implements ItemProcess
 
 	private Map<Region.Name, Region> adaptiveQMMMRegionizers(Job job, Map<Region.Name, Region> regions) {
 	
-		System.out.println("regionizers:"+adaptiveQMMMRegionizers.size());
+	
 		for (Regionizer<Map<Region.Name, Region>, Map<JobParameter, Object>> regionizer : adaptiveQMMMRegionizers) {
 
 			regions = (Map<Region.Name, Region>) regionizer.regionize(regions, job.getParameters());
