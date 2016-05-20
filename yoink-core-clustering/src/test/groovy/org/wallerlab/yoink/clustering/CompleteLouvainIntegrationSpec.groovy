@@ -6,6 +6,7 @@ import spock.lang.*;
 
 class CompleteLouvainIntegrationSpec extends Specification {
 
+	
 	def 'cluster'(){
 		setup:
 		
@@ -45,6 +46,52 @@ class CompleteLouvainIntegrationSpec extends Specification {
 		println clusterres
 		
 		def res =  louvain.getResult(0)
+		
+		louvain.shutdown()
+		
+		expect:
+		
+		res.size() == 2
+		
+		
+	}
+	
+	
+	def 'cluster weights'(){
+		setup:
+		
+		LouvainClusteringFacade louvain = new LouvainClusteringFacade<Object>("testDb/databases/graph.db")
+		
+		Object mol1 = new Object()
+		Object mol2 = new Object()
+		Object mol3 = new Object()
+		Object mol4 = new Object()
+
+		/*
+		 *  1-(1)-2-(1)-3-(20)-4
+		 *        
+		 *
+		 *
+		 */
+		
+		InteractionTriple<Object> t1 = new InteractionTriple(mol1,mol2,1.0);
+		InteractionTriple<Object> t2 = new InteractionTriple(mol2,mol3, 1.0);
+		InteractionTriple<Object> t3 = new InteractionTriple(mol3,mol4,1.0);
+		
+		
+		List<InteractionTriple<Object>> interactionSet = [t1,t2,t3]
+		
+		
+		//println "populate" + interactionSet
+		louvain.populate(interactionSet)
+		
+		println "cluster"
+		def clusterres = louvain.cluster(1);
+		println clusterres
+		
+		def res =  louvain.getResult(0)
+		
+		println res
 		
 		louvain.shutdown()
 		
@@ -115,14 +162,11 @@ class CompleteLouvainIntegrationSpec extends Specification {
 		louvain.populate(interactionSet)
 		
 		println "cluster"
-		def result = louvain.cluster(3);
+		def result = louvain.cluster(2);
 		println result
 		
-		println result.get(result.size()-1)
-		
-		
 		println louvain.getResult(0)
-		println louvain.getResult(result.size()-1)
+		println louvain.getResult(1)
 		
 		louvain.shutdown()
 		

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Transaction;
 import org.wallerlab.yoink.clustering.louvain.LouvainAlgoImpl;
@@ -17,7 +18,7 @@ import org.wallerlab.yoink.clustering.louvain.LouvainAlgoImpl;
  *
  * @param <T>
  */
-public class LouvainClusteringFacade<T>  {
+public class LouvainClusteringFacade<T> {
 
 	private final String databaseLocation;
 	private GraphPopulator<T> populator;
@@ -55,6 +56,17 @@ public class LouvainClusteringFacade<T>  {
 		}
 	}
 
+	
+	public void populate(List<InteractionTriple<T>> interactions) {
+
+		try (Transaction tx = graphDb.beginTx()) {
+
+			populator.createRelationships(interactions);
+			tx.success();
+		}
+	}
+	
+	
 	/**
 	 * 
 	 * 
@@ -62,7 +74,7 @@ public class LouvainClusteringFacade<T>  {
 	 * @return map of hierarchy level and corresponding number of communities {hierarchylevel : number of communites}
 	 */
 	public Map<Long, Integer> cluster(int maxCommunities) {
-
+		System.out.println("in louvain clustering");
 		try (Transaction tx = graphDb.beginTx()) {
 			louvain.init();
 			louvain.louvain(maxCommunities);
@@ -79,7 +91,6 @@ public class LouvainClusteringFacade<T>  {
 	 * @param level
 	 * @return List of Communities
 	 */
-
 	public List<Set<T>> getResult(int level) {
 			
 		List<Set<T>> output = null;
@@ -94,16 +105,7 @@ public class LouvainClusteringFacade<T>  {
 	public void shutdown(){
 		
 		service.shutdown();
-		service.clearDb();
 		
 	}
-
-
-
-
-
-
-
-
 
 }

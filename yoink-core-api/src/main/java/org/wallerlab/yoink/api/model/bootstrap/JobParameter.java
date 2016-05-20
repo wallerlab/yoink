@@ -93,6 +93,7 @@ public enum JobParameter {
 	NUMBER_PARTITION,
 	WFC_PATH,
 	MAX_COMMS,
+	INTERACTION_WEIGHT,
 	DGRID;
 	
 }

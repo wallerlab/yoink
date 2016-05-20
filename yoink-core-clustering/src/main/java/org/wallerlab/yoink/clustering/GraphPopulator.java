@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.NotInTransactionException;
+import org.neo4j.graphdb.Relationship;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
@@ -41,8 +42,30 @@ class GraphPopulator<T> {
 		this.graphDb = graphDb;
 	}
 
+
 	
-	
+	private void createNodes(List<InteractionTriple<T>> interactionSet)
+			throws NotInTransactionException {
+
+		bimap = HashBiMap.create();
+		
+		Set<T> molecules = new HashSet<>();
+
+		for (InteractionTriple<T> triple : interactionSet) {
+			
+				molecules.add(triple.first);
+				molecules.add(triple.second);
+		}
+			
+		for (T mol : molecules) {
+
+			Node node = graphDb.createNode(NodeLabel.MOLECULE);
+
+			bimap.put(mol, node);
+
+		}
+
+	}
 	
 	
 	private void createNodes(Set<Set<T>> interactionSet)
@@ -60,6 +83,24 @@ class GraphPopulator<T> {
 
 	}
 
+	void createRelationships(List<InteractionTriple<T>> interactionSet)
+			throws NotInTransactionException {
+
+		createNodes(interactionSet);
+		
+		for (InteractionTriple<T> triple : interactionSet) {
+
+			Node node = bimap.get(triple.first);
+			Node otherNode = bimap.get(triple.second);
+			Relationship edge = node.createRelationshipTo(otherNode, Relations.INTERACT);
+			
+			edge.setProperty("weight", triple.weight);
+			
+
+		}
+	}
+	
+	
 	void createRelationships(Set<Set<T>> interactionSet)
 			throws NotInTransactionException {
 
@@ -71,7 +112,10 @@ class GraphPopulator<T> {
 
 			Node node = bimap.get(list.get(0));
 			Node otherNode = bimap.get(list.get(1));
-			node.createRelationshipTo(otherNode, Relations.INTERACT);
+			Relationship edge = node.createRelationshipTo(otherNode, Relations.INTERACT);
+			
+		//	edge.setProperty("weight", 1.0);
+			;
 
 		}
 	}

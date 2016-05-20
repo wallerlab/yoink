@@ -161,6 +161,7 @@ public class ParameterTranslator implements
 					* unitConverterType.value());
 			break;
 		case DGRID:
+		case INTERACTION_WEIGHT:	
 			parameters.put(jobParameter, Boolean.parseBoolean(value));
 			break;
 		default:

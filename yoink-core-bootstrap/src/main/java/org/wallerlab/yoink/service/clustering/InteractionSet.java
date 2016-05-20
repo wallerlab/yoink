@@ -15,6 +15,7 @@
  */
 package org.wallerlab.yoink.service.clustering;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -40,9 +41,6 @@ import org.wallerlab.yoink.api.service.Computer;
 import org.wallerlab.yoink.api.service.Factory;
 import org.wallerlab.yoink.api.service.molecular.FilesReader;
 import org.wallerlab.yoink.api.service.regionizer.Partitioner;
-import org.wallerlab.yoink.api.service.regionizer.Regionizer;
-import org.wallerlab.yoink.clustering.LouvainClusteringFacade;
-import org.wallerlab.yoink.molecular.domain.SimpleRadialGrid;
 import org.wallerlab.yoink.regionizer.partitioner.DensityPartitioner;
 
 /**
@@ -81,11 +79,11 @@ public class InteractionSet {
 
 	}
 
-	public Set<Set<Integer>> getDoriInteractionSet(
-			Job job) {
+	public void getDoriInteractionSet(Job job) {
 		Map<JobParameter, Object> parameters = job.getParameters();
 		Map<Region.Name, Region> regions = job.getRegions();
-		Set<Set<Integer>> interactionSet = new HashSet<Set<Integer>>();
+
+		List<List> interactionAndWeightLists = new ArrayList<List>();
 		Partitioner.Type partitionType = (Partitioner.Type) parameters
 				.get(JobParameter.PARTITIONER);
 		if (partitionType == Partitioner.Type.CLUSTER) {
@@ -98,45 +96,95 @@ public class InteractionSet {
 			List<GridPoint> gridPoints = cubePartitioner.partition(regions,
 					parameters, DensityType.DORI);
 
-			interactionSet = calculateInteractionPairSet(regions, parameters,
-					gridPoints);
-			System.out.println("interaction set: " + interactionSet.size());
-			
+			interactionAndWeightLists = calculateInteractionPairList(regions,
+					parameters, gridPoints);
+
 		}
-		job.SetInteractionSet(interactionSet);
-		return interactionSet;
+
+		/*
+		 * Set<List<Integer>> tempNoRepeatInteractionList=new
+		 * HashSet<List<Integer>>(interactionListTemp); List<List<Integer>>
+		 * interactionList = new ArrayList<List<Integer>>(); List<Double>
+		 * weightList = new ArrayList<Double>();
+		 * 
+		 * double weight=0.0; for (List<Integer> pair
+		 * :tempNoRepeatInteractionList){ for(int
+		 * i=0;i<interactionListTemp.size();i++){ if
+		 * (interactionListTemp.get(i).containsAll(pair)){
+		 * 
+		 * weight+=weightListTemp.get(i); } interactionList.add(pair);
+		 * weightList.add(weight); } }
+		 */
+		System.out.println("interaction List: "
+				+ interactionAndWeightLists.get(0).size());
+		
+		System.out.println("weight List: "
+				+ interactionAndWeightLists.get(1).size());
+		
+		job.SetInteractionList(interactionAndWeightLists.get(0));
+		job.SetInteractionWeight(interactionAndWeightLists.get(1));
+
 	}
 
-	private Set<Set<Integer>> calculateInteractionPairSet(
+	private List<List> calculateInteractionPairList(
 			Map<Region.Name, Region> regions,
 			Map<JobParameter, Object> parameters, List<GridPoint> gridPoints) {
-		Set<Set<Integer>> tempSet = new HashSet<Set<Integer>>();
-		Set<Set<Integer>> pairSet = Collections.synchronizedSet(tempSet);
-		gridPoints.parallelStream().forEach(gridPoint -> {
-			Set<Molecule> neighbours = gridPoint.getTwoClosestMolecules();
-			Set<Integer> pair = new HashSet<Integer>();
-			for (Molecule m : neighbours) {
-				pair.add(m.getIndex());
+		List<List<Integer>> interactionListTemp = new ArrayList<List<Integer>>();
+		Set<Set<Integer>> interactionSetTemp = new HashSet<Set<Integer>>();
+		List<Double> weightListTemp = new ArrayList<Double>();
 
-			}
-			// if the two closest molecules of a grid point
-			// already
-			// in the region, skip
-			// this grid point
-				if (!pairSet.containsAll(pair)) {
+		List<List<Integer>> interactionList = Collections
+				.synchronizedList(interactionListTemp);
 
-					checkCriteria(regions, pairSet, gridPoint, neighbours,
-							pair, parameters);
-				}
-			});
+		List<Double> weightList = Collections.synchronizedList(weightListTemp);
+		Set<Set<Integer>> interactionSet = Collections
+				.synchronizedSet(interactionSetTemp);
+		System.out.println("gridpoints size " + gridPoints.size());
+		gridPoints.parallelStream().forEach(
+				gridPoint -> {
+					Set<Molecule> neighbours = gridPoint
+							.getTwoClosestMolecules();
 
-		return pairSet;
+					List<Integer> pair = new ArrayList<Integer>();
+					for (Molecule m : neighbours) {
+						pair.add(m.getIndex());
+
+					}
+					Collections.sort(pair);
+					Set<Integer> pairTemp = new HashSet<Integer>(pair);
+
+					if ((Boolean) parameters
+							.get(JobParameter.INTERACTION_WEIGHT)) {
+						checkCriteria(regions, interactionList, gridPoint,
+								neighbours, pair, parameters, weightList,
+								interactionSet);
+					}
+					// if the two closest molecules of a grid point
+					// already
+					// in the region, skip
+					// this grid point
+					else {
+						// Boolean itemInList = checkItemInList(interactionList,
+						// pair);
+						if (!interactionSet.contains(pairTemp)) {
+
+							checkCriteria(regions, interactionList, gridPoint,
+									neighbours, pair, parameters, weightList,
+									interactionSet);
+						}
+					}
+				});
+		List<List> interactionAndWeightLists = new ArrayList<List>();
+		interactionAndWeightLists.add(interactionList);
+		interactionAndWeightLists.add(weightList);
+		return interactionAndWeightLists;
 	}
 
 	protected void checkCriteria(Map<Region.Name, Region> regions,
-			Set<Set<Integer>> pairSet, GridPoint gridPoint,
-			Set<Molecule> neighbours, Set<Integer> pair,
-			Map<JobParameter, Object> parameters) {
+			List<List<Integer>> pairList, GridPoint gridPoint,
+			Set<Molecule> neighbours, List<Integer> pair,
+			Map<JobParameter, Object> parameters, List<Double> weightList,
+			Set<Set<Integer>> interactionSet) {
 		Region.Name cubeRegionName = (Region.Name) parameters
 				.get(JobParameter.REGION_CUBE);
 
@@ -144,18 +192,20 @@ public class InteractionSet {
 				.getAtoms()));
 		Set<Molecule> moleculesInCube = (Set<Molecule>) regions.get(
 				cubeRegionName).getMolecules();
-		calculateAndCheckDensity(atomsInCube, pairSet, gridPoint, neighbours,
-				pair, parameters, moleculesInCube);
+		calculateAndCheckDensity(atomsInCube, pairList, gridPoint, neighbours,
+				pair, parameters, moleculesInCube, weightList, interactionSet);
 
 	}
 
 	private void calculateAndCheckDensity(Set<Atom> atomsInCube,
-			Set<Set<Integer>> pairSet, GridPoint gridPoint,
-			Set<Molecule> neighbours, Set<Integer> pair,
-			Map<JobParameter, Object> parameters, Set<Molecule> moleculesInCube) {
+			List<List<Integer>> pairList, GridPoint gridPoint,
+			Set<Molecule> neighbours, List<Integer> pair,
+			Map<JobParameter, Object> parameters,
+			Set<Molecule> moleculesInCube, List<Double> weightList,
+			Set<Set<Integer>> interactionSet) {
 		double density = getDensity(moleculesInCube, gridPoint);
-		checkDensity(atomsInCube, pairSet, gridPoint, neighbours, pair,
-				parameters, density);
+		checkDensity(atomsInCube, pairList, gridPoint, neighbours, pair,
+				parameters, density, weightList, interactionSet);
 	}
 
 	private double getDensity(Set<Molecule> moleculesInCube, GridPoint gridPoint) {
@@ -165,23 +215,27 @@ public class InteractionSet {
 		return density;
 	}
 
-	private void checkDensity(Set<Atom> atomsInCube, Set<Set<Integer>> pairSet,
-			GridPoint gridPoint, Set<Molecule> neighbours, Set<Integer> pair,
-			Map<JobParameter, Object> parameters, double density) {
+	private void checkDensity(Set<Atom> atomsInCube,
+			List<List<Integer>> pairList, GridPoint gridPoint,
+			Set<Molecule> neighbours, List<Integer> pair,
+			Map<JobParameter, Object> parameters, double density,
+			List<Double> weightList, Set<Set<Integer>> interactionSet) {
 		// check density
 		if (density >= (double) parameters.get(JobParameter.DENSITY_DORI)) {
 
-			calculateAndCheckDori(atomsInCube, pairSet, gridPoint, neighbours,
-					pair, parameters);
+			calculateAndCheckDori(atomsInCube, pairList, gridPoint, neighbours,
+					pair, parameters, density, weightList,interactionSet);
 		}
 	}
 
 	private void calculateAndCheckDori(Set<Atom> atomsInCube,
-			Set<Set<Integer>> pairSet, GridPoint gridPoint,
-			Set<Molecule> neighbours, Set<Integer> pair,
-			Map<JobParameter, Object> parameters) {
+			List<List<Integer>> pairList, GridPoint gridPoint,
+			Set<Molecule> neighbours, List<Integer> pair,
+			Map<JobParameter, Object> parameters, double density,
+			List<Double> weightList, Set<Set<Integer>> interactionSet) {
 		double doriTemp = getDoriValue(atomsInCube, gridPoint);
-		checkDoriValue(pairSet, neighbours, pair, parameters, doriTemp);
+		checkDoriValue(pairList, neighbours, pair, parameters, doriTemp,
+				density, weightList, interactionSet);
 	}
 
 	private double getDoriValue(Set<Atom> atomsInCube, GridPoint gridPoint) {
@@ -193,16 +247,41 @@ public class InteractionSet {
 		return doriTemp;
 	}
 
-	private void checkDoriValue(Set<Set<Integer>> pairSet,
-			Set<Molecule> neighbours, Set<Integer> pair,
-			Map<JobParameter, Object> parameters, double doriTemp) {
+	private void checkDoriValue(List<List<Integer>> pairList,
+			Set<Molecule> neighbours, List<Integer> pair,
+			Map<JobParameter, Object> parameters, double doriTemp,
+			double density, List<Double> weightList,
+			Set<Set<Integer>> interactionSet) {
 
 		// check dori
 		if (1 >= doriTemp
 				&& doriTemp >= (double) parameters.get(JobParameter.DORI)) {
-			pairSet.add(pair);
+			// Boolean itemInList = checkItemInList(pairList, pair);
+			Set<Integer> pairTemp = new HashSet<Integer>(pair);
+			if (!interactionSet.contains(pairTemp)) {
+				interactionSet.add(pairTemp);
+				pairList.add(pair);
+				weightList.add(density);
+			} else {
+				
+				int index = pairList.indexOf(pair);
+				weightList.set(index, weightList.get(index)+density);
+			}
 
 		}
+	}
+
+	private Boolean checkItemInList(List<List<Integer>> interactionList,
+			List<Integer> pair) {
+		Boolean itemInList = false;
+		for (List list : interactionList) {
+			if (list.containsAll(pair)) {
+				itemInList = true;
+				break;
+			}
+
+		}
+		return itemInList;
 	}
 
 }

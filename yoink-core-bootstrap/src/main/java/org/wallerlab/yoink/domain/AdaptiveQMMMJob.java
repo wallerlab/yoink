@@ -48,8 +48,9 @@ public class AdaptiveQMMMJob implements Job<JAXBElement> {
 	private Map<String, Object> properties = new HashMap<String, Object>();
 
 	private Map<Region.Name, Region> regions = new HashMap<Region.Name, Region>();
-	private Set<Set<Integer>> interactionSet;
+	private List<List<Integer>> interactionList;
 	private List<Set<Integer>> clusters;
+	private  List<Double> interactionWeight;
 
 	@Override
 	public MolecularSystem getMolecularSystem() {
@@ -102,14 +103,14 @@ public class AdaptiveQMMMJob implements Job<JAXBElement> {
 	}
 
 	@Override
-	public Set<Set<Integer>> getInteractionSet() {
+	public List<List<Integer>> getInteractionList() {
 
-		return this.interactionSet;
+		return this.interactionList;
 	}
 
 	@Override
-	public void SetInteractionSet(Set<Set<Integer>> interactionSet) {
-		this.interactionSet = interactionSet;
+	public void SetInteractionList(List<List<Integer>> interactionSet) {
+		this.interactionList = interactionSet;
 
 	}
 
@@ -122,5 +123,16 @@ public class AdaptiveQMMMJob implements Job<JAXBElement> {
 	public List<Set<Integer>> getClusters() {
 		return this.clusters;
 
+	}
+
+	@Override
+	public List<Double> getInteractionWeight() {
+		return this.interactionWeight;
+	}
+
+	@Override
+	public void SetInteractionWeight(List<Double> interactionWeight) {
+		this.interactionWeight=interactionWeight;
+		
 	}
 }
