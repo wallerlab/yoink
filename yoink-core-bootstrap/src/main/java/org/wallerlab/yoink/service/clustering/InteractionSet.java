@@ -15,6 +15,7 @@
  */
 package org.wallerlab.yoink.service.clustering;
 
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -115,14 +116,35 @@ public class InteractionSet {
 		 * weight+=weightListTemp.get(i); } interactionList.add(pair);
 		 * weightList.add(weight); } }
 		 */
+
+	List<Double> weightList = new ArrayList<Double>();
+	if ((Boolean) parameters.get(JobParameter.INTERACTION_WEIGHT)) {
+			weightList = interactionAndWeightLists.get(1);
+			double weightMin=Collections.min(weightList);
+			double weightMax=Collections.max(weightList);
+			System.out.println(weightMax+"  "+weightMin);
+			double normal = 1.0/(weightMax-weightMin);
+			for(int i=0;i<weightList.size();i++){
+				
+				weightList.set(i,weightList.get(i)*normal);
+			}
+			
+		} else{
+		
+			Double[] weightArray = new Double[ interactionAndWeightLists.get(0).size()];
+			Arrays.fill(weightArray, 1.0);
+
+			weightList.addAll(Arrays.asList(weightArray));
+		
+		}
 		System.out.println("interaction List: "
 				+ interactionAndWeightLists.get(0).size());
 		
 		System.out.println("weight List: "
-				+ interactionAndWeightLists.get(1).size());
+				+ weightList.size());
 		
 		job.SetInteractionList(interactionAndWeightLists.get(0));
-		job.SetInteractionWeight(interactionAndWeightLists.get(1));
+		job.SetInteractionWeight(weightList);
 
 	}
 

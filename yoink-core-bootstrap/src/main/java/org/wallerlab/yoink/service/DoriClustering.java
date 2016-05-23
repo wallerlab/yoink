@@ -86,27 +86,8 @@ public class DoriClustering implements Clustering {
 	private List<InteractionTriple<Integer>> getInteractionTriples(Job job,
 			Map<JobParameter, Object> parameters) {
 		List<InteractionTriple<Integer>> interactionTriples = new ArrayList<InteractionTriple<Integer>>();
-		List<Double> weightList = new ArrayList<Double>();
+		List<Double> weightList = job.getInteractionWeight();
 		List<List<Integer>> interactionList = job.getInteractionList();
-		if ((Boolean) parameters.get(JobParameter.INTERACTION_WEIGHT)) {
-			weightList = job.getInteractionWeight();
-			double weightMin=Collections.min(weightList);
-			double weightMax=Collections.max(weightList);
-			System.out.println(weightMax+"  "+weightMin);
-			double normal = 1.0/(weightMax-weightMin);
-			for(int i=0;i<weightList.size();i++){
-				
-				weightList.set(i,weightList.get(i)*normal);
-			}
-			
-		} else{
-		
-			Double[] weightArray = new Double[interactionList.size()];
-			Arrays.fill(weightArray, 1.0);
-
-			weightList.addAll(Arrays.asList(weightArray));
-		
-		}
 		for (int i = 0; i < interactionList.size(); i++) {
 			List<Integer> pair = interactionList.get(i);
 			System.out.println(pair.get(0)+"  "+ pair.get(1)+"  "+  weightList.get(i));

@@ -35,17 +35,20 @@ class PYoink(object):
         self.result=self.adaptiveQMMM.process(self.input_file)
 
     def get_interaction_list(self):
-	interaction_set= self.interactionSetProcessor.process(self.input_file).getInteractionSet()
+	result=self.interactionSetProcessor.process(self.input_file)
+	interaction_temp= result.getInteractionList()
 	interaction_list=[]
-	interaction_temp=java.util.ArrayList()
-	interaction_temp.addAll(interaction_set)
+	weight_temp=result.getInteractionWeight()
+	weight=[]
+	#interaction_temp=java.util.ArrayList()
+	#interaction_temp.addAll(interaction_set)
 	for i in  range (interaction_temp.size()):
-        	temp=java.util.ArrayList()
-        	temp.addAll(interaction_temp.get(i))
-
-                plist=[temp.get(0).intValue(),temp.get(1).intValue()]
+		temp=interaction_temp.get(i)	
+                plist=[temp.get(0).intValue()-1,temp.get(1).intValue()-1]
                 interaction_list.append(plist)
-	return interaction_list	
+		temp=weight_temp.get(i).doubleValue()
+		weight.append(temp)
+	return interaction_list,weight	
   
     def get_clusters(self):
 	return self.clusteringProcessor.process(self.input_file).getClusters()	
