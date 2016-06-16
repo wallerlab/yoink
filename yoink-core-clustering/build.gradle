@@ -1,0 +1,4 @@
+dependencies {
+	compile 'log4j:log4j:1.2.16'
+	compile "org.neo4j:neo4j:3.0.1"
+}

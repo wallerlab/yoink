@@ -3368,6 +3368,8 @@
 		<parameter name="SMOOTHNER" value="DISTANCE_DAS" />
 		<parameter name="JOB_NAME" value="DISTANCE_DAS" />
 		<parameter name="OUTPUT_FOLDER" value="./outputs" />
+		<parameter name="WFC_PATH" value="./dat" />
+		<parameter name="DGRID" value="trUe" />
 	</parameterList>
 </cml>
 

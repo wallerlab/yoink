@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 package org.wallerlab.yoink;
-
 import java.io.IOException;
 
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.StandardEnvironment;
+import org.springframework.core.io.support.ResourcePropertySource;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.ApplicationContext;
@@ -26,6 +29,8 @@ import org.wallerlab.yoink.density.config.DensityConfig;
 import org.wallerlab.yoink.math.config.MathConfig;
 import org.wallerlab.yoink.molecular.config.MolecularConfig;
 import org.wallerlab.yoink.regionizer.config.RegionizerConfig;
+import org.wallerlab.yoink.config.BatchConfig;
+import org.wallerlab.yoink.service.jobbuilder.*;
 
 /**
  * This class is the main class of Yoink
@@ -41,7 +46,6 @@ import org.wallerlab.yoink.regionizer.config.RegionizerConfig;
         DensityConfig.class})
 @ComponentScan("org.wallerlab.yoink")
 public class Yoink {
-
     /**
      * use Spring boot to start Yoink application
      *
@@ -51,6 +55,25 @@ public class Yoink {
      */
     public static void main(String[] args) throws IOException,
             InterruptedException {
-        ApplicationContext ctx = SpringApplication.run(Yoink.class, args);
+      ApplicationContext   ctx = SpringApplication.run(Yoink.class, args);
     }
+
+   public  AnnotationConfigApplicationContext  getBeans(AnnotationConfigApplicationContext appContext){
+     ConfigurableEnvironment environment = new StandardEnvironment();
+                try {
+                        environment.getPropertySources().addFirst(
+                                        new ResourcePropertySource("./application.properties"));
+                } catch (IOException e) {
+                        e.printStackTrace();
+                }
+                appContext.register(BatchConfig.class);
+                appContext.setEnvironment(environment);
+                appContext.refresh();
+
+       return appContext;
+
+}
+
+
+
 }

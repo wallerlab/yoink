@@ -26,14 +26,18 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
 import org.wallerlab.yoink.api.model.density.DensityPoint.DensityType;
+import org.wallerlab.yoink.api.model.molecular.Atom;
 import org.wallerlab.yoink.api.model.molecular.Coord;
 import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.molecular.RadialGrid;
 import org.wallerlab.yoink.api.model.regionizer.Region;
 import org.wallerlab.yoink.api.service.Calculator;
 import org.wallerlab.yoink.api.service.Factory;
+import org.wallerlab.yoink.api.service.molecular.FilesReader;
 import org.wallerlab.yoink.api.service.regionizer.Partitioner;
 import org.wallerlab.yoink.api.service.regionizer.Regionizer;
 import org.wallerlab.yoink.api.service.regionizer.RegionizerMath;
+import org.wallerlab.yoink.molecular.domain.SimpleRadialGrid;
 import org.wallerlab.yoink.regionizer.domain.SimpleRegion;
 
 /**
@@ -56,6 +60,9 @@ public class DensityPartitioner implements
 
 	@Resource
 	private Factory<Region, Region.Name> simpleRegionFactory;
+
+	@Resource
+	protected  FilesReader<RadialGrid, String> radialGridReader;
 
 	/**
 	 * based on the density of QM core , define adaptive search region , the
@@ -84,7 +91,7 @@ public class DensityPartitioner implements
 		// QM, adaptive search region for adaptive QM core, and adaptive search
 		// region for buffer are different.
 		double densityThreshold = getDensityThreshold(parameters, densityType);
-		calculateAdaptiveSearchRegion(regions, densityThreshold);
+		calculateAdaptiveSearchRegion(regions, densityThreshold, parameters);
 		calculateNonQMCoreInAdaptiveSearchRegion(regions);
 		// define buffer region by density
 		calculateBufferRegion(regions, densityType);
@@ -116,13 +123,46 @@ public class DensityPartitioner implements
 	}
 
 	private void calculateAdaptiveSearchRegion(
-			Map<Region.Name, Region> regions, double densityThreshold) {
+			Map<Region.Name, Region> regions, double densityThreshold,
+			Map<JobParameter, Object> parameters) {
+		// initialize wfc for qm_core
+		readWFC(parameters, regions.get(Region.Name.QM_CORE));
 		Region adaptiveSearchRegion = findAdaptiveSearchRegionInNonQmCoreRegion(
 				regions, densityThreshold);
 		// add QM core molecules
 		adaptiveSearchRegion.addAll(regions.get(Region.Name.QM_CORE)
 				.getMolecularMap());
+		// initialize wfc for adaptive search region
+		readWFC(parameters, adaptiveSearchRegion);
 		regions.put(adaptiveSearchRegion.getName(), adaptiveSearchRegion);
+
+	}
+
+	public   void readWFC(Map<JobParameter, Object> parameters,
+			Region adaptiveSearchRegion) {
+		if ((boolean) parameters.get(JobParameter.DGRID) == true) {
+
+			List<Atom> atoms = adaptiveSearchRegion.getAtoms();
+
+			atoms.parallelStream().forEach(
+					atom -> {
+						if (atom.getRadialGrid() == null) {
+							RadialGrid grid = new SimpleRadialGrid();
+							String wfc_name = atom.getElementType().toString()
+									.toLowerCase();
+							if (wfc_name.length() == 1) {
+								wfc_name = wfc_name + "_";
+							}
+							String wfc_file = parameters
+									.get(JobParameter.WFC_PATH)
+									+ "/"
+									+ wfc_name + "_lda.wfc";
+							grid = radialGridReader.read(wfc_file, grid);
+							atom.setRadialGrid(grid);
+						}
+					});
+
+		}
 	}
 
 	private void calculateNonQMCoreInAdaptiveSearchRegion(

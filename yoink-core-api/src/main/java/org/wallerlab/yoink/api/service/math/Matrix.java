@@ -140,6 +140,13 @@ public interface Matrix<T> {
 	double dotProduct();
 
 	/**
+	 * get the dot product of this matrix and another matrix m. it works when matrix is a vector
+	 * 
+	 * @return {@link java.lang.Double}
+	 */
+	double dotProduct(Matrix m);
+	
+	/**
 	 * get the distance between this matrix and another matrix m.it works when
 	 * matrix is a vector
 	 * 

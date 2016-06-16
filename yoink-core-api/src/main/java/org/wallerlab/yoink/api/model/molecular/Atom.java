@@ -37,6 +37,23 @@ public interface Atom {
 	 * @return atomic index in molecular system -{@link java.lang.Integer}
 	 */
 	int getIndex();
+	
+
+	/**
+	 * get the radial grid 
+	 * 
+	 * @return radial grids for density -{@link org.wallerlab.yoink.api.model.molecular.RadialGrid}
+	 */
+	RadialGrid getRadialGrid();
+	
+
+	/**
+	 * set the radial grid 
+	 * 
+	 * 
+	 */
+	void setRadialGrid(RadialGrid radial_grid);
+
 
 	/**
 	 * get the coordinate of this atom

@@ -28,10 +28,14 @@ import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
 import org.wallerlab.yoink.api.model.bootstrap.Job;
 import org.wallerlab.yoink.api.service.molecular.FilesReader;
+import org.wallerlab.yoink.api.model.molecular.Atom;
+import org.wallerlab.yoink.api.model.molecular.Coord;
 import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
+import org.wallerlab.yoink.api.model.molecular.RadialGrid;
 import org.wallerlab.yoink.api.service.bootstrap.JobBuilder;
 import org.wallerlab.yoink.api.service.molecular.Translator;
 import org.wallerlab.yoink.domain.AdaptiveQMMMJob;
+import org.wallerlab.yoink.molecular.domain.SimpleRadialGrid;
 import org.xml_cml.schema.Cml;
 
 /**
@@ -45,7 +49,7 @@ import org.xml_cml.schema.Cml;
  * @param <I>
  *
  */
-public abstract class AbstractJobBuilder<I,O> implements JobBuilder<I,O>{
+public abstract class AbstractJobBuilder<I, O> implements JobBuilder<I, O> {
 
 	@Resource
 	protected Translator<MolecularSystem, JAXBElement<Cml>> molecularSystemTranslator;
@@ -53,6 +57,7 @@ public abstract class AbstractJobBuilder<I,O> implements JobBuilder<I,O>{
 	@Resource
 	protected Translator<Map<JobParameter, Object>, JAXBElement<Cml>> parameterTranslator;
 
+	
 	/**
 	 * read in cml file, and convert it to molecular system and parameters for
 	 * building a new adaptive qmmm job.
@@ -64,12 +69,13 @@ public abstract class AbstractJobBuilder<I,O> implements JobBuilder<I,O>{
 	 */
 	@Override
 	public abstract Job<O> build(I input);
-	
+
 	protected void process(Job<JAXBElement> job) {
 		readInMolecularSystem(job);
 		readInParameters(job);
-	}
 	
+	}
+
 	protected void readInMolecularSystem(Job<JAXBElement> job) {
 		MolecularSystem molecularSystem = molecularSystemTranslator
 				.translate(job.getInput());
@@ -81,5 +87,6 @@ public abstract class AbstractJobBuilder<I,O> implements JobBuilder<I,O>{
 				.translate(job.getInput());
 		job.setParameters(parameters);
 	}
+
 
 }

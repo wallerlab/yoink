@@ -20,10 +20,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
 import org.wallerlab.yoink.api.model.molecular.Atom;
@@ -45,6 +47,9 @@ public class DistanceRegionizer extends ParameterRegionizer {
 
 	@Resource
 	private Calculator<Double, Coord, Molecule> closestDistanceToMoleculeCalculator;
+	
+	@Value("${yoink.job.functional}")
+	private boolean functional=false;
 	
 	public Map<Region.Name, Region> regionize(Map<Region.Name, Region> regions,
 			Map<JobParameter, Object> parameters) {
@@ -70,7 +75,11 @@ public class DistanceRegionizer extends ParameterRegionizer {
 				.get(JobParameter.DISTANCE_QM);
 		double bufferThreshold = distanceThreshold
 				+ (double) parameters.get(JobParameter.DISTANCE_BUFFER);
-		checkCriteria(qmAdaptiveRegion, bufferRegion, centerCoord,
+		if(functional==true){
+			checkCriteriaFunc(qmAdaptiveRegion, bufferRegion, centerCoord,
+					nonQMCoreMolecules, distanceThreshold, bufferThreshold);
+		}
+		else checkCriteria(qmAdaptiveRegion, bufferRegion, centerCoord,
 				nonQMCoreMolecules, distanceThreshold, bufferThreshold);
 	}
 
@@ -90,4 +99,43 @@ public class DistanceRegionizer extends ParameterRegionizer {
 		}
 	}
 
+	public void checkCriteriaFunc(Region qmAdaptiveRegion,Region bufferRegion,Coord core,Set<Molecule> molecules,double qmThreshold, double bufferThreshold){
+
+
+		Map<Region.Name, List<Molecule>> regions=calculateStreamParallelstream( molecules,qmThreshold,  bufferThreshold,core);
+
+		
+		if(regions.containsKey(Region.Name.QM_ADAPTIVE)){
+		regions.get(Region.Name.QM_ADAPTIVE).parallelStream().forEach(
+				molecule -> {
+			qmAdaptiveRegion.addMolecule(molecule, molecule.getIndex());
+		});
+		}
+		if(regions.containsKey(Region.Name.BUFFER)){
+		regions.get(Region.Name.BUFFER).parallelStream().forEach(
+				molecule -> {
+			bufferRegion.addMolecule(molecule, molecule.getIndex());
+		});
+		}
+		
+
+	}
+	
+	
+	public Map<Region.Name, List<Molecule>> calculateStreamParallelstream(Set<Molecule> molecules,double qmThreshold, double bufferThreshold,Coord core){
+		
+		Map<Region.Name, List<Molecule>> regions =
+		molecules.parallelStream()
+				 .collect(
+						 Collectors.groupingBy(molecule -> {
+							// double distance=0;
+							double distance =closestDistanceToMoleculeCalculator.calculate(core, molecule);
+							 if (distance < qmThreshold) return Region.Name.QM_ADAPTIVE;
+							 	else if (distance < bufferThreshold) return Region.Name.BUFFER;
+							return Region.Name.MM;
+
+						 }));
+		return regions;
+	}
+	
 }

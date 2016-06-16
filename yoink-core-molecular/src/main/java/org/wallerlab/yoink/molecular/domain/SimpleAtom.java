@@ -18,6 +18,7 @@ package org.wallerlab.yoink.molecular.domain;
 import org.wallerlab.yoink.api.model.molecular.Atom;
 import org.wallerlab.yoink.api.model.molecular.Coord;
 import org.wallerlab.yoink.api.model.molecular.Element;
+import org.wallerlab.yoink.api.model.molecular.RadialGrid;
 
 /**
  * the domain model of atom
@@ -32,6 +33,8 @@ public class SimpleAtom implements Atom {
 	protected final Element elementType;
 
 	private final Coord coordinate;
+
+	private RadialGrid radial_grid;
 
 	public SimpleAtom(int index, Element elementType, Coord coordinate) {
 		this.index = index;
@@ -85,5 +88,23 @@ public class SimpleAtom implements Atom {
 	@Override
 	public double getZ3() {
 		return this.coordinate.getCoords().getZ();
+	}
+
+	/**
+	 * set the radial grid
+	 */
+	@Override
+	public RadialGrid getRadialGrid() {
+		
+		return this.radial_grid;
+	}
+
+	/**
+	 * get the radial grid
+	 */
+	@Override
+	public void setRadialGrid(RadialGrid radial_grid) {
+
+		this.radial_grid=radial_grid;
 	}
 }

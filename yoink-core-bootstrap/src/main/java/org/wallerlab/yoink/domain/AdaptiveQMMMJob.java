@@ -16,7 +16,9 @@
 package org.wallerlab.yoink.domain;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.bind.JAXBElement;
 
@@ -46,6 +48,9 @@ public class AdaptiveQMMMJob implements Job<JAXBElement> {
 	private Map<String, Object> properties = new HashMap<String, Object>();
 
 	private Map<Region.Name, Region> regions = new HashMap<Region.Name, Region>();
+	private List<List<Integer>> interactionList;
+	private List<Set<Integer>> clusters;
+	private  List<Double> interactionWeight;
 
 	@Override
 	public MolecularSystem getMolecularSystem() {
@@ -95,5 +100,39 @@ public class AdaptiveQMMMJob implements Job<JAXBElement> {
 	@Override
 	public void setProperties(Map<String, Object> properties) {
 		this.properties = properties;
+	}
+
+	@Override
+	public List<List<Integer>> getInteractionList() {
+
+		return this.interactionList;
+	}
+
+	@Override
+	public void SetInteractionList(List<List<Integer>> interactionSet) {
+		this.interactionList = interactionSet;
+
+	}
+
+	@Override
+	public void setClusters(List<Set<Integer>> clusters) {
+		this.clusters = clusters;
+	}
+
+	@Override
+	public List<Set<Integer>> getClusters() {
+		return this.clusters;
+
+	}
+
+	@Override
+	public List<Double> getInteractionWeight() {
+		return this.interactionWeight;
+	}
+
+	@Override
+	public void SetInteractionWeight(List<Double> interactionWeight) {
+		this.interactionWeight=interactionWeight;
+		
 	}
 }

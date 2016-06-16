@@ -21,11 +21,34 @@ import org.wallerlab.yoink.api.model.molecular.Element;
 import org.wallerlab.yoink.api.service.Calculator;
 import org.wallerlab.yoink.density.service.density.AtomDensityCalculator
 import org.wallerlab.yoink.math.config.MathConfig;
-
+import org.wallerlab.yoink.math.linear.SimpleMatrixFactory
+import org.wallerlab.yoink.molecular.data.RadialGridReader
+import org.wallerlab.yoink.molecular.domain.SimpleRadialGrid
+import org.wallerlab.yoink.api.service.math.Matrix;
 import spock.lang.Specification
 
 class AtomDensityCalculatorSpec extends Specification {
 
+	def "test density from radial grid"(){
+		given:
+		def grid= new SimpleRadialGrid()
+		def reader= new RadialGridReader()
+		def myMatrix= new SimpleMatrixFactory()
+		myMatrix.matrixType=Matrix.Type.COMMONS
+		reader.myMatrix=myMatrix
+		reader.read("./src/test/resources/c__lda.wfc",  grid)
+		def atom=Mock(Atom)
+		atom.getElementType()>>Element.C
+		atom.getRadialGrid()>>grid
+		def currentCoord=Mock(Coord)
+		Calculator<Double, Coord, Atom> distanceCalculator=Mock(Calculator)
+		distanceCalculator.calculate(currentCoord, atom)>>(double)   3.4641016151377544
+		when:"make a new AtomDensityCalculator"
+		def calculator= new AtomDensityCalculator()
+		calculator.distanceCalculator=distanceCalculator
+		then:
+		 Math.abs(calculator.calculate(currentCoord, atom)-1.52625795738137279E-003)<=1.0E-5
+	}
 
 	def "test method  calculate(Coord currentCoord, Atom atom) "(){
 		given:

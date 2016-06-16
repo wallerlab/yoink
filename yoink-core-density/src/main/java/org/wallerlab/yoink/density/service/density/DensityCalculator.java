@@ -15,12 +15,14 @@
  */
 package org.wallerlab.yoink.density.service.density;
 
+import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Resource;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.molecular.Atom;
 import org.wallerlab.yoink.api.model.molecular.Coord;
@@ -43,6 +45,9 @@ public class DensityCalculator implements
 
 	protected static final Log log = LogFactory.getLog(DensityCalculator.class);
 
+	@Value("${yoink.job.functional}")
+	private boolean functional=false;
+
 	/**
 	 * calculate the density of a point from molecules. during density
 	 * calculation, the density parameters are in the format of Vector
@@ -55,7 +60,12 @@ public class DensityCalculator implements
 	 * @return the density of a point from molecules
 	 */
 	public Double calculate(Coord currentCoord, Set<Molecule> molecules) {
-		double density = loopOverEveryAtom(currentCoord, molecules);
+		
+		double density = 0.0;
+		if (functional == true){
+			density = loopOverEveryAtomFunc(currentCoord, molecules);}
+		else
+			density = loopOverEveryAtom(currentCoord, molecules);
 		// if the density is too small, zero or close to zero, take the default
 		// density value.
 		density = Math.max(density, Constants.DENSITY_DEFAULT);
@@ -69,7 +79,19 @@ public class DensityCalculator implements
 				density += atomDensityCalculator.calculate(currentCoord, atom);
 			}
 		}
+
 		return density;
+	}
+
+	private double loopOverEveryAtomFunc(Coord currentCoord,
+			Set<Molecule> molecules) {
+
+		return molecules
+				.parallelStream()
+				.flatMap(molecule -> molecule.getAtoms().stream())
+				.mapToDouble(
+						atom -> atomDensityCalculator.calculate(currentCoord,
+								atom)).sum();
 	}
 
 }

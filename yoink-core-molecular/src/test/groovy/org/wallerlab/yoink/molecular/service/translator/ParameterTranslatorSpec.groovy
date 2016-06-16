@@ -20,7 +20,7 @@ import org.xml_cml.schema.Cml
 import org.xml_cml.schema.ObjectFactory
 import org.wallerlab.yoink.api.service.molecular.Converter.UnitConverterType;
 import spock.lang.Specification;
-
+import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
 class ParameterTranslatorSpec extends Specification {
 
 	def "test method translate(JAXBElement<Cml> cml)"(){
@@ -30,6 +30,7 @@ class ParameterTranslatorSpec extends Specification {
 		def cml=new JaxbFileReader().read("./src/test/resources/aro.xml", new  Cml())
 		then:"tranlate all parameters in given file"
 		parameterTranslator.translate(cml)
-		parameterTranslator.translate(cml).size()==21
+		parameterTranslator.translate(cml).size()==23
+		parameterTranslator.translate(cml).get(JobParameter.DGRID)==true
 	}
 }

@@ -147,7 +147,7 @@ public class CommonsMatrix implements Matrix<RealMatrix> {
 		RealVector vector2 = new ArrayRealVector(v2);
 		RealVector vectorEBE = vector1.ebeMultiply(vector2);
 		double[] vEBE = vectorEBE.toArray();
-		tempMatrix = MatrixUtils.createRealMatrix(1, 3);
+		tempMatrix = MatrixUtils.createRealMatrix(1, vEBE.length);
 		tempMatrix.setRow(0, vEBE);
 		Matrix newMatrix = new CommonsMatrix();
 		newMatrix.setInternalMatrix(tempMatrix);
@@ -174,6 +174,15 @@ public class CommonsMatrix implements Matrix<RealMatrix> {
 	@Override
 	public boolean equals(Matrix m) {
 		return this.internalMatrix.equals(m.getInternalMatrix());
+	}
+
+	@Override
+	public double dotProduct(Matrix m) {
+		double[] v1 = this.internalMatrix.getRow(0);
+		RealVector vector1 = new ArrayRealVector(v1);
+		double[] v2 = ((RealMatrix) m.getInternalMatrix()).getRow(0);
+		RealVector vector2 = new ArrayRealVector(v2);
+		return vector1.dotProduct(vector2);
 	}
 
 }

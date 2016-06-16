@@ -15,13 +15,16 @@
  */
 package org.wallerlab.yoink.api.model.bootstrap;
 
+import java.util.List;
 import java.util.Map;
+import java.util.List;
+import java.util.Set;
 
 import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
 import org.wallerlab.yoink.api.model.regionizer.Region;
 
 /**
- * this interface is for the Job domain model 
+ * this interface is for the Job domain model
  * 
  * @param <T>, the specified type input for the job
  * @author Min Zheng
@@ -74,7 +77,7 @@ public interface Job<T> {
 	 *         value.
 	 * 
 	 */
-	 Map<Region.Name, Region> getRegions();
+	Map<Region.Name, Region> getRegions();
 
 	/**
 	 * set the value of regions in the job
@@ -101,7 +104,7 @@ public interface Job<T> {
 	 *            , the input to start a job. eg. it can be a file ,or
 	 *            JAXBElement from a Cml file
 	 */
-	 void setInput(T input);
+	void setInput(T input);
 
 	/**
 	 * get the value of properties in the job.
@@ -120,4 +123,45 @@ public interface Job<T> {
 	 */
 	void setProperties(Map<String, Object> properties);
 
+	/**
+	 * get the interaction pairs
+	 * 
+	 * @return
+	 */
+	List<List<Integer>> getInteractionList();
+
+	/**
+	 * set the interaction pairs
+	 * 
+	 * @param interactionSet
+	 */
+	void SetInteractionList(List<List<Integer>> interactionSet);
+
+	/**
+	 * get the weight(strength) of the interaction
+	 * 
+	 * @return
+	 */
+	List<Double> getInteractionWeight();
+
+	/**
+	 * set the weight(strength) of the interaction
+	 * 
+	 * @param interactionWeight
+	 */
+	void SetInteractionWeight(List<Double> interactionWeight);
+
+	/**
+	 * set the clustering result
+	 * 
+	 * @param clusters
+	 */
+	void setClusters(List<Set<Integer>> clusters);
+
+	/**
+	 * get the clustering result
+	 * 
+	 * @return
+	 */
+	List<Set<Integer>> getClusters();
 }

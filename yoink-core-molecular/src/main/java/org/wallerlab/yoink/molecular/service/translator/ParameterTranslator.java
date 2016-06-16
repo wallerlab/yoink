@@ -62,6 +62,7 @@ public class ParameterTranslator implements
 	@Override
 	public Map<JobParameter, Object> translate(JAXBElement<Cml> cml) {
 		Map<JobParameter, Object> parameters = new HashMap<JobParameter, Object>();
+		parameters.put(JobParameter.DGRID, false);
 		Cml cmlMolecularSystem = cml.getValue();
 		parseParameterList(parameters, cmlMolecularSystem);
 		return parameters;
@@ -108,6 +109,7 @@ public class ParameterTranslator implements
 		String name = cmlParameter.getName().toUpperCase();
 		JobParameter jobParameter = JobParameter.valueOf(name);
 		String value = cmlParameter.getValue();
+		
 		switch (jobParameter) {
 		case REGION_CUBE:
 			parameters.put(jobParameter, Region.Name.valueOf(value));
@@ -115,6 +117,7 @@ public class ParameterTranslator implements
 		case NUMBER_QM:
 		case NUMBER_PARTITION:
 		case NUMBER_BUFFER:
+		case MAX_COMMS:	
 			parameters.put(jobParameter, Integer.parseInt(value));
 			break;
 		case DORI_STEPSIZE:
@@ -140,7 +143,7 @@ public class ParameterTranslator implements
 			parameters.put(jobParameter, Partitioner.Type.valueOf(value));
 			break;
 		case JOB_NAME:
-		//case INPUT_FOLDER:
+		case WFC_PATH:
 		case OUTPUT_FOLDER:
 			parameters.put(jobParameter, value);
 			break;
@@ -156,6 +159,10 @@ public class ParameterTranslator implements
 		case DISTANCE_T_MM_OUT:
 			parameters.put(jobParameter, Double.parseDouble(value)
 					* unitConverterType.value());
+			break;
+		case DGRID:
+		case INTERACTION_WEIGHT:	
+			parameters.put(jobParameter, Boolean.parseBoolean(value));
 			break;
 		default:
 			parameters.put(jobParameter, Double.parseDouble(value));

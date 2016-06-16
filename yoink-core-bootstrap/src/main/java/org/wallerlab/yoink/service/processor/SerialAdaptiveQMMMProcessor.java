@@ -18,6 +18,7 @@ package org.wallerlab.yoink.service.processor;
 import java.io.File;
 
 import javax.xml.bind.JAXBElement;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,7 @@ public class SerialAdaptiveQMMMProcessor extends AbstractAdaptiveQMMMProcessor<J
 	 */
 	@Override
 	public Job process(JAXBElement input) throws Exception {
+		
 		return buildAndExecute(input);
 	}
 

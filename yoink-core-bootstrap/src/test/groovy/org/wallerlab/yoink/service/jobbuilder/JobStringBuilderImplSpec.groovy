@@ -19,7 +19,7 @@ package org.wallerlab.yoink.service.jobbuilder
 import org.xml_cml.schema.ObjectFactory
 
 import spock.lang.Specification;
-
+import org.wallerlab.yoink.api.model.bootstrap.JobParameter
 import org.wallerlab.yoink.api.*
 import org.wallerlab.yoink.api.enums.*
 import org.wallerlab.yoink.api.model.*
@@ -36,11 +36,14 @@ class JobStringBuilderImplSpec extends Specification {
 		def  molecularSystemTranslator=Mock(Translator)
 		def  parameterTranslator=Mock(Translator)
 		def factory=new ObjectFactory()
+		def gridReader=Mock(FilesReader)
 		def cml=factory.createCml()
 		def input=factory.createCml(cml)
 		jaxbReader.read(_,_)>>input
 		molecularSystemTranslator.translate(_)>>Mock(MolecularSystem)
-		parameterTranslator.translate(_)>>Mock(Map)
+		def parameter=[:]
+		
+		parameterTranslator.translate(_)>>parameter
 
 		when:"set up a new JobBuilder"
 		def builder=new JobFileBuilderImpl()

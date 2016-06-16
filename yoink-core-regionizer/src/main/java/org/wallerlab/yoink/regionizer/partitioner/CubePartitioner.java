@@ -83,6 +83,7 @@ public class CubePartitioner implements
 		// Cube cube = new SimpleCube(xyzStepSize);
 		Region.Name cubeRegionName = (Region.Name) parameters
 				.get(JobParameter.REGION_CUBE);
+	
 		Set<Molecule> moleculesInCube = regions.get(cubeRegionName)
 				.getMolecules();
 		Cube cube = cubeBuilder.build(xyzStepSize, moleculesInCube);
@@ -136,6 +137,7 @@ public class CubePartitioner implements
 								.indexOf(currentCoord));
 						gridPoint.setProperties(properties);
 						gridPoints.add(gridPoint);
+						
 					}
 				});
 	}
