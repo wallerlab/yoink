@@ -23,7 +23,7 @@ class PYoink(object):
         self.result=None
         self.input_file=input_file   
 	self.out_file=out_file
-	self.atoms=self.get_atoms()
+	self.atoms,self.molecules=self.get_atoms_molecules()
 	self.system=system
 	FileInteractionSetProcessor=JClass("org.wallerlab.yoink.service.processor.FileInteractionSetProcessor")
 	self.interactionSetProcessor=javaApplicationContext.getBean(FileInteractionSetProcessor)
@@ -70,28 +70,36 @@ class PYoink(object):
         self.jaxbFileWriter.write(JString(self.out_file),self.result.getInput().getValue())
 
 
-    def update_input_file(self, positions):  
+    def update_input_file(self, positions=None,qm_core_fixed=None):  
         Double=JClass("java.lang.Double")
-        for iposition, position in enumerate(positions):
-                atom=self.atoms[iposition]
-                atom.setX3(Double(float(position[0])))
-                atom.setY3(Double(float(position[1])))
-                atom.setZ3(Double(float(position[2])))
+	if positions != None:
+        	for iposition, position in enumerate(positions):
+                	atom=self.atoms[iposition]
+                	atom.setX3(Double(float(position[0])))
+                	atom.setY3(Double(float(position[1])))
+                	atom.setZ3(Double(float(position[2])))
+	if qm_core_fixed != None:
+		for m in self.molecules:
+			m.setId(JString("MM"))
+		for q in qm_core_fixed:
+			self.molecules[q-1].setId(JString("QM_CORE_FIXED"))	
         self.jaxbFileWriter.write(JString(self.input_file),self.jaxb_cml.getValue())
 
     
-    def get_atoms(self):
+    def get_atoms_molecules(self):
         MoleculeList=JClass("org.xml_cml.schema.MoleculeList")
         Molecule=JClass("org.xml_cml.schema.Molecule")
         AtomArray=JClass("org.xml_cml.schema.AtomArray")
         Atom=JClass("org.xml_cml.schema.Atom")
         cmlSystem=self.jaxb_cml.getValue().getAnyCmlOrAnyOrAny()
         atoms=[]
+	molecules=[]
         for l in range(cmlSystem.size()):
           if (cmlSystem.get(l).getValue().getClass()==MoleculeList):
                 moleculeList=cmlSystem.get(l).getValue().getAnyCmlOrAnyOrAny()
         	for i in range(moleculeList.size()):
           	  if(moleculeList.get(i).getValue().getClass()==Molecule):
+		    molecules.append(moleculeList.get(i).getValue())	
                     molecule=moleculeList.get(i).getValue().getAnyCmlOrAnyOrAny()
                     for j in range(molecule.size()):                        
                         if(molecule.get(j).getValue().getClass()==AtomArray):
@@ -101,10 +109,13 @@ class PYoink(object):
                                   atom=atomArray.get(k).getValue()
                                   atoms.append(atom) 
         
-	return atoms
+	return atoms,molecules
 
-    def update(self):
+    def update(self,qm_core_fixed=None):
 	import os
         print "rerun yoink"
-	self.update_input_file(self.system.get_positions())
+	if self.system!=None:
+		self.update_input_file(self.system.get_positions(),qm_core_fixed)
+	else:
+		self.update_input_file(qm_core_fixed=qm_core_fixed)
  	self.partition()
