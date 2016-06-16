@@ -52,9 +52,8 @@ import org.wallerlab.yoink.regionizer.partitioner.DensityPartitioner;
 import org.wallerlab.yoink.service.clustering.InteractionSet;
 
 /**
- * This class is to do density interaction analysis (dori/sedd ) for those grid
- * points in the intersection between QM core region and non-QM core region
- * based on Voronoi partition.
+ * This class is to build a graph based on DORI interaction(yes or no) and do
+ * louvain clustering.
  * 
  * 
  * @author Min Zheng
@@ -90,7 +89,6 @@ public class DoriClustering implements Clustering {
 		List<List<Integer>> interactionList = job.getInteractionList();
 		for (int i = 0; i < interactionList.size(); i++) {
 			List<Integer> pair = interactionList.get(i);
-			System.out.println(pair.get(0)+"  "+ pair.get(1)+"  "+  weightList.get(i));
 			InteractionTriple<Integer> triple = new InteractionTriple<Integer>(
 					pair.get(0), pair.get(1), weightList.get(i));
 			interactionTriples.add(triple);

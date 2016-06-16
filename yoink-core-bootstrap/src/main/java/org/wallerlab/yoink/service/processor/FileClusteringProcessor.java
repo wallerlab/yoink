@@ -36,7 +36,7 @@ import org.wallerlab.yoink.service.clustering.InteractionSet;
 
 
 /**
- * This class is to set up and execute adaptive QM/MM partitioning.
+ * This class is to set up and execute clustering.
  * 
  * @author Min Zheng
  *

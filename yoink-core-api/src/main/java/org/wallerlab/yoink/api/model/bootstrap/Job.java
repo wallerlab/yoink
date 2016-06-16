@@ -123,15 +123,45 @@ public interface Job<T> {
 	 */
 	void setProperties(Map<String, Object> properties);
 
+	/**
+	 * get the interaction pairs
+	 * 
+	 * @return
+	 */
 	List<List<Integer>> getInteractionList();
 
+	/**
+	 * set the interaction pairs
+	 * 
+	 * @param interactionSet
+	 */
 	void SetInteractionList(List<List<Integer>> interactionSet);
-	
+
+	/**
+	 * get the weight(strength) of the interaction
+	 * 
+	 * @return
+	 */
 	List<Double> getInteractionWeight();
 
+	/**
+	 * set the weight(strength) of the interaction
+	 * 
+	 * @param interactionWeight
+	 */
 	void SetInteractionWeight(List<Double> interactionWeight);
 
+	/**
+	 * set the clustering result
+	 * 
+	 * @param clusters
+	 */
 	void setClusters(List<Set<Integer>> clusters);
 
+	/**
+	 * get the clustering result
+	 * 
+	 * @return
+	 */
 	List<Set<Integer>> getClusters();
 }

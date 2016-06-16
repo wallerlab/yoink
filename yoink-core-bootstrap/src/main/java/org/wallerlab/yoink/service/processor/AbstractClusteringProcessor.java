@@ -35,7 +35,7 @@ import org.wallerlab.yoink.api.service.regionizer.RegionizerMath;
 import org.wallerlab.yoink.service.clustering.InteractionSet;
 
 /**
- * This class is to set up and execute adaptive QM/MM partitioning.
+ * This class is to set up and execute clustering based on DORI analysis.
  * 
  * @author Min Zheng
  * @param <I>

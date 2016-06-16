@@ -148,7 +148,6 @@ public class BatchConfig {
 	private Step clusteringStep;
 	@Bean
 	public org.springframework.batch.core.Job importClusteringJob(JobBuilderFactory jobs) {
-		System.out.println("importClusteringJob");
 		return jobs.get("clustering")
 				.incrementer(new RunIdIncrementer())
 				.flow(clusteringStep)
@@ -212,7 +211,6 @@ public class BatchConfig {
 	public Step clusteringStep(StepBuilderFactory stepBuilderFactory, ItemReader<Cml> cmlFilereader,
 			ItemProcessor<JAXBElement, org.wallerlab.yoink.api.model.bootstrap.Job> serialClusteringProcessor,
 			ItemWriter<org.wallerlab.yoink.api.model.bootstrap.Job> cmlFileResponseWriter) {
-		System.out.println(" Step clusteringStep");
 		return stepBuilderFactory
 				.get("clustering").<JAXBElement, org.wallerlab.yoink.api.model.bootstrap.Job> chunk(1)
 				.reader(cmlFilesReader())

@@ -38,7 +38,7 @@ import org.xml_cml.schema.Cml;
 
 
 /**
- * This class is to set up and execute adaptive QM/MM partitioning.
+ * This class is to set up and execute clustering.
  * 
  * @author Min Zheng
  *
@@ -74,7 +74,6 @@ public class SerialClusteringProcessor extends  AbstractClusteringProcessor<JAXB
 	}
 
 	private Job buildAndExecute(JAXBElement input) {
-		System.out.println("in SerialClusteringProcessor");
 		Job job = jobJaxbBuilderImpl.build(input);
 		executeClustering( job) ;
 		return job;

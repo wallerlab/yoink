@@ -45,9 +45,7 @@ import org.wallerlab.yoink.api.service.regionizer.Partitioner;
 import org.wallerlab.yoink.regionizer.partitioner.DensityPartitioner;
 
 /**
- * This class is to do density interaction analysis (dori/sedd ) for those grid
- * points in the intersection between QM core region and non-QM core region
- * based on Voronoi partition.
+ * This class is to get all pairs having interaction(yes or no) base on DORI analysis.
  * 
  * 
  * @author Min Zheng
@@ -96,53 +94,31 @@ public class InteractionSet {
 							.get(JobParameter.REGION_CUBE)));
 			List<GridPoint> gridPoints = cubePartitioner.partition(regions,
 					parameters, DensityType.DORI);
-
 			interactionAndWeightLists = calculateInteractionPairList(regions,
 					parameters, gridPoints);
 
 		}
 
-		/*
-		 * Set<List<Integer>> tempNoRepeatInteractionList=new
-		 * HashSet<List<Integer>>(interactionListTemp); List<List<Integer>>
-		 * interactionList = new ArrayList<List<Integer>>(); List<Double>
-		 * weightList = new ArrayList<Double>();
-		 * 
-		 * double weight=0.0; for (List<Integer> pair
-		 * :tempNoRepeatInteractionList){ for(int
-		 * i=0;i<interactionListTemp.size();i++){ if
-		 * (interactionListTemp.get(i).containsAll(pair)){
-		 * 
-		 * weight+=weightListTemp.get(i); } interactionList.add(pair);
-		 * weightList.add(weight); } }
-		 */
-
-	List<Double> weightList = new ArrayList<Double>();
-	if ((Boolean) parameters.get(JobParameter.INTERACTION_WEIGHT)) {
+		List<Double> weightList = new ArrayList<Double>();
+		if ((Boolean) parameters.get(JobParameter.INTERACTION_WEIGHT)) {
 			weightList = interactionAndWeightLists.get(1);
-			double weightMin=Collections.min(weightList);
-			double weightMax=Collections.max(weightList);
-			System.out.println(weightMax+"  "+weightMin);
-			double normal = 1.0/(weightMax-weightMin);
-			for(int i=0;i<weightList.size();i++){
-				
-				weightList.set(i,weightList.get(i)*normal);
+			double weightMin = Collections.min(weightList);
+			double weightMax = Collections.max(weightList);
+			double normal = 1.0 / (weightMax - weightMin);
+			for (int i = 0; i < weightList.size(); i++) {
+
+				weightList.set(i, weightList.get(i) * normal);
 			}
-			
-		} else{
-		
-			Double[] weightArray = new Double[ interactionAndWeightLists.get(0).size()];
+
+		} else {
+
+			Double[] weightArray = new Double[interactionAndWeightLists.get(0)
+					.size()];
 			Arrays.fill(weightArray, 1.0);
 
 			weightList.addAll(Arrays.asList(weightArray));
-		
+
 		}
-		System.out.println("interaction List: "
-				+ interactionAndWeightLists.get(0).size());
-		
-		System.out.println("weight List: "
-				+ weightList.size());
-		
 		job.SetInteractionList(interactionAndWeightLists.get(0));
 		job.SetInteractionWeight(weightList);
 
@@ -161,7 +137,6 @@ public class InteractionSet {
 		List<Double> weightList = Collections.synchronizedList(weightListTemp);
 		Set<Set<Integer>> interactionSet = Collections
 				.synchronizedSet(interactionSetTemp);
-		System.out.println("gridpoints size " + gridPoints.size());
 		gridPoints.parallelStream().forEach(
 				gridPoint -> {
 					Set<Molecule> neighbours = gridPoint
@@ -180,14 +155,7 @@ public class InteractionSet {
 						checkCriteria(regions, interactionList, gridPoint,
 								neighbours, pair, parameters, weightList,
 								interactionSet);
-					}
-					// if the two closest molecules of a grid point
-					// already
-					// in the region, skip
-					// this grid point
-					else {
-						// Boolean itemInList = checkItemInList(interactionList,
-						// pair);
+					} else {
 						if (!interactionSet.contains(pairTemp)) {
 
 							checkCriteria(regions, interactionList, gridPoint,
@@ -246,7 +214,7 @@ public class InteractionSet {
 		if (density >= (double) parameters.get(JobParameter.DENSITY_DORI)) {
 
 			calculateAndCheckDori(atomsInCube, pairList, gridPoint, neighbours,
-					pair, parameters, density, weightList,interactionSet);
+					pair, parameters, density, weightList, interactionSet);
 		}
 	}
 
@@ -285,9 +253,9 @@ public class InteractionSet {
 				pairList.add(pair);
 				weightList.add(density);
 			} else {
-				
+
 				int index = pairList.indexOf(pair);
-				weightList.set(index, weightList.get(index)+density);
+				weightList.set(index, weightList.get(index) + density);
 			}
 
 		}
