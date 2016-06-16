@@ -97,7 +97,7 @@ public class InteractionSet {
 			interactionAndWeightLists = calculateInteractionPairList(regions,
 					parameters, gridPoints);
 
-		}
+		
 
 		List<Double> weightList = new ArrayList<Double>();
 		if ((Boolean) parameters.get(JobParameter.INTERACTION_WEIGHT)) {
@@ -121,7 +121,7 @@ public class InteractionSet {
 		}
 		job.SetInteractionList(interactionAndWeightLists.get(0));
 		job.SetInteractionWeight(weightList);
-
+		}
 	}
 
 	private List<List> calculateInteractionPairList(

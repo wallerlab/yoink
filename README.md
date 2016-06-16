@@ -78,7 +78,8 @@ After it starts, it will keep looking for *.xml files in the input folder and ex
  ` mkdir outputs`
 
 6. run examples
-
+   do do adaptive QM/MM paritioning, set spring.batch.job.names=batch in `application.properties` file
+   to do clustering based on non-covalent interaction, set spring.batch.job.names=clustering
  ` java -jar Yoink-{version}.jar`
 
 
