@@ -61,7 +61,7 @@ public class FileInteractionSetProcessor implements ItemProcessor<String, org.wa
 	/**
 	 * read in a list of requests and execute them.
 	 * 
-	 * @param requests
+	 * @param input
 	 *            - a list of files
 	 * @return jobs - a list of YoinkJob
 	 *         {@link org.wallerlab.yoink.api.model.bootstrap.Job}

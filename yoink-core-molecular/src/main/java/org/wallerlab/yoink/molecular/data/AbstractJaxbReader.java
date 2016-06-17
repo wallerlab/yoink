@@ -39,7 +39,12 @@ public abstract class AbstractJaxbReader implements FilesReader<Object, String> 
 	protected Unmarshaller jaxbUnmarshaller;	
 	
 	public abstract JAXBElement<Cml> read(String input, Object jaxbObject);
-	
+
+	/**
+	 *
+	 * @param jaxbObject to be read in.
+	 * @return marshalled object
+     */
 	protected JAXBElement<Cml> init(Object jaxbObject) {
 		JAXBElement<Cml> marshalled =  null;
 		try {

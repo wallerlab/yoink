@@ -126,42 +126,42 @@ public interface Job<T> {
 	/**
 	 * get the interaction pairs
 	 * 
-	 * @return
+	 * @return list of pairs
 	 */
 	List<List<Integer>> getInteractionList();
 
 	/**
 	 * set the interaction pairs
 	 * 
-	 * @param interactionSet
+	 * @param interactionSet after analysis
 	 */
 	void SetInteractionList(List<List<Integer>> interactionSet);
 
 	/**
 	 * get the weight(strength) of the interaction
 	 * 
-	 * @return
+	 * @return list of weights
 	 */
 	List<Double> getInteractionWeight();
 
 	/**
 	 * set the weight(strength) of the interaction
 	 * 
-	 * @param interactionWeight
+	 * @param interactionWeight weight of interaction
 	 */
 	void SetInteractionWeight(List<Double> interactionWeight);
 
 	/**
 	 * set the clustering result
 	 * 
-	 * @param clusters
+	 * @param clusters set after analysis
 	 */
 	void setClusters(List<Set<Integer>> clusters);
 
 	/**
 	 * get the clustering result
 	 * 
-	 * @return
+	 * @return result of clustering
 	 */
 	List<Set<Integer>> getClusters();
 }

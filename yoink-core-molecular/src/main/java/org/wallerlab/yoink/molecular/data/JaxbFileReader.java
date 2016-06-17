@@ -40,7 +40,7 @@ public class JaxbFileReader extends AbstractJaxbReader {
 	/**
 	 * jaxb reader to read in an instance from a file.
 	 * 
-	 * @param nameOfFile
+	 * @param input
 	 *            - the file name
 	 * @param jaxbObject
 	 *            - the instance will be read from the file

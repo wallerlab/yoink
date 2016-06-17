@@ -49,7 +49,8 @@ public interface Atom {
 
 	/**
 	 * set the radial grid 
-	 * 
+	 *
+	 * @param radial_grid the grid to be used
 	 * 
 	 */
 	void setRadialGrid(RadialGrid radial_grid);

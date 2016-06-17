@@ -38,8 +38,8 @@ import org.wallerlab.yoink.service.clustering.InteractionSet;
  * This class is to set up and execute clustering based on DORI analysis.
  * 
  * @author Min Zheng
- * @param <I>
- * @param <O>
+ * @param <I> input
+ * @param <O> output
  *
  */
 public abstract class AbstractClusteringProcessor<I, O> implements

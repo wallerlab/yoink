@@ -41,13 +41,14 @@ public class StringAdaptiveQMMMProcessor extends AbstractAdaptiveQMMMProcessor<S
 	protected static final Log log = LogFactory.getLog(StringAdaptiveQMMMProcessor.class);
 
 	/**
-	 * read in a list of requests and execute them.
+	 * read in a list of inputsand execute them.
 	 * 
-	 * @param requests
-	 *            - a list of files
+	 * @param input - a list of files
 	 * @return jobs - a list of YoinkJob
 	 *         {@link org.wallerlab.yoink.api.model.bootstrap.Job}
+	 * @throws Exception is thrown if could not process
 	 */
+
 	@Override
 	public Job process(String input) throws Exception {
 		return buildAndExecute(input);

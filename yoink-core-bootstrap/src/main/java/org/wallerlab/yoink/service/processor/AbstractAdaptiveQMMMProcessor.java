@@ -35,8 +35,8 @@ import org.wallerlab.yoink.api.service.regionizer.RegionizerMath;
  * This class is to set up and execute adaptive QM/MM partitioning.
  * 
  * @author Min Zheng
- * @param <I>
- * @param <O>
+ * @param <I> input
+ * @param <O> output
  *
  */
 public abstract class AbstractAdaptiveQMMMProcessor<I, O> implements ItemProcessor<I,O> {

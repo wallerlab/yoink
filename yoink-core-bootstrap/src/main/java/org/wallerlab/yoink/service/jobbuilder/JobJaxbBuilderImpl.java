@@ -42,7 +42,7 @@ public class JobJaxbBuilderImpl extends AbstractJobBuilder<JAXBElement,JAXBEleme
 	 * read in cml file, and convert it to molecular system and parameters for
 	 * building a new adaptive qmmm job.
 	 * 
-	 * @param inputfile
+	 * @param input
 	 *            , the file name to be read
 	 * @return job, the new built YoinkJob
 	 *         {@link org.wallerlab.yoink.api.model.bootstrap.Job }

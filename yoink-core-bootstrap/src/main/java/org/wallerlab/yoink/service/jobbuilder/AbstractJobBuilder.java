@@ -43,10 +43,10 @@ import org.xml_cml.schema.Cml;
  * needed for adaptive QM/MM partitioning.
  * 
  * @author Min Zheng
- * @param <O>
- * @param <I>
- * @param <O>
- * @param <I>
+ * @param <O> output type
+ * @param <I> input type
+ * @param <O> output type
+ * @param <I> input type
  *
  */
 public abstract class AbstractJobBuilder<I, O> implements JobBuilder<I, O> {
@@ -62,7 +62,7 @@ public abstract class AbstractJobBuilder<I, O> implements JobBuilder<I, O> {
 	 * read in cml file, and convert it to molecular system and parameters for
 	 * building a new adaptive qmmm job.
 	 * 
-	 * @param inputfile
+	 * @param input
 	 *            , the file name to be read
 	 * @return job, the new built YoinkJob
 	 *         {@link org.wallerlab.yoink.api.model.bootstrap.Job }

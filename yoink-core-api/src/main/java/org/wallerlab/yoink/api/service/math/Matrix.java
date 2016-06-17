@@ -141,7 +141,8 @@ public interface Matrix<T> {
 
 	/**
 	 * get the dot product of this matrix and another matrix m. it works when matrix is a vector
-	 * 
+	 *
+	 * @param m to be used for operation
 	 * @return {@link java.lang.Double}
 	 */
 	double dotProduct(Matrix m);

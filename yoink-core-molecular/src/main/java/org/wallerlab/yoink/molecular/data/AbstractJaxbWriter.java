@@ -38,11 +38,7 @@ public abstract class AbstractJaxbWriter implements FilesWriter<Object> {
 
 	/**
 	 * use JAXB writer to write out an instance to a file.
-	 * 
-	 * @param nameOfFile
-	 *            - the name of out put file
-	 * @param jaxbObject
-	 *            - the instance will be written into a file
+	 *
 	 */
 	protected void marshall() {
 		try {

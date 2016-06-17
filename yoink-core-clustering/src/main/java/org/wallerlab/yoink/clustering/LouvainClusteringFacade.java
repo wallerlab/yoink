@@ -16,7 +16,7 @@ import org.wallerlab.yoink.clustering.louvain.LouvainAlgoImpl;
  * Convenience class to start, populate, cluster and return the results.
  * @author marwin
  *
- * @param <T>
+ * @param <T> type of graph populator
  */
 public class LouvainClusteringFacade<T> {
 
@@ -45,7 +45,7 @@ public class LouvainClusteringFacade<T> {
 	 * The set has to be in the format
 	 * [[a,b], [b,d],[a,e],...]
 	 * 
-	 * @param interactions
+	 * @param interactions dori based NCI between molecules
 	 */
 	public void populate(Set<Set<T>> interactions) {
 
@@ -70,7 +70,7 @@ public class LouvainClusteringFacade<T> {
 	/**
 	 * 
 	 * 
-	 * @param maxCommunities
+	 * @param maxCommunities as an integer
 	 * @return map of hierarchy level and corresponding number of communities {hierarchylevel : number of communites}
 	 */
 	public Map<Long, Integer> cluster(int maxCommunities) {
@@ -88,7 +88,7 @@ public class LouvainClusteringFacade<T> {
 	/**
 	 * Return the set of communities at a certain hierarchy/aggregation level.
 	 * 
-	 * @param level
+	 * @param level aggregation level
 	 * @return List of Communities
 	 */
 	public List<Set<T>> getResult(int level) {

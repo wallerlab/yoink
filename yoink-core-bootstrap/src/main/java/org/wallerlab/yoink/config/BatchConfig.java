@@ -106,10 +106,10 @@ public class BatchConfig {
 	 * build whole job using a service based job
 	 *
 	 * @param jobs
-	 *            -
+	 *            - jobs
 	 *            {@link org.springframework.batch.core.configuration.annotation.JobBuilderFactory}
 	 *
-	 * @return Job -{@link org.springframework.batch.core.Job}
+	 * @return Job - job {@link org.springframework.batch.core.Job}
 	 */
 	@Bean
 	public org.springframework.batch.core.Job importServiceJob(JobBuilderFactory jobs) {
@@ -187,11 +187,11 @@ public class BatchConfig {
 	 * @param stepBuilderFactory
 	 *            -
 	 *            {@link org.springframework.batch.core.configuration.annotation.StepBuilderFactory}
-	 * @param cmlFilesRequest
+	 * @param cmlFilereader
 	 *            -{@link org.springframework.batch.item.ItemReader}
-	 * @param adaptiveQMMMProcessor
+	 * @param serialAdaptiveQMMMProcessor
 	 *            -{@link org.springframework.batch.item.ItemProcessor}
-	 * @param cmlFilesResponse
+	 * @param cmlFileResponseWriter
 	 *            -{@link org.springframework.batch.item.ItemWriter}
 	 * @return Step -{@link org.springframework.batch.core.Step}
 	 */
@@ -291,12 +291,6 @@ public class BatchConfig {
 	 * @param stepBuilderFactory
 	 *            -
 	 *            {@link org.springframework.batch.core.configuration.annotation.StepBuilderFactory}
-	 * @param cmlFilesRequest
-	 *            -{@link org.springframework.batch.item.ItemReader}
-	 * @param adaptiveQMMMProcessor
-	 *            -{@link org.springframework.batch.item.ItemProcessor}
-	 * @param cmlFilesResponse
-	 *            -{@link org.springframework.batch.item.ItemWriter}
 	 * @return Step -{@link org.springframework.batch.core.Step}
 	 */
 	@Bean

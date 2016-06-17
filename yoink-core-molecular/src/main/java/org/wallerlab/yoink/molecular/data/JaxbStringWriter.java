@@ -33,7 +33,7 @@ public class JaxbStringWriter extends AbstractJaxbWriter{
 	/**
 	 * use JAXB writer to write out an instance to string.
 	 * 
-	 * @param nameOfFile
+	 * @param notUsed
 	 *            - the name of out put file
 	 * @param jaxbObject
 	 *            - the instance will be written into a file
