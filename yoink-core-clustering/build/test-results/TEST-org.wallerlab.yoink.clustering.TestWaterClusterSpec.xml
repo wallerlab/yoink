@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.wallerlab.yoink.clustering.TestWaterClusterSpec" tests="1" skipped="0" failures="0" errors="0" timestamp="2016-06-17T13:24:52" hostname="VPN-POOL1-PNT-00538.UNI-MUENSTER.DE" time="0.458">
+  <properties/>
+  <testcase name="water cluster" classname="org.wallerlab.yoink.clustering.TestWaterClusterSpec" time="0.458"/>
+  <system-out><![CDATA[[[6a6cb05c, 6025e1b6], [5b12b668, 5542c4ed], [44c03695, 327514f], [54d9d12d, 5542c4ed], [3b69e7d1, 6150c3ec], [702657cc, 44c03695], [4c402120, 327514f], [1165b38, 43bc63a3], [702657cc, 40a4337a], [702657cc, 3b69e7d1], [4c402120, 1165b38], [4c402120, 5542c4ed], [815b41f, 43bc63a3], [3b69e7d1, 1573f9fc], [3b69e7d1, 5542c4ed], [44c03695, 1165b38], [44c03695, 38425407], [815b41f, 54d9d12d], [5542c4ed, 7586beff], [4c402120, 38425407], [38425407, 54d9d12d], [6a6cb05c, 7586beff], [6150c3ec, 1573f9fc], [44c03695, 6025e1b6], [702657cc, 22ff4249], [327514f, 3b69e7d1], [44c03695, 4c402120], [6150c3ec, 5b12b668], [6a6cb05c, 1573f9fc], [38425407, 5b12b668], [702657cc, 38425407], [6025e1b6, 43bc63a3], [6150c3ec, 7586beff], [54d9d12d, 2d1ef81a], [4c402120, 43bc63a3], [38425407, 2d1ef81a], [44c03695, 43bc63a3], [3b69e7d1, 5b12b668], [6a6cb05c, 40a4337a], [6150c3ec, 5542c4ed], [6a6cb05c, 38425407], [44c03695, 3b69e7d1], [54d9d12d, 7586beff], [702657cc, 6025e1b6], [38425407, 7586beff], [702657cc, 1573f9fc], [3b69e7d1, 43bc63a3], [327514f, 4c12331b], [38425407, 43bc63a3], [38425407, 6025e1b6], [702657cc, 327514f], [327514f, 5542c4ed], [22ff4249, 43bc63a3], [22ff4249, 6025e1b6], [4c402120, 3b69e7d1], [702657cc, 4c12331b], [38425407, 6150c3ec], [44c03695, 22ff4249], [44c03695, 4c12331b], [3b69e7d1, 2d1ef81a], [4c402120, 2d1ef81a], [5542c4ed, 2d1ef81a], [815b41f, 4c402120], [40a4337a, 1573f9fc], [38425407, 5542c4ed], [38425407, 3b69e7d1], [6a6cb05c, 6150c3ec], [22ff4249, 4c12331b], [40a4337a, 6025e1b6], [815b41f, 1165b38], [815b41f, 38425407], [5b12b668, 7586beff]]
+creating nodes
+21 nodes and 72 relationships created. 
+[[702657cc, 44c03695, 6a6cb05c, 22ff4249, 327514f, 40a4337a, 6025e1b6, 1573f9fc, 4c12331b], [815b41f, 4c402120, 6150c3ec, 3b69e7d1, 38425407, 5b12b668, 1165b38, 54d9d12d, 5542c4ed, 43bc63a3, 2d1ef81a, 7586beff]]
+louvain took: Total time: 0.097 s
+]]></system-out>
+  <system-err><![CDATA[Jun 17, 2016 9:24:52 PM org.wallerlab.yoink.clustering.louvain.LouvainAlgoImpl louvain
+INFO: Iterations: 1, Communities: 6
+Jun 17, 2016 9:24:52 PM org.wallerlab.yoink.clustering.louvain.LouvainAlgoImpl louvain
+INFO: Iterations: 2, Communities: 2
+]]></system-err>
+</testsuite>

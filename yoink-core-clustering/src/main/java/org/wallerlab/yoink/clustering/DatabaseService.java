@@ -52,7 +52,9 @@ public class DatabaseService {
 	/**
 	 * 
 	 * Attention: clearDb() will delete everything under DB_PATH!
-	 * @return the db service instance
+	 *
+	 * @return DatabaseService instance after clearing
+	 *
 	 */
 	protected DatabaseService clearDb() {
 		try {

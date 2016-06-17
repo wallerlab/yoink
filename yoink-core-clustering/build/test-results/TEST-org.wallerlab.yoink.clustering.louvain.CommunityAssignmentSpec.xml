@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.wallerlab.yoink.clustering.louvain.CommunityAssignmentSpec" tests="4" skipped="0" failures="0" errors="0" timestamp="2016-06-17T13:24:52" hostname="VPN-POOL1-PNT-00538.UNI-MUENSTER.DE" time="1.379">
+  <properties/>
+  <testcase name="one node assignment" classname="org.wallerlab.yoink.clustering.louvain.CommunityAssignmentSpec" time="0.372"/>
+  <testcase name="full iterator" classname="org.wallerlab.yoink.clustering.louvain.CommunityAssignmentSpec" time="0.36"/>
+  <testcase name="hierarchy accumulator" classname="org.wallerlab.yoink.clustering.louvain.CommunityAssignmentSpec" time="0.293"/>
+  <testcase name="complete" classname="org.wallerlab.yoink.clustering.louvain.CommunityAssignmentSpec" time="0.353"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

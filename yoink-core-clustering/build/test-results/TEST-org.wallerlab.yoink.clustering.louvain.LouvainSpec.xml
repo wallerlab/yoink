@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.wallerlab.yoink.clustering.louvain.LouvainSpec" tests="5" skipped="2" failures="0" errors="0" timestamp="2016-06-17T13:24:54" hostname="VPN-POOL1-PNT-00538.UNI-MUENSTER.DE" time="0.455">
+  <properties/>
+  <testcase name="test deltaQ" classname="org.wallerlab.yoink.clustering.louvain.LouvainSpec" time="0.006"/>
+  <testcase name="test init" classname="org.wallerlab.yoink.clustering.louvain.LouvainSpec" time="0.228"/>
+  <testcase name="first deltaQ run" classname="org.wallerlab.yoink.clustering.louvain.LouvainSpec" time="0.0">
+    <skipped/>
+  </testcase>
+  <testcase name="complete 1st assignment run" classname="org.wallerlab.yoink.clustering.louvain.LouvainSpec" time="0.0">
+    <skipped/>
+  </testcase>
+  <testcase name="complete" classname="org.wallerlab.yoink.clustering.louvain.LouvainSpec" time="0.22"/>
+  <system-out><![CDATA[louvain took: Total time: 0.008 s
+]]></system-out>
+  <system-err><![CDATA[Jun 17, 2016 9:24:55 PM org.wallerlab.yoink.clustering.louvain.LouvainAlgoImpl louvain
+INFO: Iterations: 1, Communities: 2
+Jun 17, 2016 9:24:55 PM org.wallerlab.yoink.clustering.louvain.LouvainAlgoImpl louvain
+INFO: Iterations: 2, Communities: 2, converged!
+]]></system-err>
+</testsuite>

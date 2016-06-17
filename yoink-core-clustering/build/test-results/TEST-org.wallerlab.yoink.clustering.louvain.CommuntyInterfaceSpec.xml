@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.wallerlab.yoink.clustering.louvain.CommuntyInterfaceSpec" tests="1" skipped="0" failures="0" errors="0" timestamp="2016-06-17T13:24:54" hostname="VPN-POOL1-PNT-00538.UNI-MUENSTER.DE" time="0.008">
+  <properties/>
+  <testcase name="testmethods" classname="org.wallerlab.yoink.clustering.louvain.CommuntyInterfaceSpec" time="0.008"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
