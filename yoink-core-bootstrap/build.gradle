@@ -39,3 +39,6 @@ integrationTest.mustRunAfter test
 tasks.withType(Test) {
 	reports.html.destination = file("${reporting.baseDir}/${name}")
 }
+
+mainClassName = 'org.wallerlab.yoink.core.bootstrap.Main'
+
