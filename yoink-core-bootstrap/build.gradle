@@ -3,6 +3,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin:'groovy'
 sourceCompatibility = 1.8
+
 buildscript {
 	repositories {
 		jcenter()
@@ -40,5 +41,5 @@ tasks.withType(Test) {
 	reports.html.destination = file("${reporting.baseDir}/${name}")
 }
 
-mainClassName = 'org.wallerlab.yoink.core.bootstrap.Main'
+mainClassName = 'org.wallerlab.yoink.Yoink'
 
