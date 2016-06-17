@@ -11,4 +11,5 @@ cache:
     - $HOME/.gradle/wrapper/
     
 install: echo "skip 'gradle assemble' step"
-script: ./gradlew clean build jacocoRootReport coveralls --continue
+script: ./gradlew clean
+script: ./gradlew build jacocoRootReport coveralls --continue
