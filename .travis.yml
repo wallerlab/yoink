@@ -1,5 +1,5 @@
 language: groovy
 jdk:
   - oraclejdk8
-install: ./gradlew assemble --stacktrace
-script: ./gradlew clean build jacocoRootReport coveralls
+install: echo "skip 'gradle assemble' step"
+script: ./gradlew clean build jacocoRootReport coveralls --continue
