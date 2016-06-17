@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="org.wallerlab.yoink.clustering.GraphPopulatorSpec" tests="3" skipped="0" failures="0" errors="0" timestamp="2016-06-17T13:24:50" hostname="VPN-POOL1-PNT-00538.UNI-MUENSTER.DE" time="0.878">
-  <properties/>
-  <testcase name="test node creation" classname="org.wallerlab.yoink.clustering.GraphPopulatorSpec" time="0.314"/>
-  <testcase name="test relationship creation" classname="org.wallerlab.yoink.clustering.GraphPopulatorSpec" time="0.558"/>
-  <testcase name="test interactionset to Objectset" classname="org.wallerlab.yoink.clustering.GraphPopulatorSpec" time="0.006"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="org.wallerlab.yoink.clustering.louvain.CommunitySpec" tests="3" skipped="0" failures="0" errors="0" timestamp="2016-06-17T13:24:53" hostname="VPN-POOL1-PNT-00538.UNI-MUENSTER.DE" time="1.023">
-  <properties/>
-  <testcase name="complete 1st assignment run" classname="org.wallerlab.yoink.clustering.louvain.CommunitySpec" time="0.363"/>
-  <testcase name="complete 1st assignment run bigger community" classname="org.wallerlab.yoink.clustering.louvain.CommunitySpec" time="0.432"/>
-  <testcase name="self loops, weights" classname="org.wallerlab.yoink.clustering.louvain.CommunitySpec" time="0.228"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
