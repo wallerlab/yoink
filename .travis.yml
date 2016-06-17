@@ -13,3 +13,5 @@ cache:
 install: echo "skip 'gradle assemble' step"
 script: ./gradlew clean
 script: ./gradlew build jacocoRootReport coveralls --continue
+script: ./gradlew alljavadoc
+
