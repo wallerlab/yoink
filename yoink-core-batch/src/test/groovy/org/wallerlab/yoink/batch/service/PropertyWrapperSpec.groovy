@@ -24,7 +24,7 @@ import org.wallerlab.yoink.batch.api.model.regionizer.Region;
 import org.wallerlab.yoink.batch.api.model.bootstrap.Job
 import org.wallerlab.yoink.batch.api.service.math.Vector;
 import org.wallerlab.yoink.batch.api.service.math.Vector.Vector3DType;
-import org.wallerlab.yoink.batch.math.linear.SimpleVector3DFactory
+import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
 class PropertyWrapperSpec extends Specification{
 	def "test method wrap(YoinkJob<JAXBElement> job) when no weightfactors and smoothfactors"(){
 		given:"make up a job without weightfactors and smoothfactors"

@@ -22,7 +22,7 @@ import org.wallerlab.yoink.api.enums.*
 import org.wallerlab.yoink.batch.api.model.bootstrap.JobParameter;
 import org.springframework.batch.item.ItemWriter;
 import org.wallerlab.yoink.batch.api.model.bootstrap.Job
-import org.wallerlab.yoink.batch.molecular.data.JaxbStringWriter
+import org.wallerlab.yoink.molecule.data.JaxbStringWriter
 
 class JmsJobItemWriterSpec extends Specification{
 

@@ -15,7 +15,7 @@
  */
 package org.wallerlab.yoink.region.service
 
-import org.wallerlab.yoink.batch.math.map.MapSorter
+import org.wallerlab.yoink.math.map.MapSorter
 import org.wallerlab.yoink.region.service.regionizer.SizeConsistentRegionizer
 import spock.lang.Specification;
 

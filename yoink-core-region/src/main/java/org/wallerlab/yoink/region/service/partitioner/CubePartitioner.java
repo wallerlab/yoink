@@ -35,7 +35,7 @@ import org.wallerlab.yoink.batch.api.model.regionizer.Region;
 import org.wallerlab.yoink.batch.api.service.cube.Assigner;
 import org.wallerlab.yoink.batch.api.service.cube.CubeBuilder;
 import org.wallerlab.yoink.batch.api.service.regionizer.Partitioner;
-import org.wallerlab.yoink.batch.cube.domain.SimpleGridPoint;
+import org.wallerlab.yoink.cube.domain.SimpleGridPoint;
 
 /**
  * This class is to get those grid points that belong to the intersection region

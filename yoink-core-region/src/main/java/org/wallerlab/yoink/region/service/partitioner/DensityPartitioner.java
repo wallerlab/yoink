@@ -37,7 +37,7 @@ import org.wallerlab.yoink.batch.api.service.Factory;
 import org.wallerlab.yoink.batch.api.service.molecular.FilesReader;
 import org.wallerlab.yoink.batch.api.service.regionizer.Partitioner;
 import org.wallerlab.yoink.batch.api.service.regionizer.RegionizerMath;
-import org.wallerlab.yoink.batch.molecular.domain.SimpleRadialGrid;
+import org.wallerlab.yoink.molecule.domain.SimpleRadialGrid;
 
 /**
  * This class is to use the density of qm core to define the region (adaptive

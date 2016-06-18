@@ -31,7 +31,7 @@ import org.wallerlab.yoink.batch.api.model.molecular.Molecule;
 import org.wallerlab.yoink.batch.api.model.regionizer.Region;
 
 import org.wallerlab.yoink.batch.api.service.adaptive.Smoothner;
-import org.wallerlab.yoink.batch.math.set.Subsets;
+import org.wallerlab.yoink.math.set.Subsets;
 
 import com.google.common.primitives.Ints;
 

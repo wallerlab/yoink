@@ -22,9 +22,9 @@ import org.wallerlab.yoink.batch.api.model.molecular.Atom
 import org.wallerlab.yoink.batch.api.model.molecular.Coord
 import org.wallerlab.yoink.batch.api.model.molecular.Molecule
 import org.wallerlab.yoink.batch.api.service.Computer
-import org.wallerlab.yoink.batch.math.linear.SimpleVector3DFactory
-import org.wallerlab.yoink.batch.molecular.domain.SimpleCoordFactory
-import org.wallerlab.yoink.batch.molecular.domain.SimpleMolecule
+import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
+import org.wallerlab.yoink.molecule.domain.SimpleCoordFactory
+import org.wallerlab.yoink.molecule.domain.SimpleMolecule
 import org.wallerlab.yoink.batch.api.model.regionizer.Region
 import org.wallerlab.yoink.batch.api.service.math.Vector;
 

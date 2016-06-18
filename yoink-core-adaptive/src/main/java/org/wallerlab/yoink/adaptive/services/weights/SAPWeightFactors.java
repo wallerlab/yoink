@@ -30,7 +30,7 @@ import org.wallerlab.yoink.batch.api.model.molecular.Molecule;
 import org.wallerlab.yoink.batch.api.model.regionizer.Region;
 import org.wallerlab.yoink.batch.api.service.Calculator;
 import org.wallerlab.yoink.batch.api.service.adaptive.Smoothner;
-import org.wallerlab.yoink.batch.math.map.MapSorter;
+import org.wallerlab.yoink.math.map.MapSorter;
 
 /**
  * this class is to get weights factor in SAP. for details please see: see:

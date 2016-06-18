@@ -36,8 +36,8 @@ import org.wallerlab.yoink.batch.api.model.regionizer.Region;
 import org.wallerlab.yoink.batch.api.service.Calculator;
 import org.wallerlab.yoink.batch.api.service.adaptive.SmoothFunction;
 import org.wallerlab.yoink.batch.api.service.adaptive.Smoothner;
-import org.wallerlab.yoink.batch.math.map.MapSorter;
-import org.wallerlab.yoink.batch.math.set.Subsets;
+import org.wallerlab.yoink.math.map.MapSorter;
+import org.wallerlab.yoink.math.set.Subsets;
 
 import com.google.common.primitives.Ints;
 

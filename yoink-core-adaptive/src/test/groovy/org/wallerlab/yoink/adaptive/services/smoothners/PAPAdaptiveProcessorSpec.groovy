@@ -19,7 +19,7 @@ import org.wallerlab.yoink.adaptive.services.PAPAdaptiveProcessor
 import org.wallerlab.yoink.batch.api.model.molecular.Atom
 import org.wallerlab.yoink.batch.api.model.molecular.Coord
 import spock.lang.Specification
-import org.wallerlab.yoink.batch.math.linear.SimpleVector3DFactory
+import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
 import org.wallerlab.yoink.batch.api.model.bootstrap.Job;
 import org.wallerlab.yoink.batch.api.model.molecular.Molecule;
 import org.wallerlab.yoink.batch.api.model.regionizer.Region

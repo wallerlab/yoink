@@ -25,7 +25,7 @@ import org.wallerlab.yoink.batch.api.model.molecular.Molecule;
 import org.wallerlab.yoink.batch.api.model.regionizer.Region;
 import org.wallerlab.yoink.batch.api.service.Factory;
 import org.wallerlab.yoink.batch.api.service.regionizer.RegionizerMath;
-import org.wallerlab.yoink.batch.math.map.MapDifference;
+import org.wallerlab.yoink.math.map.MapDifference;
 
 import static org.wallerlab.yoink.batch.api.model.regionizer.Region.Name.*;
 

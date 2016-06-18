@@ -59,9 +59,9 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.wallerlab.yoink.adaptive.config.AdaptiveConfig;
-import org.wallerlab.yoink.batch.density.config.DensityConfig;
-import org.wallerlab.yoink.batch.math.config.MathConfig;
-import org.wallerlab.yoink.batch.molecular.config.MolecularConfig;
+import org.wallerlab.yoink.density.config.DensityConfig;
+import org.wallerlab.yoink.math.config.MathConfig;
+import org.wallerlab.yoink.molecule.config.MolecularConfig;
 
 
 /**

@@ -14,7 +14,7 @@ import org.wallerlab.yoink.batch.api.model.regionizer.Region;
 import org.wallerlab.yoink.batch.api.service.adaptive.Smoothner;
 import org.wallerlab.yoink.batch.api.service.adaptiveProcessor.AdaptiveProcessor;
 import org.wallerlab.yoink.batch.api.service.math.Vector;
-import org.wallerlab.yoink.batch.math.linear.SimpleVector3DFactory;
+import org.wallerlab.yoink.math.linear.SimpleVector3DFactory;
 
 /**
  * this class is to get adaptive energy and forces. It will be called by

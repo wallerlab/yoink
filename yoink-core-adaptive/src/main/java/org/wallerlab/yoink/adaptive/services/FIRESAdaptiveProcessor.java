@@ -17,8 +17,8 @@ import org.wallerlab.yoink.batch.api.service.Calculator;
 import org.wallerlab.yoink.batch.api.service.adaptive.Smoothner;
 import org.wallerlab.yoink.batch.api.service.adaptiveProcessor.AdaptiveProcessor;
 import org.wallerlab.yoink.batch.api.service.math.Vector;
-import org.wallerlab.yoink.batch.math.constants.Constants;
-import org.wallerlab.yoink.batch.math.linear.SimpleVector3DFactory;
+import org.wallerlab.yoink.math.constants.Constants;
+import org.wallerlab.yoink.math.linear.SimpleVector3DFactory;
 
 /**
  * this class is to get FIRES adaptive energy and forces.
