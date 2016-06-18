@@ -25,10 +25,10 @@ import org.wallerlab.yoink.batch.api.model.molecular.MolecularSystem;
 import org.wallerlab.yoink.batch.api.model.regionizer.Region;
 import org.wallerlab.yoink.batch.api.service.bootstrap.Clustering;
 import org.wallerlab.yoink.batch.api.service.regionizer.RegionizerMath;
-import org.wallerlab.yoink.clustering.InteractionSet;
+import org.wallerlab.yoink.cluster.InteractionSet;
 
 /**
- * This class is to set up and execute clustering based on DORI analysis.
+ * This class is to set up and execute region based on DORI analysis.
  * 
  * @author Min Zheng
  * @param <I> input

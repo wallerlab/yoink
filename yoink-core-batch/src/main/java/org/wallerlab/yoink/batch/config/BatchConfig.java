@@ -44,7 +44,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.oxm.Unmarshaller;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.wallerlab.yoink.batch.regionizer.config.RegionizerConfig;
+import org.wallerlab.yoink.region.config.RegionizerConfig;
 import org.xml_cml.schema.Cml;
 
 import org.springframework.jms.core.JmsOperations;
@@ -136,7 +136,7 @@ public class BatchConfig {
 	private Step clusteringStep;
 	@Bean
 	public org.springframework.batch.core.Job importClusteringJob(JobBuilderFactory jobs) {
-		return jobs.get("clustering")
+		return jobs.get("region")
 				.incrementer(new RunIdIncrementer())
 				.flow(clusteringStep)
 				.end()
@@ -200,7 +200,7 @@ public class BatchConfig {
 			ItemProcessor<JAXBElement, org.wallerlab.yoink.batch.api.model.bootstrap.Job> serialClusteringProcessor,
 			ItemWriter<org.wallerlab.yoink.batch.api.model.bootstrap.Job> cmlFileResponseWriter) {
 		return stepBuilderFactory
-				.get("clustering").<JAXBElement, org.wallerlab.yoink.batch.api.model.bootstrap.Job> chunk(1)
+				.get("region").<JAXBElement, org.wallerlab.yoink.batch.api.model.bootstrap.Job> chunk(1)
 				.reader(cmlFilesReader())
 				.processor(serialClusteringProcessor)
 				.writer(cmlFileResponseWriter).build();

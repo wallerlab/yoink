@@ -32,7 +32,7 @@ import org.wallerlab.yoink.batch.api.model.regionizer.Region;
 import org.wallerlab.yoink.batch.api.service.bootstrap.Clustering;
 import org.wallerlab.yoink.batch.api.service.bootstrap.JobBuilder;
 import org.wallerlab.yoink.batch.api.service.regionizer.RegionizerMath;
-import org.wallerlab.yoink.clustering.InteractionSet;
+import org.wallerlab.yoink.cluster.InteractionSet;
 
 
 /**

@@ -1,6 +1,0 @@
-/**
- * this package is for configuration of regionizer project
- * @author Min Zheng
- *
- */
-package org.wallerlab.yoink.batch.regionizer.config;

@@ -1,4 +1,4 @@
-/**this package is for service/function interfaces for subproject regionizer
+/**this package is for service/function interfaces for subproject region
  * @author Min Zheng
  *
  */

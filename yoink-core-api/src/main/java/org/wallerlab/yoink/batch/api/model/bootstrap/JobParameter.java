@@ -55,7 +55,7 @@ package org.wallerlab.yoink.batch.api.model.bootstrap;
  *<p>	DISTANCE_T_MM_OUT: distance threshold for MM molecules out of transition</p>
  *<p>	NUMBER_PARTITION: number of partitioning in DISTANCE_SCMP	</p>
  *<p>	DGRID: adopt radial grid for promolecular density 	</p>
- *<p>	MAX_COMMS:  number of max communities of clustering	</p>
+ *<p>	MAX_COMMS:  number of max communities of region	</p>
  *<p> INTERACTION_WEIGHT: True or False to calculate the strength(weights) of the interaction  </p>
  *<p>	WFC_PATH: the database path of radial grid for promolecular density  	</p>
  * @author Min Zheng

@@ -151,16 +151,16 @@ public interface Job<T> {
 	void SetInteractionWeight(List<Double> interactionWeight);
 
 	/**
-	 * set the clustering result
+	 * set the region result
 	 * 
 	 * @param clusters set after analysis
 	 */
 	void setClusters(List<Set<Integer>> clusters);
 
 	/**
-	 * get the clustering result
+	 * get the region result
 	 * 
-	 * @return result of clustering
+	 * @return result of region
 	 */
 	List<Set<Integer>> getClusters();
 }

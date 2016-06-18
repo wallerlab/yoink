@@ -55,11 +55,19 @@ project(':yoink-core-api'){
 	 dependencies{  }
 }
 
+project(':yoink-core-cluster'){
+	dependencies{
+		compile project(':yoink-core-api')
+		compile project(':yoink-core-region')
+
+	}
+}
+
 project(':yoink-core-math'){
 	dependencies{ compile project(':yoink-core-api')  }
 }
 
-project(':yoink-core-molecular'){
+project(':yoink-core-molecule'){
 	javadoc { exclude "**/xml_cml/**" }
 	dependencies {
 		compile project(':yoink-core-api')
@@ -71,7 +79,7 @@ project(':yoink-core-density'){
 	dependencies {
 		compile project(':yoink-core-api')
 		compile project(':yoink-core-math')
-		compile project(':yoink-core-molecular')
+		compile project(':yoink-core-molecule')
 	}
 }
 
@@ -79,7 +87,7 @@ project(':yoink-core-cube'){
 	dependencies {
 		compile project(':yoink-core-api')
 		compile project(':yoink-core-math')
-		compile project(':yoink-core-molecular')
+		compile project(':yoink-core-molecule')
 	}
 }
 
@@ -87,21 +95,16 @@ project(':yoink-core-adaptive'){
 	dependencies {
 		compile project(':yoink-core-api')
 		compile project(':yoink-core-math')
-		compile project(':yoink-core-molecular')
+		compile project(':yoink-core-molecule')
 		compile project(':yoink-core-density')
 	}
 }
-project(':yoink-core-clustering'){
-	dependencies{
-		compile project(':yoink-core-api')
-		compile project(':yoink-core-regionizer')
-	}
-}
-project(':yoink-core-regionizer'){
+
+project(':yoink-core-region'){
 	dependencies {
 		compile project(':yoink-core-api')
 		compile project(':yoink-core-math')
-		compile project(':yoink-core-molecular')
+		compile project(':yoink-core-molecule')
 		compile project(':yoink-core-density')
 		compile project(':yoink-core-cube')
 		
@@ -112,10 +115,10 @@ project(':yoink-core-adaptiveProcessor'){
 	dependencies {
 		compile project(':yoink-core-api')
 		compile project(':yoink-core-math')
-		compile project(':yoink-core-molecular')
+		compile project(':yoink-core-molecule')
 		compile project(':yoink-core-density')
 		compile project(':yoink-core-cube')
-		compile project(':yoink-core-regionizer')
+		compile project(':yoink-core-region')
 	}
 }
 
@@ -123,11 +126,11 @@ project(':yoink-core-batch'){
 	dependencies {
 		compile project(':yoink-core-api')
 		compile project(':yoink-core-math')
-		compile project(':yoink-core-molecular')
+		compile project(':yoink-core-molecule')
 		compile project(':yoink-core-density')
-		compile project(':yoink-core-regionizer')
 		compile project(':yoink-core-adaptive')
-		compile project(':yoink-core-clustering')
+		compile project(':yoink-core-region')
+		compile project(':yoink-core-cluster')
 	}
 }
 
@@ -198,14 +201,13 @@ artifacts { archives allJar  }
 def exportedProjects= [
 	":yoink-core-api",
 	":yoink-core-math",
-	":yoink-core-molecular",
+	":yoink-core-molecule",
 	":yoink-core-density",
 	":yoink-core-cube",
 	":yoink-core-batch",
 	":yoink-core-adaptive",
-	":yoink-core-regionizer",
-	":yoink-core-adaptiveProcessor",
-	":yoink-core-clustering"
+	":yoink-core-region",
+	":yoink-core-adaptiveProcessor"
 ]
 task alljavadoc(type: Javadoc) {
 	exclude "**/xml_cml/**"

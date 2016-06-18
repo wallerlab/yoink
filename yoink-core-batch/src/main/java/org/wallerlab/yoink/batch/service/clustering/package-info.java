@@ -1,6 +1,6 @@
 
 /**
- * TODO: Should move to clustering module
+ * TODO: Should move to region module
  * @author Zheng
  *
  */
