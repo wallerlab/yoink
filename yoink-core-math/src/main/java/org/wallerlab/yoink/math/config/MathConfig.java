@@ -15,7 +15,6 @@
  */
 package org.wallerlab.yoink.math.config;
 
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -25,7 +24,6 @@ import org.springframework.context.annotation.Configuration;
  *
  */
 @Configuration
-@ComponentScan("org.wallerlab.yoink")
 public class MathConfig {
 
 }

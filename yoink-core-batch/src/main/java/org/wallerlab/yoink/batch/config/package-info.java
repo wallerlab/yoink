@@ -1,5 +1,5 @@
 /**
- * this package is to configure project yoink
+ * this package is to configure the batch layer of yoink
  * @author Min Zheng
  */
 

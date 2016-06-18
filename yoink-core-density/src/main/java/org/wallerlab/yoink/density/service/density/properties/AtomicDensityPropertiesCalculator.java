@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wallerlab.yoink.density.service.densityProperties;
+package org.wallerlab.yoink.density.service.density.properties;
 
 import javax.annotation.Resource;
 

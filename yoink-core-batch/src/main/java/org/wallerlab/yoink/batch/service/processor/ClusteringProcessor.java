@@ -18,6 +18,7 @@ package org.wallerlab.yoink.batch.service.processor;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.xml.bind.JAXBElement;
 
 import org.springframework.batch.item.ItemProcessor;
 import org.wallerlab.yoink.batch.api.model.bootstrap.Job;
@@ -35,24 +36,35 @@ import org.wallerlab.yoink.cluster.InteractionSet;
  * @param <O> output
  *
  */
-public abstract class AbstractClusteringProcessor<I, O> implements
-		ItemProcessor<I, O> {
+public class ClusteringProcessor implements ItemProcessor<Job<JAXBElement>, Job> {
 
 	@Resource
 	private InteractionSet interactionSet;
 
 	@Resource
 	private Clustering doriClustering;
+
 	@Resource
 	protected RegionizerMath<Map<Region.Name, Region>, MolecularSystem> regionizerServiceStarting;
 
-	protected Job executeClustering(Job job) {
+	/**
+	 * read in a list of requests and execute them.
+	 *
+	 * @param input
+	 *            - a list of files
+	 * @return jobs - a list of YoinkJob
+	 *         {@link Job}
+	 */
+	@Override
+	public Job process(Job<JAXBElement> input) throws Exception {
+		return executeClustering(input);
+	}
 
+	private Job executeClustering(Job job) {
 		regionizerServiceStarting.regionize(job.getRegions(),
 				job.getMolecularSystem());
 		interactionSet.getDoriInteractionSet(job);
 		doriClustering.cluster(job);
-
 		return job;
 	}
 

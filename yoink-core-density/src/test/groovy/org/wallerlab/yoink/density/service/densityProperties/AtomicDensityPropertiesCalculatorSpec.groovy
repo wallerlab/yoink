@@ -20,6 +20,7 @@ import org.wallerlab.yoink.batch.api.service.math.Vector
 import org.wallerlab.yoink.batch.api.model.molecular.Atom
 import org.wallerlab.yoink.batch.api.service.math.Matrix
 import org.wallerlab.yoink.density.domain.SimpleDensityPoint
+import org.wallerlab.yoink.density.service.density.properties.AtomicDensityPropertiesCalculator
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
 import org.wallerlab.yoink.molecule.data.RadialGridReader
 import org.wallerlab.yoink.molecule.domain.SimpleCoordFactory

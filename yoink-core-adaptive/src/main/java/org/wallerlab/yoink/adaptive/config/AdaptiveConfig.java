@@ -32,62 +32,48 @@ import org.wallerlab.yoink.batch.api.service.adaptive.SmoothFunction;
 @Configuration
 public class AdaptiveConfig {
 
-	@Resource
-	SmoothFunction brooksSmoothFunction;
-	@Resource
-	SmoothFunction buloSmoothFunction;
-	@Resource
-	SmoothFunction morokumaSmoothFunction;
-	@Resource
-	SmoothFunction permutedSmoothFunction;
+	@Resource SmoothFunction brooksSmoothFunction;
+	@Resource SmoothFunction buloSmoothFunction;
+	@Resource SmoothFunction morokumaSmoothFunction;
+	@Resource SmoothFunction permutedSmoothFunction;
 
-	@Bean
-	public Smoothner densitySmoothnerBF() {
+	@Bean public Smoothner densitySmoothnerBF() {
 		return new DensitySmoothner(brooksSmoothFunction);
 	}
 
-	@Bean
-	public Smoothner distanceSmoothnerBF() {
+	@Bean public Smoothner distanceSmoothnerBF() {
 		return new DistanceSmoothner(brooksSmoothFunction);
 	}
 
-	@Bean
-	public Smoothner densitySmoothnerSPOT() {
+	@Bean public Smoothner densitySmoothnerSPOT() {
 		return new DensitySmoothner(brooksSmoothFunction);
 	}
 
-	@Bean
-	public Smoothner distanceSmoothnerSPOT() {
+	@Bean public Smoothner distanceSmoothnerSPOT() {
 		return new DistanceSmoothner(brooksSmoothFunction);
 	}
 
-	@Bean
-	public Smoothner densitySmoothnerDAS() {
+	@Bean public Smoothner densitySmoothnerDAS() {
 		return new DensitySmoothner(buloSmoothFunction);
 	}
 
-	@Bean
-	public Smoothner distanceSmoothnerDAS() {
+	@Bean public Smoothner distanceSmoothnerDAS() {
 		return new DistanceSmoothner(buloSmoothFunction);
 	}
 
-	@Bean
-	public Smoothner densitySmoothnerXS() {
+	@Bean public Smoothner densitySmoothnerXS() {
 		return new DensitySmoothner(morokumaSmoothFunction);
 	}
 
-	@Bean
-	public Smoothner distanceSmoothnerXS() {
+	@Bean public Smoothner distanceSmoothnerXS() {
 		return new DistanceSmoothner(morokumaSmoothFunction);
 	}
 
-	@Bean
-	public Smoothner densitySmoothnerPAP() {
+	@Bean public Smoothner densitySmoothnerPAP() {
 		return new DensitySmoothner(permutedSmoothFunction);
 	}
 
-	@Bean
-	public Smoothner distanceSmoothnerPAP() {
+	@Bean public Smoothner distanceSmoothnerPAP() {
 		return new DistanceSmoothner(permutedSmoothFunction);
 	}
 

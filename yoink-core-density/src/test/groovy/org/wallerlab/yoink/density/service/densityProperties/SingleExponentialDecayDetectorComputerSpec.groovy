@@ -15,6 +15,7 @@
  */
 package org.wallerlab.yoink.density.service.densityProperties
 
+import org.wallerlab.yoink.density.service.density.properties.SingleExponentialDecayDetectorComputer
 import spock.lang.Specification;
 
 import org.wallerlab.yoink.math.linear.SimpleMatrixFactory

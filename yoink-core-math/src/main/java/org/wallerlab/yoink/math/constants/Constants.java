@@ -26,6 +26,6 @@ public class Constants {
 	public static final double DENSITY_DEFAULT = 1.0E-30;
 	public static final double DISTANCE_DEFAULT = 1.0E-10;
 	public static final double RDG_COEFFICIENT = 6.187335452560543;
-	public static final int COLUMN_NUMBER_IN_EACH_ROW = 6;
+	public static final int    COLUMN_NUMBER_IN_EACH_ROW = 6;
 	public static final double FORCE_CONSTANT=500;//unit in kcal/(‎Å* ‎Å)
 }

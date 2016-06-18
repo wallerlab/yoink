@@ -43,7 +43,6 @@ import static org.wallerlab.yoink.batch.api.model.regionizer.Region.Name.*;
  *
  */
 @Configuration
-@ComponentScan("org.wallerlab.yoink")
 public class RegionizerConfig {
 
 	@Resource

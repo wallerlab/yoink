@@ -28,13 +28,7 @@ import org.springframework.context.annotation.Configuration;
  *
  */
 @Configuration
-public class DensityConfig implements ApplicationContextAware {
+public class DensityConfig {
 
-	private ApplicationContext appContext;
-
-	public void setApplicationContext(ApplicationContext applicationContext)
-			throws BeansException {
-		this.appContext = applicationContext;
-	}
 
 }

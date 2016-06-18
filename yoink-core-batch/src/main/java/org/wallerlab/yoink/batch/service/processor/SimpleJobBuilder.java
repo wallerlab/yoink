@@ -14,32 +14,46 @@
  * limitations under the License.
  */
 
-package org.wallerlab.yoink.batch.service.jobbuilder;
+package org.wallerlab.yoink.batch.service.processor;
+
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.xml.bind.JAXBElement;
 
 import org.springframework.stereotype.Service;
+import org.wallerlab.yoink.batch.api.model.bootstrap.JobParameter;
 import org.wallerlab.yoink.batch.api.model.bootstrap.Job;
-import org.wallerlab.yoink.batch.api.service.molecular.FilesReader;
+import org.wallerlab.yoink.batch.api.model.molecular.MolecularSystem;
+import org.wallerlab.yoink.batch.api.service.bootstrap.JobBuilder;
+import org.wallerlab.yoink.batch.api.service.molecular.Translator;
 import org.wallerlab.yoink.batch.domain.AdaptiveQMMMJob;
+import org.xml_cml.schema.Cml;
 
 /**
  * this class is to read in all inputs (like molecular system and parameters)
  * needed for adaptive QM/MM partitioning.
  * 
+ * @author Min Zheng
+ * @param <O> output type
+ * @param <I> input type
+ * @param <O> output type
+ * @param <I> input type
  *
  */
 @Service
-public class JobJaxbBuilderImpl extends AbstractJobBuilder<JAXBElement,JAXBElement>{
+public class SimpleJobBuilder implements JobBuilder<JAXBElement, JAXBElement> {
 
 	@Resource
-	private FilesReader<Object, String> jaxbFileReader;
-	
+	protected Translator<MolecularSystem, JAXBElement<Cml>> molecularSystemTranslator;
+
+	@Resource
+	protected Translator<Map<JobParameter, Object>, JAXBElement<Cml>> parameterTranslator;
+
 	/**
 	 * read in cml file, and convert it to molecular system and parameters for
 	 * building a new adaptive qmmm job.
-	 * 
+	 *
 	 * @param input
 	 *            , the file name to be read
 	 * @return job, the new built YoinkJob
@@ -47,11 +61,24 @@ public class JobJaxbBuilderImpl extends AbstractJobBuilder<JAXBElement,JAXBEleme
 	 */
 	@Override
 	public Job<JAXBElement> build(JAXBElement input) {
-		//wrap it back up - crazy ;).
-		Job<JAXBElement> job= new AdaptiveQMMMJob();
+		Job<JAXBElement> job= (Job<JAXBElement>) new AdaptiveQMMMJob();
 		job.setInput(input);
-		process(job);
+		translate(job);
 		return job;
 	}
+
+	protected void translate(Job<JAXBElement> job) {
+		translateMolecularSystem(job);
+		translateParameters(job);
+	}
+
+	protected void translateMolecularSystem(Job<JAXBElement> job) {
+		job.setMolecularSystem(molecularSystemTranslator.translate(job.getInput()));
+	}
+
+	protected void translateParameters(Job<JAXBElement> job) {
+		job.setParameters(parameterTranslator.translate(job.getInput()));
+	}
+
 
 }

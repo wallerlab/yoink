@@ -2,4 +2,4 @@
  * @author Min Zheng
  *
  */
-package org.wallerlab.yoink.density.service.densityProperties;
+package org.wallerlab.yoink.density.service.density.properties;

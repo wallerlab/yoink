@@ -14,36 +14,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wallerlab.yoink.batch.service.jobbuilder
+package org.wallerlab.yoink.batch.service.processor
 
+import org.wallerlab.yoink.batch.service.processor.SimpleJobBuilder
 import org.xml_cml.schema.ObjectFactory
 
 import spock.lang.Specification
 import org.wallerlab.yoink.api.enums.*
-import org.wallerlab.yoink.batch.api.service.molecular.FilesReader;
 import org.wallerlab.yoink.batch.api.model.molecular.MolecularSystem;
 import org.wallerlab.yoink.batch.api.service.molecular.Translator
 import org.wallerlab.yoink.batch.api.model.bootstrap.Job
 
-class JobJaxbBuilderImplSpec extends Specification {
+class SimpleJobBuilderSpec extends Specification {
 
 	def "test method read(String inputfile,YoinkJob<JAXBElement> job)"(){
-		def jaxbReader=Mock(FilesReader)
+		//def jaxbReader=Mock(FilesReader)
 		def  molecularSystemTranslator=Mock(Translator)
 		def  parameterTranslator=Mock(Translator)
-		def gridReader=Mock(FilesReader)
 		def factory=new ObjectFactory()
 		def cml=factory.createCml()	
 		def jaxB = factory.createCml(cml)
 		molecularSystemTranslator.translate(_)>>Mock(MolecularSystem)
-	def parameter=[:]
+
+		def parameter=[:]
 		
 		parameterTranslator.translate(_)>>parameter
 		
 
 		when:"set up a new JobBuilder"
-		def builder=new JobJaxbBuilderImpl()
-		builder.jaxbFileReader=jaxbReader
+		def builder=new SimpleJobBuilder()
 		builder.molecularSystemTranslator=molecularSystemTranslator
 		builder.parameterTranslator=parameterTranslator
 		
