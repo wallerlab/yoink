@@ -13,4 +13,4 @@ include "yoink-core-api",
         "yoink-core-density",
         "yoink-core-batch",
         "yoink-core-math",
-        "yoink-core-adaptiveProcessor"
+        "yoink-core-plugin"

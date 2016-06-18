@@ -111,7 +111,7 @@ project(':yoink-core-region'){
 	}
 }
 
-project(':yoink-core-adaptiveProcessor'){
+project(':yoink-core-plugin'){
 	dependencies {
 		compile project(':yoink-core-api')
 		compile project(':yoink-core-math')
@@ -207,7 +207,7 @@ def exportedProjects= [
 	":yoink-core-batch",
 	":yoink-core-adaptive",
 	":yoink-core-region",
-	":yoink-core-adaptiveProcessor"
+	":yoink-core-plugin"
 ]
 task alljavadoc(type: Javadoc) {
 	exclude "**/xml_cml/**"
