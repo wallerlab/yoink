@@ -5,12 +5,6 @@
 
 *Yoink is a program for performing (adaptive) QM/MM partitioning.*
 
-
-
-*Website: [`http://yoink.wallerlab.org`](http://yoink.wallerlab.org)*
-
-
-
 #Quickstart
 
 To obtain a copy of the source code, please enter the following [git](https://git-scm.com/) command:
@@ -25,7 +19,7 @@ In order to run yoink, please use the following [gradle ](https://gradle.org/) c
 
 
 
-### -	Documentation
+#Documentation
 | Page | description |
 | ------------- |-------------|
 |[Code Structure](https://github.com/wallerlab/yoink/wiki/structure) | An overview of the modules and sequence diagrams |
