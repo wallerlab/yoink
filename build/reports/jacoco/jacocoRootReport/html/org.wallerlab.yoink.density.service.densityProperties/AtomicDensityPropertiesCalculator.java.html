@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>AtomicDensityPropertiesCalculator.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">yoink-core</a> &gt; <a href="index.source.html" class="el_package">org.wallerlab.yoink.density.service.densityProperties</a> &gt; <span class="el_source">AtomicDensityPropertiesCalculator.java</span></div><h1>AtomicDensityPropertiesCalculator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2014-2015 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.wallerlab.yoink.density.service.densityProperties;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+import org.wallerlab.yoink.api.model.density.DensityPoint;
+import org.wallerlab.yoink.api.model.molecular.Atom;
+import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.model.molecular.Element;
+import org.wallerlab.yoink.api.model.molecular.RadialGrid;
+import org.wallerlab.yoink.api.service.Calculator;
+import org.wallerlab.yoink.api.service.math.Matrix;
+import org.wallerlab.yoink.api.service.math.Vector;
+import org.wallerlab.yoink.math.constants.Constants;
+import org.wallerlab.yoink.math.linear.CommonsMatrix;
+import org.wallerlab.yoink.math.linear.SimpleMatrixFactory;
+
+/**
+ * This class is to calculate the Properties of a density point from an atom.
+ * 
+ * @author Min Zheng
+ *
+ */
+@Service
+<span class="fc" id="L40">public class AtomicDensityPropertiesCalculator implements</span>
+		Calculator&lt;DensityPoint, DensityPoint, Atom&gt; {
+	@Resource
+	private SimpleMatrixFactory myMatrix;
+
+	/**
+	 * calculate a density point's properties from an atom
+	 * 
+	 * @param densityPoint
+	 *            -{@link org.wallerlab.yoink.api.model.density.DensityPoint}
+	 * @param atom
+	 *            -{@link org.wallerlab.yoink.api.model.molecular.Atom}
+	 * @return densityPoint -
+	 *         {@link org.wallerlab.yoink.api.model.density.DensityPoint}
+	 */
+	public DensityPoint calculate(DensityPoint densityPoint, Atom atom) {
+		// initialize
+<span class="fc" id="L57">		Vector distanceVector = getDistanceVectorAndAtomName(densityPoint, atom);</span>
+		
+		// get the values of densityPoint
+<span class="fc" id="L60">		densityPoint = wrapDensityBasedProperties(densityPoint, distanceVector,</span>
+				atom);
+<span class="fc" id="L62">		return densityPoint;</span>
+	}
+
+	private Vector getDistanceVectorAndAtomName(DensityPoint densityPoint,
+			Atom atom) {
+<span class="fc" id="L67">		Coord tempCoord = atom.getCoordinate();</span>
+<span class="fc" id="L68">		Coord currentCoord = densityPoint.getCurrentCoord();</span>
+<span class="fc" id="L69">		Vector distanceVector = tempCoord.getCoords().subtract(</span>
+<span class="fc" id="L70">				currentCoord.getCoords());</span>
+<span class="fc" id="L71">		return distanceVector;</span>
+	}
+
+	private DensityPoint wrapDensityBasedProperties(DensityPoint densityPoint,
+			Vector distanceVector, Atom atom) {
+<span class="fc" id="L76">		Element atomName = atom.getElementType();</span>
+<span class="fc" id="L77">		double distance = Math.max(distanceVector.getNorm(),</span>
+				Constants.DISTANCE_DEFAULT);
+<span class="fc" id="L79">		double distanceReciprocal = 1.0 / distance;</span>
+<span class="fc" id="L80">		Vector distanceUnitVector = distanceVector</span>
+<span class="fc" id="L81">				.scalarMultiply(distanceReciprocal);</span>
+<span class="fc" id="L82">		double fac1 = 0;</span>
+<span class="fc" id="L83">		double fac2 = 0;</span>
+<span class="fc" id="L84">		double density = 0;</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">		if(atom.getRadialGrid()==null){</span>
+<span class="fc" id="L86">		double exp1 = Math.exp(-distance / atomName.z1());</span>
+<span class="fc" id="L87">		double exp2 = Math.exp(-distance / atomName.z2());</span>
+<span class="fc" id="L88">		double exp3 = Math.exp(-distance / atomName.z3());</span>
+<span class="fc" id="L89">		fac1 = atomName.cz1() * exp1 + atomName.cz2() * exp2 + atomName.cz3()</span>
+				* exp3;// first derivative of density
+<span class="fc" id="L91">		fac2 = atomName.czz1() * exp1 + atomName.czz2() * exp2</span>
+<span class="fc" id="L92">				+ atomName.czz3() * exp3;</span>
+<span class="fc" id="L93">		density = getPromolecularDensity(atomName, exp1, exp2, exp3);</span>
+<span class="fc" id="L94">		}</span>
+		else{
+			
+
+<span class="fc" id="L98">			double f = 0.0;</span>
+<span class="fc" id="L99">			double fp=0.0;</span>
+<span class="fc" id="L100">		 double fpp=0.0;</span>
+<span class="fc" id="L101">			RadialGrid grid = atom.getRadialGrid();</span>
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">			if (distance &lt; grid.getPosition_max()) {</span>
+
+<span class="fc" id="L104">				int ir = 0;</span>
+<span class="fc" id="L105">				double r = 0;</span>
+<span class="fc" id="L106">				double[] grid_positions = grid.getGrid_positions();</span>
+				// careful with grid limits.
+<span class="pc bpc" id="L108" title="1 of 2 branches missed.">				if (distance &lt;= grid_positions[0]) {</span>
+					
+<span class="nc" id="L110">					ir = 1;</span>
+<span class="nc" id="L111">					r = grid_positions[0];</span>
+				} else {
+<span class="fc" id="L113">					ir = (int) (1 + Math.floor(Math.log(distance / grid.getA())</span>
+<span class="fc" id="L114">							/ grid.getB()));</span>
+<span class="fc" id="L115">					r = distance;</span>
+				}
+				
+<span class="fc" id="L118">				double[] rr = new double[4];</span>
+<span class="fc" id="L119">				double[] dr1 = new double[4];</span>
+<span class="fc" id="L120">				double[][] x1dr12 = new double[4][4];</span>
+
+<span class="fc bfc" id="L122" title="All 2 branches covered.">				for (int i = 0; i &lt; 4; i++) {</span>
+<span class="fc" id="L123">					int ii = (Math.min(Math.max(ir, 2), grid.getNgrid()) - 3 + i);</span>
+<span class="fc" id="L124">					rr[i] = grid_positions[ii];</span>
+<span class="fc" id="L125">					dr1[i] = r - rr[i];</span>
+					
+<span class="fc bfc" id="L127" title="All 2 branches covered.">					for (int j = 0; j &lt;= i - 1; j++) {</span>
+<span class="fc" id="L128">						x1dr12[i][j] = 1.0 / (rr[i] - rr[j]);</span>
+<span class="fc" id="L129">						x1dr12[j][i] = -x1dr12[i][j];</span>
+						
+					}
+				}
+				// interpolate, lagrange 3rd order, 4 nodes
+<span class="fc bfc" id="L134" title="All 2 branches covered.">				for (int i = 0; i &lt; 4; i++) {</span>
+<span class="fc" id="L135">					int ii = (Math.min(Math.max(ir, 2), grid.getNgrid()) - 3 + i);</span>
+<span class="fc" id="L136">					double prod = 1.0;</span>
+<span class="fc bfc" id="L137" title="All 2 branches covered.">					for (int j = 0; j &lt; 4; j++) {</span>
+<span class="fc bfc" id="L138" title="All 2 branches covered.">						if (i == j) {</span>
+<span class="fc" id="L139">							continue;</span>
+						}
+						
+<span class="fc" id="L142">						prod = prod * dr1[j] * x1dr12[i][j];</span>
+					}
+					// density=density+grid.getGrid_values()[ii]*prod;
+<span class="fc" id="L145">					f = f + grid.getGrid_values()[ii] * prod;</span>
+<span class="fc" id="L146">					fp=fp+grid.getFirst_derivative_of_grid_values()[ii]*prod;</span>
+<span class="fc" id="L147">					 fpp=fpp+grid.getSecond_derivative_of_grid_values()[ii]*prod;</span>
+					
+				}
+			}// end of if distance
+<span class="fc" id="L151">			density=f;</span>
+<span class="fc" id="L152">			fac1 =-fp;</span>
+<span class="fc" id="L153">			fac2=fpp;		</span>
+		}//end of grid density calculation
+<span class="fc" id="L155">		Vector gradientVector = getGradientVector(distanceUnitVector, fac1);</span>
+
+<span class="fc" id="L157">		Matrix hessian = getHessian(distanceVector, atomName,</span>
+				distanceReciprocal, distanceUnitVector, fac1, fac2);
+		// set densityPoint
+<span class="fc" id="L160">		densityPoint.setDensity(density);</span>
+<span class="fc" id="L161">		densityPoint.setGradientVector(gradientVector);</span>
+<span class="fc" id="L162">		densityPoint.setHessian(hessian);</span>
+<span class="fc" id="L163">		return densityPoint;</span>
+	}
+
+	private Vector getGradientVector(Vector distanceUnitVector, double fac1) {
+<span class="fc" id="L167">		return distanceUnitVector.scalarMultiply(fac1 * -1.0);</span>
+	}
+
+	private double getPromolecularDensity(Element atomName, double exp1, double exp2,
+			double exp3) {
+<span class="fc" id="L172">		return atomName.c1() * exp1 + atomName.c2() * exp2 + atomName.c3()</span>
+				* exp3;
+	}
+
+	private Matrix getHessian(Vector distanceVector, Element atomName,
+			double distanceReciprocal, Vector distanceUnitVector, double fac1,
+			double fac2) {
+<span class="fc" id="L179">		Matrix hessian = myMatrix.matrix3x3();</span>
+<span class="fc" id="L180">		Vector distanceUnitVector2 = distanceUnitVector</span>
+<span class="fc" id="L181">				.ebeMultiply(distanceUnitVector);</span>
+<span class="fc" id="L182">		double distanceReciprocal2 = distanceReciprocal * distanceReciprocal;</span>
+<span class="fc" id="L183">		double fac11 = fac1 * distanceReciprocal;// first derivative of density</span>
+													// divided by distance
+
+<span class="fc" id="L186">		double fac3 = fac2 + fac11;// second derivative of density + fac11</span>
+
+		// hessian is a 3x3 symmetrix matrix.get the upper right part at first.
+<span class="fc bfc" id="L189" title="All 2 branches covered.">		for (int j = 0; j &lt; 3; j++) {</span>
+<span class="fc" id="L190">			hessian.setEntry(j, j, fac3 * distanceUnitVector2.getEntry(j)</span>
+					- fac11);
+<span class="fc bfc" id="L192" title="All 2 branches covered.">			for (int k = j + 1; k &lt; 3; k++) {</span>
+<span class="fc" id="L193">				hessian.setEntry(j, k,</span>
+<span class="fc" id="L194">						distanceReciprocal2 * distanceVector.getEntry(j)</span>
+<span class="fc" id="L195">								* distanceVector.getEntry(k) * fac3);</span>
+			}
+		}
+		// get the lower left part of hessian
+<span class="fc bfc" id="L199" title="All 2 branches covered.">		for (int j = 0; j &lt; 3; j++) {</span>
+<span class="fc bfc" id="L200" title="All 2 branches covered.">			for (int k = j + 1; k &lt; 3; k++) {</span>
+<span class="fc" id="L201">				hessian.setEntry(k, j, hessian.getEntry(j, k));</span>
+			}
+		}
+<span class="fc" id="L204">		return hessian;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>

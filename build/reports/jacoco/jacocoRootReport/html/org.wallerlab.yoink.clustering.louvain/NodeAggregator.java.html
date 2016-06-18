@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>NodeAggregator.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">yoink-core</a> &gt; <a href="index.source.html" class="el_package">org.wallerlab.yoink.clustering.louvain</a> &gt; <span class="el_source">NodeAggregator.java</span></div><h1>NodeAggregator.java</h1><pre class="source lang-java linenums">package org.wallerlab.yoink.clustering.louvain;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.neo4j.graphdb.DynamicLabel;
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
+import org.neo4j.graphdb.traversal.TraversalDescription;
+import org.neo4j.graphdb.traversal.Uniqueness;
+
+class NodeAggregator {
+
+	private GraphDatabaseService graph;
+	private RelationshipType edgeType;
+<span class="fc" id="L22">	private String attributeName = &quot;community&quot;;</span>
+
+	NodeAggregator(GraphDatabaseService graph,
+<span class="fc" id="L25">			RelationshipType edgeType) {</span>
+<span class="fc" id="L26">		this.graph = graph;</span>
+<span class="fc" id="L27">		this.edgeType = edgeType;</span>
+<span class="fc" id="L28">	}</span>
+
+	List&lt;Node&gt; aggregateCommunities(Collection&lt;Node&gt; startnodes, long hierarchylevel) {
+
+<span class="fc" id="L32">		String level = String.valueOf(hierarchylevel);// + &quot;-&quot;;</span>
+
+<span class="fc" id="L34">		HashMap&lt;String, Node&gt; parentIndex = new HashMap&lt;&gt;();</span>
+
+<span class="fc" id="L36">		Set&lt;Long&gt; nodeSet = new HashSet&lt;&gt;();</span>
+
+<span class="fc" id="L38">		HashMap&lt;AggregationTuple, Double&gt; aggregation = new HashMap&lt;&gt;();</span>
+
+<span class="fc" id="L40">		TraversalDescription traversal = graph.traversalDescription()</span>
+<span class="fc" id="L41">				.breadthFirst().uniqueness(Uniqueness.RELATIONSHIP_GLOBAL)</span>
+<span class="fc" id="L42">				.relationships(edgeType);</span>
+
+<span class="fc bfc" id="L44" title="All 2 branches covered.">		for (Relationship edge : traversal.traverse(startnodes).relationships()) {</span>
+
+			//System.out.println(edge);
+
+<span class="fc" id="L48">			AggregationTuple tuple = new AggregationTuple(edge);</span>
+
+<span class="fc" id="L50">			Double weight = Double.valueOf((double) edge.getProperty(&quot;weight&quot;,</span>
+<span class="fc" id="L51">					1.0));</span>
+
+<span class="fc bfc" id="L53" title="All 2 branches covered.">			if (aggregation.containsKey(tuple)) {</span>
+
+<span class="fc" id="L55">				Double sum = aggregation.get(tuple);</span>
+<span class="fc" id="L56">				aggregation.put(tuple, sum + weight);</span>
+
+<span class="fc" id="L58">			} else {</span>
+
+<span class="fc" id="L60">				aggregation.put(tuple, weight);</span>
+
+			}
+
+<span class="fc bfc" id="L64" title="All 2 branches covered.">			for (int i = 0; i &lt;= 1; i++) {</span>
+
+<span class="fc" id="L66">				Node node = edge.getNodes()[i];</span>
+
+<span class="fc bfc" id="L68" title="All 2 branches covered.">				if (!nodeSet.contains(node.getId())) {</span>
+
+					Node parent;
+
+<span class="fc" id="L72">					String community = (String) node.getProperty(attributeName);</span>
+
+<span class="fc bfc" id="L74" title="All 2 branches covered.">					if (parentIndex.containsKey(community)) {</span>
+
+<span class="fc" id="L76">						parent = parentIndex.get(community);</span>
+
+					} else {
+
+<span class="fc" id="L80">						String newlabel = level + community.substring(level.length());</span>
+						
+<span class="fc" id="L82">						parent = graph.createNode(DynamicLabel.label(newlabel));</span>
+<span class="fc" id="L83">						parent.setProperty(attributeName, newlabel);</span>
+
+<span class="fc" id="L85">						parentIndex.put(community, parent);</span>
+
+					}
+<span class="fc" id="L88">					nodeSet.add(node.getId());</span>
+<span class="fc" id="L89">					node.createRelationshipTo(parent,</span>
+							LouvainRelation.LOUVAIN_ACCUMULATED_BY);
+
+				}
+			}
+
+<span class="fc" id="L95">		}</span>
+
+		
+<span class="fc bfc" id="L98" title="All 2 branches covered.">		for(AggregationTuple tuple : aggregation.keySet()){</span>
+			
+<span class="fc" id="L100">			Node one = parentIndex.get( tuple.getStart() );</span>
+<span class="fc" id="L101">			Node two = parentIndex.get( tuple.getEnd() );</span>
+			
+<span class="fc" id="L103">			one.createRelationshipTo(two, edgeType).setProperty(&quot;weight&quot;, aggregation.get(tuple));;</span>
+			
+<span class="fc" id="L105">		}</span>
+		
+<span class="fc" id="L107">		Set&lt;Node&gt; set = new HashSet&lt;&gt;();</span>
+		
+<span class="fc" id="L109">		set.addAll(parentIndex.values());</span>
+		
+<span class="fc" id="L111">		List&lt;Node&gt; list = new ArrayList&lt;Node&gt;();</span>
+<span class="fc" id="L112">		list.addAll(set);</span>
+<span class="fc" id="L113">		return list;</span>
+
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>

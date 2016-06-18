@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>AdaptiveRegionizer.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">yoink-core</a> &gt; <a href="index.source.html" class="el_package">org.wallerlab.yoink.regionizer.service</a> &gt; <span class="el_source">AdaptiveRegionizer.java</span></div><h1>AdaptiveRegionizer.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2014-2015 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.wallerlab.yoink.regionizer.service;
+
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
+import org.wallerlab.yoink.api.model.cube.GridPoint;
+import org.wallerlab.yoink.api.model.density.DensityPoint.DensityType;
+import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.service.regionizer.Partitioner;
+import org.wallerlab.yoink.api.service.regionizer.Regionizer;
+import org.wallerlab.yoink.api.service.regionizer.RegionizerComponent;
+
+/**
+ * this class is to find adaptive QM region or adaptive QM core region.
+ * 
+ * @author Min Zheng
+ *
+ */
+
+public class AdaptiveRegionizer implements
+		RegionizerComponent&lt;Map&lt;Region.Name, Region&gt;, Map&lt;JobParameter, Object&gt;&gt; {
+
+	@Resource
+	private Partitioner&lt;Map&lt;Region.Name, Region&gt;, DensityType&gt; densityPartitioner;
+
+	@Resource
+	private Partitioner&lt;List&lt;GridPoint&gt;, DensityType&gt; cubePartitioner;
+
+	private Partitioner partitioner;
+
+	private DensityType densityType;
+
+<span class="fc" id="L51">	public AdaptiveRegionizer(DensityType densityType, Partitioner partitioner) {</span>
+<span class="fc" id="L52">		this.densityType = densityType;</span>
+<span class="fc" id="L53">		this.partitioner = partitioner;</span>
+<span class="fc" id="L54">	}</span>
+
+	/**
+	 * set up adaptive QM region partitioning first, density partitioner finds
+	 * those molecules for cube building second, cube partitioner finds those
+	 * grid points for the following density interaction analysis third,
+	 * partitioner is to do interaction analysis to find the adaptive QM or
+	 * adaptive QM core
+	 */
+	@Override
+	public Map&lt;Region.Name, Region&gt; regionize(Map&lt;Region.Name, Region&gt; regions,
+			Map&lt;JobParameter, Object&gt; parameters) {
+<span class="fc" id="L66">		Partitioner.Type partitionType = (Partitioner.Type) parameters</span>
+<span class="fc" id="L67">				.get(JobParameter.PARTITIONER);</span>
+<span class="pc bpc" id="L68" title="1 of 2 branches missed.">		if (partitionType==Partitioner.Type.DORI){</span>
+<span class="fc" id="L69">		regions = densityPartitioner</span>
+<span class="fc" id="L70">				.partition(regions, parameters, densityType);</span>
+<span class="fc" id="L71">		List&lt;GridPoint&gt; doriGridPoints = cubePartitioner.partition(regions,</span>
+				parameters, densityType);
+<span class="fc" id="L73">		regions = (Map&lt;Region.Name, Region&gt;) partitioner.partition(regions,</span>
+				parameters, doriGridPoints);
+		}
+<span class="fc" id="L76">		return regions;</span>
+	}
+
+	public DensityType getDensityType() {
+<span class="fc" id="L80">		return densityType;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>

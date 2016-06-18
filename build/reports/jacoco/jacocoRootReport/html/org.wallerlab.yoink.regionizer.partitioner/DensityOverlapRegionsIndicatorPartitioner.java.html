@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DensityOverlapRegionsIndicatorPartitioner.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">yoink-core</a> &gt; <a href="index.source.html" class="el_package">org.wallerlab.yoink.regionizer.partitioner</a> &gt; <span class="el_source">DensityOverlapRegionsIndicatorPartitioner.java</span></div><h1>DensityOverlapRegionsIndicatorPartitioner.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2014-2015 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.wallerlab.yoink.regionizer.partitioner;
+
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import javax.annotation.Resource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
+import org.wallerlab.yoink.api.model.cube.GridPoint;
+import org.wallerlab.yoink.api.model.density.DensityPoint;
+import org.wallerlab.yoink.api.model.molecular.Atom;
+import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.service.Calculator;
+import org.wallerlab.yoink.api.service.Computer;
+import org.wallerlab.yoink.api.service.Factory;
+import org.wallerlab.yoink.regionizer.domain.SimpleRegion;
+
+/**
+ * This class is to analyze Density Overlap Regions Indicator(DORI) for those
+ * grid points in the intersection between QM core region and non-QM core region
+ * based on Voronoi partitioning. If a grid point satisfies the DORI criteria,
+ * the corresponding non-QM molecule will be switched into QM region. then we
+ * can get qm region and adaptive qm region.
+ * 
+ * 
+ * @author Min Zheng
+ *
+ */
+@Service
+<span class="fc" id="L50">public class DensityOverlapRegionsIndicatorPartitioner extends</span>
+		InteractionPartitioner {
+
+	@Resource
+	private Calculator&lt;Double, Coord, Set&lt;Molecule&gt;&gt; densityCalculator;
+
+	@Resource
+	private Factory&lt;Region, Region.Name&gt; simpleRegionFactory;
+
+	@Autowired
+	private Computer&lt;Double, DensityPoint&gt; densityOverlapRegionsIndicatorComputer;
+
+	protected Region initialize(Map&lt;Region.Name, Region&gt; regions) {
+<span class="fc" id="L63">		regionName = Region.Name.QM;</span>
+<span class="fc" id="L64">		adaptiveRegionName = Region.Name.QM_ADAPTIVE;</span>
+<span class="fc" id="L65">		Region region = simpleRegionFactory.create(regionName);</span>
+<span class="fc" id="L66">		region.addAll(regions.get(Region.Name.QM_CORE).getMolecularMap());</span>
+<span class="fc" id="L67">		return region;</span>
+	}
+
+	/**
+	 * for a grid point which satisfies the criteria: density is larger than
+	 * densityThreshold and dori value is the range[doriThreshold, 1] ,the
+	 * non-QM molecule of the grid point will be in QM region.
+	 *
+	 * @param regions
+	 *            - a Map, Region.Name
+	 *            {@link org.wallerlab.yoink.api.model.regionizer.Region.Name }
+	 *            as key, Region
+	 *            {@link org.wallerlab.yoink.api.model.regionizer.Region} as
+	 *            value
+	 * @param gridPoint
+	 *            -{@link org.wallerlab.yoink.api.model.cube.GridPoint }
+	 * @param neighbours
+	 *            - a Set of two molecules
+	 *            {@link org.wallerlab.yoink.api.model.molecular.Molecule }
+	 * @param parameters
+	 *            - a Map, JobParameter
+	 *            {@link org.wallerlab.yoink.api.model.bootstrap.JobParameter}
+	 *            as Key, Object {@link java.lang.Object} as value
+	 * @return region {@link org.wallerlab.yoink.api.model.regionizer.Region}
+	 */
+
+	protected Region checkCriteria(Map&lt;Region.Name, Region&gt; regions,
+			Region region, GridPoint gridPoint, Set&lt;Molecule&gt; neighbours,
+			Map&lt;JobParameter, Object&gt; parameters) {
+<span class="fc" id="L96">		Region.Name cubeRegionName = (Region.Name) parameters</span>
+<span class="fc" id="L97">				.get(JobParameter.REGION_CUBE);</span>
+
+<span class="fc" id="L99">		Set&lt;Atom&gt; atomsInCube = (new HashSet&lt;Atom&gt;(regions.get(cubeRegionName)</span>
+<span class="fc" id="L100">				.getAtoms()));</span>
+<span class="fc" id="L101">		Set&lt;Molecule&gt; moleculesInCube = (Set&lt;Molecule&gt;) regions.get(</span>
+<span class="fc" id="L102">				cubeRegionName).getMolecules();</span>
+<span class="fc" id="L103">		calculateAndCheckDensity(atomsInCube, region, gridPoint, neighbours,</span>
+				parameters, moleculesInCube);
+<span class="fc" id="L105">		return region;</span>
+	}
+
+	private void calculateAndCheckDensity(Set&lt;Atom&gt; atomsInCube, Region region,
+			GridPoint gridPoint, Set&lt;Molecule&gt; neighbours,
+			Map&lt;JobParameter, Object&gt; parameters, Set&lt;Molecule&gt; moleculesInCube) {
+<span class="fc" id="L111">		double density = getDensity(moleculesInCube, gridPoint);</span>
+<span class="fc" id="L112">		checkDensity(atomsInCube, region, gridPoint, neighbours, parameters,</span>
+				density);
+<span class="fc" id="L114">	}</span>
+
+	private double getDensity(Set&lt;Molecule&gt; moleculesInCube, GridPoint gridPoint) {
+		// calculate density
+<span class="fc" id="L118">		double density = densityCalculator.calculate(gridPoint.getCoordinate(),</span>
+				moleculesInCube);
+<span class="fc" id="L120">		return density;</span>
+	}
+
+	private void checkDensity(Set&lt;Atom&gt; atomsInCube, Region region,
+			GridPoint gridPoint, Set&lt;Molecule&gt; neighbours,
+			Map&lt;JobParameter, Object&gt; parameters, double density) {
+		// check density
+<span class="pc bpc" id="L127" title="1 of 2 branches missed.">		if (density &gt;= (double) parameters.get(JobParameter.DENSITY_DORI)) {</span>
+<span class="fc" id="L128">			calculateAndCheckDori(atomsInCube, region, gridPoint, neighbours,</span>
+					parameters);
+		}
+<span class="fc" id="L131">	}</span>
+
+	private void calculateAndCheckDori(Set&lt;Atom&gt; atomsInCube, Region region,
+			GridPoint gridPoint, Set&lt;Molecule&gt; neighbours,
+			Map&lt;JobParameter, Object&gt; parameters) {
+<span class="fc" id="L136">		double doriTemp = getDoriValue(atomsInCube, gridPoint);</span>
+<span class="fc" id="L137">		checkDoriValue(region, neighbours, parameters, doriTemp);</span>
+<span class="fc" id="L138">	}</span>
+
+	private double getDoriValue(Set&lt;Atom&gt; atomsInCube, GridPoint gridPoint) {
+		// calculate dori
+<span class="fc" id="L142">		DensityPoint densityPoint = densityPropertiesCalculator.calculate(</span>
+<span class="fc" id="L143">				atomsInCube, gridPoint.getCoordinate());</span>
+<span class="fc" id="L144">		double doriTemp = densityOverlapRegionsIndicatorComputer</span>
+<span class="fc" id="L145">				.calculate(densityPoint);</span>
+<span class="fc" id="L146">		return doriTemp;</span>
+	}
+
+	private void checkDoriValue(Region region, Set&lt;Molecule&gt; neighbours,
+			Map&lt;JobParameter, Object&gt; parameters, double doriTemp) {
+		// check dori
+<span class="pc bpc" id="L152" title="1 of 2 branches missed.">		if (1 &gt;= doriTemp</span>
+<span class="pc bpc" id="L153" title="1 of 2 branches missed.">				&amp;&amp; doriTemp &gt;= (double) parameters.get(JobParameter.DORI)) {</span>
+<span class="fc bfc" id="L154" title="All 2 branches covered.">			for (Molecule molecule : neighbours) {</span>
+<span class="fc" id="L155">				region.addMolecule(molecule, molecule.getIndex());</span>
+
+<span class="fc" id="L157">			}</span>
+
+		}
+<span class="fc" id="L160">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>

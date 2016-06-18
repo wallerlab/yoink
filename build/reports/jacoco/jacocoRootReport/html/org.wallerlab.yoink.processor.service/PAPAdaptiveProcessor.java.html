@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PAPAdaptiveProcessor.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">yoink-core</a> &gt; <a href="index.source.html" class="el_package">org.wallerlab.yoink.processor.service</a> &gt; <span class="el_source">PAPAdaptiveProcessor.java</span></div><h1>PAPAdaptiveProcessor.java</h1><pre class="source lang-java linenums">package org.wallerlab.yoink.processor.service;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.xml.bind.JAXBElement;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.wallerlab.yoink.api.model.bootstrap.Job;
+import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.service.adaptive.Smoothner;
+import org.wallerlab.yoink.api.service.adaptiveProcessor.AdaptiveProcessor;
+import org.wallerlab.yoink.api.service.math.Vector;
+import org.wallerlab.yoink.math.linear.SimpleVector3DFactory;
+import org.wallerlab.yoink.math.set.Subsets;
+
+import com.google.common.primitives.Ints;
+
+/**
+ * This class is to get PAP adaptive energy and force
+ * 
+ * @author Min Zheng
+ *
+ */
+@Service(&quot;pap&quot;)
+<span class="fc" id="L32">public class PAPAdaptiveProcessor implements Smoothner {</span>
+
+	@Resource
+	@Qualifier(&quot;qmmm&quot;)
+	private AdaptiveProcessor qmmmProcessor;
+
+	@Resource
+	private SimpleVector3DFactory myVector3D;
+
+	@Override
+	public void smooth(Job&lt;JAXBElement&gt; job) {
+		// initialize
+<span class="fc" id="L44">		List&lt;Double&gt; lambda = (List&lt;Double&gt;) job.getProperties().get(</span>
+				&quot;smoothfactors&quot;);
+<span class="fc" id="L46">		Map&lt;Molecule, Integer&gt; bufferMoleculeMap = job.getRegions()</span>
+<span class="fc" id="L47">				.get(Region.Name.BUFFER).getMolecularMap();</span>
+
+<span class="fc" id="L49">		List&lt;Integer&gt; bufferIndices = new ArrayList&lt;Integer&gt;(</span>
+<span class="fc" id="L50">				bufferMoleculeMap.values());</span>
+<span class="fc" id="L51">		int bufferSize = bufferIndices.size();</span>
+		// run all qm/mm jobs
+<span class="fc" id="L53">		Map&lt;List&lt;Integer&gt;, Double&gt; v_all = new HashMap&lt;List&lt;Integer&gt;, Double&gt;();</span>
+<span class="fc" id="L54">		Map&lt;List&lt;Integer&gt;, List&lt;Vector&gt;&gt; f_all = new HashMap&lt;List&lt;Integer&gt;, List&lt;Vector&gt;&gt;();</span>
+<span class="fc" id="L55">		Map&lt;List&lt;Integer&gt;, Double&gt; factor_all = new HashMap&lt;List&lt;Integer&gt;, Double&gt;();</span>
+<span class="fc" id="L56">		runAllQMMMCalculations(lambda, bufferIndices, v_all, f_all, factor_all);</span>
+		// get adaptive force and energy
+<span class="fc" id="L58">		double v_adaptive = 0;</span>
+<span class="fc" id="L59">		List&lt;Vector&gt; f_adaptive = new ArrayList&lt;Vector&gt;();</span>
+<span class="fc" id="L60">		v_adaptive = calculateAdaptiveForceAndEnergy(bufferIndices, bufferSize,</span>
+				v_all, f_all, factor_all, v_adaptive, f_adaptive);
+		// put adaptive force and energy into job.properties
+<span class="fc" id="L63">		Map&lt;List&lt;Vector&gt;, Double&gt; forcesAndEnergy = new HashMap&lt;List&lt;Vector&gt;, Double&gt;();</span>
+<span class="fc" id="L64">		forcesAndEnergy.put(f_adaptive, v_adaptive);</span>
+<span class="fc" id="L65">		job.getProperties().put(&quot;forcesAndEnergy&quot;, forcesAndEnergy);</span>
+<span class="fc" id="L66">	}</span>
+
+	private void runAllQMMMCalculations(List&lt;Double&gt; lambda,
+			List&lt;Integer&gt; bufferIndices, Map&lt;List&lt;Integer&gt;, Double&gt; v_all,
+			Map&lt;List&lt;Integer&gt;, List&lt;Vector&gt;&gt; f_all,
+			Map&lt;List&lt;Integer&gt;, Double&gt; factor_all) {
+<span class="fc bfc" id="L72" title="All 2 branches covered.">		for (List&lt;Integer&gt; qmSet : Subsets.split(Ints.toArray(bufferIndices))) {</span>
+<span class="fc" id="L73">			double energy = qmmmProcessor.getEnergy();</span>
+<span class="fc" id="L74">			List&lt;Vector&gt; forces = qmmmProcessor.getForces();</span>
+
+<span class="fc" id="L76">			double smoothFactor = 1.0;</span>
+<span class="fc bfc" id="L77" title="All 2 branches covered.">			for (Integer i : qmSet) {</span>
+<span class="fc" id="L78">				int index = bufferIndices.indexOf(i);</span>
+<span class="fc" id="L79">				smoothFactor *= lambda.get(index);</span>
+
+<span class="fc" id="L81">			}</span>
+<span class="fc" id="L82">			v_all.put(qmSet, energy);</span>
+<span class="fc" id="L83">			factor_all.put(qmSet, smoothFactor);</span>
+
+<span class="fc" id="L85">			f_all.put(qmSet, forces);</span>
+
+<span class="fc" id="L87">		}</span>
+<span class="fc" id="L88">	}</span>
+
+	private double calculateAdaptiveForceAndEnergy(List&lt;Integer&gt; bufferIndices,
+			int bufferSize, Map&lt;List&lt;Integer&gt;, Double&gt; v_all,
+			Map&lt;List&lt;Integer&gt;, List&lt;Vector&gt;&gt; f_all,
+			Map&lt;List&lt;Integer&gt;, Double&gt; factor_all, double v_adaptive,
+			List&lt;Vector&gt; f_adaptive) {
+<span class="fc" id="L95">		double v_qm = (double) v_all.get(new ArrayList&lt;&gt;());</span>
+<span class="fc" id="L96">		List&lt;Vector&gt; f_qm = (List&lt;Vector&gt;) f_all.get(new ArrayList&lt;&gt;());</span>
+<span class="fc" id="L97">		Map&lt;Integer, Double&gt; v_temp_all = new HashMap&lt;Integer, Double&gt;();</span>
+
+<span class="fc" id="L99">		Map&lt;Integer, List&lt;Vector&gt;&gt; f_temp_all = new HashMap&lt;Integer, List&lt;Vector&gt;&gt;();</span>
+
+<span class="fc" id="L101">		int forceSize = f_qm.size();</span>
+<span class="fc" id="L102">		initializeForce(f_adaptive, forceSize);</span>
+
+<span class="fc bfc" id="L104" title="All 2 branches covered.">		for (int i = 1; i &lt;= bufferSize; i++) {</span>
+
+<span class="fc bfc" id="L106" title="All 2 branches covered.">			for (int j = 1; j &lt;= i; j++) {</span>
+<span class="fc" id="L107">				double v_temp = 0;</span>
+<span class="fc" id="L108">				List&lt;Vector&gt; f_temp = new ArrayList&lt;Vector&gt;();</span>
+<span class="fc" id="L109">				initializeForce(f_temp, forceSize);</span>
+<span class="pc bpc" id="L110" title="1 of 2 branches missed.">				if (i == 1) {</span>
+<span class="fc" id="L111">					List&lt;Integer&gt; singleBuffer = new ArrayList&lt;Integer&gt;();</span>
+<span class="fc" id="L112">					List&lt;ArrayList&lt;Integer&gt;&gt; combination_all = Subsets.split(</span>
+<span class="fc" id="L113">							Ints.toArray(bufferIndices), 1);</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">					for (int index = 0; index &lt; combination_all.size(); index++) {</span>
+
+<span class="fc" id="L116">						singleBuffer = combination_all.get(index);</span>
+<span class="fc" id="L117">						double current_factor = factor_all.get(singleBuffer);</span>
+<span class="fc" id="L118">						v_temp += (v_all.get(singleBuffer) - v_qm);</span>
+<span class="fc" id="L119">						v_adaptive += v_temp * current_factor;</span>
+<span class="fc" id="L120">						v_temp_all.put(singleBuffer.get(0), v_temp);</span>
+
+<span class="pc bpc" id="L122" title="1 of 2 branches missed.">						for (int n = 0; n &lt; f_qm.size(); n++) {</span>
+
+<span class="nc" id="L124">							Vector tempForce = f_all.get(singleBuffer).get(n)</span>
+<span class="nc" id="L125">									.subtract(f_qm.get(n));</span>
+<span class="nc" id="L126">							f_temp.add(n, f_temp.get(n).add(tempForce));</span>
+
+<span class="nc" id="L128">							Vector tempAF = f_temp.get(n).scalarMultiply(</span>
+									current_factor);
+<span class="nc" id="L130">							f_adaptive.add(n, f_adaptive.get(n).add(tempAF));</span>
+						}
+<span class="fc" id="L132">						f_temp_all.put(singleBuffer.get(0), f_temp);</span>
+
+					}
+<span class="pc bpc" id="L135" title="1 of 2 branches missed.">					for (Vector f : f_adaptive) {</span>
+<span class="nc" id="L136">						f = f.add(f_qm.get(f_adaptive.indexOf(f)));</span>
+<span class="nc" id="L137">					}</span>
+<span class="fc" id="L138">					v_adaptive += v_qm;</span>
+
+<span class="fc" id="L140">				}</span>
+
+				else {
+<span class="nc" id="L143">					List&lt;ArrayList&lt;Integer&gt;&gt; combination_all = Subsets.split(</span>
+<span class="nc" id="L144">							Ints.toArray(bufferIndices), j);</span>
+
+<span class="nc bnc" id="L146" title="All 2 branches missed.">					for (List&lt;Integer&gt; buffer : combination_all) {</span>
+<span class="nc" id="L147">						double mE = 0;</span>
+<span class="nc" id="L148">						double singleE = v_qm;</span>
+
+<span class="nc" id="L150">						List&lt;Vector&gt; mF = new ArrayList&lt;Vector&gt;();</span>
+<span class="nc" id="L151">						initializeForce(mF, forceSize);</span>
+<span class="nc" id="L152">						List&lt;Vector&gt; singleF = f_qm;</span>
+<span class="nc bnc" id="L153" title="All 2 branches missed.">						for (int item : buffer) {</span>
+<span class="nc" id="L154">							singleE += v_temp_all.get(item);</span>
+
+<span class="nc bnc" id="L156" title="All 2 branches missed.">							for (Vector f : singleF) {</span>
+<span class="nc" id="L157">								f = f.add(f_temp_all.get(item).get(</span>
+<span class="nc" id="L158">										singleF.indexOf(f)));</span>
+<span class="nc" id="L159">							}</span>
+
+<span class="nc" id="L161">						}</span>
+<span class="nc" id="L162">						mE = v_temp_all.get(buffer) - singleE;</span>
+
+<span class="nc bnc" id="L164" title="All 2 branches missed.">						for (int n = 0; n &lt; f_qm.size(); n++) {</span>
+
+<span class="nc" id="L166">							mF.add(n,</span>
+<span class="nc" id="L167">									f_temp_all.get(buffer).get(n)</span>
+<span class="nc" id="L168">											.subtract(singleF.get(n)));</span>
+						}
+<span class="nc bnc" id="L170" title="All 2 branches missed.">						for (int sizeSub = buffer.size() - 1; sizeSub &gt; 1; sizeSub--) {</span>
+<span class="nc" id="L171">							List&lt;ArrayList&lt;Integer&gt;&gt; combination_sub_all = Subsets</span>
+<span class="nc" id="L172">									.split(Ints.toArray(buffer), sizeSub);</span>
+
+<span class="nc bnc" id="L174" title="All 2 branches missed.">							for (List&lt;Integer&gt; subBuffer : combination_sub_all) {</span>
+<span class="nc" id="L175">								double singleE_sub = v_qm;</span>
+
+<span class="nc" id="L177">								List&lt;Vector&gt; singleF_sub = f_qm;</span>
+<span class="nc bnc" id="L178" title="All 2 branches missed.">								for (int item : subBuffer) {</span>
+<span class="nc" id="L179">									singleE += v_temp_all.get(item);</span>
+<span class="nc bnc" id="L180" title="All 2 branches missed.">									for (Vector f : singleF_sub) {</span>
+<span class="nc" id="L181">										f = f.add(f_temp_all.get(item).get(</span>
+<span class="nc" id="L182">												singleF_sub.indexOf(f)));</span>
+<span class="nc" id="L183">									}</span>
+<span class="nc" id="L184">								}</span>
+<span class="nc" id="L185">								mE = v_temp_all.get(subBuffer) - singleE_sub;</span>
+<span class="nc bnc" id="L186" title="All 2 branches missed.">								for (int n = 0; n &lt; f_qm.size(); n++) {</span>
+
+<span class="nc" id="L188">									mF.add(n, f_temp_all.get(subBuffer).get(n)</span>
+<span class="nc" id="L189">											.subtract(singleF_sub.get(n)));</span>
+
+								}
+<span class="nc" id="L192">							}</span>
+
+						}
+
+<span class="nc" id="L196">						double current_factor = factor_all.get(buffer);</span>
+<span class="nc" id="L197">						v_adaptive = mE * current_factor;</span>
+<span class="nc bnc" id="L198" title="All 2 branches missed.">						for (int n = 0; n &lt; f_qm.size(); n++) {</span>
+
+<span class="nc" id="L200">							f_adaptive.add(n,</span>
+<span class="nc" id="L201">									mF.get(n).scalarMultiply(current_factor));</span>
+						}
+<span class="nc" id="L203">					}</span>
+
+				}
+			}
+		}
+<span class="fc" id="L208">		return v_adaptive;</span>
+	}
+
+	private void initializeForce(List&lt;Vector&gt; forces, int size) {
+<span class="pc bpc" id="L212" title="1 of 2 branches missed.">		for (int i = 0; i &lt; size; i++) {</span>
+<span class="nc" id="L213">			Vector v = myVector3D.create(0, 0, 0);</span>
+<span class="nc" id="L214">			forces.add(i, v);</span>
+		}
+<span class="fc" id="L216">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>

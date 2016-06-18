@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>GraphPopulator.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">yoink-core</a> &gt; <a href="index.source.html" class="el_package">org.wallerlab.yoink.clustering</a> &gt; <span class="el_source">GraphPopulator.java</span></div><h1>GraphPopulator.java</h1><pre class="source lang-java linenums">package org.wallerlab.yoink.clustering;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.NotInTransactionException;
+import org.neo4j.graphdb.Relationship;
+
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+
+
+
+
+
+
+
+/**
+ *  Constructs the graph with objects&lt;T&gt;
+ *  
+ *  Maintains BiMap {T:Node} to convert between mapped objects and network nodes.
+ * 
+ * @author marwin
+ *
+ * @param &lt;T&gt;
+ */
+
+
+class GraphPopulator&lt;T&gt; {
+
+	private BiMap&lt;T, Node&gt; bimap;
+	private GraphDatabaseService graphDb;
+
+<span class="fc" id="L40">	public GraphPopulator(GraphDatabaseService graphDb) {</span>
+
+<span class="fc" id="L42">		this.graphDb = graphDb;</span>
+<span class="fc" id="L43">	}</span>
+
+
+	
+	private void createNodes(List&lt;InteractionTriple&lt;T&gt;&gt; interactionSet)
+			throws NotInTransactionException {
+
+<span class="fc" id="L50">		bimap = HashBiMap.create();</span>
+		
+<span class="fc" id="L52">		Set&lt;T&gt; molecules = new HashSet&lt;&gt;();</span>
+
+<span class="fc bfc" id="L54" title="All 2 branches covered.">		for (InteractionTriple&lt;T&gt; triple : interactionSet) {</span>
+			
+<span class="fc" id="L56">				molecules.add(triple.first);</span>
+<span class="fc" id="L57">				molecules.add(triple.second);</span>
+<span class="fc" id="L58">		}</span>
+			
+<span class="fc bfc" id="L60" title="All 2 branches covered.">		for (T mol : molecules) {</span>
+
+<span class="fc" id="L62">			Node node = graphDb.createNode(NodeLabel.MOLECULE);</span>
+
+<span class="fc" id="L64">			bimap.put(mol, node);</span>
+
+<span class="fc" id="L66">		}</span>
+
+<span class="fc" id="L68">	}</span>
+	
+	
+	private void createNodes(Set&lt;Set&lt;T&gt;&gt; interactionSet)
+			throws NotInTransactionException {
+
+<span class="fc" id="L74">		bimap = HashBiMap.create();</span>
+
+<span class="fc bfc" id="L76" title="All 2 branches covered.">		for (T mol : getObjectSet(interactionSet)) {</span>
+
+<span class="fc" id="L78">			Node node = graphDb.createNode(NodeLabel.MOLECULE);</span>
+
+<span class="fc" id="L80">			bimap.put(mol, node);</span>
+
+<span class="fc" id="L82">		}</span>
+
+<span class="fc" id="L84">	}</span>
+
+	void createRelationships(List&lt;InteractionTriple&lt;T&gt;&gt; interactionSet)
+			throws NotInTransactionException {
+
+<span class="fc" id="L89">		createNodes(interactionSet);</span>
+		
+<span class="fc bfc" id="L91" title="All 2 branches covered.">		for (InteractionTriple&lt;T&gt; triple : interactionSet) {</span>
+
+<span class="fc" id="L93">			Node node = bimap.get(triple.first);</span>
+<span class="fc" id="L94">			Node otherNode = bimap.get(triple.second);</span>
+<span class="fc" id="L95">			Relationship edge = node.createRelationshipTo(otherNode, Relations.INTERACT);</span>
+			
+<span class="fc" id="L97">			edge.setProperty(&quot;weight&quot;, triple.weight);</span>
+			
+
+<span class="fc" id="L100">		}</span>
+<span class="fc" id="L101">	}</span>
+	
+	
+	void createRelationships(Set&lt;Set&lt;T&gt;&gt; interactionSet)
+			throws NotInTransactionException {
+
+<span class="fc" id="L107">		createNodes(interactionSet);</span>
+
+<span class="fc bfc" id="L109" title="All 2 branches covered.">		for (Set&lt;T&gt; pair : interactionSet) {</span>
+
+<span class="fc" id="L111">			List&lt;T&gt; list = pair.stream().collect(Collectors.toList());</span>
+
+<span class="fc" id="L113">			Node node = bimap.get(list.get(0));</span>
+<span class="fc" id="L114">			Node otherNode = bimap.get(list.get(1));</span>
+<span class="fc" id="L115">			Relationship edge = node.createRelationshipTo(otherNode, Relations.INTERACT);</span>
+			
+		//	edge.setProperty(&quot;weight&quot;, 1.0);
+			;
+
+<span class="fc" id="L120">		}</span>
+<span class="fc" id="L121">	}</span>
+
+	/**
+	 * Reads set of interacting pairs
+	 * 
+	 * returns set of molecules
+	 * 
+	 * @param interaction
+	 *            set
+	 * @return molecule set
+	 */
+
+	private Set&lt;T&gt; getObjectSet(Set&lt;Set&lt;T&gt;&gt; interactionSet) {
+
+<span class="fc" id="L135">		Set&lt;T&gt; molecules = new HashSet&lt;&gt;();</span>
+
+<span class="fc bfc" id="L137" title="All 2 branches covered.">		for (Set&lt;T&gt; pair : interactionSet) {</span>
+
+<span class="fc bfc" id="L139" title="All 2 branches covered.">			for (T mol : pair) {</span>
+
+<span class="fc" id="L141">				molecules.add(mol);</span>
+
+<span class="fc" id="L143">			}</span>
+
+<span class="fc" id="L145">		}</span>
+
+<span class="fc" id="L147">		return molecules;</span>
+	}
+	
+	
+	List&lt;Set&lt;T&gt;&gt; convertCommunities(Map&lt;String, Set&lt;Node&gt;&gt; communities){
+		
+<span class="fc" id="L153">		Map&lt;Node,T&gt; inversebimap = bimap.inverse();</span>
+		
+<span class="fc" id="L155">		List&lt;Set&lt;T&gt;&gt; output = new ArrayList&lt;&gt;();</span>
+		
+<span class="fc bfc" id="L157" title="All 2 branches covered.">		for(Set&lt;Node&gt; community : communities.values()){</span>
+			
+<span class="fc" id="L159">			Set&lt;T&gt; convertedCommunity = new HashSet&lt;T&gt;(); </span>
+<span class="fc" id="L160">			community.forEach( n-&gt; convertedCommunity.add(inversebimap.get(n)));</span>
+<span class="fc" id="L161">			output.add(convertedCommunity);</span>
+			
+<span class="fc" id="L163">		}</span>
+		
+<span class="fc" id="L165">		return output;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>

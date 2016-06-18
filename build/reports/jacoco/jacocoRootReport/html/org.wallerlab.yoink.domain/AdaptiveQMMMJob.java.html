@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>AdaptiveQMMMJob.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">yoink-core</a> &gt; <a href="index.source.html" class="el_package">org.wallerlab.yoink.domain</a> &gt; <span class="el_source">AdaptiveQMMMJob.java</span></div><h1>AdaptiveQMMMJob.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2014-2015 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.wallerlab.yoink.domain;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.xml.bind.JAXBElement;
+
+import org.springframework.stereotype.Component;
+import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
+import org.wallerlab.yoink.api.model.bootstrap.Job;
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
+import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.xml_cml.schema.Cml;
+
+/**
+ * the domain model for job in adaptive qm/mm partitioning
+ * 
+ * @author Min Zheng
+ *
+ */
+@Component
+<span class="fc" id="L39">public class AdaptiveQMMMJob implements Job&lt;JAXBElement&gt; {</span>
+
+	// keep original cml in order to wrap results back to properties in the JAXB
+	private JAXBElement&lt;Cml&gt; input;
+
+	private MolecularSystem molecularSystem;
+
+<span class="fc" id="L46">	private Map&lt;JobParameter, Object&gt; parameters = new HashMap&lt;JobParameter, Object&gt;();</span>
+
+<span class="fc" id="L48">	private Map&lt;String, Object&gt; properties = new HashMap&lt;String, Object&gt;();</span>
+
+<span class="fc" id="L50">	private Map&lt;Region.Name, Region&gt; regions = new HashMap&lt;Region.Name, Region&gt;();</span>
+	private List&lt;List&lt;Integer&gt;&gt; interactionList;
+	private List&lt;Set&lt;Integer&gt;&gt; clusters;
+	private  List&lt;Double&gt; interactionWeight;
+
+	@Override
+	public MolecularSystem getMolecularSystem() {
+<span class="fc" id="L57">		return molecularSystem;</span>
+	}
+
+	@Override
+	public void setMolecularSystem(MolecularSystem molecularSystem) {
+<span class="fc" id="L62">		this.molecularSystem = molecularSystem;</span>
+<span class="fc" id="L63">	}</span>
+
+	@Override
+	public Map&lt;JobParameter, Object&gt; getParameters() {
+<span class="fc" id="L67">		return parameters;</span>
+	}
+
+	@Override
+	public void setParameters(Map&lt;JobParameter, Object&gt; parameters) {
+<span class="fc" id="L72">		this.parameters = parameters;</span>
+<span class="fc" id="L73">	}</span>
+
+	@Override
+	public Map&lt;Region.Name, Region&gt; getRegions() {
+<span class="fc" id="L77">		return regions;</span>
+	}
+
+	@Override
+	public void setRegions(Map&lt;Region.Name, Region&gt; regions) {
+<span class="fc" id="L82">		this.regions = regions;</span>
+<span class="fc" id="L83">	}</span>
+
+	@Override
+	public JAXBElement&lt;Cml&gt; getInput() {
+<span class="fc" id="L87">		return this.input;</span>
+	}
+
+	@Override
+	public void setInput(JAXBElement input) {
+<span class="fc" id="L92">		this.input = input;</span>
+<span class="fc" id="L93">	}</span>
+
+	@Override
+	public Map&lt;String, Object&gt; getProperties() {
+<span class="fc" id="L97">		return this.properties;</span>
+	}
+
+	@Override
+	public void setProperties(Map&lt;String, Object&gt; properties) {
+<span class="fc" id="L102">		this.properties = properties;</span>
+<span class="fc" id="L103">	}</span>
+
+	@Override
+	public List&lt;List&lt;Integer&gt;&gt; getInteractionList() {
+
+<span class="nc" id="L108">		return this.interactionList;</span>
+	}
+
+	@Override
+	public void SetInteractionList(List&lt;List&lt;Integer&gt;&gt; interactionSet) {
+<span class="nc" id="L113">		this.interactionList = interactionSet;</span>
+
+<span class="nc" id="L115">	}</span>
+
+	@Override
+	public void setClusters(List&lt;Set&lt;Integer&gt;&gt; clusters) {
+<span class="nc" id="L119">		this.clusters = clusters;</span>
+<span class="nc" id="L120">	}</span>
+
+	@Override
+	public List&lt;Set&lt;Integer&gt;&gt; getClusters() {
+<span class="nc" id="L124">		return this.clusters;</span>
+
+	}
+
+	@Override
+	public List&lt;Double&gt; getInteractionWeight() {
+<span class="nc" id="L130">		return this.interactionWeight;</span>
+	}
+
+	@Override
+	public void SetInteractionWeight(List&lt;Double&gt; interactionWeight) {
+<span class="nc" id="L135">		this.interactionWeight=interactionWeight;</span>
+		
+<span class="nc" id="L137">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>

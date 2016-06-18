@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DASWeightFactors.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">yoink-core</a> &gt; <a href="index.source.html" class="el_package">org.wallerlab.yoink.adaptive.smooth</a> &gt; <span class="el_source">DASWeightFactors.java</span></div><h1>DASWeightFactors.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2014-2015 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.wallerlab.yoink.adaptive.smooth;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.xml.bind.JAXBElement;
+
+import org.springframework.stereotype.Service;
+import org.wallerlab.yoink.api.model.bootstrap.Job;
+import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.regionizer.Region;
+
+import org.wallerlab.yoink.api.service.adaptive.Smoothner;
+import org.wallerlab.yoink.math.set.Subsets;
+
+import com.google.common.primitives.Ints;
+
+/**
+ * this class is to get weight factor in DAS. for details please see:
+ * &quot;Toward a practical method for adaptive QM/MM simulations.&quot; Journal of
+ * Chemical Theory and Computation 5.9 (2009): 2212-2221.
+ * 
+ * @author Min Zheng
+ *
+ */
+@Service(&quot;dasWeightFactors&quot;)
+<span class="fc" id="L47">public class DASWeightFactors implements Smoothner {</span>
+
+	/**
+	 * use smooth factors to calculate the weight factors.
+	 * @param job -parameters and results in job
+	 */
+	public void smooth(Job&lt;JAXBElement&gt; job) {
+		// initialize
+<span class="fc" id="L55">		Set&lt;Molecule&gt; bufferMolecules = job.getRegions()</span>
+<span class="fc" id="L56">				.get(Region.Name.BUFFER).getMolecules();</span>
+<span class="fc" id="L57">		List&lt;Integer&gt; bufferIndices = new ArrayList&lt;Integer&gt;();</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">		for (Molecule molecule : bufferMolecules) {</span>
+<span class="fc" id="L59">			bufferIndices.add(molecule.getIndex());</span>
+<span class="fc" id="L60">		}</span>
+<span class="fc" id="L61">		List&lt;Double&gt; lambda = (List&lt;Double&gt;) job.getProperties().get(</span>
+				&quot;smoothfactors&quot;);
+<span class="fc" id="L63">		Map&lt;List&lt;Integer&gt;, Double&gt; molecularIndicesAndWeightFactor = new HashMap&lt;List&lt;Integer&gt;, Double&gt;();</span>
+<span class="fc" id="L64">		molecularIndicesAndWeightFactor = Collections</span>
+<span class="fc" id="L65">				.synchronizedMap(molecularIndicesAndWeightFactor);</span>
+		// loop over all QM/MM sets in buffer region
+<span class="fc" id="L67">		loopOverAllQMMMConfigurationsInBuffer(lambda, bufferIndices,</span>
+				molecularIndicesAndWeightFactor);
+<span class="fc" id="L69">		job.getProperties().put(&quot;weightfactors&quot;,</span>
+				molecularIndicesAndWeightFactor);
+<span class="fc" id="L71">	}</span>
+
+	private void loopOverAllQMMMConfigurationsInBuffer(List&lt;Double&gt; lambda,
+			List&lt;Integer&gt; bufferIndices,
+			Map&lt;List&lt;Integer&gt;, Double&gt; molecularIndicesAndWeightFactor) {
+<span class="fc" id="L76">		Subsets.split(Ints.toArray(bufferIndices))</span>
+<span class="fc" id="L77">				.parallelStream()</span>
+<span class="fc" id="L78">				.forEach(</span>
+						qmSet -&gt; {
+							Set&lt;Integer&gt; mmSet = new HashSet&lt;Integer&gt;(
+									bufferIndices);
+							mmSet.removeAll(qmSet);
+							findTheRightConfigurations(lambda, bufferIndices,
+									molecularIndicesAndWeightFactor, qmSet,
+									mmSet);
+						});
+<span class="fc" id="L87">	}</span>
+
+	private void findTheRightConfigurations(List&lt;Double&gt; lambda,
+			List&lt;Integer&gt; bufferIndices,
+			Map&lt;List&lt;Integer&gt;, Double&gt; molecularIndicesAndWeightFactor,
+			List&lt;Integer&gt; qmSet, Set&lt;Integer&gt; mmSet) {
+<span class="fc" id="L93">		double lambdaQMMax = 0;</span>
+<span class="fc" id="L94">		double lambdaMMMin = 1;</span>
+		// find the maximum value of lambda in QM set
+<span class="fc" id="L96">		lambdaQMMax = getQMLambdaMaximum(lambda, bufferIndices, qmSet,</span>
+				lambdaQMMax);
+		// find the minimum value of lambda in MM set
+<span class="fc" id="L99">		lambdaMMMin = getMMLambdaMinimum(lambda, bufferIndices, mmSet,</span>
+				lambdaMMMin);
+		// calculate weighted function sigma
+<span class="fc" id="L102">		getWeightFactor(molecularIndicesAndWeightFactor, qmSet, lambdaQMMax,</span>
+				lambdaMMMin);
+
+<span class="fc" id="L105">	}</span>
+
+	private void getWeightFactor(
+			Map&lt;List&lt;Integer&gt;, Double&gt; molecularIndicesAndWeightFactor,
+			List&lt;Integer&gt; qmSet, double lambdaQMMax, double lambdaMMMin) {
+<span class="fc bfc" id="L110" title="All 2 branches covered.">		if (lambdaQMMax &lt; lambdaMMMin) {</span>
+<span class="fc" id="L111">			double sigma = lambdaMMMin - lambdaQMMax;</span>
+<span class="fc" id="L112">			molecularIndicesAndWeightFactor.put(qmSet, sigma);</span>
+		}
+<span class="fc" id="L114">	}</span>
+
+	private double getMMLambdaMinimum(List&lt;Double&gt; lambda,
+			List&lt;Integer&gt; bufferIndices, Set&lt;Integer&gt; mmSet, double lambdaMMMin) {
+<span class="fc bfc" id="L118" title="All 2 branches covered.">		for (Integer molecularIndex : mmSet) {</span>
+<span class="fc" id="L119">			int index = bufferIndices.indexOf(molecularIndex);</span>
+<span class="fc bfc" id="L120" title="All 2 branches covered.">			if (lambdaMMMin &gt; lambda.get(index)) {</span>
+<span class="fc" id="L121">				lambdaMMMin = lambda.get(index);</span>
+			}
+<span class="fc" id="L123">		}</span>
+<span class="fc" id="L124">		return lambdaMMMin;</span>
+	}
+
+	private double getQMLambdaMaximum(List&lt;Double&gt; lambda,
+			List&lt;Integer&gt; bufferIndices, List&lt;Integer&gt; qmSet, double lambdaQMMax) {
+<span class="fc bfc" id="L129" title="All 2 branches covered.">		for (Integer molecularIndex : qmSet) {</span>
+<span class="fc" id="L130">			int index = bufferIndices.indexOf(molecularIndex);</span>
+<span class="pc bpc" id="L131" title="1 of 2 branches missed.">			if (lambdaQMMax &lt; lambda.get(index)) {</span>
+<span class="fc" id="L132">				lambdaQMMax = lambda.get(index);</span>
+			}
+<span class="fc" id="L134">		}</span>
+<span class="fc" id="L135">		return lambdaQMMax;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>

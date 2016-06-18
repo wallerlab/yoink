@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DensityPropertiesCalculator.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">yoink-core</a> &gt; <a href="index.source.html" class="el_package">org.wallerlab.yoink.density.service.densityProperties</a> &gt; <span class="el_source">DensityPropertiesCalculator.java</span></div><h1>DensityPropertiesCalculator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2014-2015 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.wallerlab.yoink.density.service.densityProperties;
+
+import java.util.Set;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+import org.wallerlab.yoink.api.model.density.DensityPoint;
+import org.wallerlab.yoink.api.model.molecular.Atom;
+import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.service.Calculator;
+import org.wallerlab.yoink.api.service.Factory;
+import org.wallerlab.yoink.api.service.math.Matrix;
+import org.wallerlab.yoink.api.service.math.Vector;
+import org.wallerlab.yoink.density.domain.SimpleDensityPoint;
+import org.wallerlab.yoink.math.constants.Constants;
+import org.wallerlab.yoink.math.linear.SimpleMatrixFactory;
+import org.wallerlab.yoink.math.linear.SimpleVector3DFactory;
+
+/**
+ * This class is to calculate the Properties of a Density point from atoms.
+ * 
+ * @author Min Zheng
+ *
+ */
+@Service
+<span class="fc" id="L42">public class DensityPropertiesCalculator implements</span>
+		Calculator&lt;DensityPoint, Set&lt;Atom&gt;, Coord&gt; {
+
+	@Resource
+	private Calculator&lt;DensityPoint, DensityPoint, Atom&gt; atomicDensityPropertiesCalculator;
+
+	@Resource
+	private SimpleMatrixFactory myMatrix;
+
+	@Resource
+	private SimpleVector3DFactory myVector3D;
+
+	@Resource
+	private Factory&lt;DensityPoint, Coord&gt; simpleDensityPointFactory;
+
+	/**
+	 * calculate a density point's properties from atoms
+	 * 
+	 * @param atoms
+	 *            -a Set of atoms
+	 *            {@link org.wallerlab.yoink.api.model.molecular.Atom}
+	 * @param currentCoord
+	 *            , the coordinate of the density point,
+	 *            {@link org.wallerlab.yoink.api.model.molecular.Coord}
+	 * @return densityPoint -
+	 *         {@link org.wallerlab.yoink.api.model.density.DensityPoint}
+	 */
+	public DensityPoint calculate(Set&lt;Atom&gt; atoms, Coord currentCoord) {
+		// initialize
+<span class="fc" id="L71">		Matrix hessian = myMatrix.matrix3x3();</span>
+<span class="fc" id="L72">		Vector gradientVector = myVector3D.create(0, 0, 0);</span>
+<span class="fc" id="L73">		double density = 0;</span>
+<span class="fc" id="L74">		DensityPoint densityPoint = loopOverAllAtoms(atoms, currentCoord,</span>
+				hessian, gradientVector, density);
+<span class="fc" id="L76">		return densityPoint;</span>
+	}
+
+	private DensityPoint loopOverAllAtoms(Set&lt;Atom&gt; atoms, Coord currentCoord,
+			Matrix hessian, Vector gradientVector, double density) {
+<span class="fc" id="L81">		DensityPoint densityPoint = simpleDensityPointFactory</span>
+<span class="fc" id="L82">				.create(currentCoord);</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">		for (Atom atom : atoms) {</span>
+<span class="fc" id="L84">			DensityPoint densityPointTemp = atomicDensityPropertiesCalculator</span>
+<span class="fc" id="L85">					.calculate(densityPoint, atom);</span>
+<span class="fc" id="L86">			density += densityPointTemp.getDensity();</span>
+<span class="fc" id="L87">			gradientVector = gradientVector.add(densityPointTemp</span>
+<span class="fc" id="L88">					.getGradientVector());</span>
+<span class="fc" id="L89">			hessian = hessian.add(densityPointTemp.getHessian());</span>
+<span class="fc" id="L90">		}</span>
+<span class="fc" id="L91">		density = checkDensity(density);</span>
+<span class="fc" id="L92">		setDensityValues(densityPoint, density, gradientVector, hessian);</span>
+<span class="fc" id="L93">		return densityPoint;</span>
+	}
+
+	// if the density is too small, zero or close to zero, take the default
+	// density value.
+	private double checkDensity(double density) {
+<span class="fc" id="L99">		density = Math.max(density, Constants.DENSITY_DEFAULT);</span>
+<span class="fc" id="L100">		return density;</span>
+	}
+
+	private void setDensityValues(DensityPoint densityPoint, double density,
+			Vector gradientVector, Matrix hessian) {
+<span class="fc" id="L105">		densityPoint.setDensity(density);</span>
+<span class="fc" id="L106">		densityPoint.setGradientVector(gradientVector);</span>
+<span class="fc" id="L107">		densityPoint.setGradient(gradientVector.dotProduct());</span>
+<span class="fc" id="L108">		densityPoint.setHessian(hessian);</span>
+<span class="fc" id="L109">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>

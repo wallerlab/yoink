@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>SAPWeightFactors.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">yoink-core</a> &gt; <a href="index.source.html" class="el_package">org.wallerlab.yoink.adaptive.smooth</a> &gt; <span class="el_source">SAPWeightFactors.java</span></div><h1>SAPWeightFactors.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2014-2015 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.wallerlab.yoink.adaptive.smooth;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.annotation.Resource;
+import javax.xml.bind.JAXBElement;
+
+import org.springframework.stereotype.Service;
+import org.wallerlab.yoink.api.model.bootstrap.Job;
+import org.wallerlab.yoink.api.model.molecular.Atom;
+import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.service.Calculator;
+import org.wallerlab.yoink.api.service.adaptive.Smoothner;
+import org.wallerlab.yoink.math.map.MapSorter;
+import org.wallerlab.yoink.math.set.Subsets;
+
+import com.google.common.primitives.Ints;
+
+/**
+ * this class is to get weight factor in SAP. for details please see: see:
+ * Heyden, Andreas, Hai Lin, and Donald G. Truhlar. &quot;Adaptive partitioning in
+ * combined quantum mechanical and molecular mechanical calculations of
+ * potential energy functions for multiscale simulations.&quot; The Journal of
+ * Physical Chemistry B 111.9 (2007): 2231-2241.
+ * 
+ * @author Min Zheng
+ *
+ */
+@Service(&quot;sapWeightFactors&quot;)
+<span class="fc" id="L53">public class SAPWeightFactors implements Smoothner {</span>
+
+	@Resource
+	private Calculator&lt;Double, Coord, Molecule&gt; closestDistanceToMoleculeCalculator;
+
+	/**
+	 * use smooth factors to calculate the weight factors.
+	 * 
+	 * @param job
+	 *            -parameters and results in job
+	 */
+	public void smooth(Job&lt;JAXBElement&gt; job) {
+		// initialize
+		// sort buffer region based on radial coordiante
+<span class="fc" id="L67">		List&lt;Double&gt; sortedSmoothFactors = new ArrayList&lt;Double&gt;();</span>
+<span class="fc" id="L68">		List&lt;Integer&gt; sortedBufferIndices = new ArrayList&lt;Integer&gt;();</span>
+<span class="fc" id="L69">		sortBufferRegionByDistanceToQMCore(job, sortedSmoothFactors,</span>
+				sortedBufferIndices);
+<span class="fc" id="L71">		Map&lt;List&lt;Integer&gt;, Double&gt; molecularIndicesAndWeightFactor = new HashMap&lt;List&lt;Integer&gt;, Double&gt;();</span>
+<span class="fc" id="L72">		calculateWeightFactors(molecularIndicesAndWeightFactor,</span>
+				sortedSmoothFactors, sortedBufferIndices);
+<span class="fc" id="L74">		job.getProperties().put(&quot;weightfactors&quot;,</span>
+				molecularIndicesAndWeightFactor);
+<span class="fc" id="L76">	}</span>
+
+	private void calculateWeightFactors(
+			Map&lt;List&lt;Integer&gt;, Double&gt; molecularIndicesAndWeightFactor,
+			List&lt;Double&gt; sortedSmoothFactors, List&lt;Integer&gt; sortedBufferIndices) {
+<span class="fc" id="L81">		int bufferSize = sortedBufferIndices.size();</span>
+<span class="fc" id="L82">		List&lt;Double&gt; weightFactors= new ArrayList&lt;Double&gt;();</span>
+<span class="fc" id="L83">		List&lt;List&lt;Integer&gt;&gt; activeBuffers=new ArrayList&lt;List&lt;Integer&gt;&gt;();</span>
+<span class="fc bfc" id="L84" title="All 2 branches covered.">		for (int i = 0; i &lt; bufferSize; i++) {</span>
+<span class="fc" id="L85">			double pi = sortedSmoothFactors.get(i);</span>
+<span class="fc" id="L86">			double x1 = 0;</span>
+<span class="fc bfc" id="L87" title="All 2 branches covered.">			for (int j = 0; j &lt; i; j++) {</span>
+<span class="fc" id="L88">				x1 += (1 - sortedSmoothFactors.get(j))</span>
+<span class="fc" id="L89">						/ (sortedSmoothFactors.get(j) - pi);</span>
+			}
+<span class="fc" id="L91">			double x2 = (1 - pi) / pi;</span>
+<span class="fc" id="L92">			double x3 = 0;</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">			for (int j = i + 1; j &lt; bufferSize; j++) {</span>
+<span class="fc" id="L94">				x3 += (1 - pi) / (pi - sortedSmoothFactors.get(j))</span>
+<span class="fc" id="L95">						* sortedSmoothFactors.get(j);</span>
+			}
+<span class="fc" id="L97">			double weightFactor = Math.pow(1 + x1 + x2 + x3, -3);</span>
+<span class="fc" id="L98">			List&lt;Integer&gt; activeBuffer = sortedBufferIndices.subList(0, i + 1);</span>
+<span class="fc" id="L99">			activeBuffers.add(activeBuffer);</span>
+<span class="fc" id="L100">			weightFactors.add(weightFactor);</span>
+			
+		}
+		
+<span class="fc" id="L104">		double product=1.0;</span>
+		
+<span class="fc bfc" id="L106" title="All 2 branches covered.">		for(int i=0;i&lt;weightFactors.size();i++){</span>
+<span class="fc" id="L107">			product*=(1-weightFactors.get(i));</span>
+<span class="fc" id="L108">			double factor=weightFactors.get(i);</span>
+<span class="fc bfc" id="L109" title="All 2 branches covered.">			for(int j=activeBuffers.get(i).size();j&lt;weightFactors.size();j++){</span>
+<span class="fc" id="L110">				factor*=(1-weightFactors.get(j));</span>
+			}
+			
+<span class="fc" id="L113">			molecularIndicesAndWeightFactor.put(activeBuffers.get(i), factor);</span>
+		}
+		//no buffer molecule is treated by QM
+<span class="fc" id="L116">		List&lt;Integer&gt; activeBuffer = new ArrayList&lt;Integer&gt;();</span>
+<span class="fc" id="L117">		molecularIndicesAndWeightFactor.put(activeBuffer, product);</span>
+<span class="fc" id="L118">	}</span>
+
+	private void sortBufferRegionByDistanceToQMCore(Job&lt;JAXBElement&gt; job,
+			List&lt;Double&gt; sortedSmoothFactors, List&lt;Integer&gt; sortedBufferIndices) {
+<span class="fc" id="L122">		Map&lt;Molecule, Integer&gt; bufferMoleculeMap = job.getRegions()</span>
+<span class="fc" id="L123">				.get(Region.Name.BUFFER).getMolecularMap();</span>
+<span class="fc" id="L124">		Coord centerCoord = job.getRegions().get(Region.Name.QM_CORE)</span>
+<span class="fc" id="L125">				.getCenterOfMass();</span>
+<span class="fc" id="L126">		Map&lt;Map, Double&gt; bufferDistanceMap = new HashMap&lt;Map, Double&gt;();</span>
+<span class="fc" id="L127">		List&lt;Integer&gt; bufferIndices = new ArrayList&lt;Integer&gt;(</span>
+<span class="fc" id="L128">				bufferMoleculeMap.values());</span>
+<span class="fc" id="L129">		List&lt;Double&gt; smoothFactors = (List&lt;Double&gt;) job.getProperties().get(</span>
+				&quot;smoothfactors&quot;);
+<span class="fc" id="L131">		List&lt;Molecule&gt; bufferMolecules = new ArrayList&lt;Molecule&gt;(</span>
+<span class="fc" id="L132">				bufferMoleculeMap.keySet());</span>
+<span class="fc bfc" id="L133" title="All 2 branches covered.">		for (int count = 0; count &lt; bufferMolecules.size(); count++) {</span>
+<span class="fc" id="L134">			Molecule molecule = bufferMolecules.get(count);</span>
+<span class="fc" id="L135">			double distance = closestDistanceToMoleculeCalculator.calculate(</span>
+					centerCoord, molecule);
+<span class="fc" id="L137">			Map&lt;Integer, Double&gt; moleculeFactor = new HashMap&lt;Integer, Double&gt;();</span>
+<span class="fc" id="L138">			moleculeFactor.put(bufferIndices.get(count),</span>
+<span class="fc" id="L139">					smoothFactors.get(count));</span>
+<span class="fc" id="L140">			bufferDistanceMap.put(moleculeFactor, distance);</span>
+		}
+<span class="fc" id="L142">		bufferDistanceMap = MapSorter.sortByValue(bufferDistanceMap);</span>
+
+<span class="fc" id="L144">		List&lt;Map&gt; moleculeFactorMapList = new ArrayList&lt;Map&gt;(</span>
+<span class="fc" id="L145">				bufferDistanceMap.keySet());</span>
+
+<span class="fc bfc" id="L147" title="All 2 branches covered.">		for (Map moleculeFactorMap : moleculeFactorMapList) {</span>
+<span class="fc" id="L148">			sortedSmoothFactors.addAll(moleculeFactorMap.values());</span>
+<span class="fc" id="L149">			sortedBufferIndices.addAll(moleculeFactorMap.keySet());</span>
+<span class="fc" id="L150">		}</span>
+<span class="fc" id="L151">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>

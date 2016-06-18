@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>InteractionPartitioner.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">yoink-core</a> &gt; <a href="index.source.html" class="el_package">org.wallerlab.yoink.regionizer.partitioner</a> &gt; <span class="el_source">InteractionPartitioner.java</span></div><h1>InteractionPartitioner.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2014-2015 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.wallerlab.yoink.regionizer.partitioner;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.annotation.Resource;
+
+import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
+import org.wallerlab.yoink.api.model.cube.GridPoint;
+import org.wallerlab.yoink.api.model.density.DensityPoint;
+import org.wallerlab.yoink.api.model.molecular.Atom;
+import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.service.Calculator;
+import org.wallerlab.yoink.api.service.Factory;
+import org.wallerlab.yoink.api.service.regionizer.Partitioner;
+import org.wallerlab.yoink.api.service.regionizer.Regionizer;
+import org.wallerlab.yoink.api.service.regionizer.RegionizerMath;
+import org.wallerlab.yoink.regionizer.domain.SimpleRegion;
+
+/**
+ * This class is to do density interaction analysis (dori/sedd ) for those grid
+ * points in the intersection between QM core region and non-QM core region
+ * based on Voronoi partition.
+ * 
+ * 
+ * @author Min Zheng
+ *
+ */
+
+<span class="fc" id="L48">public class InteractionPartitioner implements</span>
+		Partitioner&lt;Map&lt;Region.Name, Region&gt;, List&lt;GridPoint&gt;&gt; {
+
+	@Resource
+	protected RegionizerMath&lt;Region, Region.Name&gt; singleRegionizerService;
+
+	@Resource
+	protected Calculator&lt;DensityPoint, Set&lt;Atom&gt;, Coord&gt; densityPropertiesCalculator;
+
+	@Resource
+	private Factory&lt;Region, Region.Name&gt; simpleRegionFactory;
+
+	protected Region.Name regionName;
+
+	protected Region.Name adaptiveRegionName;
+
+	public Map&lt;Region.Name, Region&gt; partition(Map&lt;Region.Name, Region&gt; regions,
+			Map&lt;JobParameter, Object&gt; parameters, List&lt;GridPoint&gt; gridPoints) {
+<span class="fc" id="L66">		findRegion(regions, parameters, gridPoints);</span>
+<span class="fc" id="L67">		findAdaptiveRegion(regions);</span>
+<span class="fc" id="L68">		return regions;</span>
+	}
+
+	protected void findRegion(Map&lt;Region.Name, Region&gt; regions,
+			Map&lt;JobParameter, Object&gt; parameters, List&lt;GridPoint&gt; gridPoints) {
+<span class="fc" id="L73">		Region region = initialize(regions);</span>
+<span class="fc" id="L74">		loopOverGridPoints(regions, region, gridPoints, parameters);</span>
+<span class="fc" id="L75">		regions.put(region.getName(), region);</span>
+<span class="fc" id="L76">	}</span>
+
+	protected void findAdaptiveRegion(Map&lt;Region.Name, Region&gt; regions) {
+<span class="fc" id="L79">		Region adaptiveRegion = singleRegionizerService.regionize(regions,</span>
+				adaptiveRegionName);
+<span class="fc" id="L81">		regions.put(adaptiveRegion.getName(), adaptiveRegion);</span>
+<span class="fc" id="L82">	}</span>
+
+	// rewrite in child class
+	protected Region initialize(Map&lt;Region.Name, Region&gt; regions) {
+<span class="fc" id="L86">		Region region = simpleRegionFactory.create();</span>
+<span class="fc" id="L87">		return region;</span>
+	}
+
+	protected Region loopOverGridPoints(Map&lt;Region.Name, Region&gt; regions,
+			Region region, List&lt;GridPoint&gt; gridPoints,
+			Map&lt;JobParameter, Object&gt; parameters) {
+<span class="fc" id="L93">		gridPoints.parallelStream().forEach(gridPoint -&gt; {</span>
+			Set&lt;Molecule&gt; neighbours = gridPoint.getTwoClosestMolecules();
+			// if the two closest molecules of a grid point
+			// already
+			// in the region, skip
+			// this grid point
+				if (!region.containsAll(neighbours)) {
+					checkCriteria(regions, region, gridPoint, neighbours,
+							parameters);
+				}
+			});
+<span class="fc" id="L104">		return region;</span>
+	}
+
+	// rewrite in child class
+	protected Region checkCriteria(Map&lt;Region.Name, Region&gt; regions,
+			Region region, GridPoint gridPoint, Set&lt;Molecule&gt; neighbours,
+			Map&lt;JobParameter, Object&gt; parameters) {
+<span class="fc" id="L111">		return region;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>

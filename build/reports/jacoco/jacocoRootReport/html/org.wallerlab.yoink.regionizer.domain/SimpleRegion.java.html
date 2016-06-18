@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>SimpleRegion.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">yoink-core</a> &gt; <a href="index.source.html" class="el_package">org.wallerlab.yoink.regionizer.domain</a> &gt; <span class="el_source">SimpleRegion.java</span></div><h1>SimpleRegion.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2014-2015 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.wallerlab.yoink.regionizer.domain;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.wallerlab.yoink.api.model.molecular.Atom;
+import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.service.Computer;
+import org.wallerlab.yoink.molecular.service.calculator.CenterOfMassComputer;
+
+/**
+ * This domain model Region contains a certain type molecules.
+ * 
+ * @author Min Zheng
+ * 
+ *
+ */
+public class SimpleRegion implements Region {
+
+	private Region.Name name;
+
+	private Integer size;
+
+<span class="fc" id="L47">	private Map&lt;Molecule, Integer&gt; molecularMap = new HashMap&lt;&gt;();</span>
+
+	private Computer&lt;Coord, Set&lt;Molecule&gt;&gt; centerOfMassComputer;
+
+	private Coord centerOfMass;
+
+	/**
+	 * default Region constructor
+	 */
+<span class="fc" id="L56">	public SimpleRegion() {</span>
+<span class="fc" id="L57">	}</span>
+
+	/**
+	 * construct a new Region with the region name
+	 * 
+	 * @param name
+	 *            {@link org.wallerlab.yoink.api.model.regionizer.Region.Name}
+	 */
+<span class="fc" id="L65">	public SimpleRegion(Region.Name name) {</span>
+<span class="fc" id="L66">		this.name = name;</span>
+<span class="fc" id="L67">	}</span>
+
+	/**
+	 * get the number of molecules in the region
+	 */
+	@Override
+	public Integer getSize() {
+<span class="fc" id="L74">		return molecularMap.size();</span>
+	}
+
+	/**
+	 * get molecules in the region
+	 */
+	@Override
+	public Set&lt;Molecule&gt; getMolecules() {
+<span class="nc" id="L82">		return molecularMap.keySet();</span>
+	}
+
+	/**
+	 * add one element(Molecule,Integer) in this molecularMap
+	 */
+	@Override
+	public void addMolecule(Molecule molecule, Integer index) {
+
+<span class="fc" id="L91">		this.molecularMap.put(molecule, index);</span>
+<span class="fc" id="L92">	}</span>
+
+	/**
+	 * set the molecularMap in the region
+	 */
+	@Override
+	public void setMolecularMap(Map&lt;Molecule, Integer&gt; molecularMap) {
+<span class="fc" id="L99">		this.molecularMap = molecularMap;</span>
+<span class="fc" id="L100">	}</span>
+
+	/**
+	 * get the molecularMap in the region
+	 */
+	@Override
+	public Map&lt;Molecule, Integer&gt; getMolecularMap() {
+<span class="fc" id="L107">		return this.molecularMap;</span>
+	}
+
+	/**
+	 * get the name of the region
+	 */
+	@Override
+	public Region.Name getName() {
+<span class="fc" id="L115">		return name;</span>
+	}
+
+	/**
+	 * set the name of the region
+	 */
+	@Override
+	public void setName(Region.Name name) {
+<span class="fc" id="L123">		this.name = name;</span>
+<span class="fc" id="L124">	}</span>
+
+	/**
+	 * add a Map(Molecule, Integer) to this molecularMap
+	 */
+	@Override
+	public void addAll(Map&lt;Molecule, Integer&gt; map) {
+<span class="fc" id="L131">		this.molecularMap.putAll(map);</span>
+<span class="fc" id="L132">	}</span>
+
+	/**
+	 * check if all molecules are in the region
+	 */
+	@Override
+	public boolean containsAll(Set&lt;Molecule&gt; molecules) {
+<span class="fc" id="L139">		return this.molecularMap.keySet().containsAll(molecules);</span>
+	}
+
+	/**
+	 * get all atoms in the region
+	 */
+	@Override
+	public List&lt;Atom&gt; getAtoms() {
+<span class="fc" id="L147">		List&lt;Atom&gt; atoms = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L148" title="All 2 branches covered.">		for (Molecule molecule : molecularMap.keySet()) {</span>
+<span class="fc bfc" id="L149" title="All 2 branches covered.">			for (Atom atom : molecule.getAtoms()) {</span>
+<span class="fc" id="L150">				atoms.add(atom);</span>
+<span class="fc" id="L151">			}</span>
+<span class="fc" id="L152">		}</span>
+<span class="fc" id="L153">		return atoms;</span>
+	}
+
+	/**
+	 * get the center of mass of the region
+	 */
+	@Override
+	public Coord getCenterOfMass() {
+<span class="fc" id="L161">		this.centerOfMass = this.centerOfMassComputer</span>
+<span class="fc" id="L162">				.calculate(this.molecularMap.keySet());</span>
+<span class="fc" id="L163">		return centerOfMass;</span>
+	}
+
+	/**
+	 * change the id of molecules with the name of region
+	 */
+	@Override
+	public void changeMolecularId() {
+<span class="fc bfc" id="L171" title="All 2 branches covered.">		if (getSize() != 0) {</span>
+<span class="fc bfc" id="L172" title="All 2 branches covered.">			for (Molecule molecule : this.molecularMap.keySet()) {</span>
+<span class="fc" id="L173">				molecule.setName(this.name);</span>
+<span class="fc" id="L174">			}</span>
+		}
+<span class="fc" id="L176">	}</span>
+
+	/**
+	 * change the id of molecules with the given name
+	 */
+	@Override
+	public void changeMolecularId(Region.Name name) {
+<span class="pc bpc" id="L183" title="1 of 2 branches missed.">		if (getSize() != 0) {</span>
+<span class="fc bfc" id="L184" title="All 2 branches covered.">			for (Molecule molecule : this.molecularMap.keySet()) {</span>
+<span class="fc" id="L185">				molecule.setName(name);</span>
+<span class="fc" id="L186">			}</span>
+		}
+<span class="fc" id="L188">	}</span>
+
+	/**
+	 * set the value of this.centerOfMassComputer
+	 */
+	public void setCenterOfMassComputer(
+			Computer&lt;Coord, Set&lt;Molecule&gt;&gt; centerOfMassComputer) {
+<span class="fc" id="L195">		this.centerOfMassComputer = centerOfMassComputer;</span>
+<span class="fc" id="L196">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>CommunityImpl.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">yoink-core</a> &gt; <a href="index.source.html" class="el_package">org.wallerlab.yoink.clustering.louvain</a> &gt; <span class="el_source">CommunityImpl.java</span></div><h1>CommunityImpl.java</h1><pre class="source lang-java linenums">package org.wallerlab.yoink.clustering.louvain;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Label;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
+import org.neo4j.graphdb.ResourceIterator;
+
+class CommunityImpl implements Community {
+
+	Label label;
+	GraphDatabaseService graph;
+	RelationshipType edgeType;
+	Set&lt;Node&gt; memberset;
+	double totalEdgeWeightSum;
+	double internalEdgeWeightSum;
+	long size;
+	String id;
+	
+	CommunityImpl(ResourceIterator&lt;Node&gt; members, Label label, String id,
+<span class="fc" id="L25">			RelationshipType edgeType, GraphDatabaseService graph) {</span>
+<span class="fc" id="L26">		this.graph = graph;</span>
+<span class="fc" id="L27">		this.label = label;</span>
+<span class="fc" id="L28">		this.id = id;</span>
+<span class="fc" id="L29">		this.edgeType = edgeType;</span>
+<span class="fc" id="L30">		memberset = new HashSet&lt;Node&gt;();</span>
+<span class="fc" id="L31">		members.forEachRemaining(b -&gt; memberset.add(b));</span>
+<span class="fc" id="L32">		size = 0;</span>
+<span class="fc" id="L33">		calculate();</span>
+<span class="fc" id="L34">	}</span>
+
+	private void calculate() {
+
+<span class="fc" id="L38">		double totalsum = 0.;</span>
+<span class="fc" id="L39">		double internalsum = 0.;</span>
+		
+<span class="fc" id="L41">		ResourceIterator&lt;Node&gt; iterator = getNodes();</span>
+<span class="fc bfc" id="L42" title="All 2 branches covered.">		while (iterator.hasNext()) {</span>
+
+<span class="fc" id="L44">			Node node = iterator.next();</span>
+<span class="fc" id="L45">			size++;</span>
+<span class="fc bfc" id="L46" title="All 2 branches covered.">			for (Relationship edge : node.getRelationships(edgeType)) {</span>
+
+<span class="fc" id="L48">				double weight = (double) edge.getProperty(&quot;weight&quot;, 1.0);</span>
+<span class="fc" id="L49">				totalsum += weight;</span>
+
+<span class="fc bfc" id="L51" title="All 2 branches covered.">				if (edge.getOtherNode(node).hasLabel(label)) {</span>
+			
+<span class="fc" id="L53">					internalsum += weight;</span>
+				//	System.out.println(&quot;internal sum: &quot; + internalsum);
+					
+				}
+<span class="fc" id="L57">			}</span>
+<span class="fc" id="L58">		}</span>
+
+<span class="fc" id="L60">		totalEdgeWeightSum = totalsum;</span>
+<span class="fc" id="L61">		internalEdgeWeightSum = internalsum;</span>
+<span class="fc" id="L62">	}</span>
+
+	@Override
+	public double getInternalEdgeWeightSum() {
+
+<span class="fc" id="L67">		return internalEdgeWeightSum;</span>
+	}
+
+	@Override
+	public double getTotalEdgeWeightSum() {
+
+<span class="fc" id="L73">		return totalEdgeWeightSum;</span>
+	}
+
+	@Override
+	public ResourceIterator&lt;Node&gt; getNodes() {
+
+<span class="fc" id="L79">		return graph.findNodes(label);</span>
+	}
+
+	@Override
+	public double getEdgeWeightSumTo(Node incidentNode) {
+
+		/*
+		 * TraversalDescription traversal = graph.traversalDescription()
+		 * .relationships(edgeType) .evaluator(Evaluators.atDepth(1))
+		 * .evaluator(Evaluators.includeWhereEndNodeIs(incidentNode));
+		 */
+<span class="fc" id="L90">		double sum = 0;</span>
+<span class="fc" id="L91">		ResourceIterator&lt;Node&gt; iterator = getNodes();</span>
+<span class="fc bfc" id="L92" title="All 2 branches covered.">		while (iterator.hasNext()) {</span>
+
+<span class="fc" id="L94">			Node node = iterator.next();</span>
+
+<span class="fc bfc" id="L96" title="All 2 branches covered.">			for (Relationship edge : node.getRelationships(edgeType)) {</span>
+
+<span class="fc bfc" id="L98" title="All 2 branches covered.">				if (edge.getOtherNode(node).getId() == incidentNode.getId()) {</span>
+
+<span class="fc" id="L100">					sum += (double) edge.getProperty(&quot;weight&quot;, 1.0);</span>
+
+				}
+<span class="fc" id="L103">			}</span>
+<span class="fc" id="L104">		}</span>
+
+<span class="fc" id="L106">		return sum;</span>
+	}
+
+	@Override
+	public long size(){
+		
+<span class="fc" id="L112">		return size;</span>
+	}
+	
+	@Override
+	public String getId(){
+		
+<span class="nc" id="L118">		return id;</span>
+	}
+	
+	@Override
+	public Label getLabel() {
+<span class="fc" id="L123">		return label;</span>
+	}
+	
+	@Override
+	public String toString() {
+		
+<span class="nc" id="L129">		return &quot;Community(Size: &quot; + size + &quot;, ID: &quot; + id + &quot;, Label: &quot; +label + &quot;, Sum_int: &quot; + internalEdgeWeightSum + &quot;, Sum_tot: &quot; + totalEdgeWeightSum + &quot;, members: &quot; + memberset+&quot;)&quot;;</span>
+	}
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>

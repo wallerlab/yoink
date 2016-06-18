@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>MolecularSystemTranslator.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">yoink-core</a> &gt; <a href="index.source.html" class="el_package">org.wallerlab.yoink.molecular.service.translator</a> &gt; <span class="el_source">MolecularSystemTranslator.java</span></div><h1>MolecularSystemTranslator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2014-2015 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.wallerlab.yoink.molecular.service.translator;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.annotation.Resource;
+import javax.xml.bind.JAXBElement;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.wallerlab.yoink.api.model.molecular.Atom;
+import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.model.molecular.Element;
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
+import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.service.Computer;
+import org.wallerlab.yoink.api.service.Factory;
+import org.wallerlab.yoink.api.service.math.Vector;
+import org.wallerlab.yoink.api.service.molecular.Translator;
+import org.wallerlab.yoink.api.service.molecular.Converter.UnitConverterType;
+import org.wallerlab.yoink.math.linear.SimpleVector3DFactory;
+import org.wallerlab.yoink.molecular.domain.SimpleAtom;
+import org.wallerlab.yoink.molecular.domain.SimpleCoordFactory;
+import org.wallerlab.yoink.molecular.domain.SimpleMolecularSystem;
+import org.wallerlab.yoink.molecular.domain.SimpleMolecule;
+import org.xml_cml.schema.AtomArray;
+import org.xml_cml.schema.Cml;
+import org.xml_cml.schema.MoleculeList;
+
+/**
+ * This class is to translate JAXB Cml to MolecularSystem model.
+ * 
+ * @author Min Zheng
+ *
+ */
+@Service
+<span class="fc" id="L55">public class MolecularSystemTranslator implements</span>
+		Translator&lt;MolecularSystem, JAXBElement&lt;Cml&gt;&gt; {
+
+	// This is the raw JAXB data.
+	private JAXBElement&lt;Cml&gt; cml;
+
+	// CML jaxb type
+	private Cml cmlMolecularSystem;
+
+	// This is our final domain model that we want from the CML.
+	private MolecularSystem molecularSystem;
+
+	// This list contains all of the molecules from the CML.
+	private List&lt;Molecule&gt; molecules;
+
+	@Value(&quot;${yoink.job.unitconvertertype}&quot;)
+	private UnitConverterType unitConverterType;
+
+	private int moleculeIndexCounter;
+
+	private int atomIndexCounter;
+
+	@Resource
+	private Factory&lt;Coord, double[]&gt; simpleCoordFactory;
+
+	@Resource
+	private SimpleVector3DFactory myVector3D;
+
+	@Resource
+	private Computer&lt;Coord, Set&lt;Molecule&gt;&gt; centerOfMassComputer;
+
+	/**
+	 * translate JAXBElement Cml to MolecularSystem
+	 * 
+	 * @param cml
+	 *            -JAXBElement Cml {@link org.xml_cml.schema.Cml} contains all
+	 *            the information about moleuclar system.
+	 * @return molecularSystem
+	 *         {@link org.wallerlab.yoink.api.model.molecular.MolecularSystem }
+	 */
+	@Override
+	public MolecularSystem translate(JAXBElement&lt;Cml&gt; cml) {
+<span class="fc" id="L97">		init(cml);</span>
+<span class="fc" id="L98">		findMoleculeListInCml(molecules, cmlMolecularSystem);</span>
+<span class="fc" id="L99">		this.molecularSystem = new SimpleMolecularSystem(molecules);</span>
+<span class="fc" id="L100">		return molecularSystem;</span>
+	}
+
+	// This class initializes the instance variables
+	private void init(JAXBElement&lt;Cml&gt; cml) {
+<span class="fc" id="L105">		moleculeIndexCounter = 0;</span>
+<span class="fc" id="L106">		atomIndexCounter = 0;</span>
+<span class="fc" id="L107">		this.cml = cml;</span>
+<span class="fc" id="L108">		this.molecules = new ArrayList&lt;Molecule&gt;();</span>
+<span class="fc" id="L109">		this.cmlMolecularSystem = cml.getValue();</span>
+<span class="fc" id="L110">	}</span>
+
+	// loop over elements in a cml to find the molcule list??
+	private void findMoleculeListInCml(List&lt;Molecule&gt; molecules,
+			Cml cmlMolecularSystem) {
+<span class="fc bfc" id="L115" title="All 2 branches covered.">		for (Object elementMoleculeList : cmlMolecularSystem</span>
+<span class="fc" id="L116">				.getAnyCmlOrAnyOrAny()) {</span>
+<span class="fc" id="L117">			checkIfMoleculeList(elementMoleculeList);</span>
+<span class="fc" id="L118">		}</span>
+<span class="fc" id="L119">	}</span>
+
+	private void checkIfMoleculeList(Object elementMoleculeList) {
+		@SuppressWarnings(&quot;unchecked&quot;)
+<span class="fc" id="L123">		JAXBElement&lt;MoleculeList&gt; element = (JAXBElement&lt;MoleculeList&gt;) elementMoleculeList;</span>
+<span class="fc bfc" id="L124" title="All 2 branches covered.">		if (element.getDeclaredType() == MoleculeList.class) {</span>
+<span class="fc" id="L125">			MoleculeList moleculeList = (MoleculeList) element.getValue();</span>
+<span class="fc" id="L126">			loopOverElementsInCmlMoleculeList(moleculeList);</span>
+		}
+<span class="fc" id="L128">	}</span>
+
+	private void loopOverElementsInCmlMoleculeList(MoleculeList cmlMoleculeList) {
+		// loopOverCMlMoleculelist
+<span class="fc bfc" id="L132" title="All 2 branches covered.">		for (Object elementMolecule : cmlMoleculeList.getAnyCmlOrAnyOrAny()) {</span>
+			@SuppressWarnings(&quot;unchecked&quot;)
+<span class="fc" id="L134">			JAXBElement&lt;org.xml_cml.schema.Molecule&gt; element = (JAXBElement&lt;org.xml_cml.schema.Molecule&gt;) elementMolecule;</span>
+			// check molecule
+<span class="pc bpc" id="L136" title="1 of 2 branches missed.">			if (element.getDeclaredType() == org.xml_cml.schema.Molecule.class) {</span>
+<span class="fc" id="L137">				org.xml_cml.schema.Molecule cmlMolecule = ((JAXBElement&lt;org.xml_cml.schema.Molecule&gt;) element)</span>
+<span class="fc" id="L138">						.getValue();</span>
+<span class="fc" id="L139">				parseMolecule(cmlMolecule);</span>
+			}
+<span class="fc" id="L141">		}</span>
+<span class="fc" id="L142">	}</span>
+
+	private void parseMolecule(org.xml_cml.schema.Molecule cmlMolecule) {
+<span class="fc" id="L145">		moleculeIndexCounter++;</span>
+<span class="fc" id="L146">		List&lt;Atom&gt; atoms = parseAtoms(cmlMolecule);</span>
+<span class="fc" id="L147">		Molecule molecule = new SimpleMolecule(moleculeIndexCounter, atoms);</span>
+<span class="fc" id="L148">		Region.Name name = Region.Name.valueOf(cmlMolecule.getId());</span>
+<span class="fc" id="L149">		molecule.setName(name);</span>
+<span class="fc" id="L150">		Set&lt;Molecule&gt; moleculeSet = new HashSet&lt;&gt;();</span>
+<span class="fc" id="L151">		moleculeSet.add(molecule);</span>
+<span class="fc" id="L152">		Coord centerOfMass = centerOfMassComputer.calculate(moleculeSet);</span>
+<span class="fc" id="L153">		molecule.setCenterOfMass(centerOfMass);</span>
+<span class="fc" id="L154">		molecules.add(molecule);</span>
+<span class="fc" id="L155">	}</span>
+
+	private List&lt;Atom&gt; parseAtoms(org.xml_cml.schema.Molecule cmlMolecule) {
+<span class="fc" id="L158">		List&lt;Atom&gt; atoms = new ArrayList&lt;Atom&gt;();</span>
+<span class="fc bfc" id="L159" title="All 2 branches covered.">		for (Object elementAtomArray : cmlMolecule.getAnyCmlOrAnyOrAny()) {</span>
+			@SuppressWarnings(&quot;unchecked&quot;)
+<span class="fc" id="L161">			JAXBElement&lt;AtomArray&gt; element = (JAXBElement&lt;AtomArray&gt;) elementAtomArray;</span>
+<span class="pc bpc" id="L162" title="1 of 2 branches missed.">			if (element.getDeclaredType() == AtomArray.class) {</span>
+				@SuppressWarnings(&quot;unchecked&quot;)
+<span class="fc" id="L164">				AtomArray cmlAtomArray = ((JAXBElement&lt;AtomArray&gt;) elementAtomArray)</span>
+<span class="fc" id="L165">						.getValue();</span>
+<span class="fc" id="L166">				loopOverAtoms(atoms, cmlAtomArray);</span>
+			}
+<span class="fc" id="L168">		}</span>
+<span class="fc" id="L169">		return atoms;</span>
+	}
+
+	private void loopOverAtoms(List&lt;Atom&gt; atoms, AtomArray cmlAtomArray) {
+<span class="fc bfc" id="L173" title="All 2 branches covered.">		for (Object elementAtom : cmlAtomArray.getAnyCmlOrAnyOrAny()) {</span>
+			@SuppressWarnings(&quot;unchecked&quot;)
+<span class="fc" id="L175">			JAXBElement&lt;org.xml_cml.schema.Atom&gt; element = (JAXBElement&lt;org.xml_cml.schema.Atom&gt;) elementAtom;</span>
+<span class="pc bpc" id="L176" title="1 of 2 branches missed.">			if (element.getDeclaredType() == org.xml_cml.schema.Atom.class) {</span>
+<span class="fc" id="L177">				org.xml_cml.schema.Atom cmlAtom = (org.xml_cml.schema.Atom) element</span>
+<span class="fc" id="L178">						.getValue();</span>
+<span class="fc" id="L179">				parseAtom(atoms, cmlAtom);</span>
+			}
+<span class="fc" id="L181">		}</span>
+<span class="fc" id="L182">	}</span>
+
+	private void parseAtom(List&lt;Atom&gt; atoms, org.xml_cml.schema.Atom cmlAtom) {
+<span class="fc" id="L185">		atomIndexCounter++;</span>
+<span class="fc" id="L186">		Element elementType = Element.valueOf(cmlAtom.getElementType());</span>
+<span class="fc" id="L187">		Coord atomCoord = parseCoord(cmlAtom);</span>
+<span class="fc" id="L188">		Atom atom = new SimpleAtom(atomIndexCounter, elementType, atomCoord);</span>
+<span class="fc" id="L189">		atoms.add(atom);</span>
+<span class="fc" id="L190">	}</span>
+
+	private Coord parseCoord(org.xml_cml.schema.Atom cmlAtom) {
+		@SuppressWarnings(&quot;rawtypes&quot;)
+<span class="fc" id="L194">		Vector coordVector = myVector3D.create(new double[] { cmlAtom.getX3(),</span>
+<span class="fc" id="L195">				cmlAtom.getY3(), cmlAtom.getZ3() });</span>
+		// get from property file
+		@SuppressWarnings(&quot;rawtypes&quot;)
+<span class="fc" id="L198">		Vector bohrCoordVector = coordVector.scalarMultiply(unitConverterType</span>
+<span class="fc" id="L199">				.value());</span>
+<span class="fc" id="L200">		Coord atomCoord = simpleCoordFactory.create();</span>
+<span class="fc" id="L201">		atomCoord.setCoords(bohrCoordVector);</span>
+<span class="fc" id="L202">		return atomCoord;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>

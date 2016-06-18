@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DensitySmoothner.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">yoink-core</a> &gt; <a href="index.source.html" class="el_package">org.wallerlab.yoink.adaptive.smooth</a> &gt; <span class="el_source">DensitySmoothner.java</span></div><h1>DensitySmoothner.java</h1><pre class="source lang-java linenums">package org.wallerlab.yoink.adaptive.smooth;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.annotation.Resource;
+
+import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
+import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.service.Calculator;
+import org.wallerlab.yoink.api.service.adaptive.SmoothFunction;
+
+/**
+ * this class is to electronic density based smoothing.
+ * 
+ * @author Min Zheng
+ *
+ */
+public class DensitySmoothner extends SmoothnerImpl {
+
+	@Resource
+	private Calculator&lt;Double, Coord, Set&lt;Molecule&gt;&gt; densityCalculator;
+
+	/**
+	 * the constructor of DensitySmoothner with specified smooth function. in
+	 * the smooth function the variable will be electronic density
+	 * 
+	 * @param smoothFunction
+	 *            -the specified function for smoothing, and density value is
+	 *            the variable
+	 */
+	public DensitySmoothner(SmoothFunction smoothFunction) {
+<span class="fc" id="L35">		super(smoothFunction);</span>
+<span class="fc" id="L36">	}</span>
+
+	protected void getProperSmoothParameters(Set&lt;Molecule&gt; qmCoreMolecules,
+			List&lt;Double&gt; smoothParameters, Molecule molecule) {
+<span class="fc" id="L40">		Coord centerOfMass = molecule.getCenterOfMass();</span>
+<span class="fc" id="L41">		double currentDensity = densityCalculator.calculate(centerOfMass,</span>
+				qmCoreMolecules);
+<span class="fc" id="L43">		smoothParameters.add(2, currentDensity);</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">		for (int i = 0; i &lt; smoothParameters.size(); i++) {</span>
+<span class="fc" id="L45">			smoothParameters.set(i,</span>
+<span class="fc" id="L46">					Math.abs(Math.log10(smoothParameters.get(i))));</span>
+		}
+<span class="fc" id="L48">	}</span>
+
+	protected void getOriginalMinAndMax(List&lt;Double&gt; smoothParameters,
+			Map&lt;JobParameter, Object&gt; parameters) {
+<span class="fc" id="L52">		smoothParameters.add(0,</span>
+<span class="fc" id="L53">				(double) parameters.get(JobParameter.DENSITY_QM));</span>
+<span class="fc" id="L54">		smoothParameters.add(1,</span>
+<span class="fc" id="L55">				(double) parameters.get(JobParameter.DENSITY_BUFFER));</span>
+<span class="fc" id="L56">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>SilvaDensityComputer.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">yoink-core</a> &gt; <a href="index.source.html" class="el_package">org.wallerlab.yoink.density.service.densityProperties</a> &gt; <span class="el_source">SilvaDensityComputer.java</span></div><h1>SilvaDensityComputer.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2014-2015 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.wallerlab.yoink.density.service.densityProperties;
+
+import org.springframework.stereotype.Service;
+import org.wallerlab.yoink.api.model.density.DensityPoint;
+import org.wallerlab.yoink.api.service.Computer;
+import org.wallerlab.yoink.api.service.math.Matrix;
+import org.wallerlab.yoink.api.service.math.Vector;
+
+/**
+ * This class is to do Silva density analysis calculation for a point. Silva
+ * developed two density analysis methods (DORI and SEDD).
+ * 
+ * 
+ * For DORI,see:De Silva, Piotr, and Clémence Corminboeuf.
+ * &quot;Simultaneous Visualization of Covalent and Noncovalent Interactions Using Regions of Density Overlap.&quot;
+ * Journal of chemical theory and computation 10.9 (2014): 3745-3756.
+ *
+ * For SEDD, see:De Silva, Piotr, Jacek Korchowiec, and Tomasz A. Wesolowski.
+ * &quot;Revealing the Bonding Pattern from the Molecular Electron Density Using
+ * Single Exponential Decay Detector: An Orbital‐Free Alternative to the
+ * Electron Localization Function.&quot; ChemPhysChem 13.15 (2012): 3462-3465.
+ * 
+ * @author Min Zheng
+ *
+ */
+@Service
+<span class="fc" id="L42">public class SilvaDensityComputer implements Computer&lt;Double, DensityPoint&gt; {</span>
+
+	/**
+	 * calculate Silva density analysis value for a density point
+	 * 
+	 * @param densityPoint
+	 *            -{@link org.wallerlab.yoink.api.model.density.DensityPoint}
+	 * @return silvaValue of a density point
+	 */
+	public Double calculate(DensityPoint densityPoint) {
+		// initialize
+<span class="fc" id="L53">		double silvaValue = 0.0;</span>
+<span class="fc" id="L54">		silvaValue = calculateSilvaValue(densityPoint, silvaValue);</span>
+<span class="fc" id="L55">		return silvaValue;</span>
+	}
+
+	protected double calculateSilvaValue(DensityPoint densityPoint,
+			double silvaValue) {
+<span class="fc" id="L60">		silvaValue = loopOverHessian(densityPoint, silvaValue);</span>
+<span class="fc" id="L61">		silvaValue = getSilvaValue(densityPoint, silvaValue);</span>
+<span class="fc" id="L62">		return silvaValue;</span>
+	}
+
+	// rewrite in child class
+	protected double getSilvaValue(DensityPoint densityPoint, double silvaValue) {
+<span class="fc" id="L67">		return silvaValue;</span>
+	}
+
+	protected double loopOverHessian(DensityPoint densityPoint,
+			double silvaValue) {
+<span class="fc" id="L72">		double density = densityPoint.getDensity();</span>
+<span class="fc" id="L73">		Vector gradientVector = densityPoint.getGradientVector();</span>
+<span class="fc" id="L74">		Matrix hessian = densityPoint.getHessian();</span>
+<span class="fc" id="L75">		double gradient = densityPoint.getGradient();</span>
+<span class="fc" id="L76">		silvaValue = loopEveryElementInHessian(silvaValue, density,</span>
+				gradientVector, hessian, gradient);
+<span class="fc" id="L78">		return silvaValue;</span>
+	}
+
+	private double loopEveryElementInHessian(double silvaValue, double density,
+			Vector gradientVector, Matrix hessian, double gradient) {
+<span class="fc bfc" id="L83" title="All 2 branches covered.">		for (int i = 0; i &lt; 3; i++) {</span>
+<span class="fc" id="L84">			double temp = 0.0;</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">			for (int j = 0; j &lt; 3; j++) {</span>
+<span class="fc" id="L86">				temp += gradientVector.getEntry(j) * hessian.getEntry(i, j);</span>
+			}
+<span class="fc" id="L88">			silvaValue += Math.pow((density * temp - gradientVector.getEntry(i)</span>
+					* gradient), 2);
+		}
+<span class="fc" id="L91">		return silvaValue;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>

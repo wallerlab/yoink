@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>SCMPWeightFactors.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">yoink-core</a> &gt; <a href="index.source.html" class="el_package">org.wallerlab.yoink.adaptive.smooth</a> &gt; <span class="el_source">SCMPWeightFactors.java</span></div><h1>SCMPWeightFactors.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2014-2015 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.wallerlab.yoink.adaptive.smooth;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.annotation.Resource;
+import javax.xml.bind.JAXBElement;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.wallerlab.yoink.api.model.bootstrap.Job;
+import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
+import org.wallerlab.yoink.api.model.molecular.Atom;
+import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.service.Calculator;
+import org.wallerlab.yoink.api.service.adaptive.SmoothFunction;
+import org.wallerlab.yoink.api.service.adaptive.Smoothner;
+import org.wallerlab.yoink.math.map.MapSorter;
+import org.wallerlab.yoink.math.set.Subsets;
+
+import com.google.common.primitives.Ints;
+
+/**
+ * this class is to get weight factor in SCMP. for details please see:
+ * &quot;Size-Consistent Multipartitioning QM/MM: A Stable and Efficient Adaptive
+ * QM/MM Method&quot;
+ * 
+ * @author Min Zheng
+ *
+ */
+@Service(&quot;scmpWeightFactors&quot;)
+<span class="nc" id="L55">public class SCMPWeightFactors implements Smoothner {</span>
+
+	@Resource
+	private Calculator&lt;Double, Coord, Molecule&gt; closestDistanceToMoleculeCalculator;
+
+	@Resource
+	@Qualifier(&quot;buloSmoothFunction&quot;)
+	private SmoothFunction buloSmoothFunction;// for QM
+
+	@Resource
+	@Qualifier(&quot;scmpSmoothFunction&quot;)
+	private SmoothFunction scmpSmoothFunction;// for MM
+
+	private Map&lt;List&lt;Integer&gt;, Double&gt; sigmaIndexMap;
+
+	/**
+	 * use smooth factors to calculate the weight factors.
+	 * 
+	 * @param job
+	 *            -parameters and results in job
+	 */
+	public void smooth(Job&lt;JAXBElement&gt; job) {
+		// initialize
+<span class="nc" id="L78">		getWeightForAllPartitioningConfiguration(job);</span>
+<span class="nc" id="L79">		int partitionNumber = (int) job.getParameters().get(</span>
+				JobParameter.NUMBER_PARTITION);
+<span class="nc" id="L81">		double sigmas[] = new double[partitionNumber];</span>
+<span class="nc" id="L82">		List&lt;List&lt;Integer&gt;&gt; qmSets = new ArrayList&lt;List&lt;Integer&gt;&gt;();</span>
+<span class="nc" id="L83">		Map&lt;List&lt;Integer&gt;, Double&gt; molecularIndicesAndWeightFactor = getWeightForSelectedPartitioningConfiguration(</span>
+				partitionNumber, sigmas, qmSets);
+<span class="nc" id="L85">		job.getProperties().put(&quot;weightfactors&quot;,</span>
+				molecularIndicesAndWeightFactor);
+<span class="nc" id="L87">	}</span>
+
+	private void getWeightForAllPartitioningConfiguration(Job&lt;JAXBElement&gt; job) {
+<span class="nc" id="L90">		Map&lt;JobParameter, Object&gt; parameters = job.getParameters();</span>
+<span class="nc" id="L91">		Map&lt;Molecule, Integer&gt; bufferMoleculeMap = job.getRegions()</span>
+<span class="nc" id="L92">				.get(Region.Name.BUFFER).getMolecularMap();</span>
+<span class="nc" id="L93">		List&lt;Molecule&gt; bufferMolecules = new ArrayList&lt;Molecule&gt;(</span>
+<span class="nc" id="L94">				bufferMoleculeMap.keySet());</span>
+<span class="nc" id="L95">		List&lt;Integer&gt; bufferIndices = new ArrayList&lt;Integer&gt;(</span>
+<span class="nc" id="L96">				bufferMoleculeMap.values());</span>
+<span class="nc" id="L97">		double s_qm_out = (double) parameters</span>
+<span class="nc" id="L98">				.get(JobParameter.DISTANCE_S_QM_OUT);</span>
+<span class="nc" id="L99">		double t_qm_out = (double) parameters</span>
+<span class="nc" id="L100">				.get(JobParameter.DISTANCE_T_QM_OUT);</span>
+<span class="nc" id="L101">		double s_qm_in = (double) parameters.get(JobParameter.DISTANCE_S_QM_IN);</span>
+<span class="nc" id="L102">		double t_qm_in = (double) parameters.get(JobParameter.DISTANCE_T_QM_IN);</span>
+<span class="nc" id="L103">		double s_mm_out = (double) parameters</span>
+<span class="nc" id="L104">				.get(JobParameter.DISTANCE_S_MM_OUT);</span>
+<span class="nc" id="L105">		double t_mm_out = (double) parameters</span>
+<span class="nc" id="L106">				.get(JobParameter.DISTANCE_T_MM_OUT);</span>
+<span class="nc" id="L107">		double s_mm_in = (double) parameters.get(JobParameter.DISTANCE_S_MM_IN);</span>
+<span class="nc" id="L108">		double t_mm_in = (double) parameters.get(JobParameter.DISTANCE_T_MM_IN);</span>
+<span class="nc" id="L109">		sigmaIndexMap = new HashMap&lt;List&lt;Integer&gt;, Double&gt;();</span>
+<span class="nc" id="L110">		sigmaIndexMap = Collections.synchronizedMap(sigmaIndexMap);</span>
+<span class="nc" id="L111">		int qmNumber = (int) parameters.get(JobParameter.NUMBER_QM);</span>
+<span class="nc" id="L112">		int number_qmInBuffer = qmNumber - qmNumber * 2 / 3;</span>
+<span class="nc" id="L113">		Map&lt;Region.Name, Region&gt; regions = job.getRegions();</span>
+<span class="nc" id="L114">		Coord centerCoord = regions.get(Region.Name.QM_CORE).getCenterOfMass();</span>
+<span class="nc" id="L115">		calculateWeightForEachConfiguration(bufferMolecules, bufferIndices,</span>
+				s_qm_out, t_qm_out, s_qm_in, t_qm_in, s_mm_out, t_mm_out,
+				s_mm_in, t_mm_in, number_qmInBuffer, centerCoord);
+<span class="nc" id="L118">	}</span>
+
+	private void calculateWeightForEachConfiguration(
+			List&lt;Molecule&gt; bufferMolecules, List&lt;Integer&gt; bufferIndices,
+			double s_qm_out, double t_qm_out, double s_qm_in, double t_qm_in,
+			double s_mm_out, double t_mm_out, double s_mm_in, double t_mm_in,
+			int number_qmInBuffer, Coord centerCoord) {
+<span class="nc" id="L125">		Subsets.split(Ints.toArray(bufferIndices), number_qmInBuffer)</span>
+<span class="nc" id="L126">				.parallelStream()</span>
+<span class="nc" id="L127">				.forEach(</span>
+						qmSet -&gt; {
+							Set&lt;Integer&gt; mmSet = new HashSet&lt;Integer&gt;(
+									bufferIndices);
+							mmSet.removeAll(qmSet);
+
+							double sigma = calculateSigma(centerCoord,
+									bufferMolecules, bufferIndices, s_qm_out,
+									t_qm_out, s_qm_in, t_qm_in, s_mm_out,
+									t_mm_out, s_mm_in, t_mm_in, qmSet, mmSet);
+							sigmaIndexMap.put(qmSet, sigma);
+
+						});
+<span class="nc" id="L140">	}</span>
+
+	private Map&lt;List&lt;Integer&gt;, Double&gt; getWeightForSelectedPartitioningConfiguration(
+			int partitionNumber, double[] sigmas, List&lt;List&lt;Integer&gt;&gt; qmSets) {
+<span class="nc" id="L144">		Map&lt;List&lt;Integer&gt;, Double&gt; sortedSigmaIndexMap = MapSorter</span>
+<span class="nc" id="L145">				.sortByValue(sigmaIndexMap);</span>
+<span class="nc" id="L146">		List&lt;List&lt;Integer&gt;&gt; sortedIndices = new ArrayList&lt;List&lt;Integer&gt;&gt;(</span>
+<span class="nc" id="L147">				sortedSigmaIndexMap.keySet());</span>
+<span class="nc" id="L148">		List&lt;Double&gt; sortedSigmas = new ArrayList&lt;Double&gt;(</span>
+<span class="nc" id="L149">				sortedSigmaIndexMap.values());</span>
+<span class="nc" id="L150">		double sum_sigmas = 0;</span>
+<span class="nc" id="L151">		List&lt;Double&gt; subSigmas = sortedSigmas.subList(sortedSigmas.size()</span>
+<span class="nc" id="L152">				- partitionNumber, sortedSigmas.size());</span>
+<span class="nc" id="L153">		List&lt;List&lt;Integer&gt;&gt; subIndices = sortedIndices.subList(</span>
+<span class="nc" id="L154">				sortedSigmas.size() - partitionNumber, sortedSigmas.size());</span>
+<span class="nc bnc" id="L155" title="All 2 branches missed.">		for (int num = 0; num &lt; subSigmas.size(); num++) {</span>
+<span class="nc" id="L156">			double sigma = subSigmas.get(num);</span>
+<span class="nc" id="L157">			sigmas[num] = sigma;</span>
+<span class="nc" id="L158">			List&lt;Integer&gt; qmSet = subIndices.get(num);</span>
+<span class="nc" id="L159">			qmSets.add(qmSet);</span>
+<span class="nc" id="L160">			sum_sigmas += sigma;</span>
+		}
+<span class="nc" id="L162">		Map&lt;List&lt;Integer&gt;, Double&gt; molecularIndicesAndWeightFactor = new HashMap&lt;List&lt;Integer&gt;, Double&gt;();</span>
+<span class="nc bnc" id="L163" title="All 2 branches missed.">		for (int i = 0; i &lt; sigmas.length; i++) {</span>
+<span class="nc" id="L164">			sigmas[i] = sigmas[i] / sum_sigmas;</span>
+<span class="nc" id="L165">			molecularIndicesAndWeightFactor.put(qmSets.get(i), sigmas[i]);</span>
+		}
+<span class="nc" id="L167">		return molecularIndicesAndWeightFactor;</span>
+	}
+
+	private double calculateSigma(Coord centerCoord,
+			List&lt;Molecule&gt; bufferMolecules, List&lt;Integer&gt; bufferIndices,
+			double s_qm_out, double t_qm_out, double s_qm_in, double t_qm_in,
+			double s_mm_out, double t_mm_out, double s_mm_in, double t_mm_in,
+			ArrayList&lt;Integer&gt; qmSet, Set&lt;Integer&gt; mmSet) {
+<span class="nc" id="L175">		double fadeOutQM = fadeQM(centerCoord, bufferMolecules, bufferIndices,</span>
+				s_qm_out, t_qm_out, qmSet);
+<span class="nc" id="L177">		double fadeInQM = 1 - fadeQM(centerCoord, bufferMolecules,</span>
+				bufferIndices, s_qm_in, t_qm_in, qmSet);
+<span class="nc" id="L179">		double fadeOutMM = fadeMM(centerCoord, bufferMolecules, bufferIndices,</span>
+				s_mm_out, t_mm_out, mmSet);
+<span class="nc" id="L181">		double fadeInMM = 1 - fadeMM(centerCoord, bufferMolecules,</span>
+				bufferIndices, s_mm_in, t_mm_in, mmSet);
+<span class="nc" id="L183">		double sigma = fadeOutQM * fadeOutMM * fadeInQM * fadeInMM;</span>
+<span class="nc" id="L184">		return sigma;</span>
+	}
+
+	private double fadeQM(Coord centerCoord, List&lt;Molecule&gt; bufferMolecules,
+			List&lt;Integer&gt; bufferIndices, double s_qm_out, double t_qm_out,
+			List&lt;Integer&gt; qmSet) {
+<span class="nc" id="L190">		double fadeQM = 1.0;</span>
+<span class="nc bnc" id="L191" title="All 2 branches missed.">		for (Integer molecularIndex : qmSet) {</span>
+<span class="nc" id="L192">			int index = bufferIndices.indexOf(molecularIndex);</span>
+<span class="nc" id="L193">			Molecule molecule = bufferMolecules.get(index);</span>
+<span class="nc" id="L194">			double currentDistance = closestDistanceToMoleculeCalculator</span>
+<span class="nc" id="L195">					.calculate(centerCoord, molecule);</span>
+<span class="nc" id="L196">			double lamdba = scmpSmoothFunction.evaluate(currentDistance,</span>
+					s_qm_out, t_qm_out);
+<span class="nc" id="L198">			fadeQM *= lamdba;</span>
+<span class="nc" id="L199">		}</span>
+<span class="nc" id="L200">		return fadeQM;</span>
+	}
+
+	private double fadeMM(Coord centerCoord, List&lt;Molecule&gt; bufferMolecules,
+			List&lt;Integer&gt; bufferIndices, double s_qm_out, double t_qm_out,
+			Set&lt;Integer&gt; mmSet) {
+<span class="nc" id="L206">		double fadeMM = 1.0;</span>
+<span class="nc bnc" id="L207" title="All 2 branches missed.">		for (Integer molecularIndex : mmSet) {</span>
+<span class="nc" id="L208">			int index = bufferIndices.indexOf(molecularIndex);</span>
+<span class="nc" id="L209">			Molecule molecule = bufferMolecules.get(index);</span>
+<span class="nc" id="L210">			double currentDistance = closestDistanceToMoleculeCalculator</span>
+<span class="nc" id="L211">					.calculate(centerCoord, molecule);</span>
+<span class="nc" id="L212">			double lamdba = buloSmoothFunction.evaluate(currentDistance,</span>
+					s_qm_out, t_qm_out);
+<span class="nc" id="L214">			fadeMM *= lamdba;</span>
+<span class="nc" id="L215">		}</span>
+<span class="nc" id="L216">		return fadeMM;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>

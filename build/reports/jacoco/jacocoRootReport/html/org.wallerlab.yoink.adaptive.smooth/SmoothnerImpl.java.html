@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>SmoothnerImpl.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">yoink-core</a> &gt; <a href="index.source.html" class="el_package">org.wallerlab.yoink.adaptive.smooth</a> &gt; <span class="el_source">SmoothnerImpl.java</span></div><h1>SmoothnerImpl.java</h1><pre class="source lang-java linenums">package org.wallerlab.yoink.adaptive.smooth;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.annotation.Resource;
+
+import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
+import org.wallerlab.yoink.api.model.bootstrap.Job;
+import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.service.Computer;
+
+import org.wallerlab.yoink.api.service.adaptive.SmoothFunction;
+import org.wallerlab.yoink.api.service.adaptive.Smoothner;
+
+/**
+ * this class is for smoothing the buffer region.
+ * 
+ * @author Min Zheng
+ *
+ */
+public abstract class SmoothnerImpl implements Smoothner {
+
+	@Resource
+	protected Computer&lt;Coord, Set&lt;Molecule&gt;&gt; centerOfMassComputer;
+
+	private SmoothFunction smoothFunction;
+
+	/**
+	 * SmoothnerImpl constructor with specified smooth function.
+	 * 
+	 * @param smoothFunction -the specified smooth function for a new object of SmoothnerImpl.
+	 */
+<span class="fc" id="L38">	public SmoothnerImpl(SmoothFunction smoothFunction) {</span>
+<span class="fc" id="L39">		this.smoothFunction = smoothFunction;</span>
+<span class="fc" id="L40">	}</span>
+
+	/**
+	 * calculate smooth factors for molecules in buffer region
+	 */
+	public void smooth(Job job) {
+<span class="fc" id="L46">		List&lt;Double&gt; smoothFactors = loopOverAllBufferMolecules(job);</span>
+<span class="fc" id="L47">		job.getProperties().put(&quot;smoothfactors&quot;, smoothFactors);</span>
+<span class="fc" id="L48">	}</span>
+
+	protected List&lt;Double&gt; loopOverAllBufferMolecules(Job job) {
+<span class="fc" id="L51">		Map&lt;Region.Name, Region&gt; regions = job.getRegions();</span>
+<span class="fc" id="L52">		Map&lt;JobParameter, Object&gt; parameters = job.getParameters();</span>
+<span class="fc" id="L53">		Set&lt;Molecule&gt; qmCoreMolecules = regions.get(Region.Name.QM_CORE)</span>
+<span class="fc" id="L54">				.getMolecules();</span>
+<span class="fc" id="L55">		Set&lt;Molecule&gt; bufferMolecules = regions.get(Region.Name.BUFFER)</span>
+<span class="fc" id="L56">				.getMolecules();</span>
+<span class="fc" id="L57">		List&lt;Double&gt; smoothFactors = new ArrayList&lt;Double&gt;();</span>
+<span class="fc" id="L58">		List&lt;Double&gt; smoothParameters = new ArrayList&lt;Double&gt;();</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">		for (Molecule molecule : bufferMolecules) {</span>
+			
+<span class="fc" id="L61">			getOriginalMinAndMax(smoothParameters, parameters);</span>
+<span class="fc" id="L62">			getProperSmoothParameters(qmCoreMolecules, smoothParameters,</span>
+					molecule);
+<span class="fc" id="L64">			double min = smoothParameters.get(0);</span>
+<span class="fc" id="L65">			double max = smoothParameters.get(1);</span>
+<span class="fc" id="L66">			double currentValue = smoothParameters.get(2);</span>
+<span class="fc" id="L67">			double smoothFactor = smoothFunction.evaluate(currentValue, min,</span>
+					max);
+<span class="fc" id="L69">			smoothFactors.add(smoothFactor);</span>
+<span class="fc" id="L70">		}</span>
+<span class="fc" id="L71">		return smoothFactors;</span>
+	}
+
+	protected abstract void getProperSmoothParameters(
+			Set&lt;Molecule&gt; qmCoreMolecules, List&lt;Double&gt; smoothParameters,
+			Molecule molecule);
+
+	protected abstract void getOriginalMinAndMax(List&lt;Double&gt; smoothParameters,
+			Map&lt;JobParameter, Object&gt; parameters);
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>SimpleGridPoint.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">yoink-core</a> &gt; <a href="index.source.html" class="el_package">org.wallerlab.yoink.cube.domain</a> &gt; <span class="el_source">SimpleGridPoint.java</span></div><h1>SimpleGridPoint.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2014-2015 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.wallerlab.yoink.cube.domain;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import org.wallerlab.yoink.api.model.cube.GridPoint;
+import org.wallerlab.yoink.api.model.molecular.Atom;
+import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.model.molecular.Molecule;
+
+/**
+ * This domain model is to store information and properties of a grid point
+ * 
+ * @author Min Zheng
+ *
+ */
+<span class="fc" id="L34">public class SimpleGridPoint&lt;String, V&gt; implements GridPoint&lt;String, V&gt; {</span>
+
+	private Coord coordinate;
+
+	private int indexInCube;
+
+<span class="fc" id="L40">	private Map&lt;String, V&gt; properties = new HashMap&lt;String, V&gt;();</span>
+
+	@Override
+	public void addProperty(String k, V v) {
+<span class="fc" id="L44">		this.properties.put(k, v);</span>
+<span class="fc" id="L45">	}</span>
+
+	@Override
+	public V getProperty(String k) {
+<span class="fc" id="L49">		return this.properties.get(k);</span>
+	}
+
+	@Override
+	public Coord getCoordinate() {
+<span class="fc" id="L54">		return coordinate;</span>
+	}
+
+	@Override
+	public void setCoordinate(Coord coordinate) {
+<span class="fc" id="L59">		this.coordinate = coordinate;</span>
+<span class="fc" id="L60">	}</span>
+
+	@Override
+	public Map&lt;String, V&gt; getProperties() {
+<span class="fc" id="L64">		return properties;</span>
+	}
+
+	@Override
+	public void setProperties(Map&lt;String, V&gt; properties) {
+<span class="fc" id="L69">		this.properties = properties;</span>
+<span class="fc" id="L70">	}</span>
+
+	@Override
+	public int getIndexInCube() {
+<span class="fc" id="L74">		return indexInCube;</span>
+	}
+
+	@Override
+	public void setIndexInCube(int indexInCube) {
+<span class="fc" id="L79">		this.indexInCube = indexInCube;</span>
+<span class="fc" id="L80">	}</span>
+
+	@Override
+	public Set&lt;Atom&gt; getTwoClosestAtoms() {
+<span class="fc" id="L84">		return (Set&lt;Atom&gt;) this.properties.get(&quot;twoClosestAtoms&quot;);</span>
+	}
+
+	@Override
+	public Set&lt;Molecule&gt; getTwoClosestMolecules() {
+<span class="fc" id="L89">		return (Set&lt;Molecule&gt;) this.properties.get(&quot;twoClosestMolecules&quot;);</span>
+	}
+
+	@Override
+	public Set&lt;Atom&gt; getAtomsInTwoClosestMolecules() {
+<span class="fc" id="L94">		Set&lt;Molecule&gt; molecules = (Set&lt;Molecule&gt;) this.properties</span>
+<span class="fc" id="L95">				.get(&quot;twoClosestMolecules&quot;);</span>
+<span class="fc" id="L96">		Set&lt;Atom&gt; atoms = new HashSet&lt;Atom&gt;();</span>
+<span class="fc bfc" id="L97" title="All 2 branches covered.">		for (Molecule molecule : molecules) {</span>
+<span class="fc" id="L98">			atoms.addAll(molecule.getAtoms());</span>
+<span class="fc" id="L99">		}</span>
+<span class="fc" id="L100">		return atoms;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>

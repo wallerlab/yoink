@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DoriClustering.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">yoink-core</a> &gt; <a href="index.source.html" class="el_package">org.wallerlab.yoink.service</a> &gt; <span class="el_source">DoriClustering.java</span></div><h1>DoriClustering.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2014-2015 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.wallerlab.yoink.service;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.annotation.Resource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.wallerlab.yoink.api.model.bootstrap.Job;
+import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
+import org.wallerlab.yoink.api.model.cube.GridPoint;
+import org.wallerlab.yoink.api.model.density.DensityPoint;
+import org.wallerlab.yoink.api.model.density.DensityPoint.DensityType;
+import org.wallerlab.yoink.api.model.molecular.Atom;
+import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.molecular.RadialGrid;
+import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.service.Calculator;
+import org.wallerlab.yoink.api.service.Computer;
+import org.wallerlab.yoink.api.service.Factory;
+import org.wallerlab.yoink.api.service.bootstrap.Clustering;
+import org.wallerlab.yoink.api.service.molecular.FilesReader;
+import org.wallerlab.yoink.api.service.regionizer.Partitioner;
+import org.wallerlab.yoink.api.service.regionizer.Regionizer;
+import org.wallerlab.yoink.clustering.InteractionTriple;
+import org.wallerlab.yoink.clustering.LouvainClusteringFacade;
+import org.wallerlab.yoink.molecular.domain.SimpleRadialGrid;
+import org.wallerlab.yoink.regionizer.partitioner.DensityPartitioner;
+import org.wallerlab.yoink.service.clustering.InteractionSet;
+
+/**
+ * This class is to build a graph based on DORI interaction(yes or no) and do
+ * louvain clustering.
+ * 
+ * 
+ * @author Min Zheng
+ *
+ */
+@Service
+public class DoriClustering implements Clustering {
+
+<span class="nc" id="L65">	public DoriClustering() {</span>
+
+<span class="nc" id="L67">	}</span>
+
+	@Override
+	public void cluster(Job job) {
+<span class="nc" id="L71">		Map&lt;JobParameter, Object&gt; parameters = job.getParameters();</span>
+
+<span class="nc" id="L73">		Partitioner.Type partitionType = (Partitioner.Type) parameters</span>
+<span class="nc" id="L74">				.get(JobParameter.PARTITIONER);</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">		if (partitionType == Partitioner.Type.CLUSTER) {</span>
+<span class="nc" id="L76">			List&lt;InteractionTriple&lt;Integer&gt;&gt; interactionTriples = getInteractionTriples(</span>
+					job, parameters);
+<span class="nc" id="L78">			List&lt;Set&lt;Integer&gt;&gt; clusters = louvainClustering(interactionTriples,</span>
+					parameters);
+<span class="nc" id="L80">			job.setClusters(clusters);</span>
+		}
+
+<span class="nc" id="L83">	}</span>
+
+	private List&lt;InteractionTriple&lt;Integer&gt;&gt; getInteractionTriples(Job job,
+			Map&lt;JobParameter, Object&gt; parameters) {
+<span class="nc" id="L87">		List&lt;InteractionTriple&lt;Integer&gt;&gt; interactionTriples = new ArrayList&lt;InteractionTriple&lt;Integer&gt;&gt;();</span>
+<span class="nc" id="L88">		List&lt;Double&gt; weightList = job.getInteractionWeight();</span>
+<span class="nc" id="L89">		List&lt;List&lt;Integer&gt;&gt; interactionList = job.getInteractionList();</span>
+<span class="nc bnc" id="L90" title="All 2 branches missed.">		for (int i = 0; i &lt; interactionList.size(); i++) {</span>
+<span class="nc" id="L91">			List&lt;Integer&gt; pair = interactionList.get(i);</span>
+<span class="nc" id="L92">			InteractionTriple&lt;Integer&gt; triple = new InteractionTriple&lt;Integer&gt;(</span>
+<span class="nc" id="L93">					pair.get(0), pair.get(1), weightList.get(i));</span>
+<span class="nc" id="L94">			interactionTriples.add(triple);</span>
+		}
+<span class="nc" id="L96">		return interactionTriples;</span>
+	}
+
+	public List&lt;Set&lt;Integer&gt;&gt; louvainClustering(
+			List&lt;InteractionTriple&lt;Integer&gt;&gt; interactionSet,
+			Map&lt;JobParameter, Object&gt; parameters) {
+<span class="nc" id="L102">		String parentDirName = (String) parameters</span>
+<span class="nc" id="L103">				.get(JobParameter.OUTPUT_FOLDER) + &quot;/&quot;;</span>
+<span class="nc" id="L104">		LouvainClusteringFacade&lt;Integer&gt; louvain = new LouvainClusteringFacade&lt;Integer&gt;(</span>
+				parentDirName + &quot;testDb/databases/graph.db&quot;);
+<span class="nc" id="L106">		louvain.populate(interactionSet);</span>
+<span class="nc" id="L107">		int maxCommunities = (int) parameters.get(JobParameter.MAX_COMMS);</span>
+<span class="nc" id="L108">		Map&lt;Long, Integer&gt; result = louvain.cluster(maxCommunities);</span>
+<span class="nc" id="L109">		List&lt;Set&lt;Integer&gt;&gt; clusters = louvain.getResult(result.size() - 1);</span>
+<span class="nc" id="L110">		louvain.shutdown();</span>
+<span class="nc" id="L111">		System.out.println(&quot;clusters: &quot; + clusters);</span>
+<span class="nc" id="L112">		return clusters;</span>
+
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>

@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DensityPartitioner.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">yoink-core</a> &gt; <a href="index.source.html" class="el_package">org.wallerlab.yoink.regionizer.partitioner</a> &gt; <span class="el_source">DensityPartitioner.java</span></div><h1>DensityPartitioner.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2014-2015 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.wallerlab.yoink.regionizer.partitioner;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
+import org.wallerlab.yoink.api.model.density.DensityPoint.DensityType;
+import org.wallerlab.yoink.api.model.molecular.Atom;
+import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.molecular.RadialGrid;
+import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.service.Calculator;
+import org.wallerlab.yoink.api.service.Factory;
+import org.wallerlab.yoink.api.service.molecular.FilesReader;
+import org.wallerlab.yoink.api.service.regionizer.Partitioner;
+import org.wallerlab.yoink.api.service.regionizer.Regionizer;
+import org.wallerlab.yoink.api.service.regionizer.RegionizerMath;
+import org.wallerlab.yoink.molecular.domain.SimpleRadialGrid;
+import org.wallerlab.yoink.regionizer.domain.SimpleRegion;
+
+/**
+ * This class is to use the density of qm core to define the region (adaptive
+ * search region) to look for the potential QM core or QM adaptive molecules.
+ * Also we can get NONQM_CORE_ADAPTIVE_SEARCH region and buffer region
+ * 
+ * @author Min Zheng
+ *
+ */
+@Service
+<span class="fc" id="L52">public class DensityPartitioner implements</span>
+		Partitioner&lt;Map&lt;Region.Name, Region&gt;, DensityType&gt; {
+
+	@Resource
+	private Calculator&lt;Double, Coord, Set&lt;Molecule&gt;&gt; densityCalculator;
+
+	@Resource
+	private RegionizerMath&lt;Region, Region.Name&gt; singleRegionizerService;
+
+	@Resource
+	private Factory&lt;Region, Region.Name&gt; simpleRegionFactory;
+
+	@Resource
+	protected  FilesReader&lt;RadialGrid, String&gt; radialGridReader;
+
+	/**
+	 * based on the density of QM core , define adaptive search region , the
+	 * non-QM core molecules in adaptive search region, and buffer region.
+	 * 
+	 * @param regions
+	 *            - a Map, Region.Name
+	 *            {@link org.wallerlab.yoink.api.model.regionizer.Region.Name }
+	 *            as key, Region
+	 *            {@link org.wallerlab.yoink.api.model.regionizer.Region} as
+	 *            value
+	 * @param parameters
+	 *            - a Map, JobParameter
+	 *            {@link org.wallerlab.yoink.api.model.bootstrap.JobParameter}
+	 *            as Key, Object {@link java.lang.Object} as value
+	 * @param densityType
+	 *            {@link org.wallerlab.yoink.api.model.density.DensityPoint.DensityType}
+	 * @return regions - a Map, Region.Name
+	 *         {@link org.wallerlab.yoink.api.model.regionizer.Region.Name } as
+	 *         key, Region
+	 *         {@link org.wallerlab.yoink.api.model.regionizer.Region} as value
+	 */
+	public Map&lt;Region.Name, Region&gt; partition(Map&lt;Region.Name, Region&gt; regions,
+			Map&lt;JobParameter, Object&gt; parameters, DensityType densityType) {
+		// the density parameters to define adaptive search region for adaptive
+		// QM, adaptive search region for adaptive QM core, and adaptive search
+		// region for buffer are different.
+<span class="fc" id="L93">		double densityThreshold = getDensityThreshold(parameters, densityType);</span>
+<span class="fc" id="L94">		calculateAdaptiveSearchRegion(regions, densityThreshold, parameters);</span>
+<span class="fc" id="L95">		calculateNonQMCoreInAdaptiveSearchRegion(regions);</span>
+		// define buffer region by density
+<span class="fc" id="L97">		calculateBufferRegion(regions, densityType);</span>
+<span class="fc" id="L98">		return regions;</span>
+
+	}
+
+	private double getDensityThreshold(Map&lt;JobParameter, Object&gt; parameters,
+			DensityType densityType) {
+		double densityThreshold;
+<span class="pc bfc" id="L105" title="All 4 branches covered.">		switch (densityType) {</span>
+		case SEDD:
+<span class="fc" id="L107">			densityThreshold = (double) parameters</span>
+<span class="fc" id="L108">					.get(JobParameter.DENSITY_ASR_QMCORE);</span>
+<span class="fc" id="L109">			break;</span>
+		case DORI:
+<span class="fc" id="L111">			densityThreshold = (double) parameters</span>
+<span class="fc" id="L112">					.get(JobParameter.DENSITY_ASR_QM);</span>
+<span class="fc" id="L113">			break;</span>
+		case ELECTRONIC:
+			// define buffer region by QM core density analysis
+<span class="fc" id="L116">			densityThreshold = (double) parameters</span>
+<span class="fc" id="L117">					.get(JobParameter.DENSITY_BUFFER);</span>
+<span class="fc" id="L118">			break;</span>
+		default:
+<span class="fc" id="L120">			throw new IllegalArgumentException(&quot;invalid  name&quot;);</span>
+		}
+<span class="fc" id="L122">		return densityThreshold;</span>
+	}
+
+	private void calculateAdaptiveSearchRegion(
+			Map&lt;Region.Name, Region&gt; regions, double densityThreshold,
+			Map&lt;JobParameter, Object&gt; parameters) {
+		// initialize wfc for qm_core
+<span class="fc" id="L129">		readWFC(parameters, regions.get(Region.Name.QM_CORE));</span>
+<span class="fc" id="L130">		Region adaptiveSearchRegion = findAdaptiveSearchRegionInNonQmCoreRegion(</span>
+				regions, densityThreshold);
+		// add QM core molecules
+<span class="fc" id="L133">		adaptiveSearchRegion.addAll(regions.get(Region.Name.QM_CORE)</span>
+<span class="fc" id="L134">				.getMolecularMap());</span>
+		// initialize wfc for adaptive search region
+<span class="fc" id="L136">		readWFC(parameters, adaptiveSearchRegion);</span>
+<span class="fc" id="L137">		regions.put(adaptiveSearchRegion.getName(), adaptiveSearchRegion);</span>
+
+<span class="fc" id="L139">	}</span>
+
+	public   void readWFC(Map&lt;JobParameter, Object&gt; parameters,
+			Region adaptiveSearchRegion) {
+<span class="pc bpc" id="L143" title="1 of 2 branches missed.">		if ((boolean) parameters.get(JobParameter.DGRID) == true) {</span>
+
+<span class="fc" id="L145">			List&lt;Atom&gt; atoms = adaptiveSearchRegion.getAtoms();</span>
+
+<span class="fc" id="L147">			atoms.parallelStream().forEach(</span>
+					atom -&gt; {
+						if (atom.getRadialGrid() == null) {
+							RadialGrid grid = new SimpleRadialGrid();
+							String wfc_name = atom.getElementType().toString()
+									.toLowerCase();
+							if (wfc_name.length() == 1) {
+								wfc_name = wfc_name + &quot;_&quot;;
+							}
+							String wfc_file = parameters
+									.get(JobParameter.WFC_PATH)
+									+ &quot;/&quot;
+									+ wfc_name + &quot;_lda.wfc&quot;;
+							grid = radialGridReader.read(wfc_file, grid);
+							atom.setRadialGrid(grid);
+						}
+					});
+
+		}
+<span class="fc" id="L166">	}</span>
+
+	private void calculateNonQMCoreInAdaptiveSearchRegion(
+			Map&lt;Region.Name, Region&gt; regions) {
+<span class="fc" id="L170">		Region nonQMCoreAdaptiveSearchRegion = singleRegionizerService</span>
+<span class="fc" id="L171">				.regionize(regions, Region.Name.NONQM_CORE_ADAPTIVE_SEARCH);</span>
+<span class="fc" id="L172">		regions.put(Region.Name.NONQM_CORE_ADAPTIVE_SEARCH,</span>
+				nonQMCoreAdaptiveSearchRegion);
+<span class="fc" id="L174">	}</span>
+
+	private Region findAdaptiveSearchRegionInNonQmCoreRegion(
+			Map&lt;Region.Name, Region&gt; regions, double densityThreshold) {
+<span class="fc" id="L178">		Region adaptiveSearchRegion = simpleRegionFactory</span>
+<span class="fc" id="L179">				.create(Region.Name.ADAPTIVE_SEARCH);</span>
+<span class="fc" id="L180">		List&lt;Molecule&gt; moleculesInAdaptiveSearch = Collections</span>
+<span class="fc" id="L181">				.synchronizedList(new ArrayList&lt;Molecule&gt;());</span>
+<span class="fc" id="L182">		Set&lt;Molecule&gt; moleculesInNonQmCore = regions</span>
+<span class="fc" id="L183">				.get(Region.Name.NONQM_CORE).getMolecules();</span>
+<span class="fc" id="L184">		Set&lt;Molecule&gt; moleculesInQmCore = regions.get(Region.Name.QM_CORE)</span>
+<span class="fc" id="L185">				.getMolecules();</span>
+<span class="fc" id="L186">		checkEveryNonQMCoreMolecule(densityThreshold,</span>
+				moleculesInAdaptiveSearch, moleculesInNonQmCore,
+				moleculesInQmCore);
+<span class="fc bfc" id="L189" title="All 2 branches covered.">		for (Molecule molecule : moleculesInAdaptiveSearch) {</span>
+<span class="fc" id="L190">			adaptiveSearchRegion.addMolecule(molecule, molecule.getIndex());</span>
+<span class="fc" id="L191">		}</span>
+<span class="fc" id="L192">		return adaptiveSearchRegion;</span>
+	}
+
+	private void checkEveryNonQMCoreMolecule(double densityThreshold,
+			List&lt;Molecule&gt; moleculesInAdaptiveSearch,
+			Set&lt;Molecule&gt; moleculesInNonQmCore, Set&lt;Molecule&gt; moleculesInQmCore) {
+
+<span class="fc" id="L199">		moleculesInNonQmCore.parallelStream().forEach(</span>
+				molecule -&gt; {
+					Coord centerOfMass = molecule.getCenterOfMass();
+					double density = densityCalculator.calculate(centerOfMass,
+							moleculesInQmCore);
+					if (density &gt;= densityThreshold) {
+
+						moleculesInAdaptiveSearch.add(molecule);
+					}
+				});
+<span class="fc" id="L209">	}</span>
+
+	private void calculateBufferRegion(Map&lt;Region.Name, Region&gt; regions,
+			DensityType densityType) {
+<span class="pc bpc" id="L213" title="1 of 2 branches missed.">		if (densityType == DensityType.ELECTRONIC) {</span>
+<span class="fc" id="L214">			Region bufferRegion = singleRegionizerService.regionize(regions,</span>
+					Region.Name.BUFFER);
+<span class="fc" id="L216">			regions.put(bufferRegion.getName(), bufferRegion);</span>
+
+		}
+<span class="fc" id="L219">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>

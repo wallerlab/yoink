@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>SimpleCube.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">yoink-core</a> &gt; <a href="index.source.html" class="el_package">org.wallerlab.yoink.cube.domain</a> &gt; <span class="el_source">SimpleCube.java</span></div><h1>SimpleCube.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2014-2015 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.wallerlab.yoink.cube.domain;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+import org.wallerlab.yoink.api.model.cube.Cube;
+import org.wallerlab.yoink.api.model.density.DensityPoint.DensityType;
+import org.wallerlab.yoink.api.model.molecular.Atom;
+import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.math.constants.Constants;
+
+/**
+ * Cube domain Model stores all information about cube. Constructing a cube
+ * needs the coordinate of the origin grid point, number of steps along x/y/z
+ * axis, and also step size along x/y/z axis.
+ */
+
+@Component
+public class SimpleCube implements Cube {
+
+	private Coord origin;
+
+	// if we want to use it to hold values.
+	private List&lt;Double&gt; values;
+
+<span class="fc" id="L47">	private int[] numberOfXYZSteps = new int[3];</span>
+
+<span class="fc" id="L49">	private final double[] xyzStepSize = new double[3];</span>
+
+	private Set&lt;Molecule&gt; molecules;
+
+	private String name;
+
+	private int size;
+
+	private List&lt;Coord&gt; coordinates;
+
+<span class="fc" id="L59">	private List&lt;DensityType&gt; densityTypes = new ArrayList&lt;DensityType&gt;();</span>
+
+	/**
+	 * use xyz step sizes construct a cube and convert the unit of step size
+	 * from angstrom to bohr
+	 * 
+	 * @param xyzStepSize
+	 *            -a double array with xyz step sizes
+	 * 
+	 */
+<span class="fc" id="L69">	public SimpleCube(double[] xyzStepSize) {</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">		for (int i = 0; i &lt; 3; i++) {</span>
+<span class="fc" id="L71">			this.xyzStepSize[i] = xyzStepSize[i] * Constants.ANGSTROM_TO_BOHR;</span>
+		}
+<span class="fc" id="L73">	}</span>
+
+	/**
+	 * Construct when size is known, or use setter to set number of size
+	 * 
+	 * @param cubeSize
+	 *            , the total number of grid points in the cube
+	 * 
+	 */
+<span class="fc" id="L82">	public SimpleCube(int cubeSize) {</span>
+<span class="fc" id="L83">		this.size = cubeSize;</span>
+<span class="fc" id="L84">		this.values = Arrays.asList(new Double[cubeSize]);</span>
+<span class="fc" id="L85">	}</span>
+
+	/**
+	 * default cube constructor
+	 */
+<span class="fc" id="L90">	public SimpleCube() {</span>
+<span class="fc" id="L91">	}</span>
+
+	@Override
+	public Coord getGridOrigin() {
+<span class="fc" id="L95">		return origin;</span>
+	}
+
+	@Override
+	public void setGridOrigin(Coord gridOrigin) {
+<span class="fc" id="L100">		this.origin = gridOrigin;</span>
+<span class="fc" id="L101">	}</span>
+
+	@Override
+	public int[] getNumberOfXYZSteps() {
+<span class="fc" id="L105">		return numberOfXYZSteps;</span>
+	}
+
+	@Override
+	public void setNumberOfXYZSteps(int[] numberOfXYZSteps) {
+<span class="fc" id="L110">		this.numberOfXYZSteps = numberOfXYZSteps;</span>
+<span class="fc" id="L111">	}</span>
+
+	@Override
+	public double[] getXyzStepSize() {
+<span class="fc" id="L115">		return xyzStepSize;</span>
+	}
+
+	@Override
+	public Set&lt;Molecule&gt; getMolecules() {
+<span class="fc" id="L120">		return molecules;</span>
+	}
+
+	/**
+	 * get all atoms in the cube
+	 */
+	@Override
+	public Set&lt;Atom&gt; getAtoms() {
+<span class="fc" id="L128">		Set&lt;Atom&gt; atoms = new HashSet&lt;Atom&gt;();</span>
+<span class="fc bfc" id="L129" title="All 2 branches covered.">		for (Molecule molecule : this.molecules) {</span>
+<span class="fc" id="L130">			atoms.addAll(molecule.getAtoms());</span>
+<span class="fc" id="L131">		}</span>
+<span class="fc" id="L132">		return atoms;</span>
+	}
+
+	@Override
+	public void setMolecules(Set&lt;Molecule&gt; molecules) {
+<span class="fc" id="L137">		this.molecules = molecules;</span>
+<span class="fc" id="L138">	}</span>
+
+	@Override
+	public String getName() {
+<span class="fc" id="L142">		return name;</span>
+	}
+
+	@Override
+	public void setName(String name) {
+<span class="fc" id="L147">		this.name = name;</span>
+<span class="fc" id="L148">	}</span>
+
+	@Value(&quot;#{'${yoink.cube.densityTypes}'.split(',')}&quot;)
+	public List&lt;DensityType&gt; getDensityTypes() {
+<span class="fc" id="L152">		return densityTypes;</span>
+	}
+
+	@Override
+	public void setDensityTypes(List&lt;DensityType&gt; densityTypes) {
+<span class="fc" id="L157">		this.densityTypes = densityTypes;</span>
+<span class="fc" id="L158">	}</span>
+
+	@Override
+	public int getSize() {
+<span class="fc" id="L162">		return size;</span>
+	}
+
+	@Override
+	public void setSize(int size) {
+<span class="fc" id="L167">		this.size = size;</span>
+<span class="fc" id="L168">	}</span>
+
+	@Override
+	public List&lt;Coord&gt; getCoordinates() {
+<span class="fc" id="L172">		return coordinates;</span>
+	}
+
+	@Override
+	public void setCoordinates(List&lt;Coord&gt; coordinates) {
+<span class="fc" id="L177">		this.coordinates = coordinates;</span>
+<span class="fc" id="L178">	}</span>
+
+	@Override
+	public List&lt;Double&gt; getValues() {
+<span class="fc" id="L182">		return this.values;</span>
+	}
+
+	@Override
+	public void setValues(List&lt;Double&gt; values) {
+<span class="fc" id="L187">		this.values = values;</span>
+<span class="fc" id="L188">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>

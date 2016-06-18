@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>CubePartitioner.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">yoink-core</a> &gt; <a href="index.source.html" class="el_package">org.wallerlab.yoink.regionizer.partitioner</a> &gt; <span class="el_source">CubePartitioner.java</span></div><h1>CubePartitioner.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2014-2015 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.wallerlab.yoink.regionizer.partitioner;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
+import org.wallerlab.yoink.api.model.cube.Cube;
+import org.wallerlab.yoink.api.model.cube.GridPoint;
+import org.wallerlab.yoink.api.model.density.DensityPoint.DensityType;
+import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.service.cube.Assigner;
+import org.wallerlab.yoink.api.service.cube.CubeBuilder;
+import org.wallerlab.yoink.api.service.regionizer.Partitioner;
+import org.wallerlab.yoink.cube.domain.SimpleCube;
+import org.wallerlab.yoink.cube.domain.SimpleGridPoint;
+
+/**
+ * This class is to get those grid points that belong to the intersection region
+ * of QM core region and non-QM core region. Then further calculation(dori and
+ * sedd) will just be carried out on those grid points.
+ * 
+ * 
+ */
+@Service
+<span class="fc" id="L48">public class CubePartitioner implements</span>
+		Partitioner&lt;List&lt;GridPoint&gt;, DensityType&gt; {
+
+	@Resource
+	private CubeBuilder&lt;Set&lt;Molecule&gt;&gt; cubeBuilder;
+
+	@Resource
+	private Assigner&lt;Coord, Map&lt;Region.Name, Region&gt;, Region.Name&gt; gridPointAssigner;
+
+	/**
+	 * loop over all grid points in the cube, find the grid points whose two
+	 * closest neighbours are from different regions(QM core region and non-QM
+	 * core region ).
+	 * 
+	 * @param regions
+	 *            - a Map, Region.Name
+	 *            {@link org.wallerlab.yoink.api.model.regionizer.Region.Name }
+	 *            as key, Region
+	 *            {@link org.wallerlab.yoink.api.model.regionizer.Region} as
+	 *            value
+	 * @param parameters
+	 *            - a Map, JobParameter
+	 *            {@link org.wallerlab.yoink.api.model.bootstrap.JobParameter}
+	 *            as Key, Object {@link java.lang.Object} as value
+	 * @param densityType
+	 *            -
+	 *            {@link org.wallerlab.yoink.api.model.density.DensityPoint.DensityType}
+	 * @return gridPointsForFurtherAnalysis - a list of gridPoint
+	 *         {@link org.wallerlab.yoink.api.model.cube.GridPoint }
+	 */
+	public List&lt;GridPoint&gt; partition(Map&lt;Region.Name, Region&gt; regions,
+			Map&lt;JobParameter, Object&gt; parameters, DensityType densityType) {
+		// initialize
+<span class="fc" id="L81">		double[] xyzStepSize = getXyzStepSizeByDensityType(parameters,</span>
+				densityType);
+		// Cube cube = new SimpleCube(xyzStepSize);
+<span class="fc" id="L84">		Region.Name cubeRegionName = (Region.Name) parameters</span>
+<span class="fc" id="L85">				.get(JobParameter.REGION_CUBE);</span>
+	
+<span class="fc" id="L87">		Set&lt;Molecule&gt; moleculesInCube = regions.get(cubeRegionName)</span>
+<span class="fc" id="L88">				.getMolecules();</span>
+<span class="fc" id="L89">		Cube cube = cubeBuilder.build(xyzStepSize, moleculesInCube);</span>
+		// gridPointsForFurtherAnalysis
+<span class="fc" id="L91">		List&lt;GridPoint&gt; gridPointsForFurtherAnalysis = getGridPointsWillBeCalculated(</span>
+				regions, cube, cubeRegionName);
+<span class="fc" id="L93">		return gridPointsForFurtherAnalysis;</span>
+	}
+
+	/*
+	 * DORI and SEDD calculations use different xyz step sizes.
+	 */
+	private double[] getXyzStepSizeByDensityType(
+			Map&lt;JobParameter, Object&gt; parameters, DensityType densityType) {
+		double[] xyzStepSize;
+		// get xyz step size
+<span class="pc bfc" id="L103" title="All 3 branches covered.">		switch (densityType) {</span>
+		case SEDD:
+<span class="fc" id="L105">			xyzStepSize = (double[]) parameters.get(JobParameter.SEDD_STEPSIZE);</span>
+<span class="fc" id="L106">			break;</span>
+		case DORI:
+<span class="fc" id="L108">			xyzStepSize = (double[]) parameters.get(JobParameter.DORI_STEPSIZE);</span>
+<span class="fc" id="L109">			break;</span>
+		default:
+<span class="fc" id="L111">			throw new IllegalArgumentException(&quot;invalid  name&quot;);</span>
+		}
+<span class="fc" id="L113">		return xyzStepSize;</span>
+	}
+
+	private List&lt;GridPoint&gt; getGridPointsWillBeCalculated(
+			Map&lt;Region.Name, Region&gt; regions, Cube cube,
+			Region.Name cubeRegionName) {
+<span class="fc" id="L119">		List&lt;GridPoint&gt; gridPoints = Collections</span>
+<span class="fc" id="L120">				.synchronizedList(new ArrayList&lt;GridPoint&gt;());</span>
+<span class="fc" id="L121">		List&lt;Coord&gt; coordinates = cube.getCoordinates();</span>
+<span class="fc" id="L122">		checkEveryGridPoint(regions, cubeRegionName, gridPoints, coordinates);</span>
+<span class="fc" id="L123">		return gridPoints;</span>
+	}
+
+	private void checkEveryGridPoint(Map&lt;Region.Name, Region&gt; regions,
+			Region.Name cubeRegionName, List&lt;GridPoint&gt; gridPoints,
+			List&lt;Coord&gt; coordinates) {
+<span class="fc" id="L129">		coordinates.parallelStream().forEach(</span>
+				currentCoord -&gt; {
+					Map&lt;String, Object&gt; properties = gridPointAssigner.assign(
+							currentCoord, regions, cubeRegionName);
+					if (!properties.isEmpty()) {
+						SimpleGridPoint gridPoint = new SimpleGridPoint();
+						gridPoint.setCoordinate(currentCoord);
+						gridPoint.setIndexInCube(coordinates
+								.indexOf(currentCoord));
+						gridPoint.setProperties(properties);
+						gridPoints.add(gridPoint);
+						
+					}
+				});
+<span class="fc" id="L143">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>
