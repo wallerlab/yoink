@@ -10,25 +10,17 @@
 
 
 
-
 #Quickstart
 
-###1. Cloning
 To obtain a copy of the source code, please enter the following [git](https://git-scm.com/) command:
 
- `git clone https://github.com/wallerlab/yoink.git`
+`git clone https://github.com/wallerlab/yoink.git`
 
-` cd yoink`
+`cd yoink`
 
-###2. Running
 In order to run yoink, please use the following [gradle ](https://gradle.org/) command:
 
 `./gradlew yoink`
-
-
-###2. Examples
-
-`./gradlew yoink examples`
 
 
 
