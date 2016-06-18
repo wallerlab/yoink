@@ -11,15 +11,16 @@ allprojects {
 	apply plugin: 'java'
 	apply plugin: 'eclipse'
 	apply plugin: 'groovy'
-        apply plugin: 'jacoco'
-        apply plugin: 'com.github.kt3k.coveralls'
-        apply plugin: "me.champeau.gradle.jmh"
+	apply plugin: 'jacoco'
+	apply plugin: 'com.github.kt3k.coveralls'
+	apply plugin: "me.champeau.gradle.jmh"
 
 
 	sourceCompatibility = 1.8
 	version = '0.0.1'
 
-	jar {
+	//Trying without jar, will move to publish.gradle
+	/*jar {
 		manifest {
 			attributes 'Implementation-Title': 'adaptive qm/mm partitioning','Gradle Quickstart', 'Implementation-Version': version,'Main-Class':'org.wallerlab.yoink.Yoink'
 		}
@@ -27,7 +28,7 @@ allprojects {
 
 	jar.doFirst{
 		sourceSets.main.java.srcDirs.each { from it }
-	}
+	}*/
 
 	repositories {
 		mavenCentral()
@@ -138,7 +139,9 @@ project(':yoink-core-bootstrap'){
 		compile project(':yoink-core-adaptive')
 		compile project(':yoink-core-clustering')
 	}
-	jar {
+
+	//Trying without jar, will move to publish.gradle
+	/*jar {
 		manifest {
 			attributes 'Implementation-Title': 'Gradle Quickstart', 'Implementation-Version': version,
 			'Main-Class':'org.wallerlab.yoink.Yoink'
@@ -154,7 +157,7 @@ project(':yoink-core-bootstrap'){
 	}
 	jar.doFirst{
 		sourceSets.main.java.srcDirs.each { from it }
-	}
+	}*/
 }
 
 
@@ -170,11 +173,9 @@ buildscript {
 			 url "https://plugins.gradle.org/m2/"
 			 }
 	}
-	dependencies { 
-	
-	classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.7.RELEASE") 
-	classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.6.3"
-
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.7.RELEASE")
+		classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.6.3"
 	}
 }
 
