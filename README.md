@@ -12,10 +12,9 @@ To obtain a copy of the source code with [git](https://git-scm.com/)
 
 `cd yoink`
 
-In order to run yoink then use [gradle](https://gradle.org/):
+then use [gradle](https://gradle.org/) to run yoink
 
 `./gradlew yoink`
-
 
 
 #See our wiki for more info:
