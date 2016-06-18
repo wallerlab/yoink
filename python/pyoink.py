@@ -7,27 +7,27 @@ import numpy as np
 class PYoink(object):
     def __init__(self, yoink_jar_path, input_file,out_file="./result.xml",system=None):
 	startJVM(getDefaultJVMPath(), "-Djava.class.path="+yoink_jar_path)
-	Yoink=JClass("org.wallerlab.yoink.Yoink")
+	Yoink=JClass("Yoink")
         yoink=Yoink()
         JavaApplicationContext=JClass("org.springframework.context.annotation.AnnotationConfigApplicationContext")
         javaApplicationContext=JavaApplicationContext()
         yoink.getBeans(javaApplicationContext)
-        FileAdaptiveQMMMProcessor=JClass("org.wallerlab.yoink.service.processor.FileAdaptiveQMMMProcessor")
+        FileAdaptiveQMMMProcessor=JClass("FileAdaptiveQMMMProcessor")
         self.adaptiveQMMM=javaApplicationContext.getBean(FileAdaptiveQMMMProcessor)
-        JaxbFileReader=JClass("org.wallerlab.yoink.molecular.data.JaxbFileReader")
+        JaxbFileReader=JClass("JaxbFileReader")
         jaxbFileReader=javaApplicationContext.getBean(JaxbFileReader)
         Cml=JClass("org.xml_cml.schema.Cml")
         self.jaxb_cml=jaxbFileReader.read(JString(input_file), Cml())
-        JaxbFileWriter=JClass("org.wallerlab.yoink.molecular.data.JaxbFileWriter")
+        JaxbFileWriter=JClass("JaxbFileWriter")
         self.jaxbFileWriter=javaApplicationContext.getBean(JaxbFileWriter)  
         self.result=None
         self.input_file=input_file   
 	self.out_file=out_file
 	self.atoms,self.molecules=self.get_atoms_molecules()
 	self.system=system
-	FileInteractionSetProcessor=JClass("org.wallerlab.yoink.service.processor.FileInteractionSetProcessor")
+	FileInteractionSetProcessor=JClass("FileInteractionSetProcessor")
 	self.interactionSetProcessor=javaApplicationContext.getBean(FileInteractionSetProcessor)
-	FileClusteringProcessor=JClass("org.wallerlab.yoink.service.processor.FileClusteringProcessor")	
+	FileClusteringProcessor=JClass("FileClusteringProcessor")
         self.clusteringProcessor=javaApplicationContext.getBean(FileClusteringProcessor)
 
 
@@ -55,8 +55,8 @@ class PYoink(object):
   	
 
     def get_qm_indices(self):
-        Region=JClass("org.wallerlab.yoink.api.model.regionizer.Region")
-        RegionName=JClass("org.wallerlab.yoink.api.model.regionizer.Region$Name")
+        Region=JClass("Region")
+        RegionName=JClass("Region$Name")
         qm_atoms=self.result.getRegions().get(RegionName.valueOf("QM")).getAtoms()
         qm_indices=[]
         qm_size= qm_atoms.size()

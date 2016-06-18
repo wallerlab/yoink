@@ -93,6 +93,8 @@ project(':yoink-core-adaptive'){
 }
 project(':yoink-core-clustering'){
 	dependencies{
+		compile project(':yoink-core-api')
+		compile project(':yoink-core-regionizer')
 	}
 }
 project(':yoink-core-regionizer'){
@@ -117,7 +119,7 @@ project(':yoink-core-adaptiveProcessor'){
 	}
 }
 
-project(':yoink-core-bootstrap'){
+project(':yoink-core-batch'){
 	dependencies {
 		compile project(':yoink-core-api')
 		compile project(':yoink-core-math')
@@ -150,7 +152,7 @@ buildscript {
 }
 
 dependencies {
-	compile project(':yoink-core-bootstrap')
+	compile project(':yoink-core-batch')
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter', version: '1.3.5.RELEASE'
 	compile("org.springframework.boot:spring-boot-starter-batch")
 }
@@ -199,7 +201,7 @@ def exportedProjects= [
 	":yoink-core-molecular",
 	":yoink-core-density",
 	":yoink-core-cube",
-	":yoink-core-bootstrap",
+	":yoink-core-batch",
 	":yoink-core-adaptive",
 	":yoink-core-regionizer",
 	":yoink-core-adaptiveProcessor",

@@ -27,6 +27,9 @@ import org.wallerlab.yoink.batch.api.service.Factory;
 import org.wallerlab.yoink.batch.api.service.regionizer.RegionizerMath;
 import org.wallerlab.yoink.batch.math.map.MapDifference;
 
+import static org.wallerlab.yoink.batch.api.model.regionizer.Region.Name.*;
+
+
 /**
  * this class is to get molecules in one region
  * 
