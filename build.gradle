@@ -7,6 +7,7 @@ buildscript {
 
   }
 }
+
 allprojects {
 	apply plugin: 'java'
 	apply plugin: 'eclipse'
@@ -15,20 +16,8 @@ allprojects {
 	apply plugin: 'com.github.kt3k.coveralls'
 	apply plugin: "me.champeau.gradle.jmh"
 
-
 	sourceCompatibility = 1.8
 	version = '0.0.1'
-
-	//Trying without jar, will move to publish.gradle
-	/*jar {
-		manifest {
-			attributes 'Implementation-Title': 'adaptive qm/mm partitioning','Gradle Quickstart', 'Implementation-Version': version,'Main-Class':'org.wallerlab.yoink.Yoink'
-		}
-	}
-
-	jar.doFirst{
-		sourceSets.main.java.srcDirs.each { from it }
-	}*/
 
 	repositories {
 		mavenCentral()
@@ -67,7 +56,7 @@ project(':yoink-core-api'){
 }
 
 project(':yoink-core-math'){
-	dependencies{	compile project(':yoink-core-api')  }
+	dependencies{ compile project(':yoink-core-api')  }
 }
 
 project(':yoink-core-molecular'){
@@ -104,7 +93,6 @@ project(':yoink-core-adaptive'){
 }
 project(':yoink-core-clustering'){
 	dependencies{
-		
 	}
 }
 project(':yoink-core-regionizer'){
@@ -139,30 +127,12 @@ project(':yoink-core-bootstrap'){
 		compile project(':yoink-core-adaptive')
 		compile project(':yoink-core-clustering')
 	}
-
-	//Trying without jar, will move to publish.gradle
-	/*jar {
-		manifest {
-			attributes 'Implementation-Title': 'Gradle Quickstart', 'Implementation-Version': version,
-			'Main-Class':'org.wallerlab.yoink.Yoink'
-		}
-		from{
-			configurations.compile.collect{
-				it.isDirectory() ? it:zipTree(it)
-			}
-			configurations.runtime.collect{
-				it.isDirectory() ? it:zipTree(it)
-			}
-		}
-	}
-	jar.doFirst{
-		sourceSets.main.java.srcDirs.each { from it }
-	}*/
 }
 
 
 apply plugin: 'spring-boot'
 apply plugin: 'application'
+
 mainClassName = "org.wallerlab.yoink.Yoink"
 
 buildscript {
@@ -180,8 +150,10 @@ buildscript {
 }
 
 dependencies {
+	compile project(':yoink-core-bootstrap')
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter', version: '1.3.5.RELEASE'
-	compile("org.springframework.boot:spring-boot-starter-batch") }
+	compile("org.springframework.boot:spring-boot-starter-batch")
+}
 
 configurations { all*.exclude module : 'spring-boot-starter-logging' }
 

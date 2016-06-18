@@ -20,12 +20,12 @@ import java.io.IOException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-
 /**
  * This class is the main class of Yoink
  *
  * @author Min Zheng
  */
+
 @SpringBootApplication
 public class Yoink {
     /**

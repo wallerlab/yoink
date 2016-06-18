@@ -13,23 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.wallerlab.yoink.processor;
 
-import java.io.File;
-import java.io.IOException;
-
-import junit.framework.Assert;
-
-import org.junit.Test;
 import org.wallerlab.yoink.Yoink;
+
+import java.io.File;
+import junit.framework.Assert;
+import org.junit.Test;
 
 public class TestYoink {
 
 	@Test
 	public void testYoink() throws Exception {
 
-		File files_in = new File("./inputs");
+		File files_in = new File("inputs");
 		File files_out = new File("./outputs");
 		deleteDirectory(files_in);
 		deleteDirectory(files_out);
