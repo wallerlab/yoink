@@ -55,7 +55,7 @@ Its main feature is to do density based adaptive QM/MM partitioning. Also distan
 ### -	Documentation
 | Page | description |
 | ------------- |-------------|
-|[Code Structure](https://gradle.org/ | An overview of the modules and sequence diagrams |
+|[Code Structure](https://gradle.org/) | An overview of the modules and sequence diagrams |
 
 
 
