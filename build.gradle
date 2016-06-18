@@ -184,6 +184,11 @@ dependencies {
 
 configurations { all*.exclude module : 'spring-boot-starter-logging' }
 
+
+
+// Simple 'alias' for calling yoink, instead of more cryptic bootRun.
+task yoink(dependsOn: bootRun)
+
 // generate one jar file for multi projects
 
 /**
