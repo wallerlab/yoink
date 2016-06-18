@@ -23,6 +23,7 @@ In order to run yoink, please use the following [gradle ](https://gradle.org/) c
 | ------------- |-------------|
 |[Code Structure](https://github.com/wallerlab/yoink/wiki/structure) | An overview of the modules and sequence diagrams |
 |[Options](https://github.com/wallerlab/yoink/wiki/options) | An explanation of each of the options available in yoink |
+|[Features](https://github.com/wallerlab/yoink/wiki/feautres) | The various feautres inside yoink, and their citations  |
 |[Deploy](https://github.com/wallerlab/yoink/wiki/deploy) | An explanation on how to deploy yoink |
 |[Publish](https://github.com/wallerlab/yoink/wiki/publish) | An explanation on how to publish artifacts from yoink |
 
