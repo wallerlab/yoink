@@ -6,20 +6,20 @@
 
 #Quickstart
 
-To obtain a copy of the source code, please enter the following [git](https://git-scm.com/) command:
+To obtain a copy of the source code with [git](https://git-scm.com/)
 
 `git clone https://github.com/wallerlab/yoink.git`
 
 `cd yoink`
 
-In order to run yoink, please use the following [gradle ](https://gradle.org/) command:
+In order to run yoink then use [gradle](https://gradle.org/):
 
 `./gradlew yoink`
 
 
 
-#Documentation
-| Page | description |
+#See our wiki for more info:
+| Page | Description |
 | ------------- |-------------|
 |[Options](https://github.com/wallerlab/yoink/wiki/options) | An explanation of each of the options available in yoink |
 |[Features](https://github.com/wallerlab/yoink/wiki/feautres) | The various feautres inside yoink, and their citations  |
