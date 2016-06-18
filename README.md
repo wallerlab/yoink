@@ -4,8 +4,6 @@
 [![Coverage Status](https://coveralls.io/repos/github/wallerlab/yoink/badge.svg?branch=master)](https://coveralls.io/github/wallerlab/yoink?branch=master)
 [![Apache icense](http://img.shields.io/badge/license-APACHE2-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 
-*Yoink is a program for performing (adaptive) QM/MM partitioning.*
-
 #Quickstart
 
 To obtain a copy of the source code, please enter the following [git](https://git-scm.com/) command:
