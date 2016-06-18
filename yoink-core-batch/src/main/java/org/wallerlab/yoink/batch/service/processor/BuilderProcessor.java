@@ -35,10 +35,6 @@ import org.xml_cml.schema.Cml;
  * needed for adaptive QM/MM partitioning.
  * 
  * @author Min Zheng
- * @param <O> output type
- * @param <I> input type
- * @param <O> output type
- * @param <I> input type
  *
  */
 @Service

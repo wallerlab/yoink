@@ -32,8 +32,6 @@ import org.wallerlab.yoink.cluster.InteractionSet;
  * This class is to set up and execute region based on DORI analysis.
  * 
  * @author Min Zheng
- * @param <I> input
- * @param <O> output
  *
  */
 public class ClusteringProcessor implements ItemProcessor<Job<JAXBElement>, Job> {

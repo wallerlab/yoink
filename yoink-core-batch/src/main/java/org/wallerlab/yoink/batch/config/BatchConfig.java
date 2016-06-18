@@ -128,15 +128,8 @@ public class BatchConfig  implements ApplicationContextAware {
 	/**
 	 * build executing steps
 	 *
-	 * @param stepBuilderFactory
-	 *            -
-	 *            {@link org.springframework.batch.core.configuration.annotation.StepBuilderFactory}
-	 * @param cmlFilereader
-	 *            -{@link org.springframework.batch.item.ItemReader}
-	 * @param serialAdaptiveQMMMProcessor
-	 *            -{@link org.springframework.batch.item.ItemProcessor}
-	 * @param cmlFileResponseWriter
-	 *            -{@link org.springframework.batch.item.ItemWriter}
+	 * @param processor to do computation
+	 *
 	 * @return Step -{@link org.springframework.batch.core.Step}
 	 */
 	@Bean
@@ -152,10 +145,8 @@ public class BatchConfig  implements ApplicationContextAware {
 	/**
 	 * build a batch job using a batch based approach.
 	 *
-	 * @param jobs
-	 *            -
-	 *            {@link org.springframework.batch.core.configuration.annotation.JobBuilderFactory}
-	 *
+	 * @param step to be executed
+	 * @param name string to be used as job ID.
 	 * @return Job -{@link org.springframework.batch.core.Job}
 	 */
 	private org.springframework.batch.core.Job fileJob(Step step,String name) {
@@ -170,9 +161,9 @@ public class BatchConfig  implements ApplicationContextAware {
 	/**
 	 * build a batch job using a JMS based approach.
 	 *
-	 * @param jobs
-	 *            -
-	 *            {@link org.springframework.batch.core.configuration.annotation.JobBuilderFactory}
+	 * @param step to be executed
+	 * @param name string to be used as job ID.
+	 *
 	 *
 	 * @return Job -{@link org.springframework.batch.core.Job}
 	 */
@@ -187,9 +178,8 @@ public class BatchConfig  implements ApplicationContextAware {
 	/**
 	 * build executing steps
 	 *
-	 * @param stepBuilderFactory
-	 *            -
-	 *            {@link org.springframework.batch.core.configuration.annotation.StepBuilderFactory}
+	 * @param processor for computation
+	 *
 	 * @return Step -{@link org.springframework.batch.core.Step}
 	 */
 	@Bean
