@@ -1,4 +1,4 @@
-/**this package contains Main class.
+/**this package contains batch code for YOINK.
  * @author Min Zheng
  *
  */

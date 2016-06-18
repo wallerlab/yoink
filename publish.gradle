@@ -3,7 +3,7 @@
 //Bootstrap project
 /*jar {
     manifest {
-        attributes 'Implementation-Title': 'Gradle Quickstart', 'Implementation-Version': version,
+        attributes 'Implementation-Title': 'Yoink', 'Implementation-Version': version,
         'Main-Class':'org.wallerlab.yoink.Yoink'
     }
     from{
