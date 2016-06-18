@@ -45,7 +45,7 @@ class CommunityImpl implements Community {
 			size++;
 			for (Relationship edge : node.getRelationships(edgeType)) {
 
-				double weight = (double) edge.getProperty("weight", 1.0);
+				double weight = (double) edge.getProperty("weights", 1.0);
 				totalsum += weight;
 
 				if (edge.getOtherNode(node).hasLabel(label)) {
@@ -97,7 +97,7 @@ class CommunityImpl implements Community {
 
 				if (edge.getOtherNode(node).getId() == incidentNode.getId()) {
 
-					sum += (double) edge.getProperty("weight", 1.0);
+					sum += (double) edge.getProperty("weights", 1.0);
 
 				}
 			}

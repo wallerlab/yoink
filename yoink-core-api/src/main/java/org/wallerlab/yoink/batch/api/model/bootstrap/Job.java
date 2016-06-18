@@ -137,16 +137,16 @@ public interface Job<T> {
 	void SetInteractionList(List<List<Integer>> interactionSet);
 
 	/**
-	 * get the weight(strength) of the interaction
+	 * get the weights(strength) of the interaction
 	 * 
 	 * @return list of weights
 	 */
 	List<Double> getInteractionWeight();
 
 	/**
-	 * set the weight(strength) of the interaction
+	 * set the weights(strength) of the interaction
 	 * 
-	 * @param interactionWeight weight of interaction
+	 * @param interactionWeight weights of interaction
 	 */
 	void SetInteractionWeight(List<Double> interactionWeight);
 

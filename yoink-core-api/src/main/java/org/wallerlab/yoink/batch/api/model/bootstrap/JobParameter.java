@@ -56,7 +56,7 @@ package org.wallerlab.yoink.batch.api.model.bootstrap;
  *<p>	NUMBER_PARTITION: number of partitioning in DISTANCE_SCMP	</p>
  *<p>	DGRID: adopt radial grid for promolecular density 	</p>
  *<p>	MAX_COMMS:  number of max communities of clustering	</p>
- *<p> INTERACTION_WEIGHT: True or False to calculate the strength(weight) of the interaction  </p>
+ *<p> INTERACTION_WEIGHT: True or False to calculate the strength(weights) of the interaction  </p>
  *<p>	WFC_PATH: the database path of radial grid for promolecular density  	</p>
  * @author Min Zheng
  *

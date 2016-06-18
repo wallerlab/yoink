@@ -33,7 +33,7 @@ import javax.xml.namespace.QName;
  *   &lt;simpleContent>
  *     &lt;extension base="&lt;http://www.xml-cml.org/schema>vector3Type">
  *       &lt;attGroup ref="{http://www.xml-cml.org/schema}id"/>
- *       &lt;attGroup ref="{http://www.xml-cml.org/schema}weight"/>
+ *       &lt;attGroup ref="{http://www.xml-cml.org/schema}weights"/>
  *       &lt;attGroup ref="{http://www.xml-cml.org/schema}title"/>
  *       &lt;attGroup ref="{http://www.xml-cml.org/schema}label"/>
  *       &lt;attGroup ref="{http://www.xml-cml.org/schema}convention"/>
@@ -54,7 +54,7 @@ public class Kpoint {
 	protected List<Float> value;
 	@XmlAttribute(name = "id")
 	protected String id;
-	@XmlAttribute(name = "weight")
+	@XmlAttribute(name = "weights")
 	protected Double weight;
 	@XmlAttribute(name = "title")
 	protected String title;
@@ -134,7 +134,7 @@ public class Kpoint {
 	}
 
 	/**
-	 * Gets the value of the weight property.
+	 * Gets the value of the weights property.
 	 * 
 	 * @return possible object is {@link Double }
 	 * 
@@ -144,7 +144,7 @@ public class Kpoint {
 	}
 
 	/**
-	 * Sets the value of the weight property.
+	 * Sets the value of the weights property.
 	 * 
 	 * @param value
 	 *            allowed object is {@link Double }

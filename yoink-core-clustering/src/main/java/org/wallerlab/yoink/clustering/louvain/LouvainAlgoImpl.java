@@ -92,7 +92,7 @@ public class LouvainAlgoImpl {
 
 			if (edge.isType(edgeType)) {
 
-				m += (double) edge.getProperty("weight", 1.0);
+				m += (double) edge.getProperty("weights", 1.0);
 			}
 		}
 

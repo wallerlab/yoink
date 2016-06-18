@@ -128,7 +128,7 @@ class CommunitySpec extends Specification {
 
 		// a -3- a -1- b -2- c
 		
-		def w = "weight"
+		def w = "weights"
 		nodes.get(0).createRelationshipTo(nodes.get(0), Relations.INTERACT).setProperty(w, 3.0d)
 		nodes.get(0).createRelationshipTo(nodes.get(1), Relations.INTERACT).setProperty(w, 1.0d)
 		nodes.get(1).createRelationshipTo(nodes.get(2), Relations.INTERACT).setProperty(w, 2.0d)

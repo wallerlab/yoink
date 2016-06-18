@@ -42,7 +42,7 @@ import org.w3c.dom.Element;
  *       &lt;attGroup ref="{http://www.xml-cml.org/schema}id"/>
  *       &lt;attGroup ref="{http://www.xml-cml.org/schema}title"/>
  *       &lt;attGroup ref="{http://www.xml-cml.org/schema}label"/>
- *       &lt;attGroup ref="{http://www.xml-cml.org/schema}weight"/>
+ *       &lt;attGroup ref="{http://www.xml-cml.org/schema}weights"/>
  *       &lt;attGroup ref="{http://www.xml-cml.org/schema}dictRef"/>
  *       &lt;attGroup ref="{http://www.xml-cml.org/schema}convention"/>
  *       &lt;anyAttribute processContents='lax' namespace='##other'/>
@@ -68,7 +68,7 @@ public class Band {
 	protected String title;
 	@XmlAttribute(name = "label")
 	protected String label;
-	@XmlAttribute(name = "weight")
+	@XmlAttribute(name = "weights")
 	protected Double weight;
 	@XmlAttribute(name = "dictRef")
 	protected String dictRef;
@@ -295,7 +295,7 @@ public class Band {
 	}
 
 	/**
-	 * Gets the value of the weight property.
+	 * Gets the value of the weights property.
 	 * 
 	 * @return possible object is {@link Double }
 	 * 
@@ -305,7 +305,7 @@ public class Band {
 	}
 
 	/**
-	 * Sets the value of the weight property.
+	 * Sets the value of the weights property.
 	 * 
 	 * @param value
 	 *            allowed object is {@link Double }

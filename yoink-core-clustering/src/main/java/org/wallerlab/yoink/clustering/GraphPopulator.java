@@ -70,7 +70,7 @@ class GraphPopulator<T> {
 			Node otherNode = bimap.get(triple.second);
 			Relationship edge = node.createRelationshipTo(otherNode, Relations.INTERACT);
 			
-			edge.setProperty("weight", triple.weight);
+			edge.setProperty("weights", triple.weight);
 			
 
 		}
@@ -90,7 +90,7 @@ class GraphPopulator<T> {
 			Node otherNode = bimap.get(list.get(1));
 			Relationship edge = node.createRelationshipTo(otherNode, Relations.INTERACT);
 			
-		//	edge.setProperty("weight", 1.0);
+		//	edge.setProperty("weights", 1.0);
 			;
 
 		}

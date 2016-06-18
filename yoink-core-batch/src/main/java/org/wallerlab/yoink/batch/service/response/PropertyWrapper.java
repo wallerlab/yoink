@@ -141,7 +141,7 @@ public class PropertyWrapper implements Wrapper<Job<JAXBElement>> {
 			Map<String, Object> properties, ObjectFactory objectFactory,
 			PropertyList propertyList) {
 		Property property = objectFactory.createProperty();
-		property.setTitle("weight and smooth factors ");
+		property.setTitle("weights and smooth factors ");
 		loopOverAllWeightConfigurations(properties, objectFactory,
 				propertyList, property);
 		loopOverBufferMolecules(job, objectFactory, propertyList, property);
@@ -184,7 +184,7 @@ public class PropertyWrapper implements Wrapper<Job<JAXBElement>> {
 		if (properties.containsKey("weightfactors")) {
 			Map<List<Integer>, Double> molecularIndicesAndWeightFactor = (Map<List<Integer>, Double>) properties
 					.get("weightfactors");
-			propertyList.setTitle(propertyList.getTitle() + "  weight factors");
+			propertyList.setTitle(propertyList.getTitle() + "  weights factors");
 			for (List<Integer> indices : molecularIndicesAndWeightFactor
 					.keySet()) {
 				putEveryConfigurationWeightedFactorInScalar(objectFactory,

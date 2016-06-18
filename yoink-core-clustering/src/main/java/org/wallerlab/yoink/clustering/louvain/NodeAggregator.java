@@ -47,7 +47,7 @@ class NodeAggregator {
 
 			AggregationTuple tuple = new AggregationTuple(edge);
 
-			Double weight = Double.valueOf((double) edge.getProperty("weight",
+			Double weight = Double.valueOf((double) edge.getProperty("weights",
 					1.0));
 
 			if (aggregation.containsKey(tuple)) {
@@ -100,7 +100,7 @@ class NodeAggregator {
 			Node one = parentIndex.get( tuple.getStart() );
 			Node two = parentIndex.get( tuple.getEnd() );
 			
-			one.createRelationshipTo(two, edgeType).setProperty("weight", aggregation.get(tuple));;
+			one.createRelationshipTo(two, edgeType).setProperty("weights", aggregation.get(tuple));;
 			
 		}
 		
