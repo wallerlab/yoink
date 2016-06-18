@@ -52,7 +52,10 @@ Its main feature is to do density based adaptive QM/MM partitioning. Also distan
 | Louvain | Vincent D Blondel, Jean-Loup Guillaume, Renaud Lambiotte, Etienne Lefebvre, Journal of Statistical Mechanics: Theory and Experiment 2008 (10), P10008 (12pp) doi: 10.1088/1742-5468/2008/10/P10008 |
 
 
-
+### -	Documentation
+| Page | description |
+| ------------- |-------------|
+|[Code Structure](https://gradle.org/ | An overview of the modules and sequence diagrams |
 
 
 
