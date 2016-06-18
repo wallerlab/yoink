@@ -55,7 +55,10 @@ Its main feature is to do density based adaptive QM/MM partitioning. Also distan
 ### -	Documentation
 | Page | description |
 | ------------- |-------------|
-|[Code Structure](https://gradle.org/) | An overview of the modules and sequence diagrams |
+|[Code Structure](https://github.com/wallerlab/yoink/wiki/structure) | An overview of the modules and sequence diagrams |
+|[Options](https://github.com/wallerlab/yoink/wiki/options) | An explanation of each of the options available in yoink |
+|[deploy](https://github.com/wallerlab/yoink/wiki/deploy) | An explanation on how to deploy yoink |
+|[Publish](https://github.com/wallerlab/yoink/wiki/publish) | An explanation on how to publish artifacts from yoink |
 
 
 
