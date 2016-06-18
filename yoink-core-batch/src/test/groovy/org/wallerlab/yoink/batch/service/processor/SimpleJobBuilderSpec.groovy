@@ -16,7 +16,6 @@
  */
 package org.wallerlab.yoink.batch.service.processor
 
-import org.wallerlab.yoink.batch.service.processor.SimpleJobBuilder
 import org.xml_cml.schema.ObjectFactory
 
 import spock.lang.Specification
@@ -42,7 +41,7 @@ class SimpleJobBuilderSpec extends Specification {
 		
 
 		when:"set up a new JobBuilder"
-		def builder=new SimpleJobBuilder()
+		def builder=new BuilderProcessor()
 		builder.molecularSystemTranslator=molecularSystemTranslator
 		builder.parameterTranslator=parameterTranslator
 		

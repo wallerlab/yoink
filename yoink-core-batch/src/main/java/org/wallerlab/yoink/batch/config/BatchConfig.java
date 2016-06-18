@@ -23,6 +23,7 @@ import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
+import org.springframework.batch.item.support.CompositeItemProcessor;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -36,6 +37,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.wallerlab.yoink.batch.api.model.bootstrap.Job;
 
 import javax.xml.bind.JAXBElement;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -48,7 +51,7 @@ import javax.xml.bind.JAXBElement;
 @EnableBatchProcessing
 @EnableTransactionManagement
 @PropertySource("classpath:application.properties")
-public class BatchConfig  implements ApplicationContextAware{
+public class BatchConfig  implements ApplicationContextAware {
 
 	ApplicationContext appContext;
 
@@ -67,10 +70,9 @@ public class BatchConfig  implements ApplicationContextAware{
 	@Qualifier("cmlFileReader")
 	ItemReader fileReader;
 
-
 	@Autowired
 	@Qualifier("jobBuilder")
-	public ItemProcessor<JAXBElement, JAXBElement> jobBuilder;
+	public ItemProcessor<JAXBElement, JAXBElement> builderProcessor;
 
 	@Autowired
 	@Qualifier("adaptiveProcessor")
@@ -81,6 +83,26 @@ public class BatchConfig  implements ApplicationContextAware{
 	public ItemProcessor<Job<JAXBElement>, Job> clusterProcessor;
 
 
+	@Bean
+	ItemProcessor<JAXBElement, Job> builderAndAdaptiveProcessor(){
+		CompositeItemProcessor compositeProcessor = new CompositeItemProcessor();
+		List<ItemProcessor> processors = new ArrayList<ItemProcessor>();
+		processors.add(builderProcessor);
+		processors.add(adaptiveProcessor);
+		compositeProcessor.setDelegates(processors);
+		return compositeProcessor;
+	}
+
+	@Bean
+	ItemProcessor<JAXBElement, Job> builderAndClusterProcessor(){
+		CompositeItemProcessor compositeProcessor = new CompositeItemProcessor();
+		List<ItemProcessor> processors = new ArrayList<ItemProcessor>();
+		processors.add(builderProcessor);
+		processors.add(clusterProcessor);
+		compositeProcessor.setDelegates(processors);
+		return compositeProcessor;
+	}
+
 	@Autowired
 	ItemWriter jmsWriter;
 
@@ -89,16 +111,16 @@ public class BatchConfig  implements ApplicationContextAware{
 
 
 	@Bean
-	org.springframework.batch.core.Job jmsAdaptive(){ return job(jmsStep(adaptiveProcessor),"jmsAdaptive");}
+	org.springframework.batch.core.Job jmsAdaptive(){ return job(jmsStep(builderAndAdaptiveProcessor()),"jmsAdaptive");}
 
 	@Bean
-	org.springframework.batch.core.Job jmsCluster(){ return job(jmsStep(clusterProcessor),"jmsCluster");}
+	org.springframework.batch.core.Job jmsCluster(){ return job(jmsStep(builderAndClusterProcessor()),"jmsCluster");}
 
 	@Bean
-	org.springframework.batch.core.Job fileAdaptive(){ return job(fileStep(adaptiveProcessor),"fileAdaptive");}
+	org.springframework.batch.core.Job fileAdaptive(){ return job(fileStep(builderAndAdaptiveProcessor()),"fileAdaptive");}
 
 	@Bean
-	org.springframework.batch.core.Job fileCluster(){ return job(fileStep(clusterProcessor),"fileCluster");}
+	org.springframework.batch.core.Job fileCluster(){ return job(fileStep(builderAndClusterProcessor()),"fileCluster");}
 
 
 
@@ -154,7 +176,6 @@ public class BatchConfig  implements ApplicationContextAware{
 	 *
 	 * @return Job -{@link org.springframework.batch.core.Job}
 	 */
-	@Bean
 	public org.springframework.batch.core.Job job( Step step, String name) {
 		return jobs.get(name)
 				.incrementer(new RunIdIncrementer())
@@ -171,6 +192,7 @@ public class BatchConfig  implements ApplicationContextAware{
 	 *            {@link org.springframework.batch.core.configuration.annotation.StepBuilderFactory}
 	 * @return Step -{@link org.springframework.batch.core.Step}
 	 */
+	@Bean
 	public Step jmsStep(ItemProcessor processor) {
 		return stepBuilderFactory.get("adaptiveQMMMJms")
 				.<String, org.wallerlab.yoink.batch.api.model.bootstrap.Job> chunk(1)

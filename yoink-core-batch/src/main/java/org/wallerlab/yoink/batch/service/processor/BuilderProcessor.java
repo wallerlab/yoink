@@ -42,7 +42,7 @@ import org.xml_cml.schema.Cml;
  *
  */
 @Service
-public class SimpleJobBuilder implements JobBuilder<JAXBElement, JAXBElement> {
+public class BuilderProcessor implements JobBuilder<JAXBElement, JAXBElement> {
 
 	@Resource
 	protected Translator<MolecularSystem, JAXBElement<Cml>> molecularSystemTranslator;
