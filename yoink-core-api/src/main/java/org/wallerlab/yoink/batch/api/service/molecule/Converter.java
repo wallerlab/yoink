@@ -13,19 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wallerlab.yoink.batch.api.service.molecular;
+package org.wallerlab.yoink.batch.api.service.molecule;
 
 /**
- * this interface is for method translate K to T
+ * this interface contains enum UnitConverterType
  * 
  * @author Min Zheng
  *
- * @param <T>
- *            -specified return type
- * @param <K>
- *            -specified argument type will be translated
  */
-public interface Translator<T, K> {
+public interface Converter {
 
-	T translate(K k);
+	/**
+	 * unit convert coefficient for angstrom to bohr and bohr to angstrom
+	 * 
+	 * @author Min Zheng
+	 *
+	 */
+	public enum UnitConverterType {
+
+		AngstromToBohr(1.8897259885789), BohrToAngstrom(0.529177249);
+
+		private final double constant;
+
+		UnitConverterType(double constant) {
+			this.constant = constant;
+		}
+
+		public double value() {
+			return constant;
+		}
+	}
+
 }

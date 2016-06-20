@@ -13,18 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package org.wallerlab.yoink.batch.api.service.molecular;
+package org.wallerlab.yoink.batch.api.service.molecule;
 
 /**
- * this interface is to write one object into a file
+ * this interface is for method translate K to T
  * 
  * @author Min Zheng
  *
  * @param <T>
- *            -the data type to be written, eg. JAXBElement
+ *            -specified return type
+ * @param <K>
+ *            -specified argument type will be translated
  */
-public interface FilesWriter<T> {
+public interface Translator<T, K> {
 
-	void write(String fileName, T t);
+	T translate(K k);
 }

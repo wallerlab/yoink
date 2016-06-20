@@ -1,4 +1,4 @@
-package org.wallerlab.yoink.batch;
+package org.wallerlab.yoink;
 
 /*
  * Copyright 2014-2015 the original author or authors.

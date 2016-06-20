@@ -12,7 +12,7 @@ import org.wallerlab.yoink.batch.api.service.math.Vector;
  * @author Min Zheng
  *
  */
-public interface AdaptiveProcessor {
+public interface QmMmWrapper {
 
 	/**
 	 * this method is to process energy and force during adaptive qm/mm.

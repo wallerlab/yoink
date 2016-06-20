@@ -13,35 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wallerlab.yoink.batch.api.service.molecular;
+package org.wallerlab.yoink.plugin.config;
+
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 
 /**
- * this interface contains enum UnitConverterType
+ * This class is to make configuration for project Processor
  * 
  * @author Min Zheng
  *
  */
-public interface Converter {
-
-	/**
-	 * unit convert coefficient for angstrom to bohr and bohr to angstrom
-	 * 
-	 * @author Min Zheng
-	 *
-	 */
-	public enum UnitConverterType {
-
-		AngstromToBohr(1.8897259885789), BohrToAngstrom(0.529177249);
-
-		private final double constant;
-
-		UnitConverterType(double constant) {
-			this.constant = constant;
-		}
-
-		public double value() {
-			return constant;
-		}
-	}
+@Configuration
+@ComponentScan("org.wallerlab.yoink")
+public class PluginConfig {
 
 }

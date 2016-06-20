@@ -2,4 +2,4 @@
  * @author Min Zheng
  *
  */
-package org.wallerlab.yoink.batch.api.service.molecular;
+package org.wallerlab.yoink.batch.api.service.molecule;

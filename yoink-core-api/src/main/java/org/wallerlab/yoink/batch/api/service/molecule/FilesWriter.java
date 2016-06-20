@@ -13,19 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wallerlab.yoink.plugin.config;
 
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+package org.wallerlab.yoink.batch.api.service.molecule;
 
 /**
- * This class is to make configuration for project Processor
+ * this interface is to write one object into a file
  * 
  * @author Min Zheng
  *
+ * @param <T>
+ *            -the data type to be written, eg. JAXBElement
  */
-@Configuration
-@ComponentScan("org.wallerlab.yoink")
-public class ProcessorConfig {
+public interface FilesWriter<T> {
 
+	void write(String fileName, T t);
 }
