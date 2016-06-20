@@ -1,7 +1,7 @@
 package org.wallerlab.yoink.cluster
 
-
-
+import org.wallerlab.yoink.cluster.service.interaction.InteractionTriple
+import org.wallerlab.yoink.cluster.service.louvain.LouvainClusteringFacade
 import spock.lang.*;
 
 class CompleteLouvainIntegrationSpec extends Specification {

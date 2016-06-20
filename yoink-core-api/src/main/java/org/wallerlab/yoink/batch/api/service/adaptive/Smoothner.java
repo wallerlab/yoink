@@ -17,7 +17,7 @@ package org.wallerlab.yoink.batch.api.service.adaptive;
 
 import javax.xml.bind.JAXBElement;
 
-import org.wallerlab.yoink.batch.api.model.bootstrap.Job;
+import org.wallerlab.yoink.batch.api.model.batch.Job;
 
 /**
  * this interface contains method smooth and enum smoothner type

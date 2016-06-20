@@ -24,7 +24,7 @@ import javax.annotation.Resource;
 import javax.xml.bind.JAXBElement;
 
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.batch.api.model.bootstrap.Job;
+import org.wallerlab.yoink.batch.api.model.batch.Job;
 import org.wallerlab.yoink.batch.api.model.molecular.Coord;
 import org.wallerlab.yoink.batch.api.model.molecular.Molecule;
 import org.wallerlab.yoink.batch.api.model.regionizer.Region;

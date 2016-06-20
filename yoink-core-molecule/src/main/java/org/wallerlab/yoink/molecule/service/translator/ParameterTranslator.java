@@ -22,12 +22,12 @@ import javax.xml.bind.JAXBElement;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.batch.api.model.bootstrap.JobParameter;
+import org.wallerlab.yoink.batch.api.model.batch.JobParameter;
 import org.wallerlab.yoink.batch.api.model.regionizer.Region;
 import org.wallerlab.yoink.batch.api.service.adaptive.Smoothner;
 import org.wallerlab.yoink.batch.api.service.molecular.Translator;
 import org.wallerlab.yoink.batch.api.service.molecular.Converter.UnitConverterType;
-import org.wallerlab.yoink.batch.api.service.regionizer.Partitioner;
+import org.wallerlab.yoink.batch.api.service.region.Partitioner;
 import org.xml_cml.schema.Cml;
 import org.xml_cml.schema.Parameter;
 import org.xml_cml.schema.ParameterList;

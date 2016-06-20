@@ -19,10 +19,10 @@ import org.wallerlab.yoink.adaptive.services.BufferAdaptiveProcessor
 import spock.lang.Specification
 import org.wallerlab.yoink.api.enums.*
 import org.wallerlab.yoink.batch.api.model.molecular.Coord
-import org.wallerlab.yoink.batch.api.model.bootstrap.Job;
+import org.wallerlab.yoink.batch.api.model.batch.Job;
 import org.wallerlab.yoink.batch.api.model.molecular.Molecule;
 import org.wallerlab.yoink.batch.api.model.regionizer.Region
-import org.wallerlab.yoink.batch.api.service.adaptiveProcessor.AdaptiveProcessor
+import org.wallerlab.yoink.batch.api.service.plugin.AdaptiveProcessor
 
 class BufferAdaptiveProcessorSpec  extends Specification{
 

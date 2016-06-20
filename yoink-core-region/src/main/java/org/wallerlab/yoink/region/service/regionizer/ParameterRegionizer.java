@@ -5,12 +5,12 @@ import java.util.Set;
 
 import javax.annotation.Resource;
 
-import org.wallerlab.yoink.batch.api.model.bootstrap.JobParameter;
+import org.wallerlab.yoink.batch.api.model.batch.JobParameter;
 import org.wallerlab.yoink.batch.api.model.molecular.Coord;
 import org.wallerlab.yoink.batch.api.model.molecular.Molecule;
 import org.wallerlab.yoink.batch.api.model.regionizer.Region;
 import org.wallerlab.yoink.batch.api.service.Factory;
-import org.wallerlab.yoink.batch.api.service.regionizer.Regionizer;
+import org.wallerlab.yoink.batch.api.service.region.Regionizer;
 
 /**
  * this class is for parameter based adaptive qm/mm partitioning (distance and

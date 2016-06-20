@@ -23,7 +23,7 @@ import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.batch.api.model.bootstrap.JobParameter;
+import org.wallerlab.yoink.batch.api.model.batch.JobParameter;
 import org.wallerlab.yoink.batch.api.model.cube.GridPoint;
 import org.wallerlab.yoink.batch.api.model.density.DensityPoint;
 import org.wallerlab.yoink.batch.api.model.molecular.Atom;

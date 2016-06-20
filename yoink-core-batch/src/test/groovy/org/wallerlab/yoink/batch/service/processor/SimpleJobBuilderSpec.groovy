@@ -22,7 +22,7 @@ import spock.lang.Specification
 import org.wallerlab.yoink.api.enums.*
 import org.wallerlab.yoink.batch.api.model.molecular.MolecularSystem;
 import org.wallerlab.yoink.batch.api.service.molecular.Translator
-import org.wallerlab.yoink.batch.api.model.bootstrap.Job
+import org.wallerlab.yoink.batch.api.model.batch.Job
 
 class SimpleJobBuilderSpec extends Specification {
 

@@ -10,11 +10,11 @@ import javax.xml.bind.JAXBElement;
 
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.wallerlab.yoink.batch.api.model.bootstrap.Job;
+import org.wallerlab.yoink.batch.api.model.batch.Job;
 import org.wallerlab.yoink.batch.api.model.molecular.Molecule;
 import org.wallerlab.yoink.batch.api.model.regionizer.Region;
 import org.wallerlab.yoink.batch.api.service.adaptive.Smoothner;
-import org.wallerlab.yoink.batch.api.service.adaptiveProcessor.AdaptiveProcessor;
+import org.wallerlab.yoink.batch.api.service.plugin.AdaptiveProcessor;
 import org.wallerlab.yoink.batch.api.service.math.Vector;
 
 /**

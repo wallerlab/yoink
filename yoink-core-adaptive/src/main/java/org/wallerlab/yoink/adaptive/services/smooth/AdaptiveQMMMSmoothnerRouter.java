@@ -22,8 +22,8 @@ import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.batch.api.model.bootstrap.JobParameter;
-import org.wallerlab.yoink.batch.api.model.bootstrap.Job;
+import org.wallerlab.yoink.batch.api.model.batch.JobParameter;
+import org.wallerlab.yoink.batch.api.model.batch.Job;
 import org.wallerlab.yoink.batch.api.service.adaptive.Smoothner;
 
 /**

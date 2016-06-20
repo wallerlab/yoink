@@ -20,10 +20,10 @@ import org.wallerlab.yoink.batch.api.model.molecular.Atom
 import org.wallerlab.yoink.batch.api.model.molecular.Coord
 import spock.lang.Specification
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
-import org.wallerlab.yoink.batch.api.model.bootstrap.Job;
+import org.wallerlab.yoink.batch.api.model.batch.Job;
 import org.wallerlab.yoink.batch.api.model.molecular.Molecule;
 import org.wallerlab.yoink.batch.api.model.regionizer.Region
-import org.wallerlab.yoink.batch.api.service.adaptiveProcessor.AdaptiveProcessor
+import org.wallerlab.yoink.batch.api.service.plugin.AdaptiveProcessor
 import org.wallerlab.yoink.batch.api.service.math.Vector.Vector3DType;
 import org.wallerlab.yoink.batch.api.service.Calculator;
 class PAPAdaptiveProcessorSpec  extends Specification{

@@ -16,19 +16,18 @@
 
 package org.wallerlab.yoink.batch.service.processor;
 
-import java.util.Map;
-
-import javax.annotation.Resource;
-import javax.xml.bind.JAXBElement;
-
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.batch.api.model.bootstrap.JobParameter;
-import org.wallerlab.yoink.batch.api.model.bootstrap.Job;
+import org.wallerlab.yoink.batch.api.model.batch.Job;
+import org.wallerlab.yoink.batch.api.model.batch.JobParameter;
 import org.wallerlab.yoink.batch.api.model.molecular.MolecularSystem;
-import org.wallerlab.yoink.batch.api.service.bootstrap.JobBuilder;
+import org.wallerlab.yoink.batch.api.service.batch.JobBuilder;
 import org.wallerlab.yoink.batch.api.service.molecular.Translator;
 import org.wallerlab.yoink.batch.domain.AdaptiveQMMMJob;
 import org.xml_cml.schema.Cml;
+
+import javax.annotation.Resource;
+import javax.xml.bind.JAXBElement;
+import java.util.Map;
 
 /**
  * this class is to read in all inputs (like molecular system and parameters)

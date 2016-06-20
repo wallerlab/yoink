@@ -16,7 +16,7 @@
  */
 package org.wallerlab.yoink.region.service
 
-import org.wallerlab.yoink.batch.api.service.regionizer.RegionizerMath
+import org.wallerlab.yoink.batch.api.service.region.RegionizerMath
 import org.wallerlab.yoink.region.service.regionizer.RegionizerService
 import spock.lang.Specification;
 

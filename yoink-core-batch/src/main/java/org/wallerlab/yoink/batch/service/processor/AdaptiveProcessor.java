@@ -23,15 +23,15 @@ import javax.xml.bind.JAXBElement;
 
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.wallerlab.yoink.batch.api.model.bootstrap.Job;
-import org.wallerlab.yoink.batch.api.model.bootstrap.JobParameter;
+import org.wallerlab.yoink.batch.api.model.batch.Job;
+import org.wallerlab.yoink.batch.api.model.batch.JobParameter;
 import org.wallerlab.yoink.batch.api.model.molecular.MolecularSystem;
 import org.wallerlab.yoink.batch.api.model.regionizer.Region;
 import org.wallerlab.yoink.batch.api.model.regionizer.Region.Name;
 import org.wallerlab.yoink.batch.api.service.adaptive.Smoothner;
-import org.wallerlab.yoink.batch.api.service.bootstrap.Wrapper;
-import org.wallerlab.yoink.batch.api.service.regionizer.Regionizer;
-import org.wallerlab.yoink.batch.api.service.regionizer.RegionizerMath;
+import org.wallerlab.yoink.batch.api.service.batch.Wrapper;
+import org.wallerlab.yoink.batch.api.service.region.Regionizer;
+import org.wallerlab.yoink.batch.api.service.region.RegionizerMath;
 
 /**
  * This class is to set up and execute adaptive QM/MM partitioning.
@@ -60,23 +60,19 @@ public class AdaptiveProcessor implements ItemProcessor<Job<JAXBElement>,Job> {
 	/**
 	 * read in a list of requests and execute them.
 	 *
-	 * @param input
-	 *            - a list of files
+	 * @param job
+	 *            - a job to be processed
 	 * @return jobs - a list of YoinkJob
 	 *         {@link Job}
 	 */
 	@Override
-	public Job process(Job<JAXBElement> input) throws Exception {
-		return executeQMMMPartitioning(input);
-	}
-
-
-	protected Job executeQMMMPartitioning(Job job) {
+	public Job process(Job<JAXBElement> job) throws Exception {
 		regionize(job);
 		smooth(job);
 		wrapResult(job);
 		return job;
 	}
+
 
 	protected void regionize(Job job) {
 		Map<Region.Name, Region> regions = job.getRegions();

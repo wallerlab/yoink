@@ -16,7 +16,7 @@
 package org.wallerlab.yoink.region.partitioner
 
 import org.wallerlab.yoink.api.enums.*
-import org.wallerlab.yoink.batch.api.model.bootstrap.JobParameter;
+import org.wallerlab.yoink.batch.api.model.batch.JobParameter;
 import org.wallerlab.yoink.batch.api.model.density.DensityPoint.DensityType
 import org.wallerlab.yoink.batch.api.model.molecular.Element
 import org.wallerlab.yoink.batch.api.model.molecular.Atom
@@ -24,7 +24,7 @@ import org.wallerlab.yoink.batch.api.model.molecular.RadialGrid;
 import org.wallerlab.yoink.batch.api.model.regionizer.Region;
 import org.wallerlab.yoink.batch.api.service.Calculator
 import org.wallerlab.yoink.batch.api.model.molecular.Molecule
-import org.wallerlab.yoink.batch.api.service.regionizer.RegionizerMath
+import org.wallerlab.yoink.batch.api.service.region.RegionizerMath
 import org.wallerlab.yoink.batch.api.service.molecular.FilesReader
 import org.wallerlab.yoink.region.service.partitioner.DensityPartitioner
 import org.wallerlab.yoink.region.domain.SimpleRegionFactory;

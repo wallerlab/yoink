@@ -1,8 +1,9 @@
 package org.wallerlab.yoink.cluster
 
 import org.neo4j.graphdb.DynamicLabel
-import org.neo4j.graphdb.Node;
-
+import org.neo4j.graphdb.Node
+import org.wallerlab.yoink.cluster.domain.graph.Relations
+import org.wallerlab.yoink.cluster.service.graph.DatabaseService;
 import spock.lang.*;
 
 class DatabaseInteractionSpec extends Specification{

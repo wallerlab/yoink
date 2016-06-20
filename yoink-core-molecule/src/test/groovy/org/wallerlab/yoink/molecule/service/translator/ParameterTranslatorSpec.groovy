@@ -19,7 +19,7 @@ import org.wallerlab.yoink.batch.api.service.molecular.Converter
 import org.wallerlab.yoink.molecule.data.JaxbFileReader
 import org.xml_cml.schema.Cml
 import spock.lang.Specification;
-import org.wallerlab.yoink.batch.api.model.bootstrap.JobParameter;
+import org.wallerlab.yoink.batch.api.model.batch.JobParameter;
 class ParameterTranslatorSpec extends Specification {
 
 	def "test method translate(JAXBElement<Cml> cml)"(){

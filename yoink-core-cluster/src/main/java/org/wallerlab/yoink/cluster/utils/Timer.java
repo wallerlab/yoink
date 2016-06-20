@@ -3,6 +3,8 @@ package org.wallerlab.yoink.cluster.utils;
 import java.time.Clock;
 
 public class Timer {
+
+
 	protected static Timer instance;
 	public static synchronized Timer timer() {
 		if( instance == null )

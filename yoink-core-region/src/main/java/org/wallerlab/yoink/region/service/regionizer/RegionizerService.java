@@ -26,7 +26,7 @@ import org.wallerlab.yoink.batch.api.model.molecular.MolecularSystem;
 import org.wallerlab.yoink.batch.api.model.molecular.Molecule;
 import org.wallerlab.yoink.batch.api.model.regionizer.Region;
 import org.wallerlab.yoink.batch.api.service.Factory;
-import org.wallerlab.yoink.batch.api.service.regionizer.RegionizerMath;
+import org.wallerlab.yoink.batch.api.service.region.RegionizerMath;
 
 /**
  * this class is to get molecules for those regions in the List regionNames.

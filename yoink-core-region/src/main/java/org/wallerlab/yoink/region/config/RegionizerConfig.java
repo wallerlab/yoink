@@ -15,24 +15,22 @@
  */
 package org.wallerlab.yoink.region.config;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.wallerlab.yoink.batch.api.model.density.DensityPoint.DensityType;
 import org.wallerlab.yoink.batch.api.model.molecular.MolecularSystem;
 import org.wallerlab.yoink.batch.api.model.regionizer.Region;
-import org.wallerlab.yoink.batch.api.service.regionizer.Partitioner;
-import org.wallerlab.yoink.batch.api.service.regionizer.Regionizer;
-import org.wallerlab.yoink.batch.api.service.regionizer.RegionizerComponent;
-import org.wallerlab.yoink.batch.api.service.regionizer.RegionizerMath;
+import org.wallerlab.yoink.batch.api.service.region.Partitioner;
+import org.wallerlab.yoink.batch.api.service.region.Regionizer;
+import org.wallerlab.yoink.batch.api.service.region.RegionizerComponent;
+import org.wallerlab.yoink.batch.api.service.region.RegionizerMath;
 import org.wallerlab.yoink.region.service.regionizer.AdaptiveRegionizer;
 import org.wallerlab.yoink.region.service.regionizer.RegionizerService;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import static org.wallerlab.yoink.batch.api.model.regionizer.Region.Name.*;
 

@@ -20,7 +20,7 @@ import org.wallerlab.yoink.region.service.partitioner.CubePartitioner
 import spock.lang.Specification;
 
 import org.wallerlab.yoink.api.enums.*
-import org.wallerlab.yoink.batch.api.model.bootstrap.JobParameter;
+import org.wallerlab.yoink.batch.api.model.batch.JobParameter;
 import org.wallerlab.yoink.batch.api.model.cube.Cube;
 import org.wallerlab.yoink.batch.api.model.density.DensityPoint.DensityType;
 import org.wallerlab.yoink.batch.api.model.molecular.Coord;

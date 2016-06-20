@@ -15,18 +15,8 @@
  */
 package org.wallerlab.yoink.batch.service.processor
 
-import org.wallerlab.yoink.batch.api.service.adaptiveProcessor.AdaptiveProcessor
-import spock.lang.Ignore
 import spock.lang.Specification
 import org.wallerlab.yoink.api.enums.*
-import org.wallerlab.yoink.batch.api.service.adaptive.Smoothner
-import org.wallerlab.yoink.batch.api.model.bootstrap.Job
-import org.wallerlab.yoink.batch.api.service.regionizer.Regionizer
-import org.wallerlab.yoink.batch.api.service.regionizer.RegionizerMath;
-import org.wallerlab.yoink.batch.api.service.bootstrap.JobBuilder
-import org.wallerlab.yoink.batch.api.service.bootstrap.Wrapper;
-
-
 
 class AdaptiveQMMMProcessorSpec extends Specification{
 

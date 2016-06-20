@@ -34,7 +34,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.wallerlab.yoink.batch.api.model.bootstrap.Job;
+import org.wallerlab.yoink.batch.api.model.batch.Job;
 
 import javax.xml.bind.JAXBElement;
 import java.util.ArrayList;
@@ -59,7 +59,7 @@ public class BatchConfig  implements ApplicationContextAware {
 	StepBuilderFactory stepBuilderFactory;
 
 	@Autowired
-	JobBuilderFactory jobs;
+	JobBuilderFactory jobBuilderFactory;
 
 
 	@Autowired
@@ -68,14 +68,14 @@ public class BatchConfig  implements ApplicationContextAware {
 
 	@Autowired
 	@Qualifier("cmlFileReader")
-	ItemReader fileReader;
+	ItemReader cmlReader;
 
 	@Autowired
-	@Qualifier("jobBuilder")
+	@Qualifier("builderProcessor")
 	public ItemProcessor<JAXBElement, JAXBElement> builderProcessor;
 
 	@Autowired
-	@Qualifier("adaptiveProcessor")
+	@Qualifier("adapticeProcessor")
 	public ItemProcessor<Job<JAXBElement>, Job> adaptiveProcessor;
 
 	@Autowired
@@ -123,8 +123,6 @@ public class BatchConfig  implements ApplicationContextAware {
 	org.springframework.batch.core.Job fileCluster(){ return job(fileStep(builderAndClusterProcessor()),"fileCluster");}
 
 
-
-
 	/**
 	 * build executing steps
 	 *
@@ -135,8 +133,8 @@ public class BatchConfig  implements ApplicationContextAware {
 	@Bean
 	public Step fileStep(ItemProcessor processor) {
 		return stepBuilderFactory
-				.get("adaptiveQMMMBatch").<JAXBElement, org.wallerlab.yoink.batch.api.model.bootstrap.Job> chunk(1)
-				.reader(fileReader)
+				.get("adaptiveQMMMBatch").<JAXBElement, org.wallerlab.yoink.batch.api.model.batch.Job> chunk(1)
+				.reader(cmlReader)
 				.processor(processor) // ADAPTIVE OR CLUSTERER
 				.writer(fileWriter)
 				.build();
@@ -150,7 +148,7 @@ public class BatchConfig  implements ApplicationContextAware {
 	 * @return Job -{@link org.springframework.batch.core.Job}
 	 */
 	private org.springframework.batch.core.Job fileJob(Step step,String name) {
-		return jobs.get(name)
+		return jobBuilderFactory.get(name)
 				.incrementer(new RunIdIncrementer())
 				.flow(step)
 				.end()
@@ -168,7 +166,7 @@ public class BatchConfig  implements ApplicationContextAware {
 	 * @return Job -{@link org.springframework.batch.core.Job}
 	 */
 	public org.springframework.batch.core.Job job( Step step, String name) {
-		return jobs.get(name)
+		return jobBuilderFactory.get(name)
 				.incrementer(new RunIdIncrementer())
 				.flow(step)
 				.end()
@@ -185,7 +183,7 @@ public class BatchConfig  implements ApplicationContextAware {
 	@Bean
 	public Step jmsStep(ItemProcessor processor) {
 		return stepBuilderFactory.get("adaptiveQMMMJms")
-				.<String, org.wallerlab.yoink.batch.api.model.bootstrap.Job> chunk(1)
+				.<String, org.wallerlab.yoink.batch.api.model.batch.Job> chunk(1)
 				.reader(jmsReader)
 				.processor(processor)
 				.writer(jmsWriter)

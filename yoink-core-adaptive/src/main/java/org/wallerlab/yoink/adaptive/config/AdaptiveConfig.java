@@ -69,9 +69,7 @@ public class AdaptiveConfig {
 		return new DistanceSmoothner(morokumaSmoothFunction);
 	}
 
-	@Bean public Smoothner densitySmoothnerPAP() {
-		return new DensitySmoothner(permutedSmoothFunction);
-	}
+	@Bean public Smoothner densitySmoothnerPAP() {return new DensitySmoothner(permutedSmoothFunction);}
 
 	@Bean public Smoothner distanceSmoothnerPAP() {
 		return new DistanceSmoothner(permutedSmoothFunction);

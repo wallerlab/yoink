@@ -5,8 +5,8 @@ import java.util.List;
 import javax.xml.bind.JAXBElement;
 
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.batch.api.model.bootstrap.Job;
-import org.wallerlab.yoink.batch.api.service.adaptiveProcessor.AdaptiveProcessor;
+import org.wallerlab.yoink.batch.api.model.batch.Job;
+import org.wallerlab.yoink.batch.api.service.plugin.AdaptiveProcessor;
 import org.wallerlab.yoink.batch.api.service.math.Vector;
 
 

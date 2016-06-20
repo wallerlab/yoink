@@ -24,7 +24,7 @@ import org.wallerlab.yoink.batch.api.model.regionizer.Region;
 import org.wallerlab.yoink.batch.api.service.Calculator;
 import org.wallerlab.yoink.batch.api.service.Computer;
 import org.wallerlab.yoink.batch.api.service.adaptive.SmoothFunction;
-import org.wallerlab.yoink.batch.api.model.bootstrap.Job
+import org.wallerlab.yoink.batch.api.model.batch.Job
 
 class DensitySmoothnerSpec extends Specification{
 

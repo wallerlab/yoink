@@ -15,7 +15,7 @@
  */
 package org.wallerlab.yoink.region.partitioner
 
-import org.wallerlab.yoink.batch.api.service.regionizer.RegionizerMath
+import org.wallerlab.yoink.batch.api.service.region.RegionizerMath
 import org.wallerlab.yoink.region.service.partitioner.InteractionPartitioner
 import spock.lang.Specification;
 

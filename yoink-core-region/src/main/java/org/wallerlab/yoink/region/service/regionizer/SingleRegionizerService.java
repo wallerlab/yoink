@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.batch.api.model.molecular.Molecule;
 import org.wallerlab.yoink.batch.api.model.regionizer.Region;
 import org.wallerlab.yoink.batch.api.service.Factory;
-import org.wallerlab.yoink.batch.api.service.regionizer.RegionizerMath;
+import org.wallerlab.yoink.batch.api.service.region.RegionizerMath;
 import org.wallerlab.yoink.math.map.MapDifference;
 
 import static org.wallerlab.yoink.batch.api.model.regionizer.Region.Name.*;
@@ -101,17 +101,14 @@ public class SingleRegionizerService implements RegionizerMath<Region, Region.Na
 	 * This method is to calculate the difference of two Regions
 	 */
 	private Region difference(Region regionA, Region regionB) {
+
 		Map<Molecule, Integer> mapA = new HashMap<Molecule, Integer>();
-		if (regionA != null) {
-			mapA = regionA.getMolecularMap();
-		}
+		if (regionA != null) mapA = regionA.getMolecularMap();
 
 		Map<Molecule, Integer> mapB = new HashMap<Molecule, Integer>();
-		if (regionB != null) {
-			mapB = regionB.getMolecularMap();
-		}
-		Map<Molecule, Integer> twoMapsDifference = MapDifference.diff(mapA,
-				mapB);
+		if (regionB != null) mapB = regionB.getMolecularMap();
+
+		Map<Molecule, Integer> twoMapsDifference = MapDifference.diff(mapA, mapB);
 		Region regionDifference = simpleRegionFactory.create();
 		regionDifference.setMolecularMap(twoMapsDifference);
 		return regionDifference;

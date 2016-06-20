@@ -20,12 +20,12 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.wallerlab.yoink.batch.api.model.bootstrap.JobParameter;
+import org.wallerlab.yoink.batch.api.model.batch.JobParameter;
 import org.wallerlab.yoink.batch.api.model.cube.GridPoint;
 import org.wallerlab.yoink.batch.api.model.density.DensityPoint.DensityType;
 import org.wallerlab.yoink.batch.api.model.regionizer.Region;
-import org.wallerlab.yoink.batch.api.service.regionizer.Partitioner;
-import org.wallerlab.yoink.batch.api.service.regionizer.RegionizerComponent;
+import org.wallerlab.yoink.batch.api.service.region.Partitioner;
+import org.wallerlab.yoink.batch.api.service.region.RegionizerComponent;
 
 /**
  * this class is to find adaptive QM region or adaptive QM core region.

@@ -19,7 +19,7 @@ import org.wallerlab.yoink.api.enums.*
 import org.wallerlab.yoink.adaptive.services.weights.XSWeightFactors
 import org.wallerlab.yoink.batch.api.model.molecular.Molecule
 import org.wallerlab.yoink.batch.api.model.regionizer.Region
-import org.wallerlab.yoink.batch.api.model.bootstrap.Job
+import org.wallerlab.yoink.batch.api.model.batch.Job
 
 import spock.lang.Specification
 

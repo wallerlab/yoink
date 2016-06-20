@@ -83,7 +83,6 @@ public class SimpleRegion implements Region {
 	 */
 	@Override
 	public void addMolecule(Molecule molecule, Integer index) {
-
 		this.molecularMap.put(molecule, index);
 	}
 

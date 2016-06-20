@@ -17,7 +17,7 @@ package org.wallerlab.yoink.adaptive.services
 
 import org.wallerlab.yoink.api.enums.*
 import org.wallerlab.yoink.adaptive.services.smooth.FIRESmoothner
-import org.wallerlab.yoink.batch.api.model.bootstrap.Job
+import org.wallerlab.yoink.batch.api.model.batch.Job
 import org.wallerlab.yoink.batch.api.model.molecular.Atom
 import org.wallerlab.yoink.batch.api.model.molecular.Coord
 import org.wallerlab.yoink.batch.api.model.molecular.Molecule

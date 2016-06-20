@@ -1,28 +1,23 @@
 package org.wallerlab.yoink.batch.config;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
-import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.core.launch.support.RunIdIncrementer;
-import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.jms.JmsItemReader;
 import org.springframework.batch.item.jms.JmsItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jms.core.JmsOperations;
 import org.springframework.jms.core.JmsTemplate;
-import org.wallerlab.yoink.batch.api.model.bootstrap.Job;
+import org.wallerlab.yoink.batch.api.model.batch.Job;
 import org.wallerlab.yoink.batch.service.request.JmsRequestReader;
 import org.wallerlab.yoink.batch.service.response.JmsJobItemWriter;
 
 import javax.jms.ConnectionFactory;
-import javax.xml.bind.JAXBElement;
 
 /**
  * This is for JMS integration. It offers a service.
@@ -30,15 +25,6 @@ import javax.xml.bind.JAXBElement;
 @Profile("jms")
 @Configuration
 public class JmsConfig extends BatchConfig{
-
-    @Autowired
-    private StepBuilderFactory stepBuilderFactor;
-
-    @Autowired
-    JobBuilderFactory jobs;
-
-
-
 
 
     /**
@@ -72,7 +58,7 @@ public class JmsConfig extends BatchConfig{
     @Bean
     ConnectionFactory connectionFactory() {
         ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory();
-        connectionFactory.setBrokerURL("tcp://localhost:61616");
+        connectionFactory.setBrokerURL("tcp://localhost:61616"); // MOVE to PROPERTIES
         return connectionFactory;
     }
 
@@ -100,6 +86,7 @@ public class JmsConfig extends BatchConfig{
     }
 
     /**
+     *
      * This bean delegates to a standard JMS item writer from Spring Batch,
      * after it has converted the job to a string containing the xml output.
      * @return a bean to write back to a jms queue

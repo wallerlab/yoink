@@ -23,8 +23,8 @@ import java.util.Set;
 import javax.xml.bind.JAXBElement;
 
 import org.springframework.stereotype.Component;
-import org.wallerlab.yoink.batch.api.model.bootstrap.JobParameter;
-import org.wallerlab.yoink.batch.api.model.bootstrap.Job;
+import org.wallerlab.yoink.batch.api.model.batch.JobParameter;
+import org.wallerlab.yoink.batch.api.model.batch.Job;
 import org.wallerlab.yoink.batch.api.model.molecular.MolecularSystem;
 import org.wallerlab.yoink.batch.api.model.regionizer.Region;
 import org.xml_cml.schema.Cml;
@@ -41,13 +41,18 @@ public class AdaptiveQMMMJob implements Job<JAXBElement> {
 	// keep original cml in order to wrap results back to properties in the JAXB
 	private JAXBElement<Cml> input;
 
+	// Internal domain model
 	private MolecularSystem molecularSystem;
 
+	//
 	private Map<JobParameter, Object> parameters = new HashMap<JobParameter, Object>();
 
 	private Map<String, Object> properties = new HashMap<String, Object>();
 
+	// Results from Regionizer
 	private Map<Region.Name, Region> regions = new HashMap<Region.Name, Region>();
+
+	// Results from Clusterer
 	private List<List<Integer>> interactionList;
 	private List<Set<Integer>> clusters;
 	private List<Double> interactionWeight;
@@ -130,6 +135,6 @@ public class AdaptiveQMMMJob implements Job<JAXBElement> {
 	@Override
 	public void SetInteractionWeight(List<Double> interactionWeight) {
 		this.interactionWeight=interactionWeight;
-		
 	}
+
 }

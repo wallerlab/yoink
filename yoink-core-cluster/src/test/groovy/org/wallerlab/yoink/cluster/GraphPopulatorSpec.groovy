@@ -1,5 +1,7 @@
 package org.wallerlab.yoink.cluster
 
+import org.wallerlab.yoink.cluster.service.graph.DatabaseService
+import org.wallerlab.yoink.cluster.service.graph.GraphPopulator
 import spock.lang.*;
 
 class GraphPopulatorSpec extends Specification{
