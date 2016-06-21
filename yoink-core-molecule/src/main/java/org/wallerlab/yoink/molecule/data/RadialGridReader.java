@@ -25,9 +25,9 @@ import javax.annotation.Resource;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.batch.api.model.molecular.RadialGrid;
-import org.wallerlab.yoink.batch.api.service.math.Matrix;
-import org.wallerlab.yoink.batch.api.service.molecule.FilesReader;
+import org.wallerlab.yoink.api.model.molecular.RadialGrid;
+import org.wallerlab.yoink.api.service.math.Matrix;
+import org.wallerlab.yoink.api.service.molecule.FilesReader;
 import org.wallerlab.yoink.math.constants.Constants;
 import org.wallerlab.yoink.math.linear.SimpleMatrixFactory;
 

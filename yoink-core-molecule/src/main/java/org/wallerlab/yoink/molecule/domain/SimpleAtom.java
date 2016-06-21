@@ -15,10 +15,10 @@
  */
 package org.wallerlab.yoink.molecule.domain;
 
-import org.wallerlab.yoink.batch.api.model.molecular.Atom;
-import org.wallerlab.yoink.batch.api.model.molecular.Coord;
-import org.wallerlab.yoink.batch.api.model.molecular.Element;
-import org.wallerlab.yoink.batch.api.model.molecular.RadialGrid;
+import org.wallerlab.yoink.api.model.molecular.Atom;
+import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.model.molecular.Element;
+import org.wallerlab.yoink.api.model.molecular.RadialGrid;
 
 /**
  * the domain model of atom

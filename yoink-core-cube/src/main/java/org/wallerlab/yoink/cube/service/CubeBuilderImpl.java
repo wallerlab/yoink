@@ -25,13 +25,13 @@ import java.util.stream.IntStream;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.batch.api.model.cube.Cube;
-import org.wallerlab.yoink.batch.api.model.molecular.Atom;
-import org.wallerlab.yoink.batch.api.model.molecular.Coord;
-import org.wallerlab.yoink.batch.api.model.molecular.Molecule;
-import org.wallerlab.yoink.batch.api.service.Calculator;
-import org.wallerlab.yoink.batch.api.service.Factory;
-import org.wallerlab.yoink.batch.api.service.cube.CubeBuilder;
+import org.wallerlab.yoink.api.model.cube.Cube;
+import org.wallerlab.yoink.api.model.molecular.Atom;
+import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.service.Calculator;
+import org.wallerlab.yoink.api.service.Factory;
+import org.wallerlab.yoink.api.service.cube.CubeBuilder;
 import org.wallerlab.yoink.cube.domain.SimpleCube;
 import org.wallerlab.yoink.molecule.domain.SimpleCoord;
 

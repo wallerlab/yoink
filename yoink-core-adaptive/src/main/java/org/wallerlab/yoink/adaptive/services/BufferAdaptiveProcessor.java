@@ -10,12 +10,12 @@ import javax.xml.bind.JAXBElement;
 
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.wallerlab.yoink.batch.api.model.batch.Job;
-import org.wallerlab.yoink.batch.api.model.molecular.Molecule;
-import org.wallerlab.yoink.batch.api.model.regionizer.Region;
-import org.wallerlab.yoink.batch.api.service.adaptive.Smoothner;
-import org.wallerlab.yoink.batch.api.service.plugin.QmMmWrapper;
-import org.wallerlab.yoink.batch.api.service.math.Vector;
+import org.wallerlab.yoink.api.model.batch.Job;
+import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.service.adaptive.Smoothner;
+import org.wallerlab.yoink.api.service.plugin.QmMmWrapper;
+import org.wallerlab.yoink.api.service.math.Vector;
 
 /**
  * This class is to get adaptive forces in buffered force method.

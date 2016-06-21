@@ -20,14 +20,14 @@ import org.wallerlab.yoink.region.service.regionizer.SizeConsistentRegionizer
 import spock.lang.Specification;
 
 import org.wallerlab.yoink.api.enums.*
-import org.wallerlab.yoink.batch.api.model.batch.JobParameter;
-import org.wallerlab.yoink.batch.api.model.molecular.Atom;
-import org.wallerlab.yoink.batch.api.model.molecular.Coord;
-import org.wallerlab.yoink.batch.api.model.molecular.Molecule;
-import org.wallerlab.yoink.batch.api.model.regionizer.Region;
-import org.wallerlab.yoink.batch.api.service.Calculator;
-import org.wallerlab.yoink.batch.api.service.Factory;
-import org.wallerlab.yoink.batch.api.service.region.Partitioner
+import org.wallerlab.yoink.api.model.batch.JobParameter;
+import org.wallerlab.yoink.api.model.molecular.Atom;
+import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.service.Calculator;
+import org.wallerlab.yoink.api.service.Factory;
+import org.wallerlab.yoink.api.service.region.Partitioner
 import org.wallerlab.yoink.region.domain.SimpleRegion
 
 class SizeConsistentRegionizerSpec extends Specification{

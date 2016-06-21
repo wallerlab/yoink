@@ -15,19 +15,19 @@
  */
 package org.wallerlab.yoink.region.partitioner
 
-import org.wallerlab.yoink.batch.api.service.region.RegionizerMath
+import org.wallerlab.yoink.api.service.region.RegionizerMath
 import org.wallerlab.yoink.region.service.partitioner.SeddPartitioner
 import spock.lang.Specification;
 
 import org.wallerlab.yoink.api.enums.*
-import org.wallerlab.yoink.batch.api.model.batch.JobParameter;
-import org.wallerlab.yoink.batch.api.model.cube.GridPoint;
-import org.wallerlab.yoink.batch.api.model.density.DensityPoint;
-import org.wallerlab.yoink.batch.api.model.molecular.Atom;
-import org.wallerlab.yoink.batch.api.model.molecular.Molecule;
-import org.wallerlab.yoink.batch.api.model.regionizer.Region;
-import org.wallerlab.yoink.batch.api.service.Calculator;
-import org.wallerlab.yoink.batch.api.service.Computer
+import org.wallerlab.yoink.api.model.batch.JobParameter;
+import org.wallerlab.yoink.api.model.cube.GridPoint;
+import org.wallerlab.yoink.api.model.density.DensityPoint;
+import org.wallerlab.yoink.api.model.molecular.Atom;
+import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.service.Calculator;
+import org.wallerlab.yoink.api.service.Computer
 
 class SingleExponentialDecayDetectorPartitionerSpec extends Specification{
 	def "test method partition"(){

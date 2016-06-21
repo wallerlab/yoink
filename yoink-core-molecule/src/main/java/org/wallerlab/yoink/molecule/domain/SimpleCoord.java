@@ -15,8 +15,8 @@
  */
 package org.wallerlab.yoink.molecule.domain;
 
-import org.wallerlab.yoink.batch.api.model.molecular.Coord;
-import org.wallerlab.yoink.batch.api.service.math.Vector;
+import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.service.math.Vector;
 
 /**
  * this domain model of coordinate stores the information of coordinate in the

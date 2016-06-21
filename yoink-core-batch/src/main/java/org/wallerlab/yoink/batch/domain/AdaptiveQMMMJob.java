@@ -23,10 +23,10 @@ import java.util.Set;
 import javax.xml.bind.JAXBElement;
 
 import org.springframework.stereotype.Component;
-import org.wallerlab.yoink.batch.api.model.batch.JobParameter;
-import org.wallerlab.yoink.batch.api.model.batch.Job;
-import org.wallerlab.yoink.batch.api.model.molecular.MolecularSystem;
-import org.wallerlab.yoink.batch.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.model.batch.JobParameter;
+import org.wallerlab.yoink.api.model.batch.Job;
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
+import org.wallerlab.yoink.api.model.regionizer.Region;
 import org.xml_cml.schema.Cml;
 
 /**

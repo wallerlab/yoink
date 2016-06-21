@@ -17,7 +17,7 @@ package org.wallerlab.yoink.math.linear
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D
 import spock.lang.Specification;
-import org.wallerlab.yoink.batch.api.service.math.Vector.Vector3DType
+import org.wallerlab.yoink.api.service.math.Vector.Vector3DType
 
 class SimpleVector3DFactorySpec extends Specification {
 

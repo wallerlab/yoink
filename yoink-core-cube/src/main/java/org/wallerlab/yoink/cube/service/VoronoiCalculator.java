@@ -26,10 +26,10 @@ import java.util.Set;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.batch.api.model.molecular.Atom;
-import org.wallerlab.yoink.batch.api.model.molecular.Coord;
-import org.wallerlab.yoink.batch.api.model.molecular.Molecule;
-import org.wallerlab.yoink.batch.api.service.Calculator;
+import org.wallerlab.yoink.api.model.molecular.Atom;
+import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.service.Calculator;
 
 /**
  * This class assigns a grid point to two molecules and two atoms it is closest

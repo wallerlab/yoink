@@ -5,9 +5,9 @@ import java.util.List;
 import javax.xml.bind.JAXBElement;
 
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.batch.api.model.batch.Job;
-import org.wallerlab.yoink.batch.api.service.plugin.QmMmWrapper;
-import org.wallerlab.yoink.batch.api.service.math.Vector;
+import org.wallerlab.yoink.api.model.batch.Job;
+import org.wallerlab.yoink.api.service.plugin.QmMmWrapper;
+import org.wallerlab.yoink.api.service.math.Vector;
 
 
 /**

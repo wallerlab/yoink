@@ -16,7 +16,7 @@
 package org.wallerlab.yoink.molecule.domain
 
 import spock.lang.Specification
-import org.wallerlab.yoink.batch.api.service.math.Vector;
+import org.wallerlab.yoink.api.service.math.Vector;
 
 class SimpleCoordSpec extends Specification{
 

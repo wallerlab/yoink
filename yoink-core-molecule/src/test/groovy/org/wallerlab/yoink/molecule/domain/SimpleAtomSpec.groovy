@@ -15,10 +15,10 @@
  */
 package org.wallerlab.yoink.molecule.domain
 
-import org.wallerlab.yoink.batch.api.model.molecular.Coord;
-import org.wallerlab.yoink.batch.api.model.molecular.Element;
-import org.wallerlab.yoink.batch.api.service.math.Vector;
-import org.wallerlab.yoink.batch.api.model.molecular.RadialGrid;
+import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.model.molecular.Element;
+import org.wallerlab.yoink.api.service.math.Vector;
+import org.wallerlab.yoink.api.model.molecular.RadialGrid;
 import spock.lang.Specification
 
 class SimpleAtomSpec extends Specification {

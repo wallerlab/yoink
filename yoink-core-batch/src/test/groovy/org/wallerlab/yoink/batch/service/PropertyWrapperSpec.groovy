@@ -19,11 +19,11 @@ import org.wallerlab.yoink.batch.service.response.PropertyWrapper
 import org.xml_cml.schema.ObjectFactory
 
 import spock.lang.Specification
-import org.wallerlab.yoink.batch.api.model.molecular.Molecule;
-import org.wallerlab.yoink.batch.api.model.regionizer.Region;
-import org.wallerlab.yoink.batch.api.model.batch.Job
-import org.wallerlab.yoink.batch.api.service.math.Vector;
-import org.wallerlab.yoink.batch.api.service.math.Vector.Vector3DType;
+import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.model.batch.Job
+import org.wallerlab.yoink.api.service.math.Vector;
+import org.wallerlab.yoink.api.service.math.Vector.Vector3DType;
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
 class PropertyWrapperSpec extends Specification{
 	def "test method wrap(YoinkJob<JAXBElement> job) when no weightfactors and smoothfactors"(){

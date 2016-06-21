@@ -16,16 +16,16 @@
 package org.wallerlab.yoink.adaptive.services.smoothners
 
 import org.wallerlab.yoink.adaptive.services.ConfigurationAdaptiveProcessor
-import org.wallerlab.yoink.batch.api.model.molecular.Atom
-import org.wallerlab.yoink.batch.api.model.molecular.Coord
+import org.wallerlab.yoink.api.model.molecular.Atom
+import org.wallerlab.yoink.api.model.molecular.Coord
 import spock.lang.Specification
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
-import org.wallerlab.yoink.batch.api.model.batch.Job;
-import org.wallerlab.yoink.batch.api.model.molecular.Molecule;
-import org.wallerlab.yoink.batch.api.model.regionizer.Region
-import org.wallerlab.yoink.batch.api.service.plugin.QmMmWrapper
-import org.wallerlab.yoink.batch.api.service.math.Vector.Vector3DType;
-import org.wallerlab.yoink.batch.api.service.Calculator;
+import org.wallerlab.yoink.api.model.batch.Job;
+import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.regionizer.Region
+import org.wallerlab.yoink.api.service.plugin.QmMmWrapper
+import org.wallerlab.yoink.api.service.math.Vector.Vector3DType;
+import org.wallerlab.yoink.api.service.Calculator;
 class ConfigurationAdaptiveProcessorSpec  extends Specification{
 	def "test ConfigurationAdaptiveProcessor smooth" (){
 		def job=Mock(Job)

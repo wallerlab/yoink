@@ -16,7 +16,7 @@
 package org.wallerlab.yoink.molecule.data
 
 import org.wallerlab.yoink.math.linear.SimpleMatrixFactory
-import org.wallerlab.yoink.batch.api.service.math.Matrix
+import org.wallerlab.yoink.api.service.math.Matrix
 import org.wallerlab.yoink.molecule.domain.SimpleRadialGrid;
 import spock.lang.Specification
 

@@ -30,7 +30,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.*;
-import org.wallerlab.yoink.batch.api.model.batch.Job;
+import org.wallerlab.yoink.api.model.batch.Job;
 
 import javax.xml.bind.JAXBElement;
 import java.util.ArrayList;
@@ -124,7 +124,7 @@ public class BatchConfig  implements ApplicationContextAware {
 	@Bean
 	public Step fileStep(ItemProcessor processor) {
 		return stepBuilderFactory
-				.get("adaptiveQMMMBatch").<JAXBElement, org.wallerlab.yoink.batch.api.model.batch.Job> chunk(1)
+				.get("adaptiveQMMMBatch").<JAXBElement, Job> chunk(1)
 				.reader((ItemReader) appContext.getBean("cmlFilesReader"))
 				.processor(processor) // ADAPTIVE OR CLUSTERER
 				.writer(fileWriter)
@@ -174,7 +174,7 @@ public class BatchConfig  implements ApplicationContextAware {
 	@Bean
 	public Step jmsStep(ItemProcessor processor) {
 		return stepBuilderFactory.get("adaptiveQMMMJms")
-				.<String, org.wallerlab.yoink.batch.api.model.batch.Job> chunk(1)
+				.<String, Job> chunk(1)
 				.reader(jmsReader)
 				.processor(processor)
 				.writer(jmsWriter)

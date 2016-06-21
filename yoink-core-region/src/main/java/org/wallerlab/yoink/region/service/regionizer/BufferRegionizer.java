@@ -20,11 +20,11 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.batch.api.model.batch.JobParameter;
-import org.wallerlab.yoink.batch.api.model.density.DensityPoint.DensityType;
-import org.wallerlab.yoink.batch.api.model.regionizer.Region;
-import org.wallerlab.yoink.batch.api.service.region.Partitioner;
-import org.wallerlab.yoink.batch.api.service.region.RegionizerComponent;
+import org.wallerlab.yoink.api.model.batch.JobParameter;
+import org.wallerlab.yoink.api.model.density.DensityPoint.DensityType;
+import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.service.region.Partitioner;
+import org.wallerlab.yoink.api.service.region.RegionizerComponent;
 
 /**
  * this class is to locate buffer region based on the density of qm core

@@ -16,14 +16,14 @@
 package org.wallerlab.yoink.adaptive.services.smoothners
 
 import org.wallerlab.yoink.adaptive.services.HOTSPOTAdaptiveProcessor
-import org.wallerlab.yoink.batch.api.model.molecular.Coord
+import org.wallerlab.yoink.api.model.molecular.Coord
 import spock.lang.Specification
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
-import org.wallerlab.yoink.batch.api.model.batch.Job;
-import org.wallerlab.yoink.batch.api.model.molecular.Molecule;
-import org.wallerlab.yoink.batch.api.model.regionizer.Region
-import org.wallerlab.yoink.batch.api.service.plugin.QmMmWrapper
-import org.wallerlab.yoink.batch.api.service.math.Vector.Vector3DType;
+import org.wallerlab.yoink.api.model.batch.Job;
+import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.regionizer.Region
+import org.wallerlab.yoink.api.service.plugin.QmMmWrapper
+import org.wallerlab.yoink.api.service.math.Vector.Vector3DType;
 class HOTSPOTAdaptiveProcessorSpec  extends Specification{
 
 	def "test HOTSPOTAdaptiveProcessor smooth" (){

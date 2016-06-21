@@ -18,14 +18,14 @@ package org.wallerlab.yoink.density.service.density.properties;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.batch.api.model.density.DensityPoint;
-import org.wallerlab.yoink.batch.api.model.molecular.Atom;
-import org.wallerlab.yoink.batch.api.model.molecular.Coord;
-import org.wallerlab.yoink.batch.api.model.molecular.Element;
-import org.wallerlab.yoink.batch.api.model.molecular.RadialGrid;
-import org.wallerlab.yoink.batch.api.service.Calculator;
-import org.wallerlab.yoink.batch.api.service.math.Matrix;
-import org.wallerlab.yoink.batch.api.service.math.Vector;
+import org.wallerlab.yoink.api.model.density.DensityPoint;
+import org.wallerlab.yoink.api.model.molecular.Atom;
+import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.model.molecular.Element;
+import org.wallerlab.yoink.api.model.molecular.RadialGrid;
+import org.wallerlab.yoink.api.service.Calculator;
+import org.wallerlab.yoink.api.service.math.Matrix;
+import org.wallerlab.yoink.api.service.math.Vector;
 import org.wallerlab.yoink.math.constants.Constants;
 import org.wallerlab.yoink.math.linear.SimpleMatrixFactory;
 

@@ -3366,29 +3366,29 @@
     </parameterList>
     <propertyList title="Partitioning result  : ">
         <property title="QM and Buffer molecule indices">
-            <scalar dataType="QM molecules">[24, 234, 381, 104, 150, 375, 207, 45, 33, 18, 470, 129, 337, 420, 29, 373, 369, 455, 120, 474, 1]</scalar>
-            <scalar dataType="BUFFER molecules">[84, 244, 351, 204, 400, 36, 324, 34, 286, 344, 216, 341, 452, 394, 285, 169, 261]</scalar>
+            <scalar dataType="QM molecules">[373, 1, 45, 474, 455, 470, 18, 24, 33, 369, 337, 120, 381, 129, 150, 207, 375, 29, 420, 234, 104]</scalar>
+            <scalar dataType="BUFFER molecules">[285, 34, 261, 204, 216, 394, 351, 84, 341, 452, 36, 324, 244, 286, 169, 344, 400]</scalar>
         </property>
     </propertyList>
     <propertyList title="Smoothing result  :   average smooth factor:  ">
         <property title="weights and smooth factors ">
-            <scalar dataType="smooth function" title="molecule index" id="84">0.397512563906644</scalar>
-            <scalar dataType="smooth function" title="molecule index" id="244">0.9844591239633381</scalar>
-            <scalar dataType="smooth function" title="molecule index" id="351">0.31848657511447437</scalar>
-            <scalar dataType="smooth function" title="molecule index" id="204">0.7891578994763649</scalar>
-            <scalar dataType="smooth function" title="molecule index" id="400">0.14813186393199276</scalar>
-            <scalar dataType="smooth function" title="molecule index" id="36">0.024538463002329283</scalar>
-            <scalar dataType="smooth function" title="molecule index" id="324">0.280262960729487</scalar>
+            <scalar dataType="smooth function" title="molecule index" id="285">0.9557998362059075</scalar>
             <scalar dataType="smooth function" title="molecule index" id="34">0.3981200918397644</scalar>
-            <scalar dataType="smooth function" title="molecule index" id="286">0.9568873732314117</scalar>
-            <scalar dataType="smooth function" title="molecule index" id="344">0.9361587862369193</scalar>
+            <scalar dataType="smooth function" title="molecule index" id="261">0.757293245380656</scalar>
+            <scalar dataType="smooth function" title="molecule index" id="204">0.7891578994763649</scalar>
             <scalar dataType="smooth function" title="molecule index" id="216">0.6625930814713649</scalar>
+            <scalar dataType="smooth function" title="molecule index" id="394">0.13357853371893721</scalar>
+            <scalar dataType="smooth function" title="molecule index" id="351">0.31848657511447437</scalar>
+            <scalar dataType="smooth function" title="molecule index" id="84">0.397512563906644</scalar>
             <scalar dataType="smooth function" title="molecule index" id="341">0.6256114093669245</scalar>
             <scalar dataType="smooth function" title="molecule index" id="452">0.943297219081938</scalar>
-            <scalar dataType="smooth function" title="molecule index" id="394">0.13357853371893721</scalar>
-            <scalar dataType="smooth function" title="molecule index" id="285">0.9557998362059075</scalar>
+            <scalar dataType="smooth function" title="molecule index" id="36">0.024538463002329283</scalar>
+            <scalar dataType="smooth function" title="molecule index" id="324">0.280262960729487</scalar>
+            <scalar dataType="smooth function" title="molecule index" id="244">0.9844591239633381</scalar>
+            <scalar dataType="smooth function" title="molecule index" id="286">0.9568873732314117</scalar>
             <scalar dataType="smooth function" title="molecule index" id="169">0.8705303298557712</scalar>
-            <scalar dataType="smooth function" title="molecule index" id="261">0.757293245380656</scalar>
+            <scalar dataType="smooth function" title="molecule index" id="344">0.9361587862369193</scalar>
+            <scalar dataType="smooth function" title="molecule index" id="400">0.14813186393199276</scalar>
         </property>
         <property/>
         <property/>

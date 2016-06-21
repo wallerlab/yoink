@@ -18,9 +18,9 @@ package org.wallerlab.yoink.molecule.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.wallerlab.yoink.batch.api.model.molecular.Atom;
-import org.wallerlab.yoink.batch.api.model.molecular.MolecularSystem;
-import org.wallerlab.yoink.batch.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.molecular.Atom;
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
+import org.wallerlab.yoink.api.model.molecular.Molecule;
 
 /**
  * the domain model for molecule system.

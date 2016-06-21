@@ -15,9 +15,9 @@
  */
 package org.wallerlab.yoink.molecule.domain
 
-import org.wallerlab.yoink.batch.api.model.molecular.Atom;
-import org.wallerlab.yoink.batch.api.model.molecular.Coord;
-import org.wallerlab.yoink.batch.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.model.molecular.Atom;
+import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.model.regionizer.Region;
 
 import spock.lang.Specification
 

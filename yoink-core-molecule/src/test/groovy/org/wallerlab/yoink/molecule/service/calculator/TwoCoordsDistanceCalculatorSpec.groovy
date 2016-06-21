@@ -17,7 +17,7 @@ package org.wallerlab.yoink.molecule.service.calculator
 
 import spock.lang.Specification
 
-import org.wallerlab.yoink.batch.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.model.molecular.Coord;
 import org.wallerlab.yoink.math.linear.CommonsVector3D
 
 class TwoCoordsDistanceCalculatorSpec extends Specification{

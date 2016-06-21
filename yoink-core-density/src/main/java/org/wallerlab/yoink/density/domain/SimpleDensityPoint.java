@@ -15,10 +15,10 @@
  */
 package org.wallerlab.yoink.density.domain;
 
-import org.wallerlab.yoink.batch.api.model.density.DensityPoint;
-import org.wallerlab.yoink.batch.api.model.molecular.Coord;
-import org.wallerlab.yoink.batch.api.service.math.Matrix;
-import org.wallerlab.yoink.batch.api.service.math.Vector;
+import org.wallerlab.yoink.api.model.density.DensityPoint;
+import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.service.math.Matrix;
+import org.wallerlab.yoink.api.service.math.Vector;
 
 /**
  * This class is to store all density based properties on a point, those

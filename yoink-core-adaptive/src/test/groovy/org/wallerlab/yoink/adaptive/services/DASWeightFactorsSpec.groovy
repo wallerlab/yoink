@@ -17,9 +17,9 @@ package org.wallerlab.yoink.adaptive.services
 
 import org.wallerlab.yoink.api.enums.*
 import org.wallerlab.yoink.adaptive.services.weights.DASWeightFactors
-import org.wallerlab.yoink.batch.api.model.regionizer.Region
-import org.wallerlab.yoink.batch.api.model.batch.Job
-import org.wallerlab.yoink.batch.api.model.molecular.Molecule
+import org.wallerlab.yoink.api.model.regionizer.Region
+import org.wallerlab.yoink.api.model.batch.Job
+import org.wallerlab.yoink.api.model.molecular.Molecule
 import spock.lang.Specification
 
 class DASWeightFactorsSpec extends Specification {

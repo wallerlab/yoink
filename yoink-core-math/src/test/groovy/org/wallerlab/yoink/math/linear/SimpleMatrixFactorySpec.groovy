@@ -15,7 +15,7 @@
  */
 package org.wallerlab.yoink.math.linear
 
-import org.wallerlab.yoink.batch.api.service.math.Matrix;
+import org.wallerlab.yoink.api.service.math.Matrix;
 import spock.lang.Specification;
 
 class SimpleMatrixFactorySpec extends Specification {

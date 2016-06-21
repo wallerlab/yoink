@@ -15,7 +15,7 @@
  */
 package org.wallerlab.yoink.molecule.service.translator
 
-import org.wallerlab.yoink.batch.api.service.molecule.Converter
+import org.wallerlab.yoink.api.service.molecule.Converter
 
 import javax.xml.bind.JAXBElement
 
@@ -23,9 +23,9 @@ import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
 import org.wallerlab.yoink.molecule.data.JaxbFileReader
 import org.wallerlab.yoink.molecule.domain.SimpleCoordFactory
 import org.xml_cml.schema.Cml
-import org.wallerlab.yoink.batch.api.model.molecular.Coord
-import org.wallerlab.yoink.batch.api.service.Computer;
-import org.wallerlab.yoink.batch.api.service.math.Vector;
+import org.wallerlab.yoink.api.model.molecular.Coord
+import org.wallerlab.yoink.api.service.Computer;
+import org.wallerlab.yoink.api.service.math.Vector;
 
 import spock.lang.Specification
 

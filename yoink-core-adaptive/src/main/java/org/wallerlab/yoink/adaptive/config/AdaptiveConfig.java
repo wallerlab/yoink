@@ -20,8 +20,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.wallerlab.yoink.adaptive.services.smooth.DensitySmoothner;
 import org.wallerlab.yoink.adaptive.services.smooth.DistanceSmoothner;
-import org.wallerlab.yoink.batch.api.service.adaptive.Smoothner;
-import org.wallerlab.yoink.batch.api.service.adaptive.SmoothFunction;
+import org.wallerlab.yoink.api.service.adaptive.Smoothner;
+import org.wallerlab.yoink.api.service.adaptive.SmoothFunction;
 
 /**
  * this class is for adaptive project configuration

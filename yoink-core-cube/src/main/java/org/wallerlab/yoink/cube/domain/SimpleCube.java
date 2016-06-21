@@ -23,11 +23,11 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.wallerlab.yoink.batch.api.model.cube.Cube;
-import org.wallerlab.yoink.batch.api.model.density.DensityPoint.DensityType;
-import org.wallerlab.yoink.batch.api.model.molecular.Atom;
-import org.wallerlab.yoink.batch.api.model.molecular.Coord;
-import org.wallerlab.yoink.batch.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.cube.Cube;
+import org.wallerlab.yoink.api.model.density.DensityPoint.DensityType;
+import org.wallerlab.yoink.api.model.molecular.Atom;
+import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.model.molecular.Molecule;
 import org.wallerlab.yoink.math.constants.Constants;
 
 /**

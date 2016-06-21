@@ -16,7 +16,7 @@
 package org.wallerlab.yoink.math.linear;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
-import org.wallerlab.yoink.batch.api.service.math.Vector;
+import org.wallerlab.yoink.api.service.math.Vector;
 
 /**
  * Vector Adaptor pattern.

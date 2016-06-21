@@ -15,10 +15,10 @@
  */
 package org.wallerlab.yoink.cube.service
 
-import org.wallerlab.yoink.batch.api.model.molecular.Atom
-import org.wallerlab.yoink.batch.api.model.molecular.Coord
-import org.wallerlab.yoink.batch.api.model.molecular.Molecule
-import org.wallerlab.yoink.batch.api.service.Calculator;
+import org.wallerlab.yoink.api.model.molecular.Atom
+import org.wallerlab.yoink.api.model.molecular.Coord
+import org.wallerlab.yoink.api.model.molecular.Molecule
+import org.wallerlab.yoink.api.service.Calculator;
 import spock.lang.Specification;
 
 class VoronoiCalculatorSpec extends Specification {

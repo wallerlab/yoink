@@ -16,8 +16,8 @@
 package org.wallerlab.yoink.molecule.service.calculator;
 
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.batch.api.model.molecular.Coord;
-import org.wallerlab.yoink.batch.api.service.Calculator;
+import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.service.Calculator;
 
 /**
  * This class is to calculate the distance between two points

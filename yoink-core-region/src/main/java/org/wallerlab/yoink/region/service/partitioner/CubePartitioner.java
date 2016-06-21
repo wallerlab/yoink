@@ -15,27 +15,22 @@
  */
 package org.wallerlab.yoink.region.service.partitioner;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import org.springframework.stereotype.Service;
+import org.wallerlab.yoink.api.model.batch.JobParameter;
+import org.wallerlab.yoink.api.model.cube.Cube;
+import org.wallerlab.yoink.api.model.cube.GridPoint;
+import org.wallerlab.yoink.api.model.density.DensityPoint;
+import org.wallerlab.yoink.api.model.density.DensityPoint.DensityType;
+import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.service.cube.Assigner;
+import org.wallerlab.yoink.api.service.cube.CubeBuilder;
+import org.wallerlab.yoink.api.service.region.Partitioner;
+import org.wallerlab.yoink.cube.domain.SimpleGridPoint;
 
 import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.batch.api.model.batch.JobParameter;
-import org.wallerlab.yoink.batch.api.model.cube.Cube;
-import org.wallerlab.yoink.batch.api.model.cube.GridPoint;
-import org.wallerlab.yoink.batch.api.model.density.DensityPoint;
-import org.wallerlab.yoink.batch.api.model.density.DensityPoint.DensityType;
-import org.wallerlab.yoink.batch.api.model.molecular.Coord;
-import org.wallerlab.yoink.batch.api.model.molecular.Molecule;
-import org.wallerlab.yoink.batch.api.model.regionizer.Region;
-import org.wallerlab.yoink.batch.api.service.cube.Assigner;
-import org.wallerlab.yoink.batch.api.service.cube.CubeBuilder;
-import org.wallerlab.yoink.batch.api.service.region.Partitioner;
-import org.wallerlab.yoink.cube.domain.SimpleGridPoint;
+import java.util.*;
 
 /**
  * This class is to get those grid points that belong to the intersection region
@@ -45,8 +40,7 @@ import org.wallerlab.yoink.cube.domain.SimpleGridPoint;
  * 
  */
 @Service
-public class CubePartitioner implements
-		Partitioner<List<GridPoint>, DensityType> {
+public class CubePartitioner implements Partitioner<List<GridPoint>, DensityType> {
 
 	@Resource
 	private CubeBuilder<Set<Molecule>> cubeBuilder;

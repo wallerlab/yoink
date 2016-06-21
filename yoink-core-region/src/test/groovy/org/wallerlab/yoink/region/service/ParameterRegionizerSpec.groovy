@@ -20,9 +20,9 @@ import org.wallerlab.yoink.region.service.regionizer.ParameterRegionizer
 import spock.lang.Specification;
 
 import org.wallerlab.yoink.api.enums.*
-import org.wallerlab.yoink.batch.api.model.molecular.Coord;
-import org.wallerlab.yoink.batch.api.model.molecular.Molecule;
-import org.wallerlab.yoink.batch.api.model.regionizer.Region
+import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.regionizer.Region
 import org.wallerlab.yoink.region.domain.SimpleRegionFactory
 
 class ParameterRegionizerSpec extends Specification{

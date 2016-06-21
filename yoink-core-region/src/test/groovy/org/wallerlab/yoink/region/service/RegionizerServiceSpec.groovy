@@ -16,14 +16,14 @@
  */
 package org.wallerlab.yoink.region.service
 
-import org.wallerlab.yoink.batch.api.service.region.RegionizerMath
+import org.wallerlab.yoink.api.service.region.RegionizerMath
 import org.wallerlab.yoink.region.service.regionizer.RegionizerService
 import spock.lang.Specification;
 
 import org.wallerlab.yoink.api.enums.*
-import org.wallerlab.yoink.batch.api.model.molecular.MolecularSystem;
-import org.wallerlab.yoink.batch.api.model.molecular.Molecule;
-import org.wallerlab.yoink.batch.api.model.regionizer.Region
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
+import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.regionizer.Region
 import org.wallerlab.yoink.region.domain.SimpleRegionFactory
 
 class RegionizerServiceSpec extends Specification{

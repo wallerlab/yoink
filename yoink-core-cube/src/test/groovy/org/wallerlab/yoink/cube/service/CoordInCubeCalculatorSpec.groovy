@@ -17,8 +17,8 @@ package org.wallerlab.yoink.cube.service
 
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
 import org.wallerlab.yoink.molecule.domain.SimpleCoordFactory
-import org.wallerlab.yoink.batch.api.model.cube.Cube;
-import org.wallerlab.yoink.batch.api.service.math.Vector;
+import org.wallerlab.yoink.api.model.cube.Cube;
+import org.wallerlab.yoink.api.service.math.Vector;
 
 import spock.lang.Specification;
 

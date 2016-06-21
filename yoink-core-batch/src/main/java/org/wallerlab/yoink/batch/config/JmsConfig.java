@@ -1,19 +1,15 @@
 package org.wallerlab.yoink.batch.config;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
-import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.jms.JmsItemReader;
 import org.springframework.batch.item.jms.JmsItemWriter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.jms.core.JmsOperations;
 import org.springframework.jms.core.JmsTemplate;
-import org.wallerlab.yoink.batch.api.model.batch.Job;
+import org.wallerlab.yoink.api.model.batch.Job;
 import org.wallerlab.yoink.batch.service.request.JmsRequestReader;
 import org.wallerlab.yoink.batch.service.response.JmsJobItemWriter;
 

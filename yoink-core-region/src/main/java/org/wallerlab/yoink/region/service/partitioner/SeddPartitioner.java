@@ -15,23 +15,24 @@
  */
 package org.wallerlab.yoink.region.service.partitioner;
 
+import org.springframework.stereotype.Service;
+import org.wallerlab.yoink.api.model.batch.JobParameter;
+import org.wallerlab.yoink.api.model.cube.GridPoint;
+import org.wallerlab.yoink.api.model.density.DensityPoint;
+import org.wallerlab.yoink.api.model.molecular.Atom;
+import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.service.Calculator;
+import org.wallerlab.yoink.api.service.Computer;
+
+import javax.annotation.Resource;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.batch.api.model.batch.JobParameter;
-import org.wallerlab.yoink.batch.api.model.cube.GridPoint;
-import org.wallerlab.yoink.batch.api.model.density.DensityPoint;
-import org.wallerlab.yoink.batch.api.model.molecular.Atom;
-import org.wallerlab.yoink.batch.api.model.molecular.Coord;
-import org.wallerlab.yoink.batch.api.model.molecular.Molecule;
-import org.wallerlab.yoink.batch.api.model.regionizer.Region;
-import org.wallerlab.yoink.batch.api.service.Calculator;
-import org.wallerlab.yoink.batch.api.service.Computer;
-import static  org.wallerlab.yoink.batch.api.model.regionizer.Region.Name.*;
+import static org.wallerlab.yoink.api.model.regionizer.Region.Name.QM_CORE;
+import static org.wallerlab.yoink.api.model.regionizer.Region.Name.QM_CORE_ADAPTIVE;
 
 /**
  * This class is to analyze SEDD for those grid points in the intersection

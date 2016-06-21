@@ -18,9 +18,9 @@ package org.wallerlab.yoink.adaptive.services
 import org.wallerlab.yoink.adaptive.services.smooth.AdaptiveQMMMSmoothnerRouter
 import spock.lang.Specification
 import org.wallerlab.yoink.api.enums.*
-import org.wallerlab.yoink.batch.api.model.batch.JobParameter
-import org.wallerlab.yoink.batch.api.service.adaptive.Smoothner;
-import org.wallerlab.yoink.batch.api.model.batch.Job
+import org.wallerlab.yoink.api.model.batch.JobParameter
+import org.wallerlab.yoink.api.service.adaptive.Smoothner;
+import org.wallerlab.yoink.api.model.batch.Job
 
 class AdaptiveQMMMSmoothnerRouterSpec extends Specification{
 

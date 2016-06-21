@@ -20,10 +20,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.wallerlab.yoink.batch.api.model.cube.GridPoint;
-import org.wallerlab.yoink.batch.api.model.molecular.Atom;
-import org.wallerlab.yoink.batch.api.model.molecular.Coord;
-import org.wallerlab.yoink.batch.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.cube.GridPoint;
+import org.wallerlab.yoink.api.model.molecular.Atom;
+import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.model.molecular.Molecule;
 
 /**
  * This domain model is to store information and properties of a grid point

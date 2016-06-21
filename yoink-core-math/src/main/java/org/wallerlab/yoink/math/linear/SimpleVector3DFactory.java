@@ -1,9 +1,8 @@
 package org.wallerlab.yoink.math.linear;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.batch.api.service.math.Vector;
-import org.wallerlab.yoink.batch.api.service.math.Vector.Vector3DType;
+import org.wallerlab.yoink.api.service.math.Vector;
+import org.wallerlab.yoink.api.service.math.Vector.Vector3DType;
 
 /**
  * this class is Vector 3D factory

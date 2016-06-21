@@ -16,7 +16,7 @@
 
 package org.wallerlab.yoink.region.service
 
- import org.wallerlab.yoink.batch.api.service.region.RegionizerComponent
+ import org.wallerlab.yoink.api.service.region.RegionizerComponent
  import org.wallerlab.yoink.region.service.regionizer.DensityBasedRegionizer
  import spock.lang.Specification;
 

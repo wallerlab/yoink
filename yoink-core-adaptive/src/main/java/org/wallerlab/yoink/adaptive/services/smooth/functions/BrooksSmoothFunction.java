@@ -17,7 +17,7 @@
 package org.wallerlab.yoink.adaptive.services.smooth.functions;
 
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.batch.api.service.adaptive.SmoothFunction;
+import org.wallerlab.yoink.api.service.adaptive.SmoothFunction;
 
 /**
  * this class is smooth function used in Hot-spot. the original smooth function

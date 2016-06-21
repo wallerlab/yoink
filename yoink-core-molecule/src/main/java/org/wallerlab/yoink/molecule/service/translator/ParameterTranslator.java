@@ -20,14 +20,13 @@ import java.util.Map;
 
 import javax.xml.bind.JAXBElement;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.batch.api.model.batch.JobParameter;
-import org.wallerlab.yoink.batch.api.model.regionizer.Region;
-import org.wallerlab.yoink.batch.api.service.adaptive.Smoothner;
-import org.wallerlab.yoink.batch.api.service.molecule.Translator;
-import org.wallerlab.yoink.batch.api.service.molecule.Converter.UnitConverterType;
-import org.wallerlab.yoink.batch.api.service.region.Partitioner;
+import org.wallerlab.yoink.api.model.batch.JobParameter;
+import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.service.adaptive.Smoothner;
+import org.wallerlab.yoink.api.service.molecule.Translator;
+import org.wallerlab.yoink.api.service.molecule.Converter.UnitConverterType;
+import org.wallerlab.yoink.api.service.region.Partitioner;
 import org.xml_cml.schema.Cml;
 import org.xml_cml.schema.Parameter;
 import org.xml_cml.schema.ParameterList;

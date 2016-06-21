@@ -17,9 +17,9 @@
 package org.wallerlab.yoink.molecule.service.calculator;
 
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.batch.api.model.molecular.Atom;
-import org.wallerlab.yoink.batch.api.service.Calculator;
-import org.wallerlab.yoink.batch.api.service.math.Vector;
+import org.wallerlab.yoink.api.model.molecular.Atom;
+import org.wallerlab.yoink.api.service.Calculator;
+import org.wallerlab.yoink.api.service.math.Vector;
 
 /**
  * this class is to get the distance between two atoms

@@ -15,8 +15,8 @@
  */
 package org.wallerlab.yoink.molecule.service.calculator
 
-import org.wallerlab.yoink.batch.api.model.molecular.Atom
-import org.wallerlab.yoink.batch.api.model.molecular.Coord
+import org.wallerlab.yoink.api.model.molecular.Atom
+import org.wallerlab.yoink.api.model.molecular.Coord
 import org.wallerlab.yoink.math.linear.CommonsVector3D
 
 import spock.lang.Specification

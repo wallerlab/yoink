@@ -21,8 +21,8 @@ package org.wallerlab.yoink.region.service
  import spock.lang.Specification;
 
 import org.wallerlab.yoink.api.enums.*
- import org.wallerlab.yoink.batch.api.service.region.Partitioner
- import org.wallerlab.yoink.batch.api.model.batch.JobParameter;
+ import org.wallerlab.yoink.api.service.region.Partitioner
+ import org.wallerlab.yoink.api.model.batch.JobParameter;
 
 class BufferRegionizerSpec extends Specification {
 

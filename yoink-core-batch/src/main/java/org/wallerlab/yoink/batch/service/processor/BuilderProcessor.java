@@ -18,11 +18,10 @@ package org.wallerlab.yoink.batch.service.processor;
 
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.batch.api.model.batch.Job;
-import org.wallerlab.yoink.batch.api.model.batch.JobParameter;
-import org.wallerlab.yoink.batch.api.model.molecular.MolecularSystem;
-import org.wallerlab.yoink.batch.api.service.batch.JobBuilder;
-import org.wallerlab.yoink.batch.api.service.molecule.Translator;
+import org.wallerlab.yoink.api.model.batch.Job;
+import org.wallerlab.yoink.api.model.batch.JobParameter;
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
+import org.wallerlab.yoink.api.service.molecule.Translator;
 import org.wallerlab.yoink.batch.domain.AdaptiveQMMMJob;
 import org.xml_cml.schema.Cml;
 

@@ -15,29 +15,24 @@
  */
 package org.wallerlab.yoink.region.service.partitioner;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import org.springframework.stereotype.Service;
+import org.wallerlab.yoink.api.model.batch.JobParameter;
+import org.wallerlab.yoink.api.model.density.DensityPoint;
+import org.wallerlab.yoink.api.model.density.DensityPoint.DensityType;
+import org.wallerlab.yoink.api.model.molecular.Atom;
+import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.molecular.RadialGrid;
+import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.service.Calculator;
+import org.wallerlab.yoink.api.service.Factory;
+import org.wallerlab.yoink.api.service.molecule.FilesReader;
+import org.wallerlab.yoink.api.service.region.Partitioner;
+import org.wallerlab.yoink.api.service.region.RegionizerMath;
+import org.wallerlab.yoink.molecule.domain.SimpleRadialGrid;
 
 import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.batch.api.model.batch.JobParameter;
-import org.wallerlab.yoink.batch.api.model.density.DensityPoint;
-import org.wallerlab.yoink.batch.api.model.density.DensityPoint.DensityType;
-import org.wallerlab.yoink.batch.api.model.molecular.Atom;
-import org.wallerlab.yoink.batch.api.model.molecular.Coord;
-import org.wallerlab.yoink.batch.api.model.molecular.Molecule;
-import org.wallerlab.yoink.batch.api.model.molecular.RadialGrid;
-import org.wallerlab.yoink.batch.api.model.regionizer.Region;
-import org.wallerlab.yoink.batch.api.service.Calculator;
-import org.wallerlab.yoink.batch.api.service.Factory;
-import org.wallerlab.yoink.batch.api.service.molecule.FilesReader;
-import org.wallerlab.yoink.batch.api.service.region.Partitioner;
-import org.wallerlab.yoink.batch.api.service.region.RegionizerMath;
-import org.wallerlab.yoink.molecule.domain.SimpleRadialGrid;
+import java.util.*;
 
 /**
  * This class is to use the density of qm core to define the region (adaptive

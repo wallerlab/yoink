@@ -21,10 +21,10 @@ import java.util.Map;
 import java.util.Set;
 
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.batch.api.model.batch.Job;
-import org.wallerlab.yoink.batch.api.model.batch.JobParameter;
-import org.wallerlab.yoink.batch.api.service.batch.Clustering;
-import org.wallerlab.yoink.batch.api.service.region.Partitioner;
+import org.wallerlab.yoink.api.model.batch.Job;
+import org.wallerlab.yoink.api.model.batch.JobParameter;
+import org.wallerlab.yoink.api.service.batch.Clustering;
+import org.wallerlab.yoink.api.service.region.Partitioner;
 import org.wallerlab.yoink.cluster.service.louvain.LouvainClusteringFacade;
 import org.wallerlab.yoink.cluster.service.interaction.InteractionTriple;
 

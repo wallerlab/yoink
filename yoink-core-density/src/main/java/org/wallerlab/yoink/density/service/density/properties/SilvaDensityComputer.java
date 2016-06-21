@@ -16,10 +16,10 @@
 package org.wallerlab.yoink.density.service.density.properties;
 
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.batch.api.model.density.DensityPoint;
-import org.wallerlab.yoink.batch.api.service.Computer;
-import org.wallerlab.yoink.batch.api.service.math.Matrix;
-import org.wallerlab.yoink.batch.api.service.math.Vector;
+import org.wallerlab.yoink.api.model.density.DensityPoint;
+import org.wallerlab.yoink.api.service.Computer;
+import org.wallerlab.yoink.api.service.math.Matrix;
+import org.wallerlab.yoink.api.service.math.Vector;
 
 /**
  * This class is to do Silva density analysis calculation for a point. Silva

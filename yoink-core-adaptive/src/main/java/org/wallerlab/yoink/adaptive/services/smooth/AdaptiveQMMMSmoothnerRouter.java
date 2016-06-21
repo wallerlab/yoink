@@ -22,9 +22,9 @@ import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.batch.api.model.batch.JobParameter;
-import org.wallerlab.yoink.batch.api.model.batch.Job;
-import org.wallerlab.yoink.batch.api.service.adaptive.Smoothner;
+import org.wallerlab.yoink.api.model.batch.JobParameter;
+import org.wallerlab.yoink.api.model.batch.Job;
+import org.wallerlab.yoink.api.service.adaptive.Smoothner;
 
 /**
  * this class is to choose different smoothner to smooth the buffer region

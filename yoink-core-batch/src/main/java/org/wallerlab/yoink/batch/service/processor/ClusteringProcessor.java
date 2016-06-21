@@ -22,11 +22,11 @@ import javax.xml.bind.JAXBElement;
 
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.batch.api.model.batch.Job;
-import org.wallerlab.yoink.batch.api.model.molecular.MolecularSystem;
-import org.wallerlab.yoink.batch.api.model.regionizer.Region;
-import org.wallerlab.yoink.batch.api.service.batch.Clustering;
-import org.wallerlab.yoink.batch.api.service.region.RegionizerMath;
+import org.wallerlab.yoink.api.model.batch.Job;
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
+import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.service.batch.Clustering;
+import org.wallerlab.yoink.api.service.region.RegionizerMath;
 import org.wallerlab.yoink.cluster.service.interaction.InteractionSet;
 
 /**

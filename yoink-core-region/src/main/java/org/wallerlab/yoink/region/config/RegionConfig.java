@@ -19,23 +19,22 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.wallerlab.yoink.batch.api.model.density.DensityPoint.DensityType;
-import org.wallerlab.yoink.batch.api.model.molecular.MolecularSystem;
-import org.wallerlab.yoink.batch.api.model.regionizer.Region;
-import org.wallerlab.yoink.batch.api.service.region.Partitioner;
-import org.wallerlab.yoink.batch.api.service.region.Regionizer;
-import org.wallerlab.yoink.batch.api.service.region.RegionizerComponent;
-import org.wallerlab.yoink.batch.api.service.region.RegionizerMath;
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
+import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.service.region.Partitioner;
+import org.wallerlab.yoink.api.service.region.Regionizer;
+import org.wallerlab.yoink.api.service.region.RegionizerComponent;
+import org.wallerlab.yoink.api.service.region.RegionizerMath;
 import org.wallerlab.yoink.region.service.regionizer.AdaptiveRegionizer;
 import org.wallerlab.yoink.region.service.regionizer.RegionizerService;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 import java.util.Map;
 
-import static org.wallerlab.yoink.batch.api.model.regionizer.Region.Name.*;
-import static org.wallerlab.yoink.batch.api.model.density.DensityPoint.DensityType.*;
+import static org.wallerlab.yoink.api.model.density.DensityPoint.DensityType.DORI;
+import static org.wallerlab.yoink.api.model.density.DensityPoint.DensityType.SEDD;
+import static org.wallerlab.yoink.api.model.regionizer.Region.Name.*;
 
 /**
  * This class is the configuration for region project.
@@ -64,13 +63,8 @@ public class RegionConfig {
 	@Bean
 	RegionizerMath<Map<Region.Name, Region>, MolecularSystem> regionizerServiceStarting() {
 		RegionizerService regionizerService = new RegionizerService();
-		List<Region.Name> regionReqeusts = new ArrayList<Region.Name>();
-		regionReqeusts.add(QM_CORE_FIXED);
-		regionReqeusts.add(SYSTEM);
-		regionReqeusts.add(QM_CORE);
-		regionReqeusts.add(QM);
-		regionReqeusts.add(NONQM_CORE);
-		regionizerService.setRegionNames(regionReqeusts);
+		Region.Name[] regionReqeusts = {QM_CORE_FIXED,SYSTEM,QM_CORE,QM,NONQM_CORE};
+		regionizerService.setRegionNames(Arrays.asList(regionReqeusts));
 		return (RegionizerMath<Map<Region.Name, Region>, MolecularSystem>) regionizerService;
 	}
 
@@ -83,15 +77,13 @@ public class RegionConfig {
 	@Bean
 	RegionizerMath<Map<Region.Name, Region>, MolecularSystem> regionizerServiceEnding() {
 		RegionizerService regionizerService = new RegionizerService();
-		List<Region.Name> regionReqeusts = new ArrayList<Region.Name>();
-		regionReqeusts.add(MM);
-		regionReqeusts.add(MM_NONBUFFER);
-		regionizerService.setRegionNames(regionReqeusts);
+		Region.Name[] regionReqeusts = {MM,MM_NONBUFFER};
+		regionizerService.setRegionNames(Arrays.asList(regionReqeusts));
 		return (RegionizerMath<Map<Region.Name, Region>, MolecularSystem>) regionizerService;
 	}
 
 	/**
-	 * region for adaptive QM in density based adaptive partitioning
+	 *  Adaptive QM regionizer in density based adaptive partitioning
 	 * 
 	 * @return adaptiveQMRegionizer
 	 *         {@link Regionizer}
@@ -102,7 +94,7 @@ public class RegionConfig {
 	}
 
 	/**
-	 * region for adaptive QM core in density based adaptive partitioning
+	 * Adaptive QM core regionizer in density based adaptive partitioning
 	 * 
 	 * @return adaptiveQMCoreRegionizer
 	 *         {@link Regionizer}

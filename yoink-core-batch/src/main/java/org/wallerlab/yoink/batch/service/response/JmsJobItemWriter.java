@@ -25,7 +25,7 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.batch.api.model.batch.Job;
+import org.wallerlab.yoink.api.model.batch.Job;
 import org.wallerlab.yoink.molecule.data.JaxbStringWriter;
 import org.xml_cml.schema.Cml;
 

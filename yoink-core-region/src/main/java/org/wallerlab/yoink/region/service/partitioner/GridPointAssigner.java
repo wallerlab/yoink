@@ -15,17 +15,16 @@
  */
 package org.wallerlab.yoink.region.service.partitioner;
 
-import java.util.Map;
-import java.util.Set;
+import org.springframework.stereotype.Component;
+import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.service.Calculator;
+import org.wallerlab.yoink.api.service.cube.Assigner;
 
 import javax.annotation.Resource;
-
-import org.springframework.stereotype.Component;
-import org.wallerlab.yoink.batch.api.model.molecular.Coord;
-import org.wallerlab.yoink.batch.api.model.molecular.Molecule;
-import org.wallerlab.yoink.batch.api.model.regionizer.Region;
-import org.wallerlab.yoink.batch.api.service.Calculator;
-import org.wallerlab.yoink.batch.api.service.cube.Assigner;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * This class is to determine if a grid point is in the intersection region

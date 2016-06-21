@@ -15,10 +15,8 @@
  */
 package org.wallerlab.yoink.math.linear;
 
-import javafx.scene.transform.MatrixType;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.batch.api.service.math.Matrix;
+import org.wallerlab.yoink.api.service.math.Matrix;
 
 @Service
 public class SimpleMatrixFactory {

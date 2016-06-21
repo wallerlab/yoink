@@ -16,9 +16,9 @@
 package org.wallerlab.yoink.density.domain;
 
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.batch.api.model.density.DensityPoint;
-import org.wallerlab.yoink.batch.api.model.molecular.Coord;
-import org.wallerlab.yoink.batch.api.service.Factory;
+import org.wallerlab.yoink.api.model.density.DensityPoint;
+import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.service.Factory;
 
 @Service
 public class SimpleDensityPointFactory implements Factory<DensityPoint, Coord> {

@@ -16,8 +16,8 @@
 package org.wallerlab.yoink.density.service.density.properties;
 
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.batch.api.model.density.DensityPoint;
-import org.wallerlab.yoink.batch.api.service.Computer;
+import org.wallerlab.yoink.api.model.density.DensityPoint;
+import org.wallerlab.yoink.api.service.Computer;
 import org.wallerlab.yoink.math.constants.Constants;
 
 /**
