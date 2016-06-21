@@ -1,12 +1,12 @@
 buildscript {
-  repositories {
-    jcenter()
-  }
-  dependencies {
-    classpath "gradle.plugin.me.champeau.gradle:jmh-gradle-plugin:0.3.0"
-  }
-}
-
+        repositories {
+                jcenter()
+                mavenCentral()
+        }
+        dependencies {
+classpath "gradle.plugin.me.champeau.gradle:jmh-gradle-plugin:0.3.0"
+classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.7.RELEASE") }
+}  
 allprojects {
 	apply plugin: 'java'
 	apply plugin: 'eclipse'
@@ -157,11 +157,16 @@ buildscript {
 
 dependencies {
  compile project(':yoink-core-batch')
-
+        compile("org.springframework.boot:spring-boot-starter-batch")
+        testCompile group: 'junit', name: 'junit', version: '4.+'
 	}
 
-configurations { all*.exclude module : 'spring-boot-starter-logging' }
+configurations { 
 
+        all*.exclude module : 'spring-boot-starter-logging'
+        integrationTestCompile.extendsFrom testCompile
+        integrationTestRuntime.extendsFrom testRuntime
+}
 mainClassName = 'org.wallerlab.yoink.Application'
 
 
@@ -252,3 +257,27 @@ coveralls {
   sourceDirs = subprojects.sourceSets.main.allSource.srcDirs.flatten()
   jacocoReportPath = "${buildDir}/reports/jacoco/jacocoRootReport/jacocoRootReport.xml"
 }
+
+
+
+sourceSets {
+	integrationTest {
+		java {
+			compileClasspath += main.output + test.output
+			runtimeClasspath += main.output + test.output
+			srcDir file('src/integration-test/java')
+		}
+		resources.srcDir file('src/integration-test/resources')
+	}
+}
+task integrationTest(type: Test) {
+	testClassesDir = sourceSets.integrationTest.output.classesDir
+	classpath = sourceSets.integrationTest.runtimeClasspath
+	outputs.upToDateWhen { false }
+}
+check.dependsOn integrationTest
+integrationTest.mustRunAfter test
+tasks.withType(Test) {
+	reports.html.destination = file("${reporting.baseDir}/${name}")
+}
+
