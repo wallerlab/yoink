@@ -1,5 +1,5 @@
 /**
- * this package is for molecular project configuration 
+ * this package is for molecule project configuration
  * @author Min Zheng
  *
  */

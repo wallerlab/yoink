@@ -20,21 +20,22 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
 /**
- * this class is to configure molecular project
+ * this class is to configure molecule project
  * 
  * @author Min Zheng
  *
  */
 @Configuration
 @ComponentScan("org.wallerlab.yoink")
+@PropertySource("classpath:application.properties")
 public class MolecularConfig implements ApplicationContextAware {
 
 	private ApplicationContext appContext;
 
-	public void setApplicationContext(ApplicationContext applicationContext)
-			throws BeansException {
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		this.appContext = applicationContext;
 	}
 

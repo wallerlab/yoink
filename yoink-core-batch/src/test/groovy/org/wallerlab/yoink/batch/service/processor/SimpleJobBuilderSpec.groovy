@@ -21,7 +21,7 @@ import org.xml_cml.schema.ObjectFactory
 import spock.lang.Specification
 import org.wallerlab.yoink.api.enums.*
 import org.wallerlab.yoink.batch.api.model.molecular.MolecularSystem;
-import org.wallerlab.yoink.batch.api.service.molecular.Translator
+import org.wallerlab.yoink.batch.api.service.molecule.Translator
 import org.wallerlab.yoink.batch.api.model.batch.Job
 
 class SimpleJobBuilderSpec extends Specification {
@@ -46,6 +46,6 @@ class SimpleJobBuilderSpec extends Specification {
 		builder.parameterTranslator=parameterTranslator
 		
 		then:"check the return type"
-		builder.build(jaxB) instanceof Job
+		builder.process(jaxB) instanceof Job
 	}
 }

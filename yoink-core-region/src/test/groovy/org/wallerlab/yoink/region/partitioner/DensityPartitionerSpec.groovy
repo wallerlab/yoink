@@ -25,7 +25,7 @@ import org.wallerlab.yoink.batch.api.model.regionizer.Region;
 import org.wallerlab.yoink.batch.api.service.Calculator
 import org.wallerlab.yoink.batch.api.model.molecular.Molecule
 import org.wallerlab.yoink.batch.api.service.region.RegionizerMath
-import org.wallerlab.yoink.batch.api.service.molecular.FilesReader
+import org.wallerlab.yoink.batch.api.service.molecule.FilesReader
 import org.wallerlab.yoink.region.service.partitioner.DensityPartitioner
 import org.wallerlab.yoink.region.domain.SimpleRegionFactory;
 import spock.lang.Specification

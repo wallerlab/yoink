@@ -32,7 +32,7 @@ import org.wallerlab.yoink.batch.api.model.regionizer.Region;
 public interface Job<T> {
 
 	/**
-	 * get the molecular system from the job
+	 * get the molecule system from the job
 	 * 
 	 * @return molecularSystem -
 	 *         {@link MolecularSystem }
@@ -40,7 +40,7 @@ public interface Job<T> {
 	MolecularSystem getMolecularSystem();
 
 	/**
-	 * set the molecular system into the job
+	 * set the molecule system into the job
 	 * 
 	 * @param molecularSystem
 	 *            -

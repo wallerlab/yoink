@@ -34,8 +34,8 @@ class AdaptiveQMMMProcessorSpec extends Specification{
 		adaptiveQMMMRegionizers.add(adaptiveQMMMRegionizer)
 		jobBuilder.build(_)>>Mock(Job)
 
-		when:"set up a new AdaptiveProcessor"
-		def processor = new AdaptiveProcessor() {} {}
+		when:"set up a new QmMmWrapper"
+		def processor = new QmMmWrapper() {} {}
 		processor.regionizerServiceStarting=regionizerServiceStarting
 		processor.regionizerServiceEnding=regionizerServiceEnding
 		processor.adaptiveQMMMRegionizers=adaptiveQMMMRegionizers

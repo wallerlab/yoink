@@ -14,7 +14,7 @@ import org.wallerlab.yoink.batch.api.model.batch.Job;
 import org.wallerlab.yoink.batch.api.model.molecular.Molecule;
 import org.wallerlab.yoink.batch.api.model.regionizer.Region;
 import org.wallerlab.yoink.batch.api.service.adaptive.Smoothner;
-import org.wallerlab.yoink.batch.api.service.plugin.AdaptiveProcessor;
+import org.wallerlab.yoink.batch.api.service.plugin.QmMmWrapper;
 import org.wallerlab.yoink.batch.api.service.math.Vector;
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory;
 import org.wallerlab.yoink.math.set.Subsets;
@@ -32,7 +32,7 @@ public class PAPAdaptiveProcessor implements Smoothner {
 
 	@Resource
 	@Qualifier("qmmm")
-	private AdaptiveProcessor qmmmProcessor;
+	private QmMmWrapper qmmmProcessor;
 
 	@Resource
 	private SimpleVector3DFactory myVector3D;

@@ -15,7 +15,7 @@
  */
 package org.wallerlab.yoink.molecule.service.translator
 
-import org.wallerlab.yoink.batch.api.service.molecular.Converter
+import org.wallerlab.yoink.batch.api.service.molecule.Converter
 
 import javax.xml.bind.JAXBElement
 
@@ -46,7 +46,7 @@ class MolecularSystemTranslatorSpec extends Specification {
 		molecularSystemTranslator.centerOfMassComputer=centerOfMassComputer
 		molecularSystemTranslator.myVector3D=myVector3D
 		
-		then:"translate molecular information in the given file"
+		then:"translate molecule information in the given file"
 		def ms =molecularSystemTranslator.translate(cml)
 		ms.getMolecules().size()==476
 		ms.getAtoms().size()==1435

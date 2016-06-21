@@ -25,7 +25,7 @@ import org.wallerlab.yoink.batch.api.service.Calculator;
 
 /**
  * this class is to get the density ratio of two molecules on a grid point. And
- * this density ratio can be used to identify inter/intra-molecular interaction.
+ * this density ratio can be used to identify inter/intra-molecule interaction.
  * 
  * @author Min Zheng
  *

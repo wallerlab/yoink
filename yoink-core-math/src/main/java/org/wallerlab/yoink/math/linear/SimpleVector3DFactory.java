@@ -14,7 +14,7 @@ import org.wallerlab.yoink.batch.api.service.math.Vector.Vector3DType;
 @Service
 public class SimpleVector3DFactory {
 
-	private Vector3DType myVectorType;
+	private Vector3DType myVectorType = Vector3DType.COMMONS;
 
 	public SimpleVector3DFactory() {
 
@@ -76,7 +76,7 @@ public class SimpleVector3DFactory {
 	 * @param myVectorType
 	 *            {@link Vector.Vector3DType}
 	 */
-	@Value("${yoink.job.myvectortype}")
+	//@Value("${yoink.job.myvectortype}")
 	public void setMyVectorType(Vector3DType myVectorType) {
 		this.myVectorType = myVectorType;
 	}

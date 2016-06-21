@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.batch.api.model.batch.Job;
 import org.wallerlab.yoink.batch.api.model.regionizer.Region;
 import org.wallerlab.yoink.batch.api.service.adaptive.Smoothner;
-import org.wallerlab.yoink.batch.api.service.plugin.AdaptiveProcessor;
+import org.wallerlab.yoink.batch.api.service.plugin.QmMmWrapper;
 import org.wallerlab.yoink.batch.api.service.math.Vector;
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory;
 
@@ -28,7 +28,7 @@ public class ConfigurationAdaptiveProcessor implements Smoothner {
 
 	@Resource
 	@Qualifier("qmmm")
-	AdaptiveProcessor qmmmProcessor;
+	QmMmWrapper qmmmProcessor;
 
 	@Resource
 	private SimpleVector3DFactory myVector3D;

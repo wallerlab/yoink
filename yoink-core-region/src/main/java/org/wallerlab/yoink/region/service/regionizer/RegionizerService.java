@@ -111,7 +111,7 @@ public class RegionizerService implements
 	}
 
 	/**
-	 * find the Qm_Core_Fixed molecules in molecular system
+	 * find the Qm_Core_Fixed molecules in molecule system
 	 */
 	private Region qmCoreFixedRegionize(Region.Name name,
 			MolecularSystem molecularSystem) {
@@ -126,7 +126,7 @@ public class RegionizerService implements
 	}
 
 	/**
-	 * put all molecules in molecular system in SYSTEM region
+	 * put all molecules in molecule system in SYSTEM region
 	 */
 	private Region systemRegionize(Region.Name name,
 			MolecularSystem molecularSystem) {

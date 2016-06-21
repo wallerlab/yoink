@@ -15,6 +15,7 @@
  */
 package org.wallerlab.yoink.math.linear;
 
+import javafx.scene.transform.MatrixType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.batch.api.service.math.Matrix;
@@ -22,7 +23,7 @@ import org.wallerlab.yoink.batch.api.service.math.Matrix;
 @Service
 public class SimpleMatrixFactory {
 
-	private Matrix.Type matrixType;
+	private Matrix.Type matrixType = Matrix.Type.COMMONS;
 
 	public Matrix matrix() {
 		Matrix newMatrixInstance;
@@ -67,7 +68,7 @@ public class SimpleMatrixFactory {
 		return newMatrixInstance;
 	}
 
-	@Value("${yoink.job.mymatrixtype}")
+	//@Value("${yoink.job.mymatrixtype}")
 	public void setMatrixType(Matrix.Type matrixType) {
 		this.matrixType = matrixType;
 	}

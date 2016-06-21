@@ -1,3 +1,4 @@
+/*
 apply plugin: 'spring-boot'
 apply plugin: 'java'
 apply plugin: 'eclipse'
@@ -5,41 +6,41 @@ apply plugin:'groovy'
 sourceCompatibility = 1.8
 
 buildscript {
-	repositories {
-		jcenter()
-		mavenCentral()
-	}
-	dependencies { classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.7.RELEASE") }
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+    dependencies { classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.7.RELEASE") }
 }
 dependencies {
-	compile("org.springframework.boot:spring-boot-starter-batch")
-	testCompile group: 'junit', name: 'junit', version: '4.+'
+    compile("org.springframework.boot:spring-boot-starter-batch")
+    testCompile group: 'junit', name: 'junit', version: '4.+'
 }
 configurations {
-	all*.exclude module : 'spring-boot-starter-logging'
-	integrationTestCompile.extendsFrom testCompile
-	integrationTestRuntime.extendsFrom testRuntime
+    all*.exclude module : 'spring-boot-starter-logging'
+    integrationTestCompile.extendsFrom testCompile
+    integrationTestRuntime.extendsFrom testRuntime
 }
 sourceSets {
-	integrationTest {
-		java {
-			compileClasspath += main.output + test.output
-			runtimeClasspath += main.output + test.output
-			srcDir file('src/integration-test/java')
-		}
-		resources.srcDir file('src/integration-test/resources')
-	}
+    integrationTest {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir file('src/integration-test/java')
+        }
+        resources.srcDir file('src/integration-test/resources')
+    }
 }
 task integrationTest(type: Test) {
-	testClassesDir = sourceSets.integrationTest.output.classesDir
-	classpath = sourceSets.integrationTest.runtimeClasspath
-	outputs.upToDateWhen { false }
+    testClassesDir = sourceSets.integrationTest.output.classesDir
+    classpath = sourceSets.integrationTest.runtimeClasspath
+    outputs.upToDateWhen { false }
 }
 check.dependsOn integrationTest
 integrationTest.mustRunAfter test
 tasks.withType(Test) {
-	reports.html.destination = file("${reporting.baseDir}/${name}")
+    reports.html.destination = file("${reporting.baseDir}/${name}")
 }
 
-mainClassName = 'org.wallerlab.yoink.Yoink'
-
+mainClassName = 'org.wallerlab.yoink.Application'
+*/

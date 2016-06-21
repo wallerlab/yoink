@@ -23,6 +23,7 @@ import javax.xml.bind.JAXBElement;
 
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.batch.api.model.batch.Job;
 import org.wallerlab.yoink.batch.api.model.batch.JobParameter;
 import org.wallerlab.yoink.batch.api.model.molecular.MolecularSystem;
@@ -39,6 +40,7 @@ import org.wallerlab.yoink.batch.api.service.region.RegionizerMath;
  * @author Min Zheng
  *
  */
+@Service
 public class AdaptiveProcessor implements ItemProcessor<Job<JAXBElement>,Job> {
 	
 	@Resource

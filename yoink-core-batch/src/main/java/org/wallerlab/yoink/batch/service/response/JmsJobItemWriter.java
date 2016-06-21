@@ -43,6 +43,7 @@ public class JmsJobItemWriter implements ItemWriter<Job> {
 	private JaxbStringWriter  jaxbStringWriter;
 	
 	@Autowired
+	@Qualifier("jmsItemWriter")
 	ItemWriter<String> jmsItemWriter;
 
 	protected static final Log log = LogFactory.getLog(CmlFilesResponse.class);

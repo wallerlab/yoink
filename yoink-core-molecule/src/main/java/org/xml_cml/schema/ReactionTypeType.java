@@ -62,7 +62,7 @@ public enum ReactionTypeType {
 	 *                                         A reaction or process generating free radicals (or some other reactive
 	 *                                         reaction intermediates) which then induce a chain reaction. For example,
 	 *                                         in the chlorination of alkanes by a radical mechanism the initiation step is
-	 *                                         the dissociation of molecular chlorine.
+	 *                                         the dissociation of molecule chlorine.
 	 *                                         IUPAC Compendium of Chemical Terminology 2nd Edition (1997).
 	 *                                     &lt;/h:p&gt;
 	 *                                 &lt;/h:div&gt;

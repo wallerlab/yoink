@@ -4,9 +4,10 @@
 [![Coverage Status](https://coveralls.io/repos/github/wallerlab/yoink/badge.svg?branch=master)](https://coveralls.io/github/wallerlab/yoink?branch=master)
 [![Apache icense](http://img.shields.io/badge/license-APACHE2-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 
+
 #Quickstart
 
-To obtain a copy of the source code with [git](https://git-scm.com/)
+Use [git](https://git-scm.com/) to get a copy of yoink
 
 `git clone https://github.com/wallerlab/yoink.git`
 
@@ -17,14 +18,8 @@ then use [gradle](https://gradle.org/) to run yoink
 `./gradlew yoink`
 
 
-#See our wiki for more info:
-| Page | Description |
-| ------------- |-------------|
-|[Options](https://github.com/wallerlab/yoink/wiki/options) | An explanation of each of the options available in yoink |
-|[Features](https://github.com/wallerlab/yoink/wiki/feautres) | The various feautres inside yoink, and their citations  |
-|[Structure](https://github.com/wallerlab/yoink/wiki/structure) | An overview of the modules and sequence diagrams |
-|[Deploy](https://github.com/wallerlab/yoink/wiki/deploy) | An explanation on how to deploy yoink |
-|[Publish](https://github.com/wallerlab/yoink/wiki/publish) | An explanation on how to publish artifacts from yoink |
+#See our wiki for more detailed info:
 
+[Yoink Wiki](https://github.com/wallerlab/yoink/wiki)
 
 

@@ -16,6 +16,7 @@
 package org.wallerlab.yoink.math.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
 /**
  * This class is to make configuration for project Math
@@ -23,6 +24,7 @@ import org.springframework.context.annotation.Configuration;
  * @author Min Zheng
  *
  */
+@PropertySource("classpath:application.properties")
 @Configuration
 public class MathConfig {
 

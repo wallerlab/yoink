@@ -1,14 +1,10 @@
 package org.wallerlab.yoink.batch.config;
 
-import org.springframework.batch.core.Step;
 import org.springframework.batch.item.file.MultiResourceItemReader;
 import org.springframework.batch.item.file.ResourceAwareItemReaderItemStream;
 import org.springframework.batch.item.xml.StaxEventItemReader;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.Resource;
 import org.springframework.oxm.Unmarshaller;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
@@ -16,12 +12,10 @@ import org.xml_cml.schema.Cml;
 
 import javax.xml.bind.JAXBElement;
 import java.io.IOException;
+import java.util.Arrays;
 
-
-@Profile("batch")
 @Configuration
 public class XmlConfig extends BatchConfig{
-
 
     /**
      * Standard Spring Batch bean
@@ -32,15 +26,14 @@ public class XmlConfig extends BatchConfig{
     MultiResourceItemReader cmlFilesReader() {
         MultiResourceItemReader multiResourceItemReader = new MultiResourceItemReader();
         try {
-            //TODO remove appContext refernece
-            multiResourceItemReader.setResources((Resource[]) appContext.getResources("file:./inputs/*.xml"));
+            System.out.println("Resources are " + Arrays.asList(appContext.getResources("classpath:examples/*.xml")));
+            multiResourceItemReader.setResources((Resource[]) appContext.getResources("classpath:examples/*.xml"));
         } catch (IOException e) {
             e.printStackTrace();
         }
         multiResourceItemReader.setDelegate((ResourceAwareItemReaderItemStream) cmlFileReader());
         return multiResourceItemReader;
     }
-
 
     /**
      *  Standard Spring Batch item reader for OXM (Object Unmarshalling)

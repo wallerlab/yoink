@@ -16,12 +16,13 @@
 
 package org.wallerlab.yoink.batch.service.processor;
 
+import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.batch.api.model.batch.Job;
 import org.wallerlab.yoink.batch.api.model.batch.JobParameter;
 import org.wallerlab.yoink.batch.api.model.molecular.MolecularSystem;
 import org.wallerlab.yoink.batch.api.service.batch.JobBuilder;
-import org.wallerlab.yoink.batch.api.service.molecular.Translator;
+import org.wallerlab.yoink.batch.api.service.molecule.Translator;
 import org.wallerlab.yoink.batch.domain.AdaptiveQMMMJob;
 import org.xml_cml.schema.Cml;
 
@@ -30,14 +31,14 @@ import javax.xml.bind.JAXBElement;
 import java.util.Map;
 
 /**
- * this class is to read in all inputs (like molecular system and parameters)
+ * this class is to read in all inputs (like molecule system and parameters)
  * needed for adaptive QM/MM partitioning.
  * 
  * @author Min Zheng
  *
  */
 @Service
-public class BuilderProcessor implements JobBuilder<JAXBElement, JAXBElement> {
+public class BuilderProcessor implements ItemProcessor<JAXBElement, Job<JAXBElement>> {
 
 	@Resource
 	protected Translator<MolecularSystem, JAXBElement<Cml>> molecularSystemTranslator;
@@ -46,7 +47,7 @@ public class BuilderProcessor implements JobBuilder<JAXBElement, JAXBElement> {
 	protected Translator<Map<JobParameter, Object>, JAXBElement<Cml>> parameterTranslator;
 
 	/**
-	 * read in cml file, and convert it to molecular system and parameters for
+	 * read in cml file, and convert it to molecule system and parameters for
 	 * building a new adaptive qmmm job.
 	 *
 	 * @param input
@@ -55,7 +56,7 @@ public class BuilderProcessor implements JobBuilder<JAXBElement, JAXBElement> {
 	 *         {@link Job }
 	 */
 	@Override
-	public Job<JAXBElement> build(JAXBElement input) {
+	public Job<JAXBElement> process(JAXBElement input) {
 		Job<JAXBElement> job= (Job<JAXBElement>) new AdaptiveQMMMJob();
 		job.setInput(input);
 		translate(job);

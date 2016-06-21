@@ -33,7 +33,7 @@ import org.wallerlab.yoink.batch.api.service.region.Partitioner;
 /**
  * this class is the calculation of number based qm/mm partitioning. for number
  * based adaptive QM/MM partition. See, Takenaka N, Kitamura Y, Koyano Y, et al.
- * The number-adaptive multiscale QM/MM molecular dynamics simulation:
+ * The number-adaptive multiscale QM/MM molecule dynamics simulation:
  * Application to liquid water[J]. Chemical Physics Letters, 2012, 524: 56-61.
  * 
  * @author Min Zheng

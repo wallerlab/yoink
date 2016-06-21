@@ -6,7 +6,7 @@ import javax.xml.bind.JAXBElement;
 
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.batch.api.model.batch.Job;
-import org.wallerlab.yoink.batch.api.service.plugin.AdaptiveProcessor;
+import org.wallerlab.yoink.batch.api.service.plugin.QmMmWrapper;
 import org.wallerlab.yoink.batch.api.service.math.Vector;
 
 /**
@@ -15,7 +15,7 @@ import org.wallerlab.yoink.batch.api.service.math.Vector;
  *
  */
 @Service("qm")
-public class QMProcessor implements AdaptiveProcessor {
+public class QMProcessor implements QmMmWrapper {
 
 	@Override
 	public void run(Job<JAXBElement> job) {

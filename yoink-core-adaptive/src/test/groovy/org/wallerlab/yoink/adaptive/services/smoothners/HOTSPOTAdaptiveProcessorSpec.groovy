@@ -22,7 +22,7 @@ import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
 import org.wallerlab.yoink.batch.api.model.batch.Job;
 import org.wallerlab.yoink.batch.api.model.molecular.Molecule;
 import org.wallerlab.yoink.batch.api.model.regionizer.Region
-import org.wallerlab.yoink.batch.api.service.plugin.AdaptiveProcessor
+import org.wallerlab.yoink.batch.api.service.plugin.QmMmWrapper
 import org.wallerlab.yoink.batch.api.service.math.Vector.Vector3DType;
 class HOTSPOTAdaptiveProcessorSpec  extends Specification{
 
@@ -44,13 +44,13 @@ class HOTSPOTAdaptiveProcessorSpec  extends Specification{
 
 	
 
-		def qmmmProcessor =Mock(AdaptiveProcessor)
+		def qmmmProcessor =Mock(QmMmWrapper)
 		def vector=new SimpleVector3DFactory( Vector3DType.COMMONS).create((double)0,(double)0,(double)0)
 		def list=Mock(List)
 		list.get(_)>>vector
 		qmmmProcessor.getForces()>>list
 
-		def mmProcessor =Mock(AdaptiveProcessor)
+		def mmProcessor =Mock(QmMmWrapper)
 		mmProcessor.getForces()>>list
 
 		def properties=new HashMap<String,Object>()

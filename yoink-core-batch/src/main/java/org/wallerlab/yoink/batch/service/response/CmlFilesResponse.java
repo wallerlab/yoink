@@ -23,7 +23,7 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.batch.api.model.batch.JobParameter;
 import org.wallerlab.yoink.batch.api.model.batch.Job;
-import org.wallerlab.yoink.batch.api.service.molecular.FilesWriter;
+import org.wallerlab.yoink.batch.api.service.molecule.FilesWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 

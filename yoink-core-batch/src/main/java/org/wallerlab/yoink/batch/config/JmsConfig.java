@@ -22,11 +22,9 @@ import javax.jms.ConnectionFactory;
 /**
  * This is for JMS integration. It offers a service.
  */
-@Profile("jms")
 @Configuration
 public class JmsConfig extends BatchConfig{
-
-
+    
     /**
      * This is a bean that wraps around the standard jmsItemReader. It converts
      * it to a long running service. I.e. it does not return null, because this

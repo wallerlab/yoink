@@ -30,7 +30,7 @@ import org.wallerlab.yoink.batch.api.service.adaptive.Smoothner;
 
 /**
  * this class is to get weights factor in XS. for details please see:
- * "ONIOM-XS: An extension of the ONIOM method for molecular simulation in condensed phase"
+ * "ONIOM-XS: An extension of the ONIOM method for molecule simulation in condensed phase"
  * Chemical Physics Letters, Volume 355, Number 3, 2 April 2002, pp. 257-262(6).
  * 
  * @author Min Zheng

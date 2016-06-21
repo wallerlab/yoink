@@ -21,7 +21,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.batch.api.service.molecular.FilesReader;
+import org.wallerlab.yoink.batch.api.service.molecule.FilesReader;
 import org.xml_cml.schema.Cml;
 
 /**

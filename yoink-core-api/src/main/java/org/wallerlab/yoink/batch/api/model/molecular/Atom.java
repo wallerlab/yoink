@@ -32,9 +32,9 @@ public interface Atom {
 	Element getElementType();
 
 	/**
-	 * get the index of this atom in molecular system
+	 * get the index of this atom in molecule system
 	 * 
-	 * @return atomic index in molecular system -{@link java.lang.Integer}
+	 * @return atomic index in molecule system -{@link java.lang.Integer}
 	 */
 	int getIndex();
 	

@@ -22,7 +22,7 @@ import org.wallerlab.yoink.api.enums.*
 import org.wallerlab.yoink.batch.api.model.batch.JobParameter;
 import org.springframework.batch.item.ItemWriter;
 import org.wallerlab.yoink.batch.api.model.batch.Job
-import org.wallerlab.yoink.batch.api.service.molecular.FilesWriter;
+import org.wallerlab.yoink.batch.api.service.molecule.FilesWriter;
 
 class CmlFilesResponseSpec extends Specification{
 

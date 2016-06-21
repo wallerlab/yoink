@@ -26,7 +26,7 @@ import java.util.List;
 public interface MolecularSystem {
 
 	/**
-	 * get all the atoms in the molecular system
+	 * get all the atoms in the molecule system
 	 * 
 	 * @return a list of atoms, -
 	 *         {@link Atom}
@@ -34,7 +34,7 @@ public interface MolecularSystem {
 	List<Atom> getAtoms();
 
 	/**
-	 * get all molecules in the molecular system
+	 * get all molecules in the molecule system
 	 * 
 	 * @return a lsit of molecules, -
 	 *         {@link Molecule}

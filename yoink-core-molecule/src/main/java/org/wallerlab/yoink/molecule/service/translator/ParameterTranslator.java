@@ -25,8 +25,8 @@ import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.batch.api.model.batch.JobParameter;
 import org.wallerlab.yoink.batch.api.model.regionizer.Region;
 import org.wallerlab.yoink.batch.api.service.adaptive.Smoothner;
-import org.wallerlab.yoink.batch.api.service.molecular.Translator;
-import org.wallerlab.yoink.batch.api.service.molecular.Converter.UnitConverterType;
+import org.wallerlab.yoink.batch.api.service.molecule.Translator;
+import org.wallerlab.yoink.batch.api.service.molecule.Converter.UnitConverterType;
 import org.wallerlab.yoink.batch.api.service.region.Partitioner;
 import org.xml_cml.schema.Cml;
 import org.xml_cml.schema.Parameter;
@@ -44,8 +44,8 @@ import org.xml_cml.schema.ParameterList;
 public class ParameterTranslator implements
 		Translator<Map<JobParameter, Object>, JAXBElement<Cml>> {
 
-	@Value("${yoink.job.unitconvertertype}")
-	private UnitConverterType unitConverterType;
+	//@Value("${yoink.job.unitconvertertype}")
+	private UnitConverterType unitConverterType = UnitConverterType.AngstromToBohr;
 
 	/**
 	 * get parameters a Map(JobParameter -

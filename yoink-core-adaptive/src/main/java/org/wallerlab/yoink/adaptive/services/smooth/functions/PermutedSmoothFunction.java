@@ -31,7 +31,7 @@ public class PermutedSmoothFunction implements SmoothFunction {
 	/**
 	 * this smooth function is used in PAP and SAP methods. for details please
 	 * see: Heyden, Andreas, Hai Lin, and Donald G. Truhlar. "Adaptive
-	 * partitioning in combined quantum mechanical and molecular mechanical
+	 * partitioning in combined quantum mechanical and molecule mechanical
 	 * calculations of potential energy functions for multiscale simulations."
 	 * The Journal of Physical Chemistry B 111.9 (2007): 2231-2241.
 	 * 

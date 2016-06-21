@@ -1,5 +1,5 @@
 /**
- * this package is domain models for project molecular.
+ * this package is domain models for project molecule.
  * @author Min Zheng
  *
  */

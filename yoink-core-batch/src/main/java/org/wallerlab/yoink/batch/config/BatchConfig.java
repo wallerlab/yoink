@@ -19,7 +19,10 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.batch.core.launch.support.SimpleJobLauncher;
+import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
@@ -29,14 +32,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.wallerlab.yoink.batch.api.model.batch.Job;
 
 import javax.xml.bind.JAXBElement;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,8 +51,8 @@ import java.util.List;
 @Lazy
 @Configuration
 @EnableBatchProcessing
-@EnableTransactionManagement
-@PropertySource("classpath:application.properties")
+@ComponentScan("org.wallerlab.yoink.batch")
+@PropertySource("classpath:batch.properties")
 public class BatchConfig  implements ApplicationContextAware {
 
 	ApplicationContext appContext;
@@ -61,25 +63,20 @@ public class BatchConfig  implements ApplicationContextAware {
 	@Autowired
 	JobBuilderFactory jobBuilderFactory;
 
-
 	@Autowired
 	@Qualifier("jmsRequestReader")
 	ItemReader<String> jmsReader;
 
 	@Autowired
-	@Qualifier("cmlFileReader")
-	ItemReader cmlReader;
-
-	@Autowired
 	@Qualifier("builderProcessor")
-	public ItemProcessor<JAXBElement, JAXBElement> builderProcessor;
+	public ItemProcessor<JAXBElement, Job<JAXBElement>> builderProcessor;
 
 	@Autowired
-	@Qualifier("adapticeProcessor")
+	@Qualifier("adaptiveProcessor")
 	public ItemProcessor<Job<JAXBElement>, Job> adaptiveProcessor;
 
 	@Autowired
-	@Qualifier("clusterProcessor")
+	@Qualifier("clusteringProcessor")
 	public ItemProcessor<Job<JAXBElement>, Job> clusterProcessor;
 
 
@@ -103,10 +100,14 @@ public class BatchConfig  implements ApplicationContextAware {
 		return compositeProcessor;
 	}
 
-	@Autowired
-	ItemWriter jmsWriter;
 
 	@Autowired
+	@Qualifier("jmsJobItemWriter")
+	ItemWriter jmsWriter;
+
+
+	@Autowired
+	@Qualifier("cmlFileResponseWriter")
 	ItemWriter fileWriter;
 
 
@@ -134,7 +135,7 @@ public class BatchConfig  implements ApplicationContextAware {
 	public Step fileStep(ItemProcessor processor) {
 		return stepBuilderFactory
 				.get("adaptiveQMMMBatch").<JAXBElement, org.wallerlab.yoink.batch.api.model.batch.Job> chunk(1)
-				.reader(cmlReader)
+				.reader((ItemReader) appContext.getBean("cmlFilesReader"))
 				.processor(processor) // ADAPTIVE OR CLUSTERER
 				.writer(fileWriter)
 				.build();

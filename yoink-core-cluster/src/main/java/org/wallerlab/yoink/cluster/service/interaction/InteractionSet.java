@@ -40,7 +40,7 @@ import org.wallerlab.yoink.batch.api.model.regionizer.Region;
 import org.wallerlab.yoink.batch.api.service.Calculator;
 import org.wallerlab.yoink.batch.api.service.Computer;
 import org.wallerlab.yoink.batch.api.service.Factory;
-import org.wallerlab.yoink.batch.api.service.molecular.FilesReader;
+import org.wallerlab.yoink.batch.api.service.molecule.FilesReader;
 import org.wallerlab.yoink.batch.api.service.region.Partitioner;
 import org.wallerlab.yoink.region.service.partitioner.DensityPartitioner;
 

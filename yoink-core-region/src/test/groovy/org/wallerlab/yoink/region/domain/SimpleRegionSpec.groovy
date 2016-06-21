@@ -74,16 +74,16 @@ class SimpleRegionSpec extends Specification{
 		centerOfMassComputer.calculate(_)>>simpleCoordFactory.create((double[])[1, 1, 1])
 		region.setCenterOfMassComputer(centerOfMassComputer)
 
-		when:"change molecular name using the region name"
+		when:"change molecule name using the region name"
 		region.addMolecule(m,1)
 		region.changeMolecularId()
-		then:"molecular name equals region name"
+		then:"molecule name equals region name"
 		Math.abs(region.getCenterOfMass().getCoords().getEntry(0)-1)<=1.0E-5
 		m.getName()==Region.Name.MM
 
-		when:"change molecular name using given name"
+		when:"change molecule name using given name"
 		region.changeMolecularId(Region.Name.QM)
-		then:"molecular name equals given name"
+		then:"molecule name equals given name"
 		m.getName()==Region.Name.QM
 	}
 }

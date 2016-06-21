@@ -23,7 +23,7 @@ import org.wallerlab.yoink.batch.api.model.molecular.MolecularSystem;
 import org.wallerlab.yoink.batch.api.model.molecular.Molecule;
 
 /**
- * the domain model for molecular system.
+ * the domain model for molecule system.
  * 
  * @author Min Zheng
  *
@@ -37,7 +37,7 @@ public class SimpleMolecularSystem implements MolecularSystem {
 	}
 
 	/**
-	 * get all atoms in the molecular system.
+	 * get all atoms in the molecule system.
 	 */
 	@Override
 	public List<Atom> getAtoms() {
@@ -51,7 +51,7 @@ public class SimpleMolecularSystem implements MolecularSystem {
 	}
 
 	/**
-	 * get all molecules in molecular system.
+	 * get all molecules in molecule system.
 	 */
 	@Override
 	public List<Molecule> getMolecules() {

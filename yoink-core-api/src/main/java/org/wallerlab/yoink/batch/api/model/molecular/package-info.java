@@ -1,6 +1,6 @@
 
 /**
- * This package is the interfaces for domain models in molecular system
+ * This package is the interfaces for domain models in molecule system
  * @author Min Zheng
  *
  */

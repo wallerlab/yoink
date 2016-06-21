@@ -51,7 +51,7 @@ public class SimpleAtom implements Atom {
 	}
 
 	/**
-	 * get the atomic index in molecular system
+	 * get the atomic index in molecule system
 	 */
 	@Override
 	public int getIndex() {

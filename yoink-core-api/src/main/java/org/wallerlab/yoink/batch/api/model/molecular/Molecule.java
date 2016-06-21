@@ -53,9 +53,9 @@ public interface Molecule {
 	List<Atom> getAtoms();
 
 	/**
-	 * get the index of molecule in the molecular system
+	 * get the index of molecule in the molecule system
 	 * 
-	 * @return molecular index, {@link java.lang.Integer}
+	 * @return molecule index, {@link java.lang.Integer}
 	 */
 	int getIndex();
 

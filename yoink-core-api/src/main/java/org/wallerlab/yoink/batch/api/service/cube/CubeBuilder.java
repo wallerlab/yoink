@@ -26,7 +26,7 @@ public interface CubeBuilder<T> {
 	 * @param xyzStepSize
 	 *            , a double array for step size along x/y/z axes
 	 * @param t
-	 *            , it contains the molecular information to build the cube. eg.
+	 *            , it contains the molecule information to build the cube. eg.
 	 *            a Set of molecules, {@link Molecule}
 	 * @return cube {@link Cube}
 	 */

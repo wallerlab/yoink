@@ -34,8 +34,8 @@ import org.wallerlab.yoink.batch.api.model.regionizer.Region;
 import org.wallerlab.yoink.batch.api.service.Computer;
 import org.wallerlab.yoink.batch.api.service.Factory;
 import org.wallerlab.yoink.batch.api.service.math.Vector;
-import org.wallerlab.yoink.batch.api.service.molecular.Translator;
-import org.wallerlab.yoink.batch.api.service.molecular.Converter;
+import org.wallerlab.yoink.batch.api.service.molecule.Translator;
+import org.wallerlab.yoink.batch.api.service.molecule.Converter;
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory;
 import org.wallerlab.yoink.molecule.domain.SimpleAtom;
 import org.wallerlab.yoink.molecule.domain.SimpleMolecularSystem;
@@ -66,8 +66,8 @@ public class MolecularSystemTranslator implements
 	// This list contains all of the molecules from the CML.
 	private List<Molecule> molecules;
 
-	@Value("${yoink.job.unitconvertertype}")
-	private Converter.UnitConverterType unitConverterType;
+	//@Value("${yoink.job.unitconvertertype}")
+	private Converter.UnitConverterType unitConverterType = Converter.UnitConverterType.AngstromToBohr;
 
 	private int moleculeIndexCounter;
 

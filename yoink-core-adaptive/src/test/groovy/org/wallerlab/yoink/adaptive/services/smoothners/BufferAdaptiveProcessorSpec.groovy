@@ -22,7 +22,7 @@ import org.wallerlab.yoink.batch.api.model.molecular.Coord
 import org.wallerlab.yoink.batch.api.model.batch.Job;
 import org.wallerlab.yoink.batch.api.model.molecular.Molecule;
 import org.wallerlab.yoink.batch.api.model.regionizer.Region
-import org.wallerlab.yoink.batch.api.service.plugin.AdaptiveProcessor
+import org.wallerlab.yoink.batch.api.service.plugin.QmMmWrapper
 
 class BufferAdaptiveProcessorSpec  extends Specification{
 
@@ -45,10 +45,10 @@ class BufferAdaptiveProcessorSpec  extends Specification{
 		def properties=new HashMap<String,Object>()
 		job.getProperties()>>properties
 		
-		def qmmmProcessor =Mock(AdaptiveProcessor)
+		def qmmmProcessor =Mock(QmMmWrapper)
 		qmmmProcessor.getForces()>>Mock(List)
 		
-		def mmProcessor =Mock(AdaptiveProcessor)
+		def mmProcessor =Mock(QmMmWrapper)
 		mmProcessor.getForces()>>Mock(List)
 		
 		when:

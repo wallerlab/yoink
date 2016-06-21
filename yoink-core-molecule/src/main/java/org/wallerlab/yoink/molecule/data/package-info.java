@@ -1,5 +1,5 @@
 /**
- * this package contains readers and writers for molecular project
+ * this package contains readers and writers for molecule project
  * @author Min Zheng
  *
  */

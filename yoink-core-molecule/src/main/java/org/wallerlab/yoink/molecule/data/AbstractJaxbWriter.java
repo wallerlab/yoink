@@ -21,7 +21,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.batch.api.service.molecular.FilesWriter;
+import org.wallerlab.yoink.batch.api.service.molecule.FilesWriter;
 
 /**
  * this class is to use jaxb to write an object out.

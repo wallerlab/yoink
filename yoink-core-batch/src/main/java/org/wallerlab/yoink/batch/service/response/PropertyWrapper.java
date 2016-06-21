@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.batch.api.model.batch.JobParameter;
 import org.wallerlab.yoink.batch.api.model.batch.Job;
 import org.wallerlab.yoink.batch.api.service.math.Vector;
-import org.wallerlab.yoink.batch.api.service.molecular.FilesWriter;
+import org.wallerlab.yoink.batch.api.service.molecule.FilesWriter;
 import org.wallerlab.yoink.batch.api.model.molecular.Molecule;
 import org.wallerlab.yoink.batch.api.model.regionizer.Region;
 import org.wallerlab.yoink.batch.api.service.batch.Wrapper;
@@ -52,7 +52,7 @@ public class PropertyWrapper implements Wrapper<Job<JAXBElement>> {
 	private FilesWriter<Object> jaxbFileWriter;
 
 	/**
-	 * wrap molecular name(
+	 * wrap molecule name(
 	 * {@link Region.Name}, like QM or
 	 * QM_ADAPTIVE) and buffer region smoothing in JAXBElemnt Cml
 	 * 
@@ -117,7 +117,7 @@ public class PropertyWrapper implements Wrapper<Job<JAXBElement>> {
 			Map<String, Object> properties, ObjectFactory objectFactory,
 			PropertyList propertyList) {
 		Property property = objectFactory.createProperty();
-		property.setTitle("QM and Buffer molecular indices");
+		property.setTitle("QM and Buffer molecule indices");
 		loopOverQMAndBufferRegions(job, objectFactory, propertyList, property);	
 		propertyList.getAnyCmlOrAnyOrAny().add(property);
 		return property;
@@ -201,7 +201,7 @@ public class PropertyWrapper implements Wrapper<Job<JAXBElement>> {
 		scalar.setDataType("weighted function");
 		scalar.setValue(String.valueOf(molecularIndicesAndWeightFactor
 				.get(indices)));
-		scalar.setTitle("molecular indeices");
+		scalar.setTitle("molecule indeices");
 		scalar.setId(String.valueOf(indices));
 		property.getAnyCmlOrAnyOrAny().add(scalar);
 	}
@@ -260,7 +260,7 @@ public class PropertyWrapper implements Wrapper<Job<JAXBElement>> {
 		Scalar scalar = objectFactory.createScalar();
 		scalar.setDataType("smooth function");
 		scalar.setValue(String.valueOf(smoothFactor));
-		scalar.setTitle("molecular index");
+		scalar.setTitle("molecule index");
 		scalar.setId(String.valueOf(bufferIndex));
 		property.getAnyCmlOrAnyOrAny().add(scalar);
 	}

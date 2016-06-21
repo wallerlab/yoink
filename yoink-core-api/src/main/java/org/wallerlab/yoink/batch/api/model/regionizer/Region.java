@@ -133,12 +133,12 @@ public interface Region {
 	 Coord getCenterOfMass();
 
 	/**
-	 * set molecular name as same as region name
+	 * set molecule name as same as region name
 	 */
 	 void changeMolecularId();
 
 	/**
-	 * change molecular name as the given name
+	 * change molecule name as the given name
 	 * 
 	 * @param name
 	 *            -{@link Region.Name}

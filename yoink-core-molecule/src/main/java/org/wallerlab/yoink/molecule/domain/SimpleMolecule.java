@@ -44,7 +44,7 @@ public class SimpleMolecule implements Molecule {
 	}
 
 	/**
-	 * get the molecular name
+	 * get the molecule name
 	 */
 	@Override
 	public Region.Name getName() {
@@ -52,7 +52,7 @@ public class SimpleMolecule implements Molecule {
 	}
 
 	/**
-	 * set the molecular name
+	 * set the molecule name
 	 */
 	@Override
 	public void setName(Region.Name value) {
@@ -68,7 +68,7 @@ public class SimpleMolecule implements Molecule {
 	}
 
 	/**
-	 * get molecular index in molecular system
+	 * get molecule index in molecule system
 	 */
 	@Override
 	public int getIndex() {
