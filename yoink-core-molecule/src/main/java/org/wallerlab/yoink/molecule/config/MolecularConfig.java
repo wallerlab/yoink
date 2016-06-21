@@ -29,14 +29,7 @@ import org.springframework.context.annotation.PropertySource;
  *
  */
 @Configuration
-@ComponentScan("org.wallerlab.yoink")
-@PropertySource("classpath:application.properties")
-public class MolecularConfig implements ApplicationContextAware {
-
-	private ApplicationContext appContext;
-
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		this.appContext = applicationContext;
-	}
-
+@ComponentScan("org.wallerlab.yoink.molecule")
+@PropertySource("classpath:molecule.properties")
+public class MolecularConfig {
 }

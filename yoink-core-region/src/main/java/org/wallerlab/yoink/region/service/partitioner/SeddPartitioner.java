@@ -31,6 +31,7 @@ import org.wallerlab.yoink.batch.api.model.molecular.Molecule;
 import org.wallerlab.yoink.batch.api.model.regionizer.Region;
 import org.wallerlab.yoink.batch.api.service.Calculator;
 import org.wallerlab.yoink.batch.api.service.Computer;
+import static  org.wallerlab.yoink.batch.api.model.regionizer.Region.Name.*;
 
 /**
  * This class is to analyze SEDD for those grid points in the intersection
@@ -42,8 +43,7 @@ import org.wallerlab.yoink.batch.api.service.Computer;
  *
  */
 @Service
-public class SingleExponentialDecayDetectorPartitioner extends
-		InteractionPartitioner {
+public class SeddPartitioner extends InteractionPartitioner {
 
 	@Resource
 	private Calculator<Double, Coord, Atom[]> atomicDensityRatioCalculator;
@@ -52,11 +52,11 @@ public class SingleExponentialDecayDetectorPartitioner extends
 	private Calculator<Double, Coord, Atom> atomDensityCalculator;
 
 	@Resource
-	private Computer<Double, DensityPoint> singleExponentialDecayDetectorComputer;
+	private Computer<Double, DensityPoint> seddComputer;
 
 	protected Region initialize(Map<Region.Name, Region> regions) {
-		regionName = Region.Name.QM_CORE;
-		adaptiveRegionName = Region.Name.QM_CORE_ADAPTIVE;
+		this.regionName = QM_CORE;
+		this.adaptiveRegionName = QM_CORE_ADAPTIVE;
 		Region region = regions.get(regionName);
 		return region;
 	}
@@ -69,9 +69,6 @@ public class SingleExponentialDecayDetectorPartitioner extends
 	 * [densityRatioMin,densityRatioMax] ,then the non-QM molecule of the grid
 	 * point should be in QM core region.
 	 *
-	 * 
-	 * 
-	 * 
 	 */
 	protected Region checkCriteria(Map<Region.Name, Region> regions,
 			Region region, GridPoint gridPoint, Set<Molecule> neighbours,
@@ -140,7 +137,7 @@ public class SingleExponentialDecayDetectorPartitioner extends
 		// calculate sedd value of two closest atoms of a grid point
 		DensityPoint densityPoint = densityPropertiesCalculator.calculate(
 				neighbourAtoms, coordinate);
-		double seddAtom = singleExponentialDecayDetectorComputer
+		double seddAtom = seddComputer
 				.calculate(densityPoint);
 		return seddAtom;
 	}
@@ -167,7 +164,7 @@ public class SingleExponentialDecayDetectorPartitioner extends
 				.getAtoms()));
 		DensityPoint densityPoint = densityPropertiesCalculator.calculate(
 				atomsInCube, coordinate);
-		double seddMoleculeTemp = singleExponentialDecayDetectorComputer
+		double seddMoleculeTemp = seddComputer
 				.calculate(densityPoint);
 		return seddMoleculeTemp;
 	}

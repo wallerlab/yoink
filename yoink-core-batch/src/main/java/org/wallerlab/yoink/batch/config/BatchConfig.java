@@ -19,10 +19,7 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
-import org.springframework.batch.core.launch.support.SimpleJobLauncher;
-import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
@@ -33,15 +30,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.*;
-import org.springframework.core.task.TaskExecutor;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.wallerlab.yoink.batch.api.model.batch.Job;
 
 import javax.xml.bind.JAXBElement;
-import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
-
 
 /**
  * This class is configuration for spring batch
@@ -105,11 +98,9 @@ public class BatchConfig  implements ApplicationContextAware {
 	@Qualifier("jmsJobItemWriter")
 	ItemWriter jmsWriter;
 
-
 	@Autowired
 	@Qualifier("cmlFileResponseWriter")
 	ItemWriter fileWriter;
-
 
 	@Bean
 	org.springframework.batch.core.Job jmsAdaptive(){ return job(jmsStep(builderAndAdaptiveProcessor()),"jmsAdaptive");}
@@ -122,7 +113,6 @@ public class BatchConfig  implements ApplicationContextAware {
 
 	@Bean
 	org.springframework.batch.core.Job fileCluster(){ return job(fileStep(builderAndClusterProcessor()),"fileCluster");}
-
 
 	/**
 	 * build executing steps

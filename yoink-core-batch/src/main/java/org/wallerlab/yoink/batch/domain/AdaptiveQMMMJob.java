@@ -44,7 +44,6 @@ public class AdaptiveQMMMJob implements Job<JAXBElement> {
 	// Internal domain model
 	private MolecularSystem molecularSystem;
 
-	//
 	private Map<JobParameter, Object> parameters = new HashMap<JobParameter, Object>();
 
 	private Map<String, Object> properties = new HashMap<String, Object>();

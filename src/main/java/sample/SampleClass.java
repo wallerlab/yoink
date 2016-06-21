@@ -4,6 +4,9 @@ import java.io.InputStream;
 
 import org.uncommons.maths.Maths;
 
+
+//This should be deprecated
+@Deprecated
 public class SampleClass {
 
     public static String yoinkTest() {

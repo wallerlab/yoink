@@ -19,33 +19,33 @@ import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.batch.api.model.density.DensityPoint;
 
 /**
- * This class is to get the density overlap regions indicator(DORI) value of a
- * grid point. For DORI,see:De Silva, Piotr, and Clémence Corminboeuf.
- * "Simultaneous Visualization of Covalent and Noncovalent Interactions Using Regions of Density Overlap."
- * Journal of chemical theory and computation 10.9 (2014): 3745-3756.
+ * This class is to get the single exponential decay detector(SEDD) value of a
+ * grid point. For SEDD, see:De Silva, Piotr, Jacek Korchowiec, and Tomasz A.
+ * Wesolowski. "Revealing the Bonding Pattern from the Molecular Electron
+ * Density Using Single Exponential Decay Detector: An Orbital‐Free Alternative
+ * to the Electron Localization Function." ChemPhysChem 13.15 (2012): 3462-3465.
+ * 
  * 
  * @author Min Zheng
  *
  */
 @Service
-public class DensityOverlapRegionsIndicatorComputer extends
-		SilvaDensityComputer {
+public class SeddComputer extends SilvaDensityComputer {
 
 	/**
-	 * calculate dori value of a grid point
+	 * calculate SEDD of a denstiy point
 	 * 
 	 * @param densityPoint
 	 *            -{@link DensityPoint}
-	 * @param doriValue
-	 *            , pre-calculated
-	 * @return doriValue, final-calculated
-	 * 
+	 * @param seddValue
+	 *            pre-calculated
+	 * @return seddValue final-calculated
 	 */
-	protected double getSilvaValue(DensityPoint densityPoint, double doriValue) {
-		double gradient = densityPoint.getGradient();
-		doriValue *= (4.0 / Math.pow(gradient, 3));
-		doriValue /= (1.0 + doriValue);
-		return doriValue;
+	protected double getSilvaValue(DensityPoint densityPoint, double seddValue) {
+		double density = densityPoint.getDensity();
+		seddValue *= (4.0 / Math.pow(density, 8));
+		seddValue = Math.log((1.0 + seddValue));
+		return seddValue;
 	}
 
 }

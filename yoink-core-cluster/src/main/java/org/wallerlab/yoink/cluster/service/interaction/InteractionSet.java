@@ -67,7 +67,7 @@ public class InteractionSet {
 	private Factory<Region, Region.Name> simpleRegionFactory;
 
 	@Autowired
-	private Computer<Double, DensityPoint> densityOverlapRegionsIndicatorComputer;
+	private Computer<Double, DensityPoint> doriComputer;
 
 	@Resource
 	protected FilesReader<RadialGrid, String> radialGridReader;
@@ -233,7 +233,7 @@ public class InteractionSet {
 		// calculate dori
 		DensityPoint densityPoint = densityPropertiesCalculator.calculate(
 				atomsInCube, gridPoint.getCoordinate());
-		double doriTemp = densityOverlapRegionsIndicatorComputer
+		double doriTemp = doriComputer
 				.calculate(densityPoint);
 		return doriTemp;
 	}

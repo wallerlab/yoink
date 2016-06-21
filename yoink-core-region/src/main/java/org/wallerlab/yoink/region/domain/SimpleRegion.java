@@ -190,4 +190,5 @@ public class SimpleRegion implements Region {
 		this.centerOfMassComputer = centerOfMassComputer;
 	}
 
+
 }

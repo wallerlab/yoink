@@ -16,7 +16,7 @@
 package org.wallerlab.yoink.region.partitioner
 
 import org.wallerlab.yoink.batch.api.service.region.RegionizerMath
-import org.wallerlab.yoink.region.service.partitioner.SingleExponentialDecayDetectorPartitioner
+import org.wallerlab.yoink.region.service.partitioner.SeddPartitioner
 import spock.lang.Specification;
 
 import org.wallerlab.yoink.api.enums.*
@@ -72,11 +72,11 @@ class SingleExponentialDecayDetectorPartitionerSpec extends Specification{
 		parameters.get(JobParameter.REGION_CUBE)>>Region.Name.ADAPTIVE_SEARCH
 
 		when:"set up a new sedd partitioner"
-		def partitioner=new SingleExponentialDecayDetectorPartitioner()
+		def partitioner=new SeddPartitioner()
 		partitioner.singleRegionizerService=singleRegionizerService
 		partitioner.densityPropertiesCalculator=densityPropertiesCalculator
 		partitioner.atomDensityCalculator= atomDensityCalculator
-		partitioner.singleExponentialDecayDetectorComputer=singleExponentialDecayDetectorComputer
+		partitioner.seddComputer=singleExponentialDecayDetectorComputer
 		partitioner.singleRegionizerService=singleRegionizerService
 		partitioner.atomicDensityRatioCalculator=atomicDensityRatioCalculator
 

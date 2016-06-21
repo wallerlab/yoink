@@ -17,41 +17,35 @@ package org.wallerlab.yoink.density.service.density.properties;
 
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.batch.api.model.density.DensityPoint;
-import org.wallerlab.yoink.batch.api.service.Computer;
-import org.wallerlab.yoink.math.constants.Constants;
 
 /**
- * This class is to get the reduced density gradient(RDG) value of a point. For
- * RDG, see: Erin R.Johnson, Shahar Keinan, Paula Mori-Sanchez, Julia
- * Contreras-Garcia, Aron J. Cohen, and Weitao Yang, J. Am. Chem. Soc. 2010,
- * 132, pp 6498-6506.
+ * This class is to get the density overlap regions indicator(DORI) value of a
+ * grid point. For DORI,see:De Silva, Piotr, and Clémence Corminboeuf.
+ * "Simultaneous Visualization of Covalent and Noncovalent Interactions Using Regions of Density Overlap."
+ * Journal of chemical theory and computation 10.9 (2014): 3745-3756.
  * 
  * @author Min Zheng
  *
  */
 @Service
-public class ReducedDensityGradientComputer implements
-		Computer<Double, DensityPoint> {
+public class DoriComputer extends
+		SilvaDensityComputer {
 
 	/**
-	 * calculate RDG of a density point
+	 * calculate dori value of a grid point
 	 * 
 	 * @param densityPoint
 	 *            -{@link DensityPoint}
-	 * @return rdg value
+	 * @param doriValue
+	 *            , pre-calculated
+	 * @return doriValue, final-calculated
+	 * 
 	 */
-	public Double calculate(DensityPoint densityPoint) {
-		// initialize
-		double density = densityPoint.getDensity();
+	protected double getSilvaValue(DensityPoint densityPoint, double doriValue) {
 		double gradient = densityPoint.getGradient();
-		double rdg = calculateRdg(density, gradient);
-		return rdg;
-	}
-
-	private double calculateRdg(double density, double gradient) {
-		double rdg = Math.sqrt(gradient) / (Math.pow(density, 4.0 / 3));
-		rdg = rdg / Constants.RDG_COEFFICIENT;
-		return rdg;
+		doriValue *= (4.0 / Math.pow(gradient, 3));
+		doriValue /= (1.0 + doriValue);
+		return doriValue;
 	}
 
 }

@@ -17,36 +17,41 @@ package org.wallerlab.yoink.density.service.density.properties;
 
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.batch.api.model.density.DensityPoint;
+import org.wallerlab.yoink.batch.api.service.Computer;
+import org.wallerlab.yoink.math.constants.Constants;
 
 /**
- * This class is to get the single exponential decay detector(SEDD) value of a
- * grid point. For SEDD, see:De Silva, Piotr, Jacek Korchowiec, and Tomasz A.
- * Wesolowski. "Revealing the Bonding Pattern from the Molecular Electron
- * Density Using Single Exponential Decay Detector: An Orbital‐Free Alternative
- * to the Electron Localization Function." ChemPhysChem 13.15 (2012): 3462-3465.
- * 
+ * This class is to get the reduced density gradient(RDG) value of a point. For
+ * RDG, see: Erin R.Johnson, Shahar Keinan, Paula Mori-Sanchez, Julia
+ * Contreras-Garcia, Aron J. Cohen, and Weitao Yang, J. Am. Chem. Soc. 2010,
+ * 132, pp 6498-6506.
  * 
  * @author Min Zheng
  *
  */
 @Service
-public class SingleExponentialDecayDetectorComputer extends
-		SilvaDensityComputer {
+public class RdgComputer implements
+		Computer<Double, DensityPoint> {
 
 	/**
-	 * calculate SEDD of a denstiy point
+	 * calculate RDG of a density point
 	 * 
 	 * @param densityPoint
 	 *            -{@link DensityPoint}
-	 * @param seddValue
-	 *            pre-calculated
-	 * @return seddValue final-calculated
+	 * @return rdg value
 	 */
-	protected double getSilvaValue(DensityPoint densityPoint, double seddValue) {
+	public Double calculate(DensityPoint densityPoint) {
+		// initialize
 		double density = densityPoint.getDensity();
-		seddValue *= (4.0 / Math.pow(density, 8));
-		seddValue = Math.log((1.0 + seddValue));
-		return seddValue;
+		double gradient = densityPoint.getGradient();
+		double rdg = calculateRdg(density, gradient);
+		return rdg;
+	}
+
+	private double calculateRdg(double density, double gradient) {
+		double rdg = Math.sqrt(gradient) / (Math.pow(density, 4.0 / 3));
+		rdg = rdg / Constants.RDG_COEFFICIENT;
+		return rdg;
 	}
 
 }

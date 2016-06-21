@@ -16,7 +16,7 @@
 package org.wallerlab.yoink.region.partitioner
 
 import org.wallerlab.yoink.batch.api.service.region.RegionizerMath
-import org.wallerlab.yoink.region.service.partitioner.DensityOverlapRegionsIndicatorPartitioner
+import org.wallerlab.yoink.region.service.partitioner.DoriPartitioner
 import spock.lang.Specification;
 
 import org.wallerlab.yoink.api.enums.*
@@ -68,9 +68,9 @@ class DensityOverlapRegionsIndicatorPartitionerSpec extends Specification{
 		def simpleRegionFactory=new SimpleRegionFactory()
 
 		when:"set up a new DensityOverlapRegionsIndicatorPartitioner"
-		def partitioner=new DensityOverlapRegionsIndicatorPartitioner()
+		def partitioner=new DoriPartitioner()
 		partitioner.simpleRegionFactory=simpleRegionFactory
-		partitioner.densityOverlapRegionsIndicatorComputer=densityOverlapRegionsIndicatorComputer
+		partitioner.doriComputer=densityOverlapRegionsIndicatorComputer
 		partitioner.densityCalculator=densityCalculator
 		partitioner.densityPropertiesCalculator=densityPropertiesCalculator
 		partitioner.singleRegionizerService=singleRegionizerService

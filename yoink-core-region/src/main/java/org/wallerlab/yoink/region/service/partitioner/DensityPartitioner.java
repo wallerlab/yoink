@@ -48,8 +48,7 @@ import org.wallerlab.yoink.molecule.domain.SimpleRadialGrid;
  *
  */
 @Service
-public class DensityPartitioner implements
-		Partitioner<Map<Region.Name, Region>, DensityType> {
+public class DensityPartitioner implements Partitioner<Map<Region.Name, Region>, DensityType> {
 
 	@Resource
 	private Calculator<Double, Coord, Set<Molecule>> densityCalculator;

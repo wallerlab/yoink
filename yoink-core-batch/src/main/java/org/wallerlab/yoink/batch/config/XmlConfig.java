@@ -26,8 +26,7 @@ public class XmlConfig extends BatchConfig{
     MultiResourceItemReader cmlFilesReader() {
         MultiResourceItemReader multiResourceItemReader = new MultiResourceItemReader();
         try {
-            System.out.println("Resources are " + Arrays.asList(appContext.getResources("classpath:examples/*.xml")));
-            multiResourceItemReader.setResources((Resource[]) appContext.getResources("classpath:examples/*.xml"));
+            multiResourceItemReader.setResources((Resource[]) appContext.getResources("classpath:inputs/*.xml"));
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -46,8 +46,7 @@ import org.wallerlab.yoink.batch.api.service.Factory;
  *
  */
 @Service
-public class DensityOverlapRegionsIndicatorPartitioner extends
-		InteractionPartitioner {
+public class DoriPartitioner extends InteractionPartitioner {
 
 	@Resource
 	private Calculator<Double, Coord, Set<Molecule>> densityCalculator;
@@ -56,7 +55,7 @@ public class DensityOverlapRegionsIndicatorPartitioner extends
 	private Factory<Region, Region.Name> simpleRegionFactory;
 
 	@Autowired
-	private Computer<Double, DensityPoint> densityOverlapRegionsIndicatorComputer;
+	private Computer<Double, DensityPoint> doriComputer;
 
 	protected Region initialize(Map<Region.Name, Region> regions) {
 		regionName = Region.Name.QM;
@@ -140,7 +139,7 @@ public class DensityOverlapRegionsIndicatorPartitioner extends
 		// calculate dori
 		DensityPoint densityPoint = densityPropertiesCalculator.calculate(
 				atomsInCube, gridPoint.getCoordinate());
-		double doriTemp = densityOverlapRegionsIndicatorComputer
+		double doriTemp = doriComputer
 				.calculate(densityPoint);
 		return doriTemp;
 	}
@@ -148,11 +147,9 @@ public class DensityOverlapRegionsIndicatorPartitioner extends
 	private void checkDoriValue(Region region, Set<Molecule> neighbours,
 			Map<JobParameter, Object> parameters, double doriTemp) {
 		// check dori
-		if (1 >= doriTemp
-				&& doriTemp >= (double) parameters.get(JobParameter.DORI)) {
+		if (1 >= doriTemp && doriTemp >= (double) parameters.get(JobParameter.DORI)) {
 			for (Molecule molecule : neighbours) {
 				region.addMolecule(molecule, molecule.getIndex());
-
 			}
 
 		}

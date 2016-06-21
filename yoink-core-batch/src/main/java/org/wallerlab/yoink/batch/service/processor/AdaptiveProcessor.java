@@ -23,6 +23,7 @@ import javax.xml.bind.JAXBElement;
 
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.batch.api.model.batch.Job;
 import org.wallerlab.yoink.batch.api.model.batch.JobParameter;
@@ -44,9 +45,11 @@ import org.wallerlab.yoink.batch.api.service.region.RegionizerMath;
 public class AdaptiveProcessor implements ItemProcessor<Job<JAXBElement>,Job> {
 	
 	@Resource
+	@Qualifier("regionizerServiceStarting")
 	protected RegionizerMath<Map<Region.Name, Region>, MolecularSystem> regionizerServiceStarting;
 
 	@Resource
+	@Qualifier("regionizerServiceEnding")
 	protected RegionizerMath<Map<Region.Name, Region>, MolecularSystem> regionizerServiceEnding;
 
 	@Resource
@@ -57,7 +60,6 @@ public class AdaptiveProcessor implements ItemProcessor<Job<JAXBElement>,Job> {
 
 	@Autowired
 	protected List<Regionizer<Map<Name, Region>, Map<JobParameter, Object>>> adaptiveQMMMRegionizers;
-
 
 	/**
 	 * read in a list of requests and execute them.
@@ -75,14 +77,12 @@ public class AdaptiveProcessor implements ItemProcessor<Job<JAXBElement>,Job> {
 		return job;
 	}
 
-
 	protected void regionize(Job job) {
 		Map<Region.Name, Region> regions = job.getRegions();
 		regionizerServiceStarting.regionize(regions, job.getMolecularSystem());
 		regions = adaptiveQMMMRegionizers(job, regions);
 		regionizerServiceEnding.regionize(regions, job.getMolecularSystem());
 	}
-
 
 	private Map<Region.Name, Region> adaptiveQMMMRegionizers(Job job, Map<Region.Name, Region> regions) {
 		for (Regionizer<Map<Region.Name, Region>, Map<JobParameter, Object>> regionizer : adaptiveQMMMRegionizers) {

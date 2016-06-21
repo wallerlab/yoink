@@ -15,8 +15,10 @@
  */
 package org.wallerlab.yoink.region.config;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.wallerlab.yoink.batch.api.model.density.DensityPoint.DensityType;
 import org.wallerlab.yoink.batch.api.model.molecular.MolecularSystem;
 import org.wallerlab.yoink.batch.api.model.regionizer.Region;
@@ -33,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.wallerlab.yoink.batch.api.model.regionizer.Region.Name.*;
+import static org.wallerlab.yoink.batch.api.model.density.DensityPoint.DensityType.*;
 
 /**
  * This class is the configuration for region project.
@@ -41,13 +44,16 @@ import static org.wallerlab.yoink.batch.api.model.regionizer.Region.Name.*;
  *
  */
 @Configuration
-public class RegionizerConfig {
+@PropertySource("classpath:region.properties")
+public class RegionConfig {
 
 	@Resource
-	private Partitioner densityOverlapRegionsIndicatorPartitioner;
+	@Qualifier("doriPartitioner")
+	private Partitioner doriPartitioner;
 
 	@Resource
-	private Partitioner singleExponentialDecayDetectorPartitioner;
+	@Qualifier("seddPartitioner")
+	private Partitioner seddPartitioner;
 
 	/**
 	 * region math service before adaptive partitioning
@@ -92,10 +98,7 @@ public class RegionizerConfig {
 	 */
 	@Bean
 	RegionizerComponent<Map<Region.Name, Region>, Map<String, Object>> adaptiveQMRegionizer() {
-		Partitioner doriPartitioner = densityOverlapRegionsIndicatorPartitioner;
-		RegionizerComponent adaptiveQMRegionizer = new AdaptiveRegionizer(
-				DensityType.DORI, doriPartitioner);
-		return adaptiveQMRegionizer;
+		return (RegionizerComponent) new AdaptiveRegionizer(DORI, doriPartitioner);
 	}
 
 	/**
@@ -106,10 +109,7 @@ public class RegionizerConfig {
 	 */
 	@Bean
 	RegionizerComponent<Map<Region.Name, Region>, Map<String, Object>> adaptiveQMCoreRegionizer() {
-		Partitioner seddPartitioner =singleExponentialDecayDetectorPartitioner;
-		RegionizerComponent adaptiveQMCoreRegionizer = new AdaptiveRegionizer(
-				DensityType.SEDD, seddPartitioner);
-		return adaptiveQMCoreRegionizer;
+		return (RegionizerComponent) new AdaptiveRegionizer(SEDD, seddPartitioner);
 	}
 	
 }
