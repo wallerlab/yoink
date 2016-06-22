@@ -3,7 +3,7 @@ package org.wallerlab.yoink.benchmark.domain;
 /**
  * @author lukas241094
  */
-public class Core {
+public class Core  implements Point{
 	
 	private double x;
 	private double y;

@@ -5,7 +5,7 @@ import java.util.Random;
 /**
  * @author lukas241094
  */
-public class Atom{
+public class Atom implements Point{
 	
 	private final double x;
 	private final double y;
