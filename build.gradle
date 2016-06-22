@@ -1,11 +1,12 @@
 buildscript {
-        repositories {
-                jcenter()
-                mavenCentral()
-        }
-        dependencies {
-classpath "gradle.plugin.me.champeau.gradle:jmh-gradle-plugin:0.3.0"
-classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.7.RELEASE") }
+	repositories {
+    	jcenter()
+        mavenCentral()
+	}
+	dependencies {
+		classpath "gradle.plugin.me.champeau.gradle:jmh-gradle-plugin:0.3.0"
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.7.RELEASE")
+	}
 }  
 allprojects {
 	apply plugin: 'java'
@@ -161,12 +162,7 @@ dependencies {
         testCompile group: 'junit', name: 'junit', version: '4.+'
 	}
 
-configurations { 
 
-        all*.exclude module : 'spring-boot-starter-logging'
-        integrationTestCompile.extendsFrom testCompile
-        integrationTestRuntime.extendsFrom testRuntime
-}
 mainClassName = 'org.wallerlab.yoink.Application'
 
 
@@ -270,13 +266,30 @@ sourceSets {
 		resources.srcDir file('src/integration-test/resources')
 	}
 }
+
+configurations {
+	all*.exclude module : 'spring-boot-starter-logging'
+	integrationTestCompile.extendsFrom testCompile
+	integrationTestRuntime.extendsFrom testRuntime
+}
+
+dependencies {
+	compile 'log4j:log4j:1.2.17'
+	testCompile 'junit:junit:4.11'
+	integrationTestCompile 'org.assertj:assertj-core:3.0.0'
+	//compile group: 'org.springframework', name: 'spring-test', version: '4.3.0.RELEASE'
+
+}
+
 task integrationTest(type: Test) {
 	testClassesDir = sourceSets.integrationTest.output.classesDir
 	classpath = sourceSets.integrationTest.runtimeClasspath
 	outputs.upToDateWhen { false }
 }
+
 check.dependsOn integrationTest
 integrationTest.mustRunAfter test
+
 tasks.withType(Test) {
 	reports.html.destination = file("${reporting.baseDir}/${name}")
 }
