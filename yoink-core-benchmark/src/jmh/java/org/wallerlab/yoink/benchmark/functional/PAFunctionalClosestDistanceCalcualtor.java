@@ -11,13 +11,11 @@ public class PAFunctionalClosestDistanceCalcualtor {
 	private PointAtomDistanceCalculator calculator = new PointAtomDistanceCalculator();
 
 	public double calculateClosestDistance(Core core, Molecule molecule) {
-
-		return molecule.getAtoms().stream()
-								  .mapToDouble(atom -> calculator.calculateDistance(core, atom))
-								  .min()
-								  .getAsDouble();
-
-
+		return molecule.getAtoms()
+						.stream()
+						.mapToDouble(atom -> calculator.calculateDistance(core, atom))
+						.min()
+						.getAsDouble();
 	}
 
 }

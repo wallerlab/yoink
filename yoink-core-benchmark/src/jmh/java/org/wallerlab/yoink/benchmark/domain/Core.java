@@ -8,8 +8,7 @@ public class Core {
 	private double x;
 	private double y;
 	private double z;
-	
-	
+
 	public double getX() {
 		return x;
 	}
@@ -34,7 +33,5 @@ public class Core {
 		this.y = y;
 		this.z = z;
 	}
-	
-	
 
 }

@@ -18,14 +18,11 @@ public class PAImperativeClosestDistanceCalculator {
 	public double calculateClosestDistance(Core core,Molecule molecule){
 		List<Double> distances = new ArrayList<Double>();
 		for (Atom atom : molecule.getAtoms()) {
-			double tempdistance = distanceCalculator.calculateDistance(core,
-					atom);
+			double tempdistance = distanceCalculator.calculateDistance(core, atom);
 			distances.add(tempdistance);
 		}
 		double distance = Collections.min(distances);
 		return distance;
 	}
-	
-	
 
 }

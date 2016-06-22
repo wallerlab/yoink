@@ -21,16 +21,12 @@ public class AAImperativeClosestDistanceCalculator {
 		List<Double> distances = new ArrayList<Double>();
 		for (Atom atom : molecule.getAtoms()) {
 			for (Atom coreAtom : core.getAtoms()){
-
-				
-			double tempdistance = distanceCalculator.calculateDistance(coreAtom,
-					atom);
-			distances.add(tempdistance);
-			
+				double tempdistance = distanceCalculator.calculateDistance(coreAtom, atom);
+				distances.add(tempdistance);
 			}
 		}
 		double distance = Collections.min(distances);
 		return distance;
-
 	}
+
 }

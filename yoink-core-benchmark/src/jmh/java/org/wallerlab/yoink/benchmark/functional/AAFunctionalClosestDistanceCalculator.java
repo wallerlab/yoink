@@ -2,19 +2,15 @@ package org.wallerlab.yoink.benchmark.functional;
 
 import org.wallerlab.yoink.benchmark.domain.Molecule;
 import org.wallerlab.yoink.benchmark.service.AtomAtomDistanceCalculator;
-import org.wallerlab.yoink.benchmark.domain.Molecule;
-import org.wallerlab.yoink.benchmark.service.AtomAtomDistanceCalculator;
 
-/**
- * @author lukas241094
- */
 public class AAFunctionalClosestDistanceCalculator {
 
 	private AtomAtomDistanceCalculator calculator = new AtomAtomDistanceCalculator();
 
 	public double calculateClosestDistance(Molecule core, Molecule molecule) {
 
-		return molecule.getAtoms().stream()
+		return molecule.getAtoms()
+					   .stream()
 					   .flatMapToDouble(atom -> {
 											return core.getAtoms().stream()
 																  .mapToDouble(coreAtom -> {
