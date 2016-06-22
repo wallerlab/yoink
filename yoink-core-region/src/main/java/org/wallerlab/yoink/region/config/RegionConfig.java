@@ -61,7 +61,7 @@ public class RegionConfig {
 	 *         {@link RegionizerService}
 	 */
 	@Bean
-	RegionizerMath<Map<Region.Name, Region>, MolecularSystem> regionizerServiceStarting() {
+	RegionizerMath<Map<Region.Name, Region>, MolecularSystem> preRegionizer() {
 		RegionizerService regionizerService = new RegionizerService();
 		Region.Name[] regionReqeusts = {QM_CORE_FIXED,SYSTEM,QM_CORE,QM,NONQM_CORE};
 		regionizerService.setRegionNames(Arrays.asList(regionReqeusts));
@@ -75,7 +75,7 @@ public class RegionConfig {
 	 *         {@link RegionizerService}
 	 */
 	@Bean
-	RegionizerMath<Map<Region.Name, Region>, MolecularSystem> regionizerServiceEnding() {
+	RegionizerMath<Map<Region.Name, Region>, MolecularSystem> postRegionizer() {
 		RegionizerService regionizerService = new RegionizerService();
 		Region.Name[] regionReqeusts = {MM,MM_NONBUFFER};
 		regionizerService.setRegionNames(Arrays.asList(regionReqeusts));

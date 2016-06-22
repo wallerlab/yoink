@@ -21,6 +21,7 @@ import javax.annotation.Resource;
 import javax.xml.bind.JAXBElement;
 
 import org.springframework.batch.item.ItemProcessor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.batch.Job;
 import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
@@ -45,7 +46,8 @@ public class ClusteringProcessor implements ItemProcessor<Job<JAXBElement>, Job>
 	private Clustering doriClustering;
 
 	@Resource
-	protected RegionizerMath<Map<Region.Name, Region>, MolecularSystem> regionizerServiceStarting;
+	@Qualifier("preRegionizer")
+	protected RegionizerMath<Map<Region.Name, Region>, MolecularSystem> preRegionizer;
 
 	/**
 	 * read in a list of requests and execute them.
@@ -57,7 +59,7 @@ public class ClusteringProcessor implements ItemProcessor<Job<JAXBElement>, Job>
 	 */
 	@Override
 	public Job process(Job<JAXBElement> job) throws Exception {
-		regionizerServiceStarting.regionize(job.getRegions(), job.getMolecularSystem());
+		preRegionizer.regionize(job.getRegions(), job.getMolecularSystem());
 		interactionSet.getDoriInteractionSet(job);
 		doriClustering.cluster(job);
 		return job;

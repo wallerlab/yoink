@@ -41,17 +41,12 @@ public class BrooksSmoothFunction implements SmoothFunction {
 	 */
 	public double evaluate(double currentValue, double min, double max) {
 		double smoothFactor;
-		if (currentValue > max) {
-			smoothFactor = 0;
-		} else if (currentValue <= min) {
-			smoothFactor = 1;
-		} else {
-			smoothFactor = Math.pow(
-					(Math.pow(max, 2) - Math.pow(currentValue, 2)), 2);
-			smoothFactor = smoothFactor
-					* (Math.pow(max, 2) + 2 * Math.pow(currentValue, 2) - 3 * Math
-							.pow(min, 2));
-			smoothFactor = smoothFactor / Math.pow((max * max - min * min), 3);
+		if 		(currentValue >  max) smoothFactor = 0;
+		else if (currentValue <= min) smoothFactor = 1;
+		else {
+			smoothFactor = Math.pow((Math.pow(max, 2) - Math.pow(currentValue, 2)), 2);
+			smoothFactor *= (Math.pow(max, 2) + 2 * Math.pow(currentValue, 2) - 3 * Math.pow(min, 2));
+			smoothFactor /=  Math.pow((max * max - min * min), 3);
 		}
 		return smoothFactor;
 	}

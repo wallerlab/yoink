@@ -70,8 +70,7 @@ public class CenterOfMassComputer implements Computer<Coord, Set<Molecule>> {
 
 	private Coord setCOM(Vector massWeightedCoordinate, double massOfMolecule) {
 		Coord centerCoord = simpleCoordFactory.create();
-		Vector centerCoordinate = massWeightedCoordinate
-				.scalarMultiply(1.0 / massOfMolecule);
+		Vector centerCoordinate = massWeightedCoordinate.scalarMultiply(1.0 / massOfMolecule);
 		centerCoord.setCoords(centerCoordinate);
 		return centerCoord;
 	}

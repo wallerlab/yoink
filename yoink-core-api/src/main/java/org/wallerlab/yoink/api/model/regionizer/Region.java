@@ -153,7 +153,6 @@ public interface Region {
 	 *            - {@link Computer}
 	 *
 	 */
-	void setCenterOfMassComputer(
-			Computer<Coord, Set<Molecule>> centerOfMassComputer);
+	void setCenterOfMassComputer(Computer<Coord, Set<Molecule>> centerOfMassComputer);
 
 }

@@ -26,6 +26,7 @@ import org.wallerlab.yoink.api.model.regionizer.Region;
 import org.wallerlab.yoink.api.service.region.Partitioner;
 import org.wallerlab.yoink.api.service.region.RegionizerComponent;
 
+import static org.wallerlab.yoink.api.model.density.DensityPoint.DensityType.ELECTRONIC;
 /**
  * this class is to locate buffer region based on the density of qm core
  * 
@@ -33,8 +34,7 @@ import org.wallerlab.yoink.api.service.region.RegionizerComponent;
  *
  */
 @Service
-public class BufferRegionizer implements
-		RegionizerComponent<Map<Region.Name, Region>, Map<JobParameter, Object>> {
+public class BufferRegionizer implements RegionizerComponent<Map<Region.Name, Region>, Map<JobParameter, Object>> {
 
 	@Resource
 	private Partitioner<Map<Region.Name, Region>, DensityType> densityPartitioner;
@@ -43,14 +43,9 @@ public class BufferRegionizer implements
 	 * set up buffer region partitioning
 	 */
 	@Override
-	public Map<Region.Name, Region> regionize(Map<Region.Name, Region> regions,
-			Map<JobParameter, Object> parameters) {
-		Partitioner.Type partitionType = (Partitioner.Type) parameters
-				.get(JobParameter.PARTITIONER);
-		if (partitionType==Partitioner.Type.DORI){
-		 densityPartitioner.partition(regions, parameters,
-				DensityType.ELECTRONIC);
-	}
+	public Map<Region.Name, Region> regionize(Map<Region.Name, Region> regions, Map<JobParameter, Object> parameters) {
+		Partitioner.Type partitionType = (Partitioner.Type) parameters.get(JobParameter.PARTITIONER);
+		if (partitionType==Partitioner.Type.DORI) densityPartitioner.partition(regions, parameters, ELECTRONIC);
 		return regions;
 	}
 	

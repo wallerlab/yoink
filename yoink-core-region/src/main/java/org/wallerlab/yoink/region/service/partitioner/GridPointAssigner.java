@@ -26,6 +26,7 @@ import javax.annotation.Resource;
 import java.util.Map;
 import java.util.Set;
 
+import static org.wallerlab.yoink.api.model.regionizer.Region.Name.*;
 /**
  * This class is to determine if a grid point is in the intersection region
  * between QM core and non-QM core in adaptiveSearch region.
@@ -39,6 +40,9 @@ public class GridPointAssigner implements
 
 	@Resource
 	private Calculator<Map<String, Object>, Coord, Set<Molecule>> voronoiCalculator;
+
+	//@Resource
+	//private Calculator<Map<String, Object>, Coord, Set<Molecule>> voronoiFunctionalCalculator;
 
 	/**
 	 * for a grid point, get its two neighbours from Voronoi partitioning, if it
@@ -61,30 +65,28 @@ public class GridPointAssigner implements
 	 * @return properties - a Map, String {@link java.lang.String} as Key,
 	 *         Object {@link java.lang.Object} as value
 	 */
-	public Map assign(Coord tempCoord, Map<Region.Name, Region> regions,
-			Region.Name cubeRegionName) {
-		Region qmCoreRegion = regions.get(Region.Name.QM_CORE);
-		Region nonQmCoreRegion = regions
-				.get(Region.Name.NONQM_CORE_ADAPTIVE_SEARCH);
-		Map<String, Object> properties = voronoiCalculator.calculate(tempCoord,
-				regions.get(cubeRegionName).getMolecules());
-		Set<Molecule> moleculeSet = (Set<Molecule>) properties
-				.get("twoClosestMolecules");
+	public Map assign(Coord tempCoord, Map<Region.Name, Region> regions, Region.Name cubeRegionName) {
+
+		Region qmCoreRegion = regions.get(QM_CORE);
+		Region nonQmCoreRegion = regions.get(NONQM_CORE_ADAPTIVE_SEARCH);
+
+		//Map<String, Object> properties = voronoiFunctionalCalculator.calculate(tempCoord, regions.get(cubeRegionName).getMolecules());
+
+		Map<String, Object> properties = voronoiCalculator.calculate(tempCoord, regions.get(cubeRegionName).getMolecules());
+
+		Set<Molecule> moleculeSet = (Set<Molecule>) properties .get("twoClosestMolecules");
+
 		boolean notNeighbourPair = (boolean) (moleculeSet.size() != 2);
 		switch (cubeRegionName) {
 		case SYSTEM:
 			if (notNeighbourPair) {
 				properties.clear();
-				
 			}
 			break;
 		default:
-			boolean bothNeighboursAreInNonQmCore = nonQmCoreRegion
-					.containsAll(moleculeSet);
-			boolean bothNeighboursAreInQmCore = qmCoreRegion
-					.containsAll(moleculeSet);
-			if (notNeighbourPair || bothNeighboursAreInNonQmCore
-					|| bothNeighboursAreInQmCore) {
+			boolean bothNeighboursAreInNonQmCore = nonQmCoreRegion.containsAll(moleculeSet);
+			boolean bothNeighboursAreInQmCore = qmCoreRegion.containsAll(moleculeSet);
+			if (notNeighbourPair || bothNeighboursAreInNonQmCore || bothNeighboursAreInQmCore) {
 				properties.clear();
 			}
 		}

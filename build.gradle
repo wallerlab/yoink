@@ -7,14 +7,13 @@ buildscript {
 		classpath "gradle.plugin.me.champeau.gradle:jmh-gradle-plugin:0.3.0"
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.7.RELEASE")
 	}
-}  
+}
 allprojects {
 	apply plugin: 'java'
 	apply plugin: 'eclipse'
 	apply plugin: 'groovy'
 	apply plugin: 'jacoco'
 	apply plugin: 'com.github.kt3k.coveralls'
-	apply plugin: "me.champeau.gradle.jmh"
 
 	sourceCompatibility = 1.8
 	version = '0.0.3'
@@ -41,14 +40,14 @@ allprojects {
 		compile 'com.google.guava:guava:18.0'
 		compile 'org.apache.commons:commons-math3:3.3'
 		compile 'org.apache.commons:commons-lang3:3.1'
-		testCompile group: 'junit', name: 'junit', version: '4.+'		
+		testCompile group: 'junit', name: 'junit', version: '4.+'
 	}
 }
 
 test { systemProperties 'property': 'value'  }
 
 project(':yoink-core-api'){
-	 dependencies{  }
+	 dependencies{ }
 }
 
 project(':yoink-core-cluster'){
@@ -88,6 +87,28 @@ project(':yoink-core-cube'){
 	}
 }
 
+project(':yoink-core-benchmark'){
+
+	apply plugin: "me.champeau.gradle.jmh"
+
+
+	dependencies {
+		compile project(':yoink-core-api')
+		compile group: 'org.openjdk.jmh', name: 'jmh-core', version: '1.12'
+	}
+
+	jmh {
+		include = 'org\\.wallerlab\\.yoink\\.benchmark\\.*'
+		zip64 = true
+		iterations = 5 // Number of measurement iterations to do.
+		warmup = '1s' // Time to spend at each warmup iteration.
+		warmupForks = 0 // How many warmup forks to make for a single benchmark. 0 to disable warmup forks.
+		warmupIterations = 3 // Number of warmup iterations to do.
+		warmupBatchSize = 5 // Warmup batch size: number of benchmark method calls per operation.
+
+	}
+}
+
 project(':yoink-core-adaptive'){
 	dependencies {
 		compile project(':yoink-core-api')
@@ -104,7 +125,7 @@ project(':yoink-core-region'){
 		compile project(':yoink-core-molecule')
 		compile project(':yoink-core-density')
 		compile project(':yoink-core-cube')
-		
+
 	}
 }
 
@@ -146,9 +167,9 @@ buildscript {
 	repositories {
 		jcenter()
 		mavenCentral()
-		 maven {
-			 url "https://plugins.gradle.org/m2/"
-			 }
+		maven {
+			url "https://plugins.gradle.org/m2/"
+		}
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.7.RELEASE")
@@ -157,10 +178,10 @@ buildscript {
 }
 
 dependencies {
- compile project(':yoink-core-batch')
-        compile("org.springframework.boot:spring-boot-starter-batch")
-        testCompile group: 'junit', name: 'junit', version: '4.+'
-	}
+	compile project(':yoink-core-batch')
+	compile("org.springframework.boot:spring-boot-starter-batch")
+	testCompile group: 'junit', name: 'junit', version: '4.+'
+}
 
 
 mainClassName = 'org.wallerlab.yoink.Application'
@@ -169,8 +190,9 @@ mainClassName = 'org.wallerlab.yoink.Application'
 // Simple 'alias' for calling yoink, instead of more cryptic bootRun.
 task yoink(dependsOn: bootRun)
 
-// generate one jar file for multi projects
 
+
+// generate one jar file for multi projects
 /**
 subprojects.each { subproject -> evaluationDependsOn(subproject.path)}
 task allJar(type: Jar, dependsOn: subprojects.assemble) {
@@ -209,18 +231,16 @@ def exportedProjects= [
 	":yoink-core-batch",
 	":yoink-core-adaptive",
 	":yoink-core-region",
-	":yoink-core-plugin"
+	":yoink-core-plugin",
+	":yoink-core-benchmark"
 ]
+
 task alljavadoc(type: Javadoc) {
 	exclude "**/xml_cml/**"
 	source exportedProjects.collect { project(it).sourceSets.main.allJava }
 	classpath = files(exportedProjects.collect { project(it).sourceSets.main.compileClasspath })
 	destinationDir = file("${buildDir}/docs/javadoc")
-
 }
-
-
-
 
 task jacocoRootReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
     dependsOn = subprojects.test
@@ -293,4 +313,6 @@ integrationTest.mustRunAfter test
 tasks.withType(Test) {
 	reports.html.destination = file("${reporting.baseDir}/${name}")
 }
+
+
 

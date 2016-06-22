@@ -53,11 +53,20 @@ public class ClosestDistanceToMoleculeCalculator implements Calculator<Double, C
 	public Double calculate(Coord gridCoord, Molecule molecule) {
 		List<Double> distances = new ArrayList<Double>();
 		for (Atom atom : molecule.getAtoms()) {
-			double tempdistance = distanceCalculator.calculate(gridCoord,
-					atom);
+			double tempdistance = distanceCalculator.calculate(gridCoord, atom);
 			distances.add(tempdistance);
 		}
 		double distance = Collections.min(distances);
 		return distance;
+	}
+
+
+	public Double calculateFunctional(Coord gridCoord, Molecule molecule) {
+			return  molecule.getAtoms()
+							.stream()
+							.mapToDouble(atom -> {return distanceCalculator.calculate(gridCoord, atom);})
+							.min()
+							.getAsDouble();
+
 	}
 }

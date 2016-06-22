@@ -55,14 +55,15 @@ public class VoronoiCalculator implements
 	 * @return properties, a Map, String as key, Object as value
 	 */
 	@Override
-	public Map<String, Object> calculate(Coord tempCoord,
-			Set<Molecule> molecules) {
+	public Map<String, Object> calculate(Coord tempCoord, Set<Molecule> molecules) {
+
 		// initialize
 		List<Double> neighbourDistances = new ArrayList<Double>();
 		List<Atom> twoAtoms = new ArrayList<Atom>();
 		List<Molecule> twoMolecules = new ArrayList<Molecule>();
-		loopOverAllMoleculesInRegion(twoAtoms, neighbourDistances, tempCoord,
-				molecules, twoMolecules);
+
+		loopOverAllMoleculesInRegion(twoAtoms, neighbourDistances, tempCoord, molecules, twoMolecules);
+
 		// put two closest atoms and moleucles in a list
 		Map<String, Object> properties = packResults(twoAtoms, twoMolecules);
 		return properties;
@@ -78,7 +79,7 @@ public class VoronoiCalculator implements
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put("twoClosestAtoms", atomSet);
 		properties.put("twoClosestMolecules", moleculeSet);
-		return properties;
+ 		return properties;
 	}
 
 	/*
@@ -86,29 +87,24 @@ public class VoronoiCalculator implements
 	 * corresponding to the first and second lowest distances. Next get two
 	 * molecules corresponding to the first and second lowest distances.
 	 */
+	//TODO bottleneck
 	private void loopOverAllMoleculesInRegion(List<Atom> twoNeighbours,
 			List<Double> neighbourDistances, Coord tempCoord,
 			Set<Molecule> molecules, List<Molecule> twoMolecules) {
 		for (Molecule molecule : molecules) {
 			for (Atom atom : molecule.getAtoms()) {
-				double distance = distanceBetweenGridPointToAtom(tempCoord,
-						atom);
+				double distanceBetweenGridPointToAtom = distanceCalculator.calculate(tempCoord, atom);
 				getTwoClosestNeighbours(twoNeighbours, neighbourDistances,
-						atom, distance, twoMolecules, molecule);
+						atom, distanceBetweenGridPointToAtom, twoMolecules, molecule);
 			}
 		}
-	}
-
-	private double distanceBetweenGridPointToAtom(Coord tempCoord, Atom atom) {
-		double distance = distanceCalculator.calculate(tempCoord, atom);
-		return distance;
 	}
 
 	private void getTwoClosestNeighbours(List<Atom> twoNeighbours,
 			List<Double> neighbourDistances, Atom atom, double distance,
 			List<Molecule> twoMolecules, Molecule molecule) {
-		int size = neighbourDistances.size();
-		switch (size) {
+		int numberOfNeighbours = neighbourDistances.size();
+		switch (numberOfNeighbours) {
 		case 0:
 			// add one neighbour
 			neighbourDistances.add(0, distance);
@@ -141,8 +137,9 @@ public class VoronoiCalculator implements
 			}
 			break;
 		default:
-			throw new IllegalArgumentException("Invalid type of size: " + size);
+			throw new IllegalArgumentException("Invalid number of neighbours: " + numberOfNeighbours);
 		}
+
 	}
 
 }

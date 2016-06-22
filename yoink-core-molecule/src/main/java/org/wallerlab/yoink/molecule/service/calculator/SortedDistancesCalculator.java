@@ -57,25 +57,21 @@ public class SortedDistancesCalculator implements
 	 *            - a Set of molecules
 	 * @return sortedDistance - a Map, molecule as key and distance as value
 	 */
-	public Map<Molecule, Double> calculate(Coord centerCoord,
-			Set<Molecule> molecules) {
+	public Map<Molecule, Double> calculate(Coord centerCoord, Set<Molecule> molecules) {
 		// molecule, distance
-		Map<Molecule, Double> distances = loopOverMolecules(molecules,
-				centerCoord);
+		Map<Molecule, Double> distances = loopOverMolecules(molecules, centerCoord);
 		// now sort the list of molecules based on their closest atoms
-		Map<Molecule, Double> sortedDistances = MapSorter
-				.sortByValue(distances);
+		Map<Molecule, Double> sortedDistances = MapSorter.sortByValue(distances);
 		return sortedDistances;
 	}
 
-	private Map<Molecule, Double> loopOverMolecules(Set<Molecule> molecules,
-			Coord centerCoord) {
+	private Map<Molecule, Double> loopOverMolecules(Set<Molecule> molecules, Coord centerCoord) {
 		Map<Molecule, Double> distances = new HashMap<Molecule, Double>();
+
 		for (Molecule molecule : molecules) {
 			List<Double> atomDistances = new ArrayList<Double>();
 			for (Atom atom : molecule.getAtoms()) {
-				double distance = distanceCalculator.calculate(centerCoord,
-						atom);
+				double distance = distanceCalculator.calculate(centerCoord, atom);
 				atomDistances.add(distance);
 			}
 			// sort the distances for given atoms in a molecule

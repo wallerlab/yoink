@@ -17,6 +17,7 @@ import org.wallerlab.yoink.api.service.adaptive.Smoothner;
 import org.wallerlab.yoink.api.service.plugin.QmMmWrapper;
 import org.wallerlab.yoink.api.service.math.Vector;
 
+import static org.wallerlab.yoink.api.model.regionizer.Region.Name.*;
 /**
  * This class is to get adaptive forces in buffered force method.
  * 
@@ -38,12 +39,10 @@ public class BufferAdaptiveProcessor implements Smoothner {
 	@Override
 	public void smooth(Job<JAXBElement> job) {
 		// initialize and run QM/MM and MM jobs
-		Map<Molecule, Integer> qmMoleculeMap = job.getRegions()
-				.get(Region.Name.QM).getMolecularMap();
+		Map<Molecule, Integer> qmMoleculeMap = job.getRegions().get(QM).getMolecularMap();
 		List<Integer> qmIndices = new ArrayList<Integer>(qmMoleculeMap.values());
 
 		List<Vector> forces_QMMM = qmmmProcessor.getForces();
-
 		List<Vector> forces_MM = mmProcessor.getForces();
 
 		// put qm force into forces_MM

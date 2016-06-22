@@ -44,6 +44,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
  * @author Min Zheng
  *
  */
+//TODO deprecate this, use a XML library
 @Service
 public class PropertyWrapper implements Wrapper<Job<JAXBElement>> {
 

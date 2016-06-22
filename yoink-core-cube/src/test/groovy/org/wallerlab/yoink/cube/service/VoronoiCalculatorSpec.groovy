@@ -67,6 +67,6 @@ class VoronoiCalculatorSpec extends Specification {
 				twoMolecules,  molecule)
 		then:"throw execption"
 		Exception ex=thrown()
-		ex.message=="Invalid type of size: 3"
+		ex.message=="Invalid number of neighbours: 3"
 	}
 }

@@ -19,7 +19,7 @@ import org.wallerlab.yoink.api.service.plugin.QmMmWrapper;
 import org.wallerlab.yoink.api.service.math.Vector;
 import org.wallerlab.yoink.math.constants.Constants;
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory;
-
+import static org.wallerlab.yoink.api.model.regionizer.Region.Name.*;
 /**
  * this class is to get FIRES adaptive energy and forces.
  * @author Min Zheng
@@ -42,16 +42,20 @@ public class FIRESAdaptiveProcessor implements Smoothner {
 	@Override
 	public void smooth(Job<JAXBElement> job) {
 		//initialize
-		List<Double> lambda = (List<Double>) job.getProperties().get(
-				"smoothfactors");
+		List<Double> lambda = (List<Double>) job.getProperties().get("smoothfactors");
+
 		double innerR = lambda.get(0);
+
 		// get the qmmm energy and forces.
 		double energy = qmmmProcessor.getEnergy();
 		List<Vector> forces = qmmmProcessor.getForces();
-		//adjust MM energy and forcd
-		List<Atom> mmAtoms = job.getRegions().get(Region.Name.MM).getAtoms();
-		Coord qmCenter = job.getRegions().get(Region.Name.QM_CORE)
-				.getCenterOfMass();
+
+
+		//adjust MM energy and force
+		List<Atom> mmAtoms = job.getRegions().get(MM).getAtoms();
+		Coord qmCenter = job.getRegions().get(QM_CORE).getCenterOfMass();
+
+
 		double eCorrection = 0;
 		for (Atom atom : mmAtoms) {
 			double r = distanceCalculator.calculate(qmCenter, atom);

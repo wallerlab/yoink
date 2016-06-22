@@ -45,11 +45,9 @@ public class PermutedSmoothFunction implements SmoothFunction {
 	 */
 	public double evaluate(double currentValue, double min, double max) {
 		double smoothFactor;
-		if (currentValue > max) {
-			smoothFactor = 0;
-		} else if (currentValue < min) {
-			smoothFactor = 1;
-		} else {
+		if 		(currentValue > max)  smoothFactor = 0;
+		else if (currentValue < min)  smoothFactor = 1;
+		else {
 			double alpha = (currentValue - min) / (max - min);
 			smoothFactor = -6 * (Math.pow((alpha), 5)) + 15
 					* (Math.pow((alpha), 4)) - 10 * (Math.pow((alpha), 3)) + 1;

@@ -27,8 +27,7 @@ import org.wallerlab.yoink.api.service.Calculator;
  */
 
 @Service
-public class TwoCoordsDistanceCalculator implements
-		Calculator<Double, Coord, Coord> {
+public class TwoCoordsDistanceCalculator implements Calculator<Double, Coord, Coord> {
 
 	/**
 	 * calculate the distance between two coordinates

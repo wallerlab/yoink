@@ -44,11 +44,9 @@ public class MorokumaSmoothFunction implements SmoothFunction {
 	 */
 	public double evaluate(double currentValue, double min, double max) {
 		double smoothFactor;
-		if (currentValue > max) {
-			smoothFactor = 1;
-		} else if (currentValue < min) {
-			smoothFactor = 0;
-		} else {
+		if 		(currentValue > max)  smoothFactor = 1;
+		else if (currentValue < min)  smoothFactor = 0;
+		else {
 			double x = (currentValue - min) / (max - min);
 			smoothFactor = 6 * (Math.pow((x - 0.5), 5)) - 5
 					* (Math.pow((x - 0.5), 3)) + 15.0 / 8 * (x - 0.5) + 0.5;

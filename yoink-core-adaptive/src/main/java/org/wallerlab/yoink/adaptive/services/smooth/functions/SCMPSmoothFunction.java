@@ -42,15 +42,13 @@ public class SCMPSmoothFunction implements SmoothFunction {
 	 * @return smooth factor
 	 */
 	public double evaluate(double currentValue, double min, double max) {
-		double smoothFactor;
-		if (currentValue > max) {
-			smoothFactor = 0;
-		} else if (currentValue < min) {
-			smoothFactor = 1;
-		} else {
-			smoothFactor = Math.pow((currentValue - max), 2);
-			smoothFactor = smoothFactor * (-3 * min + max + 2 * currentValue);
-			smoothFactor = smoothFactor / Math.pow((max - min), 3);
+		double  smoothFactor;
+		if 		(currentValue > max) smoothFactor = 0;
+		else if (currentValue < min) smoothFactor = 1;
+		else {
+			smoothFactor  = Math.pow((currentValue - max), 2);
+			smoothFactor *= (-3 * min + max + 2 * currentValue);
+			smoothFactor /= Math.pow((max - min), 3);
 		}
 		return smoothFactor;
 	}

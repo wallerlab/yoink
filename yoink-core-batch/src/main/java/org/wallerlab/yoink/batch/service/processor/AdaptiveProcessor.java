@@ -45,16 +45,18 @@ import org.wallerlab.yoink.api.service.region.RegionizerMath;
 public class AdaptiveProcessor implements ItemProcessor<Job<JAXBElement>,Job> {
 	
 	@Resource
-	@Qualifier("regionizerServiceStarting")
-	protected RegionizerMath<Map<Region.Name, Region>, MolecularSystem> regionizerServiceStarting;
+	@Qualifier("preRegionizer")
+	protected RegionizerMath<Map<Region.Name, Region>, MolecularSystem> preRegionizer;
 
 	@Resource
-	@Qualifier("regionizerServiceEnding")
-	protected RegionizerMath<Map<Region.Name, Region>, MolecularSystem> regionizerServiceEnding;
+	@Qualifier("postRegionizer")
+	protected RegionizerMath<Map<Region.Name, Region>, MolecularSystem> postRegionizer;
 
+	//TODO DEPRECATE THIS - use composition instead of switch
 	@Resource
 	protected Smoothner adaptiveQMMMSmoothnerRouter;
 
+	//TODO DEPRECATE THIS - use JAXB or similar
 	@Resource
 	protected Wrapper propertyWrapper;
 
@@ -79,9 +81,9 @@ public class AdaptiveProcessor implements ItemProcessor<Job<JAXBElement>,Job> {
 
 	protected void regionize(Job job) {
 		Map<Region.Name, Region> regions = job.getRegions();
-		regionizerServiceStarting.regionize(regions, job.getMolecularSystem());
+		preRegionizer.regionize(regions, job.getMolecularSystem());
 		regions = adaptiveQMMMRegionizers(job, regions);
-		regionizerServiceEnding.regionize(regions, job.getMolecularSystem());
+		postRegionizer.regionize(regions, job.getMolecularSystem());
 	}
 
 	private Map<Region.Name, Region> adaptiveQMMMRegionizers(Job job, Map<Region.Name, Region> regions) {

@@ -44,14 +44,12 @@ public class BuloSmoothFunction implements SmoothFunction {
 	 */
 	public double evaluate(double currentValue, double min, double max) {
 		double smoothFactor;
-		if (currentValue > max) {
-			smoothFactor = 1;
-		} else if (currentValue < min) {
-			smoothFactor = 0;
-		} else {
-			smoothFactor = Math.pow((currentValue - min), 2);
-			smoothFactor = smoothFactor * (3 * max - min - 2 * currentValue);
-			smoothFactor = smoothFactor / Math.pow((max - min), 3);
+		if 		(currentValue > max) smoothFactor = 1;
+		else if (currentValue < min) smoothFactor = 0;
+		else {
+			smoothFactor  = Math.pow((currentValue - min), 2);
+			smoothFactor *= (3 * max - min - 2 * currentValue);
+			smoothFactor /= Math.pow((max - min), 3);
 		}
 		return smoothFactor;
 	}

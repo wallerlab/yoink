@@ -24,17 +24,15 @@ public class FIRESmoothner implements Smoothner {
 	@Override
 	public void smooth(Job<JAXBElement> job) {
 		List<Double> smoothFactors = new ArrayList<Double>();
-		Region qmRegion=job.getRegions().get(Region.Name.QM);
-		
-		List<Atom> qmAtoms = qmRegion.getAtoms();
-		Coord qmCenter = job.getRegions().get(Region.Name.QM_CORE)
-				.getCenterOfMass();
 		List<Double> distances = new ArrayList<Double>();
-		for (Atom atom : qmAtoms) {
-			double distance = distanceCalculator.calculate(qmCenter, atom);
-			distances.add(distance);
-		}
-		double smoothFactor = Collections.max(distances);
+		List<Atom> qmAtoms = job.getRegions().get(Region.Name.QM).getAtoms();
+		Coord qmCenter = job.getRegions().get(Region.Name.QM_CORE).getCenterOfMass();
+
+		double smoothFactor = qmAtoms.stream()
+				.mapToDouble(atom -> {return distanceCalculator.calculate(qmCenter, atom);})
+				.max()
+				.getAsDouble();
+
 		smoothFactors.add(smoothFactor);
 		job.getProperties().put("smoothfactors", smoothFactors);
 

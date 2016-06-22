@@ -46,7 +46,7 @@ public class JmsJobItemWriter implements ItemWriter<Job> {
 	@Qualifier("jmsItemWriter")
 	ItemWriter<String> jmsItemWriter;
 
-	protected static final Log log = LogFactory.getLog(CmlFilesResponse.class);
+	protected static final Log log = LogFactory.getLog(JmsJobItemWriter.class);
 
 	/**
 	 * write adaptive QM/MM result into a String, and then send to a JMS queue.

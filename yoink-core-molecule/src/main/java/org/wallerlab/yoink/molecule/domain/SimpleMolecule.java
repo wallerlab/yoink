@@ -43,6 +43,10 @@ public class SimpleMolecule implements Molecule {
 		this.atoms = atoms;
 	}
 
+	@Override
+	public String toString() {
+		return "index=" + index ;}
+
 	/**
 	 * get the molecule name
 	 */

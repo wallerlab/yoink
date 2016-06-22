@@ -60,17 +60,12 @@ public class AdaptiveRegionizer implements
 	 * adaptive QM core
 	 */
 	@Override
-	public Map<Region.Name, Region> regionize(Map<Region.Name, Region> regions,
-			Map<JobParameter, Object> parameters) {
-		Partitioner.Type partitionType = (Partitioner.Type) parameters
-				.get(JobParameter.PARTITIONER);
-		if (partitionType==Partitioner.Type.DORI){
-		regions = densityPartitioner
-				.partition(regions, parameters, densityType);
-		List<GridPoint> doriGridPoints = cubePartitioner.partition(regions,
-				parameters, densityType);
-		regions = (Map<Region.Name, Region>) partitioner.partition(regions,
-				parameters, doriGridPoints);
+	public Map<Region.Name, Region> regionize(Map<Region.Name, Region> regions, Map<JobParameter, Object> parameters) {
+		Partitioner.Type partitionType = (Partitioner.Type) parameters.get(JobParameter.PARTITIONER);
+
+		if (partitionType==Partitioner.Type.DORI){ regions = densityPartitioner.partition(regions, parameters, densityType);
+			List<GridPoint> doriGridPoints = cubePartitioner.partition(regions, parameters, densityType);
+			regions = (Map<Region.Name, Region>) partitioner.partition(regions, parameters, doriGridPoints);
 		}
 		return regions;
 	}

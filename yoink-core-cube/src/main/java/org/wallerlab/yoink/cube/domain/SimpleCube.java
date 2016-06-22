@@ -35,13 +35,11 @@ import org.wallerlab.yoink.math.constants.Constants;
  * needs the coordinate of the origin grid point, number of steps along x/y/z
  * axis, and also step size along x/y/z axis.
  */
-
 @Component
 public class SimpleCube implements Cube {
 
 	private Coord origin;
 
-	// if we want to use it to hold values.
 	private List<Double> values;
 
 	private int[] numberOfXYZSteps = new int[3];

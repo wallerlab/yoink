@@ -37,12 +37,11 @@ public class HOTSPOTAdaptiveProcessor implements Smoothner {
 	@Override
 	public void smooth(Job<JAXBElement> job) {
 		// initialize and run qm/mm and mm calculation
-		Map<Molecule, Integer> bufferMoleculeMap = job.getRegions()
-				.get(Region.Name.BUFFER).getMolecularMap();
-		List<Integer> bufferIndices = new ArrayList<Integer>(
-				bufferMoleculeMap.values());
-		Map<Molecule, Integer> qmMoleculeMap = job.getRegions()
-				.get(Region.Name.QM).getMolecularMap();
+		Map<Molecule, Integer> bufferMoleculeMap = job.getRegions().get(Region.Name.BUFFER).getMolecularMap();
+		List<Integer> bufferIndices = new ArrayList<Integer>(bufferMoleculeMap.values());
+
+		Map<Molecule, Integer> qmMoleculeMap = job.getRegions() .get(Region.Name.QM).getMolecularMap();
+
 		List<Integer> qmIndices = new ArrayList<Integer>(qmMoleculeMap.values());
 
 		List<Vector> forces_QMMM = qmmmProcessor.getForces();
@@ -50,14 +49,13 @@ public class HOTSPOTAdaptiveProcessor implements Smoothner {
 		List<Vector> forces_MM = mmProcessor.getForces();
 
 		// get forces for buffer region
-		List<Double> lambda = (List<Double>) job.getProperties().get(
-				"smoothfactors");
+		List<Double> lambda = (List<Double>) job.getProperties().get("smoothfactors");
+
 		for (int i = 0; i < bufferIndices.size(); i++) {
 			int bufferIndex = bufferIndices.get(i);
 			double s = lambda.get(i);
 			Vector qmForce = forces_QMMM.get(bufferIndex - 1).scalarMultiply(s);
-			Vector mmForce = forces_MM.get(bufferIndex - 1).scalarMultiply(
-					1 - s);
+			Vector mmForce = forces_MM.get(bufferIndex - 1).scalarMultiply(1 - s);
 			Vector bufferForce = qmForce.add(mmForce);
 			forces_MM.set(bufferIndex - 1, bufferForce);
 		}

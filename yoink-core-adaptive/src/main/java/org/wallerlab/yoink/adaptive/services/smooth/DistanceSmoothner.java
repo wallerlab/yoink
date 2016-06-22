@@ -12,6 +12,8 @@ import org.wallerlab.yoink.api.model.molecular.Molecule;
 import org.wallerlab.yoink.api.service.Calculator;
 import org.wallerlab.yoink.api.service.adaptive.SmoothFunction;
 
+import static org.wallerlab.yoink.api.model.batch.JobParameter.*;
+
 /**
  * this class is to do distance based smoothing.
  * 
@@ -38,18 +40,15 @@ public class DistanceSmoothner extends SmoothnerImpl {
 	protected void getProperSmoothParameters(Set<Molecule> qmCoreMolecules,
 			List<Double> smoothParameters, Molecule molecule) {
 		Coord centerCoord = centerOfMassComputer.calculate(qmCoreMolecules);
-		double currentDistance = closestDistanceToMoleculeCalculator.calculate(
-				centerCoord, molecule);
+		double currentDistance = closestDistanceToMoleculeCalculator.calculate(centerCoord, molecule);
 		smoothParameters.add(2, currentDistance);
 	}
 
 	protected void getOriginalMinAndMax(List<Double> smoothParameters,
 			Map<JobParameter, Object> parameters) {
-		smoothParameters.add(0,
-				(double) parameters.get(JobParameter.DISTANCE_QM));
-		smoothParameters.add(1,
-				(double) parameters.get(JobParameter.DISTANCE_BUFFER)
-						+ (double) parameters.get(JobParameter.DISTANCE_QM));
+		smoothParameters.add(0, (double) parameters.get(DISTANCE_QM));
+		smoothParameters.add(1, (double) parameters.get(DISTANCE_BUFFER)
+									+ (double) parameters.get(DISTANCE_QM));
 	}
 
 }

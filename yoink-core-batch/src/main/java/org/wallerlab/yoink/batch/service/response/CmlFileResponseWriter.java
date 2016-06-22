@@ -15,19 +15,18 @@
  */
 package org.wallerlab.yoink.batch.service.response;
 
-import java.util.List;
-
-import javax.xml.bind.JAXBElement;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.api.model.batch.JobParameter;
-import org.wallerlab.yoink.api.model.batch.Job;
-import org.wallerlab.yoink.api.service.molecule.FilesWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.wallerlab.yoink.api.model.batch.Job;
+import org.wallerlab.yoink.api.model.batch.JobParameter;
+import org.wallerlab.yoink.api.service.molecule.FilesWriter;
+
+import javax.xml.bind.JAXBElement;
+import java.util.List;
 /**
  * This class is almost identical to CmlFilesResponse, except it is not
  * processing a list of a list of jobs.
@@ -42,7 +41,7 @@ public class CmlFileResponseWriter implements ItemWriter<Job<JAXBElement>> {
 	@Qualifier("jaxbFileWriter")
 	private FilesWriter<Object> jaxbWriter;
 
-	protected static final Log log = LogFactory.getLog(CmlFilesResponse.class);
+	protected static final Log log = LogFactory.getLog(CmlFileResponseWriter.class);
 
 	/**
 	 * write adaptive qmmm result into a cml file.
