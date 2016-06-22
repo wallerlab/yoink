@@ -1,0 +1,56 @@
+/*
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: "me.champeau.gradle.jmh"
+
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "gradle.plugin.me.champeau.gradle:jmh-gradle-plugin:0.3.0"
+    }
+}
+
+sourceCompatibility = 1.8
+version = '1.0'
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Gradle Quickstart',
+                'Implementation-Version': version
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
+    testCompile group: 'junit', name: 'junit', version: '4.+'
+}
+
+test {
+    systemProperties 'property': 'value'
+}
+
+uploadArchives {
+    repositories {
+        flatDir {
+            dirs 'repos'
+        }
+    }
+}
+
+jmh {
+    include = 'org\\.wallerlab\\.yoink\\.benchmark\\.*'
+    zip64 = true
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.6'
+}
+*/
