@@ -18,7 +18,7 @@ then use [gradle](https://gradle.org/) to run yoink
 `./gradlew yoink`
 
 
-#See our wiki for more detailed info:
+#Documentation:
 
 [Yoink Wiki](https://github.com/wallerlab/yoink/wiki)
 

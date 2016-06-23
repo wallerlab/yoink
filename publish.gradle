@@ -1,67 +1,17 @@
-
-//all projects
-//Trying without jar, will move to publish.gradle
-/*jar {
-    manifest {
-        attributes 'Implementation-Title': 'adaptive qm/mm partitioning','Gradle Quickstart', 'Implementation-Version': version,'Main-Class':'org.wallerlab.yoink.Yoink'
-    }
-}
-
-/*
-apply plugin: 'spring-boot'
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin:'groovy'
-sourceCompatibility = 1.8
-
-buildscript {
-    repositories {
-        jcenter()
-        mavenCentral()
-    }
-    dependencies { classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.7.RELEASE") }
-}
-dependencies {
-    compile("org.springframework.boot:spring-boot-starter-batch")
-    testCompile group: 'junit', name: 'junit', version: '4.+'
-}
 configurations {
     all*.exclude module : 'spring-boot-starter-logging'
     integrationTestCompile.extendsFrom testCompile
     integrationTestRuntime.extendsFrom testRuntime
 }
-sourceSets {
-    integrationTest {
-        java {
-            compileClasspath += main.output + test.output
-            runtimeClasspath += main.output + test.output
-            srcDir file('src/integration-test/java')
-        }
-        resources.srcDir file('src/integration-test/resources')
-    }
-}
-task integrationTest(type: Test) {
-    testClassesDir = sourceSets.integrationTest.output.classesDir
-    classpath = sourceSets.integrationTest.runtimeClasspath
-    outputs.upToDateWhen { false }
-}
-check.dependsOn integrationTest
-integrationTest.mustRunAfter test
-tasks.withType(Test) {
-    reports.html.destination = file("${reporting.baseDir}/${name}")
-}
-
-mainClassName = 'org.wallerlab.yoink.Application'
-
-*/
-
 
 
 //Trying without jar, will move to publish.gradle
 //Bootstrap project
-/*jar {
+jar {
     manifest {
-        attributes 'Implementation-Title': 'Yoink', 'Implementation-Version': version,
+        attributes
+        'Implementation-Title': 'Yoink',
+        'Implementation-Version': version,
         'Main-Class':'org.wallerlab.yoink.Yoink'
     }
     from{
@@ -75,5 +25,5 @@ mainClassName = 'org.wallerlab.yoink.Application'
 }
 jar.doFirst{
     sourceSets.main.java.srcDirs.each { from it }
-}*/
+}
 

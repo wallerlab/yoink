@@ -58,22 +58,9 @@ public class BuilderProcessor implements ItemProcessor<JAXBElement, Job<JAXBElem
 	public Job<JAXBElement> process(JAXBElement input) {
 		Job<JAXBElement> job= (Job<JAXBElement>) new AdaptiveQMMMJob();
 		job.setInput(input);
-		translate(job);
+		job.setMolecularSystem(molecularSystemTranslator.translate(job.getInput()));
+		job.setParameters(parameterTranslator.translate(job.getInput()));
 		return job;
 	}
-
-	protected void translate(Job<JAXBElement> job) {
-		translateMolecularSystem(job);
-		translateParameters(job);
-	}
-
-	protected void translateMolecularSystem(Job<JAXBElement> job) {
-		job.setMolecularSystem(molecularSystemTranslator.translate(job.getInput()));
-	}
-
-	protected void translateParameters(Job<JAXBElement> job) {
-		job.setParameters(parameterTranslator.translate(job.getInput()));
-	}
-
 
 }

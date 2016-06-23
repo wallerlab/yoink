@@ -102,10 +102,10 @@ public class BatchConfig  {
 	@Bean
 	public org.springframework.batch.core.Job fileJob(@Qualifier("compositeStep") Step step) {
 		return jobBuilderFactory.get("yoink")
-				.incrementer(new RunIdIncrementer())
-				.flow(step)
-				.end()
-				.build();
+								.incrementer(new RunIdIncrementer())
+								.flow(step)
+								.end()
+								.build();
 	}
 
 	/**
@@ -117,15 +117,12 @@ public class BatchConfig  {
 	 */
 	@Bean
 	public Step compositeStep(@Qualifier("compositeProcessor") ItemProcessor processor) {
-		return stepBuilderFactory
-				.get("step")
-				.<JAXBElement, Job> chunk(1)
-				.reader(itemReader)
-				.processor(processor)
-				.writer(itemWriter)
-				.build();
+		return stepBuilderFactory.get("step")
+							  	 .<JAXBElement, Job> chunk(1)
+								 .reader(itemReader)
+								 .processor(processor)
+								 .writer(itemWriter)
+								 .build();
 	}
-
-
 
 }

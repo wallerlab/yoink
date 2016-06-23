@@ -102,8 +102,8 @@ public class PropertyWrapper implements Wrapper<Job<JAXBElement>> {
 
 	
 	private void putPartitioningResultInProperty(Job<JAXBElement> job,
-			JAXBElement<Cml> cmlElement, Map<JobParameter, Object> parameters,
-			Map<String, Object> properties) {
+												JAXBElement<Cml> cmlElement, Map<JobParameter, Object> parameters,
+												Map<String, Object> properties) {
 		ObjectFactory objectFactory = new ObjectFactory();
 		PropertyList propertyList = objectFactory.createPropertyList();
 		propertyList.setTitle("Partitioning result  : ");
@@ -115,8 +115,9 @@ public class PropertyWrapper implements Wrapper<Job<JAXBElement>> {
 	}
 	
 	private Property wrapPartitionResult(Job<JAXBElement> job,
-			Map<String, Object> properties, ObjectFactory objectFactory,
-			PropertyList propertyList) {
+										 Map<String, Object> properties,
+										 ObjectFactory objectFactory,
+										 PropertyList propertyList) {
 		Property property = objectFactory.createProperty();
 		property.setTitle("QM and Buffer molecule indices");
 		loopOverQMAndBufferRegions(job, objectFactory, propertyList, property);	
@@ -125,22 +126,21 @@ public class PropertyWrapper implements Wrapper<Job<JAXBElement>> {
 	}
 	
 	private void putSmoothingResultInProperty(Job<JAXBElement> job,
-			JAXBElement<Cml> cmlElement, Map<JobParameter, Object> parameters,
-			Map<String, Object> properties) {
+											  JAXBElement<Cml> cmlElement, Map<JobParameter, Object> parameters,
+											  Map<String, Object> properties) {
 		ObjectFactory objectFactory = new ObjectFactory();
 		PropertyList propertyList = objectFactory.createPropertyList();
 		propertyList.setTitle("Smoothing result  :");
-		Property property = wrapSmoothResult(job, properties, objectFactory,
-				propertyList);
+		Property property = wrapSmoothResult(job, properties, objectFactory, propertyList);
 		wrapForceAndEnergy(properties, objectFactory, propertyList, property);
-		JAXBElement propertyListJAXB = objectFactory
-				.createPropertyList(propertyList);
+		JAXBElement propertyListJAXB = objectFactory.createPropertyList(propertyList);
 		cmlElement.getValue().getAnyCmlOrAnyOrAny().add(propertyListJAXB);
 	}
 
 	private Property wrapSmoothResult(Job<JAXBElement> job,
-			Map<String, Object> properties, ObjectFactory objectFactory,
-			PropertyList propertyList) {
+									  Map<String, Object> properties,
+									  ObjectFactory objectFactory,
+									  PropertyList propertyList) {
 		Property property = objectFactory.createProperty();
 		property.setTitle("weights and smooth factors ");
 		loopOverAllWeightConfigurations(properties, objectFactory,
@@ -151,8 +151,9 @@ public class PropertyWrapper implements Wrapper<Job<JAXBElement>> {
 	}
 
 	private void wrapForceAndEnergy(Map<String, Object> properties,
-			ObjectFactory objectFactory, PropertyList propertyList,
-			Property property) {
+									ObjectFactory objectFactory,
+									PropertyList propertyList,
+									Property property) {
 		Property propertyEnergy = objectFactory.createProperty();
 		Property propertyForce = objectFactory.createProperty();
 		if (properties.containsKey("forcesAndEnergy")) {
@@ -179,12 +180,13 @@ public class PropertyWrapper implements Wrapper<Job<JAXBElement>> {
 		propertyList.getAnyCmlOrAnyOrAny().add(propertyForce);
 	}
 
-	private void loopOverAllWeightConfigurations(
-			Map<String, Object> properties, ObjectFactory objectFactory,
-			PropertyList propertyList, Property property) {
+	private void loopOverAllWeightConfigurations(Map<String, Object> properties,
+												 ObjectFactory objectFactory,
+												 PropertyList propertyList,
+												 Property property) {
 		if (properties.containsKey("weightfactors")) {
-			Map<List<Integer>, Double> molecularIndicesAndWeightFactor = (Map<List<Integer>, Double>) properties
-					.get("weightfactors");
+			Map<List<Integer>, Double> molecularIndicesAndWeightFactor
+								= (Map<List<Integer>, Double>) properties.get("weightfactors");
 			propertyList.setTitle(propertyList.getTitle() + "  weights factors");
 			for (List<Integer> indices : molecularIndicesAndWeightFactor
 					.keySet()) {
@@ -194,10 +196,10 @@ public class PropertyWrapper implements Wrapper<Job<JAXBElement>> {
 		}
 	}
 
-	private void putEveryConfigurationWeightedFactorInScalar(
-			ObjectFactory objectFactory, Property property,
-			Map<List<Integer>, Double> molecularIndicesAndWeightFactor,
-			List<Integer> indices) {
+	private void putEveryConfigurationWeightedFactorInScalar(ObjectFactory objectFactory,
+															 Property property,
+															 Map<List<Integer>, Double> molecularIndicesAndWeightFactor,
+															 List<Integer> indices) {
 		Scalar scalar = objectFactory.createScalar();
 		scalar.setDataType("weighted function");
 		scalar.setValue(String.valueOf(molecularIndicesAndWeightFactor
@@ -208,8 +210,9 @@ public class PropertyWrapper implements Wrapper<Job<JAXBElement>> {
 	}
 
 	private void loopOverBufferMolecules(Job<JAXBElement> job,
-			ObjectFactory objectFactory, PropertyList propertyList,
-			Property property) {
+										 ObjectFactory objectFactory,
+										 PropertyList propertyList,
+										 Property property) {
 		if (job.getProperties().containsKey("smoothfactors")) {
 			List<Double> smoothFactors = (List<Double>) job.getProperties()
 					.get("smoothfactors");
@@ -234,8 +237,9 @@ public class PropertyWrapper implements Wrapper<Job<JAXBElement>> {
 	}
 
 	private void loopOverQMAndBufferRegions(Job<JAXBElement> job,
-			ObjectFactory objectFactory, PropertyList propertyList,
-			Property property) {
+											ObjectFactory objectFactory,
+											PropertyList propertyList,
+											Property property) {
 		List<Region.Name> regions= new ArrayList<Region.Name>();
 		regions.add(Region.Name.QM);
 		regions.add(Region.Name.BUFFER);	
@@ -255,9 +259,10 @@ public class PropertyWrapper implements Wrapper<Job<JAXBElement>> {
 		}	
 	}
 	
-	private void putEveryMoleculeSmoothFactorInScalar(
-			ObjectFactory objectFactory, Property property,
-			Integer bufferIndex, Double smoothFactor) {
+	private void putEveryMoleculeSmoothFactorInScalar(ObjectFactory objectFactory,
+													  Property property,
+													  Integer bufferIndex,
+													  Double smoothFactor) {
 		Scalar scalar = objectFactory.createScalar();
 		scalar.setDataType("smooth function");
 		scalar.setValue(String.valueOf(smoothFactor));
