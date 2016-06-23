@@ -5,6 +5,24 @@
 [![Apache icense](http://img.shields.io/badge/license-APACHE2-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 
 
+# Adaptive QM/MM
+
+Multi-scale Modeling is an interesting area of Computational Science.
+A large number of important systems can be studied using hybrid methods.
+
+One of the challenges in this area is to switch representation on-the-fly.
+Partitioning of the system is followed by smoothening of the buffer region.
+Yoink is a framework that contains many of the published solutions.
+
+![waller_yoink_github 008](https://cloud.githubusercontent.com/assets/13583117/16300758/2a23bd5a-3974-11e6-9c09-79b84cb61a9a.jpeg)
+
+[Yoink homepage](https:yoink.wallerlab.org/)
+
+[Yoink wiki](https://github.com/wallerlab/yoink/wiki)
+
+[Group page](https:wallerlab.org/)
+
+
 #Quickstart
 
 Use [git](https://git-scm.com/) to get a copy of yoink
@@ -18,8 +36,6 @@ then use [gradle](https://gradle.org/) to run yoink
 `./gradlew yoink`
 
 
-#Documentation:
 
-[Yoink Wiki](https://github.com/wallerlab/yoink/wiki)
 
 
