@@ -7,8 +7,8 @@ import java.util.Set;
 import javax.annotation.Resource;
 
 import org.wallerlab.yoink.api.model.batch.JobParameter;
-import org.wallerlab.yoink.api.model.molecular.Coord;
-import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.molecule.Coord;
+import org.wallerlab.yoink.api.model.molecule.Molecule;
 import org.wallerlab.yoink.api.service.Calculator;
 import org.wallerlab.yoink.api.service.adaptive.SmoothFunction;
 
@@ -20,7 +20,7 @@ import static org.wallerlab.yoink.api.model.batch.JobParameter.*;
  * @author Min Zheng
  *
  */
-public class DistanceSmoothner extends SmoothnerImpl {
+public class DistanceSmoothner extends AbstractSmoothner {
 
 	@Resource
 	private Calculator<Double, Coord, Molecule> closestDistanceToMoleculeCalculator;

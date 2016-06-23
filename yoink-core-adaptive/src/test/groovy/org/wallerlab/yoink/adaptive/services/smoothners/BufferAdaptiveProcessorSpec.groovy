@@ -15,13 +15,13 @@
  */
 package org.wallerlab.yoink.adaptive.services.smoothners
 
-import org.wallerlab.yoink.adaptive.services.BufferAdaptiveProcessor
+import org.wallerlab.yoink.adaptive.services.BufferSmoothner
 import spock.lang.Specification
 import org.wallerlab.yoink.api.enums.*
-import org.wallerlab.yoink.api.model.molecular.Coord
+import org.wallerlab.yoink.api.model.molecule.Coord
 import org.wallerlab.yoink.api.model.batch.Job;
-import org.wallerlab.yoink.api.model.molecular.Molecule;
-import org.wallerlab.yoink.api.model.regionizer.Region
+import org.wallerlab.yoink.api.model.molecule.Molecule;
+import org.wallerlab.yoink.api.model.region.Region
 import org.wallerlab.yoink.api.service.plugin.QmMmWrapper
 
 class BufferAdaptiveProcessorSpec  extends Specification{
@@ -52,7 +52,7 @@ class BufferAdaptiveProcessorSpec  extends Specification{
 		mmProcessor.getForces()>>Mock(List)
 		
 		when:
-		def bf=new BufferAdaptiveProcessor();
+		def bf=new BufferSmoothner();
 		bf.mmProcessor=mmProcessor
 		bf.qmmmProcessor=qmmmProcessor
 		then:

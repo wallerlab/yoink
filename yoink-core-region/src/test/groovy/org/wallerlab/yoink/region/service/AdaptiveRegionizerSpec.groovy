@@ -15,7 +15,7 @@
  */
 package org.wallerlab.yoink.region.service
 
-import org.wallerlab.yoink.region.service.regionizer.AdaptiveRegionizer
+import org.wallerlab.yoink.region.service.regionizer.density.components.AdaptiveRegionizer
 import spock.lang.Specification;
 
 import org.wallerlab.yoink.api.enums.*

@@ -26,9 +26,9 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.cube.Cube;
-import org.wallerlab.yoink.api.model.molecular.Atom;
-import org.wallerlab.yoink.api.model.molecular.Coord;
-import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.molecule.Atom;
+import org.wallerlab.yoink.api.model.molecule.Coord;
+import org.wallerlab.yoink.api.model.molecule.Molecule;
 import org.wallerlab.yoink.api.service.Calculator;
 import org.wallerlab.yoink.api.service.Factory;
 import org.wallerlab.yoink.api.service.cube.CubeBuilder;
@@ -91,22 +91,15 @@ public class CubeBuilderImpl implements CubeBuilder<Set<Molecule>> {
 
 	private List<Coord> getAllCoordinates(Cube cube) {
 		Coord[] initialValues = new SimpleCoord[cube.getSize()];
-		List<Coord> coordinates = Collections.synchronizedList(Arrays
-				.asList(initialValues));
-		IntStream
-				.range(0, cube.getNumberOfXYZSteps()[0])
+		List<Coord> coordinates = Collections.synchronizedList(Arrays.asList(initialValues));
+		IntStream.range(0, cube.getNumberOfXYZSteps()[0])
 				.parallel()
-				.forEach(
-						nXStep -> {
-							for (int nYStep = 0; nYStep < cube
-									.getNumberOfXYZSteps()[1]; nYStep++) {
-								for (int nZStep = 0; nZStep < cube
-										.getNumberOfXYZSteps()[2]; nZStep++) {
+				.forEach(nXStep -> {
+							for (int nYStep = 0; nYStep < cube.getNumberOfXYZSteps()[1]; nYStep++) {
+								for (int nZStep = 0; nZStep < cube.getNumberOfXYZSteps()[2]; nZStep++) {
 									// get the coordinate in cube
-									int[] xyzCurrentStep = new int[] { nXStep,
-											nYStep, nZStep };
-									Coord currentCoord = coordInCubeCalculator
-											.calculate(xyzCurrentStep, cube);
+									int[] xyzCurrentStep = new int[] { nXStep, nYStep, nZStep };
+									Coord currentCoord = coordInCubeCalculator.calculate(xyzCurrentStep, cube);
 									// get the index of a grid point in cube
 									int indexInCube = nXStep
 											* cube.getNumberOfXYZSteps()[1]
@@ -140,11 +133,8 @@ public class CubeBuilderImpl implements CubeBuilder<Set<Molecule>> {
 	}
 
 	private void setOrigin(Cube cube, double[] xyzMinimumOfCube) {
-		// Coord gridOrigin = new SimpleCoord(xyzMinimumOfCube[0],
-		// xyzMinimumOfCube[1], xyzMinimumOfCube[2]);
-		Coord gridOrigin = simpleCoordFactory
-				.create(new double[] { xyzMinimumOfCube[0],
-						xyzMinimumOfCube[1], xyzMinimumOfCube[2] });
+		double[] dimensions = new double[] { xyzMinimumOfCube[0], xyzMinimumOfCube[1], xyzMinimumOfCube[2]};
+		Coord gridOrigin = simpleCoordFactory.create(dimensions);
 		cube.setGridOrigin(gridOrigin);
 	}
 
@@ -176,8 +166,9 @@ public class CubeBuilderImpl implements CubeBuilder<Set<Molecule>> {
 	}
 
 	private void getxyzLists(Set<Molecule> molecules,
-			List<Double> xCoordOfAllAtoms, List<Double> yCoordOfAllAtoms,
-			List<Double> zCoordOfAllAtoms) {
+							 List<Double> xCoordOfAllAtoms,
+							 List<Double> yCoordOfAllAtoms,
+							 List<Double> zCoordOfAllAtoms) {
 		for (Molecule molecule : molecules) {
 			for (Atom atom : molecule.getAtoms()) {
 				xCoordOfAllAtoms.add(atom.getX3());

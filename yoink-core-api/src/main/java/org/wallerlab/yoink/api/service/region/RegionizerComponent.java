@@ -17,8 +17,8 @@ package org.wallerlab.yoink.api.service.region;
 
 import java.util.Map;
 
-import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
-import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.model.molecule.MolecularSystem;
+import org.wallerlab.yoink.api.model.region.Region;
 
 /**
  * this interface is for region operations

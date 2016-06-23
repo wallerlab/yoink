@@ -18,10 +18,10 @@ package org.wallerlab.yoink.adaptive.services
 import org.wallerlab.yoink.api.enums.*
 import org.wallerlab.yoink.adaptive.services.smooth.FIRESmoothner
 import org.wallerlab.yoink.api.model.batch.Job
-import org.wallerlab.yoink.api.model.molecular.Atom
-import org.wallerlab.yoink.api.model.molecular.Coord
-import org.wallerlab.yoink.api.model.molecular.Molecule
-import org.wallerlab.yoink.api.model.regionizer.Region
+import org.wallerlab.yoink.api.model.molecule.Atom
+import org.wallerlab.yoink.api.model.molecule.Coord
+import org.wallerlab.yoink.api.model.molecule.Molecule
+import org.wallerlab.yoink.api.model.region.Region
 import spock.lang.Specification
 import org.wallerlab.yoink.api.service.Calculator;
 class FiresWeightFactorsSpec extends Specification {

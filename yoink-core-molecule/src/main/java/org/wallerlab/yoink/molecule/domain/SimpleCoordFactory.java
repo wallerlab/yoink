@@ -18,7 +18,7 @@ package org.wallerlab.yoink.molecule.domain;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.model.molecule.Coord;
 import org.wallerlab.yoink.api.service.Factory;
 import org.wallerlab.yoink.api.service.math.Vector;
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory;

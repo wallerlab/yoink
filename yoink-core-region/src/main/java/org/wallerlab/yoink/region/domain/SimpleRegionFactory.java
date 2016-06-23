@@ -16,9 +16,9 @@
 package org.wallerlab.yoink.region.domain;
 
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.api.model.molecular.Coord;
-import org.wallerlab.yoink.api.model.molecular.Molecule;
-import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.model.molecule.Coord;
+import org.wallerlab.yoink.api.model.molecule.Molecule;
+import org.wallerlab.yoink.api.model.region.Region;
 import org.wallerlab.yoink.api.service.Computer;
 import org.wallerlab.yoink.api.service.Factory;
 

@@ -25,9 +25,9 @@ import javax.xml.bind.JAXBElement;
 
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.batch.Job;
-import org.wallerlab.yoink.api.model.molecular.Coord;
-import org.wallerlab.yoink.api.model.molecular.Molecule;
-import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.model.molecule.Coord;
+import org.wallerlab.yoink.api.model.molecule.Molecule;
+import org.wallerlab.yoink.api.model.region.Region;
 import org.wallerlab.yoink.api.service.Calculator;
 import org.wallerlab.yoink.api.service.adaptive.Smoothner;
 import org.wallerlab.yoink.math.map.MapSorter;

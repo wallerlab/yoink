@@ -16,7 +16,7 @@
 package org.wallerlab.yoink.api.service.cube;
 
 import org.wallerlab.yoink.api.model.cube.Cube;
-import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.molecule.Molecule;
 
 @FunctionalInterface
 public interface CubeBuilder<T> {

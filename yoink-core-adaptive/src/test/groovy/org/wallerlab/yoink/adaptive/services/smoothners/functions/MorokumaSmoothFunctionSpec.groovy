@@ -15,7 +15,7 @@
  */
 package org.wallerlab.yoink.adaptive.services.smoothners.functions
 
-import org.wallerlab.yoink.adaptive.services.smooth.functions.MorokumaSmoothFunction
+import org.wallerlab.yoink.adaptive.services.smooth.functions.MorokumaFunction
 import spock.lang.Specification;
 
 class MorokumaSmoothFunctionSpec extends Specification{
@@ -24,7 +24,7 @@ class MorokumaSmoothFunctionSpec extends Specification{
 		def  min=(double)3.8
 		def max=(double)4.0
 		double currentValue;
-		def sf= new MorokumaSmoothFunction()
+		def sf= new MorokumaFunction()
 
 		when:"current value is max"
 		currentValue=4.0

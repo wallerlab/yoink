@@ -15,10 +15,10 @@
  */
 package org.wallerlab.yoink.region.domain;
 
-import org.wallerlab.yoink.api.model.molecular.Atom;
-import org.wallerlab.yoink.api.model.molecular.Coord;
-import org.wallerlab.yoink.api.model.molecular.Molecule;
-import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.model.molecule.Atom;
+import org.wallerlab.yoink.api.model.molecule.Coord;
+import org.wallerlab.yoink.api.model.molecule.Molecule;
+import org.wallerlab.yoink.api.model.region.Region;
 import org.wallerlab.yoink.api.service.Computer;
 
 import java.util.*;
@@ -149,8 +149,7 @@ public class SimpleRegion implements Region {
 	 */
 	@Override
 	public Coord getCenterOfMass() {
-		this.centerOfMass = this.centerOfMassComputer
-				.calculate(this.molecularMap.keySet());
+		this.centerOfMass = this.centerOfMassComputer.calculate(this.molecularMap.keySet());
 		return centerOfMass;
 	}
 
@@ -181,10 +180,8 @@ public class SimpleRegion implements Region {
 	/**
 	 * set the value of this.centerOfMassComputer
 	 */
-	public void setCenterOfMassComputer(
-			Computer<Coord, Set<Molecule>> centerOfMassComputer) {
+	public void setCenterOfMassComputer(Computer<Coord, Set<Molecule>> centerOfMassComputer) {
 		this.centerOfMassComputer = centerOfMassComputer;
 	}
-
 
 }

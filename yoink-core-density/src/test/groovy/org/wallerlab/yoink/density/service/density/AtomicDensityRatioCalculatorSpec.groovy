@@ -2,8 +2,8 @@ package org.wallerlab.yoink.density.service.density
 
 import spock.lang.Specification
 
-import org.wallerlab.yoink.api.model.molecular.Atom;
-import org.wallerlab.yoink.api.model.molecular.Coord
+import org.wallerlab.yoink.api.model.molecule.Atom;
+import org.wallerlab.yoink.api.model.molecule.Coord
 import org.wallerlab.yoink.api.service.Calculator;
 
 class AtomicDensityRatioCalculatorSpec extends Specification {

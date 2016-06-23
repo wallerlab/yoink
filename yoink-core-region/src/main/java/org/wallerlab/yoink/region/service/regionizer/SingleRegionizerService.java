@@ -21,13 +21,13 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.api.model.molecular.Molecule;
-import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.model.molecule.Molecule;
+import org.wallerlab.yoink.api.model.region.Region;
 import org.wallerlab.yoink.api.service.Factory;
 import org.wallerlab.yoink.api.service.region.RegionizerMath;
 import org.wallerlab.yoink.math.map.MapDifference;
 
-import static org.wallerlab.yoink.api.model.regionizer.Region.Name.*;
+import static org.wallerlab.yoink.api.model.region.Region.Name.*;
 
 /**
  * this class is to get molecules in one region
@@ -57,40 +57,38 @@ public class SingleRegionizerService implements RegionizerMath<Region, Region.Na
 	public Region regionize(Map<Region.Name, Region> regions, Region.Name name) {
 		Region region = simpleRegionFactory.create();
 		switch (name) {
-		case QM_CORE:
-			region.addAll(regions.get(QM_CORE_FIXED).getMolecularMap());
-			break;
-		case QM:
-			region.addAll(regions.get(QM_CORE_FIXED).getMolecularMap());
-			break;
-		case QM_CORE_ADAPTIVE:
-			region = difference(regions.get(QM_CORE),
-					regions.get(QM_CORE_FIXED));
-			region.changeMolecularId(QM_CORE_ADAPTIVE);
-			break;
-		case QM_ADAPTIVE:
-			region = difference(regions.get(QM), regions.get(QM_CORE));
-			region.changeMolecularId(QM_ADAPTIVE);
-			break;
-		case MM:
-			region = difference(regions.get(SYSTEM), regions.get(QM));
-			break;
-		case MM_NONBUFFER:
-			region = difference(regions.get(MM), regions.get(BUFFER));
-			region.changeMolecularId(MM);
-			break;
-		case NONQM_CORE:
-			region = difference(regions.get(SYSTEM), regions.get(QM_CORE));
-			break;
-		case NONQM_CORE_ADAPTIVE_SEARCH:
-			region = difference(regions.get(ADAPTIVE_SEARCH),
-					regions.get(QM_CORE));
-			break;
-		case BUFFER:
-			region = difference(regions.get(ADAPTIVE_SEARCH), regions.get(QM));
-			break;
-		default:
-			throw new IllegalArgumentException("invalid region name");
+			case QM_CORE:
+				region.addAll(regions.get(QM_CORE_FIXED).getMolecularMap());
+				break;
+			case QM:
+				region.addAll(regions.get(QM_CORE_FIXED).getMolecularMap());
+				break;
+			case QM_CORE_ADAPTIVE:
+				region = difference(regions.get(QM_CORE), regions.get(QM_CORE_FIXED));
+				region.changeMolecularId(QM_CORE_ADAPTIVE);
+				break;
+			case QM_ADAPTIVE:
+				region = difference(regions.get(QM), regions.get(QM_CORE));
+				region.changeMolecularId(QM_ADAPTIVE);
+				break;
+			case MM:
+				region = difference(regions.get(SYSTEM), regions.get(QM));
+				break;
+			case MM_NONBUFFER:
+				region = difference(regions.get(MM), regions.get(BUFFER));
+				region.changeMolecularId(MM);
+				break;
+			case NONQM_CORE:
+				region = difference(regions.get(SYSTEM), regions.get(QM_CORE));
+				break;
+			case NONQM_CORE_ADAPTIVE_SEARCH:
+				region = difference(regions.get(ADAPTIVE_SEARCH), regions.get(QM_CORE));
+				break;
+			case BUFFER:
+				region = difference(regions.get(ADAPTIVE_SEARCH), regions.get(QM));
+				break;
+			default:
+				throw new IllegalArgumentException("invalid region name");
 		}
 		region.setName(name);
 		return region;

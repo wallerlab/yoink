@@ -26,6 +26,7 @@ import org.wallerlab.yoink.api.model.batch.JobParameter;
 import org.wallerlab.yoink.api.model.batch.Job;
 import org.wallerlab.yoink.api.service.adaptive.Smoothner;
 
+import static org.wallerlab.yoink.api.service.region.Partitioner.Type.*;
 /**
  * this class is to choose different smoothner to smooth the buffer region
  * 

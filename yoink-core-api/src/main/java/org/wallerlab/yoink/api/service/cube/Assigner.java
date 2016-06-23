@@ -16,8 +16,8 @@
 
 package org.wallerlab.yoink.api.service.cube;
 
-import org.wallerlab.yoink.api.model.molecular.Coord;
-import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.model.molecule.Coord;
+import org.wallerlab.yoink.api.model.region.Region;
 
 import java.util.Map;
 

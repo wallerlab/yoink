@@ -23,7 +23,7 @@ import java.util.Set;
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.batch.Job;
 import org.wallerlab.yoink.api.model.batch.JobParameter;
-import org.wallerlab.yoink.api.service.batch.Clustering;
+import org.wallerlab.yoink.api.service.cluster.Clusterer;
 import org.wallerlab.yoink.api.service.region.Partitioner;
 import org.wallerlab.yoink.cluster.service.louvain.LouvainClusteringFacade;
 import org.wallerlab.yoink.cluster.service.interaction.InteractionTriple;
@@ -37,7 +37,7 @@ import org.wallerlab.yoink.cluster.service.interaction.InteractionTriple;
  *
  */
 @Service
-public class DoriClustering implements Clustering {
+public class DoriClustering implements Clusterer {
 
 	public DoriClustering() {
 	}

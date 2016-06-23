@@ -17,8 +17,8 @@ package org.wallerlab.yoink.adaptive.services
 
 import org.wallerlab.yoink.api.enums.*
 import org.wallerlab.yoink.adaptive.services.weights.XSWeightFactors
-import org.wallerlab.yoink.api.model.molecular.Molecule
-import org.wallerlab.yoink.api.model.regionizer.Region
+import org.wallerlab.yoink.api.model.molecule.Molecule
+import org.wallerlab.yoink.api.model.region.Region
 import org.wallerlab.yoink.api.model.batch.Job
 
 import spock.lang.Specification

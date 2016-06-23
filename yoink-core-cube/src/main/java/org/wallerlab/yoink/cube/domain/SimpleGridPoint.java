@@ -16,15 +16,14 @@
 package org.wallerlab.yoink.cube.domain;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 import org.wallerlab.yoink.api.model.cube.GridPoint;
-import org.wallerlab.yoink.api.model.molecular.Atom;
-import org.wallerlab.yoink.api.model.molecular.Coord;
-import org.wallerlab.yoink.api.model.molecular.Molecule;
-
+import org.wallerlab.yoink.api.model.molecule.Atom;
+import org.wallerlab.yoink.api.model.molecule.Coord;
+import org.wallerlab.yoink.api.model.molecule.Molecule;
+import static java.util.stream.Collectors.toSet;
 /**
  * This domain model is to store information and properties of a grid point
  * 
@@ -91,13 +90,10 @@ public class SimpleGridPoint<String, V> implements GridPoint<String, V> {
 
 	@Override
 	public Set<Atom> getAtomsInTwoClosestMolecules() {
-		Set<Molecule> molecules = (Set<Molecule>) this.properties
-				.get("twoClosestMolecules");
-		Set<Atom> atoms = new HashSet<Atom>();
-		for (Molecule molecule : molecules) {
-			atoms.addAll(molecule.getAtoms());
-		}
-		return atoms;
+		Set<Molecule> molecules = (Set<Molecule>) this.properties.get("twoClosestMolecules");
+		return molecules.stream()
+				 		.flatMap(molecule -> molecule.getAtoms().stream())
+						.collect(toSet());
 	}
 
 }

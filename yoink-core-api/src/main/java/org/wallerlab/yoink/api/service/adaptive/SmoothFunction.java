@@ -22,6 +22,7 @@ package org.wallerlab.yoink.api.service.adaptive;
  * @author Min Zheng
  *
  */
+@FunctionalInterface
 public interface SmoothFunction {
 	/**
 	 * 

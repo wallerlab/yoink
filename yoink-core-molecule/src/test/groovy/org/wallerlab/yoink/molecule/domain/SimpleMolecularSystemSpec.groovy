@@ -15,8 +15,8 @@
  */
 package org.wallerlab.yoink.molecule.domain
 
-import org.wallerlab.yoink.api.model.molecular.Atom;
-import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.molecule.Atom;
+import org.wallerlab.yoink.api.model.molecule.Molecule;
 
 import spock.lang.Specification
 

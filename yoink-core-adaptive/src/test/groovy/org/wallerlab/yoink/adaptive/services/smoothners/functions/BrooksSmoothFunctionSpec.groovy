@@ -15,7 +15,7 @@
  */
 package org.wallerlab.yoink.adaptive.services.smoothners.functions
 
-import org.wallerlab.yoink.adaptive.services.smooth.functions.BrooksSmoothFunction
+import org.wallerlab.yoink.adaptive.services.smooth.functions.BrooksFunction
 import spock.lang.Specification;
 
 class BrooksSmoothFunctionSpec extends Specification{
@@ -24,7 +24,7 @@ class BrooksSmoothFunctionSpec extends Specification{
 		def  min=(double)2.0
 		def max=(double)3.0
 		double currentValue;
-		def sf= new BrooksSmoothFunction()
+		def sf= new BrooksFunction()
 
 		when:"current value is larger than max"
 		currentValue=3.1

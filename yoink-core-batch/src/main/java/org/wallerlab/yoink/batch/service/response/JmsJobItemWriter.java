@@ -35,7 +35,6 @@ import org.xml_cml.schema.Cml;
  *
  *
  */
-@Service
 public class JmsJobItemWriter implements ItemWriter<Job> {
 
 	@Autowired

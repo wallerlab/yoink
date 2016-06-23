@@ -15,9 +15,9 @@
  */
 package org.wallerlab.yoink.density.service.density
 
-import org.wallerlab.yoink.api.model.molecular.Element
-import org.wallerlab.yoink.api.model.molecular.Atom
-import org.wallerlab.yoink.api.model.molecular.Coord
+import org.wallerlab.yoink.api.model.molecule.Element
+import org.wallerlab.yoink.api.model.molecule.Atom
+import org.wallerlab.yoink.api.model.molecule.Coord
 import org.wallerlab.yoink.api.service.Calculator
 import org.wallerlab.yoink.math.linear.SimpleMatrixFactory
 import org.wallerlab.yoink.molecule.data.RadialGridReader

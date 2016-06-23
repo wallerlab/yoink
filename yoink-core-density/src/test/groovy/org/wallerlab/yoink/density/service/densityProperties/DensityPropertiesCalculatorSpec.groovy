@@ -19,8 +19,8 @@ import org.wallerlab.yoink.density.service.density.properties.DensityPropertiesC
 import spock.lang.Specification;
 
 import org.wallerlab.yoink.api.model.density.DensityPoint;
-import org.wallerlab.yoink.api.model.molecular.Atom;
-import org.wallerlab.yoink.api.model.molecular.Coord
+import org.wallerlab.yoink.api.model.molecule.Atom;
+import org.wallerlab.yoink.api.model.molecule.Coord
 import org.wallerlab.yoink.api.service.Calculator;
 import org.wallerlab.yoink.api.service.Factory;
 import org.wallerlab.yoink.api.service.math.Matrix;

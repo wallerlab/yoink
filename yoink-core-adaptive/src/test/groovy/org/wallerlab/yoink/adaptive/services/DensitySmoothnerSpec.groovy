@@ -18,9 +18,9 @@ package org.wallerlab.yoink.adaptive.services
 import org.wallerlab.yoink.adaptive.services.smooth.DensitySmoothner
 import spock.lang.Specification
 import org.wallerlab.yoink.api.enums.*
-import org.wallerlab.yoink.api.model.molecular.Coord;
-import org.wallerlab.yoink.api.model.molecular.Molecule;
-import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.model.molecule.Coord;
+import org.wallerlab.yoink.api.model.molecule.Molecule;
+import org.wallerlab.yoink.api.model.region.Region;
 import org.wallerlab.yoink.api.service.Calculator;
 import org.wallerlab.yoink.api.service.Computer;
 import org.wallerlab.yoink.api.service.adaptive.SmoothFunction;

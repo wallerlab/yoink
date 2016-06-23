@@ -32,17 +32,17 @@ import org.wallerlab.yoink.api.model.batch.JobParameter;
 import org.wallerlab.yoink.api.model.cube.GridPoint;
 import org.wallerlab.yoink.api.model.density.DensityPoint;
 import org.wallerlab.yoink.api.model.density.DensityPoint.DensityType;
-import org.wallerlab.yoink.api.model.molecular.Atom;
-import org.wallerlab.yoink.api.model.molecular.Coord;
-import org.wallerlab.yoink.api.model.molecular.Molecule;
-import org.wallerlab.yoink.api.model.molecular.RadialGrid;
-import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.model.molecule.Atom;
+import org.wallerlab.yoink.api.model.molecule.Coord;
+import org.wallerlab.yoink.api.model.molecule.Molecule;
+import org.wallerlab.yoink.api.model.molecule.RadialGrid;
+import org.wallerlab.yoink.api.model.region.Region;
 import org.wallerlab.yoink.api.service.Calculator;
 import org.wallerlab.yoink.api.service.Computer;
 import org.wallerlab.yoink.api.service.Factory;
 import org.wallerlab.yoink.api.service.molecule.FilesReader;
 import org.wallerlab.yoink.api.service.region.Partitioner;
-import org.wallerlab.yoink.region.service.partitioner.DensityPartitioner;
+import org.wallerlab.yoink.region.service.regionizer.density.partitioner.DensityPartitioner;
 
 /**
  * This class is to get all pairs having interaction(yes or no) base on DORI analysis.

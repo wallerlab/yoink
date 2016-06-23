@@ -22,7 +22,7 @@ import javax.xml.bind.JAXBElement;
 
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.batch.JobParameter;
-import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.model.region.Region;
 import org.wallerlab.yoink.api.service.adaptive.Smoothner;
 import org.wallerlab.yoink.api.service.molecule.Translator;
 import org.wallerlab.yoink.api.service.molecule.Converter.UnitConverterType;

@@ -73,7 +73,7 @@ public class Point3 {
 	 * 
 	 * 
 	 * <pre>
-	 * &lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;h:div xmlns:h="http://www.w3.org/1999/xhtml" xmlns="http://www.xml-cml.org/schema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" class="description"&gt;The 3 components can have any signed value.&lt;/h:div&gt;
+	 * &lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;h:div xmlns:h="http://www.w3.org/1999/xhtml" xmlns="http://www.xml-cml.org/schema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" class="description"&gt;The 3 density can have any signed value.&lt;/h:div&gt;
 	 * </pre>
 	 * 
 	 * 

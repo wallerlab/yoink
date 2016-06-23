@@ -19,13 +19,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
-import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.model.molecule.MolecularSystem;
+import org.wallerlab.yoink.api.model.region.Region;
 import org.wallerlab.yoink.api.service.region.Partitioner;
 import org.wallerlab.yoink.api.service.region.Regionizer;
 import org.wallerlab.yoink.api.service.region.RegionizerComponent;
 import org.wallerlab.yoink.api.service.region.RegionizerMath;
-import org.wallerlab.yoink.region.service.regionizer.AdaptiveRegionizer;
+import org.wallerlab.yoink.region.service.regionizer.density.components.AdaptiveRegionizer;
 import org.wallerlab.yoink.region.service.regionizer.RegionizerService;
 
 import javax.annotation.Resource;
@@ -34,7 +34,7 @@ import java.util.Map;
 
 import static org.wallerlab.yoink.api.model.density.DensityPoint.DensityType.DORI;
 import static org.wallerlab.yoink.api.model.density.DensityPoint.DensityType.SEDD;
-import static org.wallerlab.yoink.api.model.regionizer.Region.Name.*;
+import static org.wallerlab.yoink.api.model.region.Region.Name.*;
 
 /**
  * This class is the configuration for region project.
@@ -69,8 +69,31 @@ public class RegionConfig {
 	}
 
 	/**
-	 * region math service after adaptive partitioning
+	 * Adaptive QM core region in density based adaptive partitioning
+	 *
+	 * @return adaptiveQMCoreRegionizer
+	 *         {@link Regionizer}
+	 */
+	@Bean
+	RegionizerComponent<Map<Region.Name, Region>, Map<String, Object>> adaptiveQMCoreRegionizer() {
+		return (RegionizerComponent) new AdaptiveRegionizer(SEDD, seddPartitioner);
+	}
+
+	/**
+	 *  Adaptive QM region in density based adaptive partitioning
 	 * 
+	 * @return adaptiveQMRegionizer
+	 *         {@link Regionizer}
+	 */
+	@Bean
+	RegionizerComponent<Map<Region.Name, Region>, Map<String, Object>> adaptiveQMRegionizer() {
+		return (RegionizerComponent) new AdaptiveRegionizer(DORI, doriPartitioner);
+	}
+
+
+	/**
+	 * region math service after adaptive partitioning
+	 *
 	 * @return regionizerService
 	 *         {@link RegionizerService}
 	 */
@@ -81,27 +104,4 @@ public class RegionConfig {
 		regionizerService.setRegionNames(Arrays.asList(regionReqeusts));
 		return (RegionizerMath<Map<Region.Name, Region>, MolecularSystem>) regionizerService;
 	}
-
-	/**
-	 *  Adaptive QM regionizer in density based adaptive partitioning
-	 * 
-	 * @return adaptiveQMRegionizer
-	 *         {@link Regionizer}
-	 */
-	@Bean
-	RegionizerComponent<Map<Region.Name, Region>, Map<String, Object>> adaptiveQMRegionizer() {
-		return (RegionizerComponent) new AdaptiveRegionizer(DORI, doriPartitioner);
-	}
-
-	/**
-	 * Adaptive QM core regionizer in density based adaptive partitioning
-	 * 
-	 * @return adaptiveQMCoreRegionizer
-	 *         {@link Regionizer}
-	 */
-	@Bean
-	RegionizerComponent<Map<Region.Name, Region>, Map<String, Object>> adaptiveQMCoreRegionizer() {
-		return (RegionizerComponent) new AdaptiveRegionizer(SEDD, seddPartitioner);
-	}
-	
 }

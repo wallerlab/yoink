@@ -15,7 +15,7 @@
  */
 package org.wallerlab.yoink.adaptive.services.smoothners.functions
 
-import org.wallerlab.yoink.adaptive.services.smooth.functions.BuloSmoothFunction
+import org.wallerlab.yoink.adaptive.services.smooth.functions.BuloFunction
 import spock.lang.Specification;
 
 class BuloSmoothFunctionSpec extends Specification{
@@ -24,7 +24,7 @@ class BuloSmoothFunctionSpec extends Specification{
 		def  min=(double)2.0
 		def max=(double)3.0
 		double currentValue;
-		def sf= new BuloSmoothFunction()
+		def sf= new BuloFunction()
 
 		when:"current value is larger than max"
 		currentValue=3.1

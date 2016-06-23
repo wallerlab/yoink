@@ -21,9 +21,9 @@ import org.wallerlab.yoink.region.service.regionizer.RegionizerService
 import spock.lang.Specification;
 
 import org.wallerlab.yoink.api.enums.*
-import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
-import org.wallerlab.yoink.api.model.molecular.Molecule;
-import org.wallerlab.yoink.api.model.regionizer.Region
+import org.wallerlab.yoink.api.model.molecule.MolecularSystem;
+import org.wallerlab.yoink.api.model.molecule.Molecule;
+import org.wallerlab.yoink.api.model.region.Region
 import org.wallerlab.yoink.region.domain.SimpleRegionFactory
 
 class RegionizerServiceSpec extends Specification{

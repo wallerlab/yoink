@@ -15,19 +15,20 @@
  */
 package org.wallerlab.yoink.region.service.regionizer;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
-import org.wallerlab.yoink.api.model.molecular.Molecule;
-import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.model.molecule.MolecularSystem;
+import org.wallerlab.yoink.api.model.molecule.Molecule;
+import org.wallerlab.yoink.api.model.region.Region;
 import org.wallerlab.yoink.api.service.Factory;
 import org.wallerlab.yoink.api.service.region.RegionizerMath;
 
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.IntStream;
+
+import static org.wallerlab.yoink.api.model.region.Region.Name.*;
 /**
  * this class is to get molecules for those regions in the List regionNames.
  * 
@@ -39,11 +40,11 @@ public class RegionizerService implements
 		RegionizerMath<Map<Region.Name, Region>, MolecularSystem> {
 
 	@Resource
-	private RegionizerMath<Region, Region.Name> singleRegionizerService;
-
-	@Resource
 	private Factory<Region, Region.Name> simpleRegionFactory;
 
+	@Resource
+	private RegionizerMath<Region, Region.Name> singleRegionizerService;
+	
 	private List<Region.Name> regionNames = new ArrayList<Region.Name>();
 
 	/**
@@ -75,32 +76,28 @@ public class RegionizerService implements
 				region = qmCoreFixedRegionize(name, molecularSystem);
 				break;
 			case QM_CORE:
-				region = singleRegionizerService.regionize(regions, Region.Name.QM_CORE);
+				region = singleRegionizerService.regionize(regions, QM_CORE);
 				break;
 			case QM:
-				region = singleRegionizerService.regionize(regions, Region.Name.QM);
+				region = singleRegionizerService.regionize(regions, QM);
 				break;
 			case QM_CORE_ADAPTIVE:
-				region = singleRegionizerService.regionize(regions,
-						Region.Name.QM_CORE_ADAPTIVE);
+				region = singleRegionizerService.regionize(regions, QM_CORE_ADAPTIVE);
 				break;
 			case QM_ADAPTIVE:
-				region = singleRegionizerService
-						.regionize(regions, Region.Name.QM_ADAPTIVE);
+				region = singleRegionizerService.regionize(regions, QM_ADAPTIVE);
 				break;
 			case MM:
-				region = singleRegionizerService.regionize(regions, Region.Name.MM);
+				region = singleRegionizerService.regionize(regions, MM);
 				break;
 			case MM_NONBUFFER:
-				region = singleRegionizerService.regionize(regions,
-						Region.Name.MM_NONBUFFER);
+				region = singleRegionizerService.regionize(regions, MM_NONBUFFER);
 				break;
 			case NONQM_CORE:
-				region = singleRegionizerService.regionize(regions, Region.Name.NONQM_CORE);
+				region = singleRegionizerService.regionize(regions, NONQM_CORE);
 				break;
 			case NONQM_CORE_ADAPTIVE_SEARCH:
-				region = singleRegionizerService.regionize(regions,
-						Region.Name.NONQM_CORE_ADAPTIVE_SEARCH);
+				region = singleRegionizerService.regionize(regions, NONQM_CORE_ADAPTIVE_SEARCH);
 				break;
 			default:
 				throw new IllegalArgumentException("invalid region name");
@@ -128,13 +125,10 @@ public class RegionizerService implements
 	/**
 	 * put all molecules in molecule system in SYSTEM region
 	 */
-	private Region systemRegionize(Region.Name name,
-			MolecularSystem molecularSystem) {
+	private Region systemRegionize(Region.Name name, MolecularSystem molecularSystem) {
 		Region region = simpleRegionFactory.create(name);
 		List<Molecule> molecules = molecularSystem.getMolecules();
-		for (int i = 0; i < molecules.size(); i++) {
-			region.addMolecule(molecules.get(i), i + 1);
-		}
+		IntStream.range(0,molecules.size()).forEach(i-> region.addMolecule(molecules.get(i), i + 1));
 		return region;
 	}
 

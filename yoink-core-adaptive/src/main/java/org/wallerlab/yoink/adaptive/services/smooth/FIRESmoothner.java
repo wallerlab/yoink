@@ -1,7 +1,6 @@
 package org.wallerlab.yoink.adaptive.services.smooth;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -9,9 +8,9 @@ import javax.xml.bind.JAXBElement;
 
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.batch.Job;
-import org.wallerlab.yoink.api.model.molecular.Atom;
-import org.wallerlab.yoink.api.model.molecular.Coord;
-import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.model.molecule.Atom;
+import org.wallerlab.yoink.api.model.molecule.Coord;
+import org.wallerlab.yoink.api.model.region.Region;
 import org.wallerlab.yoink.api.service.Calculator;
 import org.wallerlab.yoink.api.service.adaptive.Smoothner;
 

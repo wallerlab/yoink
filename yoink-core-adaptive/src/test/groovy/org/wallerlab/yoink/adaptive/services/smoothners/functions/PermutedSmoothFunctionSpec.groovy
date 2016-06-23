@@ -15,7 +15,7 @@
  */
 package org.wallerlab.yoink.adaptive.services.smoothners.functions
 
-import org.wallerlab.yoink.adaptive.services.smooth.functions.PermutedSmoothFunction
+import org.wallerlab.yoink.adaptive.services.smooth.functions.PermutedFunction
 import spock.lang.Specification;
 
 class PermutedSmoothFunctionSpec extends Specification{
@@ -24,7 +24,7 @@ class PermutedSmoothFunctionSpec extends Specification{
 		def  min=(double)3.8
 		def max=(double)4.0
 		double currentValue;
-		def sf= new PermutedSmoothFunction()
+		def sf= new PermutedFunction()
 
 		when:"current value is max"
 		currentValue=4.0

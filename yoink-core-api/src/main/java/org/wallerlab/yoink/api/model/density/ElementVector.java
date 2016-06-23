@@ -15,7 +15,7 @@
  */
 package org.wallerlab.yoink.api.model.density;
 
-import org.wallerlab.yoink.api.model.molecular.Element;
+import org.wallerlab.yoink.api.model.molecule.Element;
 import org.wallerlab.yoink.api.service.math.Vector;
 
 /**

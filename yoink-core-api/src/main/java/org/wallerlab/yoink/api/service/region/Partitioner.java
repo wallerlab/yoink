@@ -19,7 +19,7 @@ import java.util.Map;
 
 import org.wallerlab.yoink.api.model.batch.JobParameter;
 import org.wallerlab.yoink.api.model.cube.GridPoint;
-import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.model.region.Region;
 import org.wallerlab.yoink.api.model.density.DensityPoint;
 
 /**

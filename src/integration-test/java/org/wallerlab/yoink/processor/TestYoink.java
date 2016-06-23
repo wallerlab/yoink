@@ -68,6 +68,7 @@ public class TestYoink {
 			}
 		} // either file or an empty directory
 		System.out.println("removing file or directory : " + dir.getName());
+		new File("./outputs").mkdir(); //for next time!
 		return dir.delete();
 	}
 }

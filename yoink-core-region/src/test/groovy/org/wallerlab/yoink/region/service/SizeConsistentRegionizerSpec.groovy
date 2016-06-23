@@ -16,15 +16,15 @@
 package org.wallerlab.yoink.region.service
 
 import org.wallerlab.yoink.math.map.MapSorter
-import org.wallerlab.yoink.region.service.regionizer.SizeConsistentRegionizer
+import org.wallerlab.yoink.region.service.regionizer.parameter.SizeRegionizer
 import spock.lang.Specification;
 
 import org.wallerlab.yoink.api.enums.*
 import org.wallerlab.yoink.api.model.batch.JobParameter;
-import org.wallerlab.yoink.api.model.molecular.Atom;
-import org.wallerlab.yoink.api.model.molecular.Coord;
-import org.wallerlab.yoink.api.model.molecular.Molecule;
-import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.model.molecule.Atom;
+import org.wallerlab.yoink.api.model.molecule.Coord;
+import org.wallerlab.yoink.api.model.molecule.Molecule;
+import org.wallerlab.yoink.api.model.region.Region;
 import org.wallerlab.yoink.api.service.Calculator;
 import org.wallerlab.yoink.api.service.Factory;
 import org.wallerlab.yoink.api.service.region.Partitioner
@@ -73,9 +73,9 @@ class SizeConsistentRegionizerSpec extends Specification{
 				simpleRegionFactory.create(Region.Name.BUFFER)>>new SimpleRegion(Region.Name.BUFFER)
 		
 				when:"start up a new NumberRegionizer"
-				def regionizer=new SizeConsistentRegionizer()
-				regionizer.sortedDistancesCalculator=sortedDistancesCalculator
-				regionizer.simpleRegionFactory=simpleRegionFactory
+				def regionizer=new SizeRegionizer()
+				regionizer.sortedCalculator=sortedDistancesCalculator
+				regionizer.regionFactory=simpleRegionFactory
 		
 		
 				then:"the new numberRegionizer is executable and gets right results"

@@ -24,9 +24,9 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.batch.Job;
-import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
-import org.wallerlab.yoink.api.model.regionizer.Region;
-import org.wallerlab.yoink.api.service.batch.Clustering;
+import org.wallerlab.yoink.api.model.molecule.MolecularSystem;
+import org.wallerlab.yoink.api.model.region.Region;
+import org.wallerlab.yoink.api.service.cluster.Clusterer;
 import org.wallerlab.yoink.api.service.region.RegionizerMath;
 import org.wallerlab.yoink.cluster.service.interaction.InteractionSet;
 
@@ -43,7 +43,7 @@ public class ClusteringProcessor implements ItemProcessor<Job<JAXBElement>, Job>
 	private InteractionSet interactionSet;
 
 	@Resource
-	private Clustering doriClustering;
+	private Clusterer doriClustering;
 
 	@Resource
 	@Qualifier("preRegionizer")

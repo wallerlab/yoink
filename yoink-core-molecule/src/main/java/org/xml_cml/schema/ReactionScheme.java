@@ -26,8 +26,8 @@ import org.w3c.dom.Element;
  * 
  * <pre>
  * &lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;h:div xmlns:h="http://www.w3.org/1999/xhtml" xmlns="http://www.xml-cml.org/schema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" class="description"&gt;&lt;h:p&gt;The semantics of the content model are&lt;/h:p&gt;&lt;h:ul&gt;&lt;h:li&gt;metadataList for general metadata&lt;/h:li&gt;&lt;h:li&gt;label for classifying or describing the reaction (e.g. "hydrolysis")&lt;/h:li&gt;&lt;h:li&gt;identifier for unique identification. This could be a classification such as EC
- *                                 (enzyme commission) or an IChI-like string generated from the components.
- *                             &lt;/h:li&gt;&lt;h:li&gt;these are followed by the possible components of the reaction and/or a reactionList of
+ *                                 (enzyme commission) or an IChI-like string generated from the density.
+ *                             &lt;/h:li&gt;&lt;h:li&gt;these are followed by the possible density of the reaction and/or a reactionList of
  *                                 further details.
  *                             &lt;/h:li&gt;
  *                         &lt;/h:ul&gt;

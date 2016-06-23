@@ -15,15 +15,15 @@
  */
 package org.wallerlab.yoink.region.service
 
-import org.wallerlab.yoink.region.service.regionizer.NumberRegionizer
+import org.wallerlab.yoink.region.service.regionizer.parameter.NumberRegionizer
 import spock.lang.Specification;
 
 import org.wallerlab.yoink.api.enums.*
 import org.wallerlab.yoink.api.model.batch.JobParameter;
-import org.wallerlab.yoink.api.model.molecular.Atom;
-import org.wallerlab.yoink.api.model.molecular.Coord;
-import org.wallerlab.yoink.api.model.molecular.Molecule;
-import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.model.molecule.Atom;
+import org.wallerlab.yoink.api.model.molecule.Coord;
+import org.wallerlab.yoink.api.model.molecule.Molecule;
+import org.wallerlab.yoink.api.model.region.Region;
 import org.wallerlab.yoink.api.service.Calculator;
 import org.wallerlab.yoink.api.service.Factory
 import org.wallerlab.yoink.region.domain.SimpleRegion
@@ -74,7 +74,7 @@ class NumberRegionizerSpec extends Specification{
 		when:"start up a new NumberRegionizer"
 		def regionizer=new NumberRegionizer()
 		regionizer.sortedDistancesCalculator=sortedDistancesCalculator
-		regionizer.simpleRegionFactory=simpleRegionFactory
+		regionizer.regionFactory=simpleRegionFactory
 
 
 		then:"the new numberRegionizer is executable and gets right results"

@@ -17,9 +17,10 @@ package org.wallerlab.yoink.cube.service;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.cube.Cube;
-import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.model.molecule.Coord;
 import org.wallerlab.yoink.api.service.Calculator;
 import org.wallerlab.yoink.api.service.Factory;
 import org.wallerlab.yoink.api.service.math.Vector;
@@ -38,7 +39,8 @@ public class CoordInCubeCalculator implements Calculator<Coord, int[], Cube> {
 	private SimpleVector3DFactory myVector3D;
 
 	@Resource
-	private Factory<Coord, double[]> simpleCoordFactory;
+	@Qualifier("simpleCoordFactory")
+	private Factory<Coord, double[]> coordFactory;
 
 	/**
 	 * calculate the coordinate of a grid point in cube based on current x/y/z
@@ -55,15 +57,17 @@ public class CoordInCubeCalculator implements Calculator<Coord, int[], Cube> {
 	public Coord calculate(int[] xyzCurrentStep, Cube cube) {
 		Vector originCoordMatrix = cube.getGridOrigin().getCoords();
 		Vector xyzStepSize = myVector3D.create(cube.getXyzStepSize());
-		Vector currentSteps = myVector3D.create(new double[] {
-				xyzCurrentStep[0], xyzCurrentStep[1], xyzCurrentStep[2] });
+		Vector currentSteps = create(xyzCurrentStep);
 		currentSteps.ebeMultiply(xyzStepSize);
 		currentSteps.add(xyzStepSize);
-		Vector coordinate = (currentSteps.ebeMultiply(xyzStepSize))
-				.add(originCoordMatrix);
-		Coord gridPointCoord = simpleCoordFactory.create();
+		Vector coordinate = (currentSteps.ebeMultiply(xyzStepSize)).add(originCoordMatrix);
+		Coord gridPointCoord = coordFactory.create();
 		gridPointCoord.setCoords(coordinate);
 		return gridPointCoord;
+	}
+
+	public Vector create(int[] xyzCurrentStep){
+		return myVector3D.create(new double[] {xyzCurrentStep[0], xyzCurrentStep[1], xyzCurrentStep[2] });
 	}
 
 }

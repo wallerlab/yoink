@@ -19,8 +19,8 @@ import org.wallerlab.yoink.batch.service.response.PropertyWrapper
 import org.xml_cml.schema.ObjectFactory
 
 import spock.lang.Specification
-import org.wallerlab.yoink.api.model.molecular.Molecule;
-import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.model.molecule.Molecule;
+import org.wallerlab.yoink.api.model.region.Region;
 import org.wallerlab.yoink.api.model.batch.Job
 import org.wallerlab.yoink.api.service.math.Vector;
 import org.wallerlab.yoink.api.service.math.Vector.Vector3DType;

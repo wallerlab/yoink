@@ -39,7 +39,7 @@ class CoordInCubeCalculatorSpec extends Specification{
 		when:"set up new CoordInCubeCalculator"
 		def calculator= new CoordInCubeCalculator()
 		calculator.myVector3D=myVector3D
-		calculator.simpleCoordFactory=simpleCoordFactory
+		calculator.coordFactory=simpleCoordFactory
 
 		then:"assert the x/y/z coordinate value"
 		def c=calculator.calculate(xyzCurrentStep, cube)

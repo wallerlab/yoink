@@ -19,10 +19,10 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.density.DensityPoint;
-import org.wallerlab.yoink.api.model.molecular.Atom;
-import org.wallerlab.yoink.api.model.molecular.Coord;
-import org.wallerlab.yoink.api.model.molecular.Element;
-import org.wallerlab.yoink.api.model.molecular.RadialGrid;
+import org.wallerlab.yoink.api.model.molecule.Atom;
+import org.wallerlab.yoink.api.model.molecule.Coord;
+import org.wallerlab.yoink.api.model.molecule.Element;
+import org.wallerlab.yoink.api.model.molecule.RadialGrid;
 import org.wallerlab.yoink.api.service.Calculator;
 import org.wallerlab.yoink.api.service.math.Matrix;
 import org.wallerlab.yoink.api.service.math.Vector;

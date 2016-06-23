@@ -46,9 +46,7 @@ import java.util.List;
 @EnableBatchProcessing
 @ComponentScan("org.wallerlab.yoink.batch")
 @PropertySource("classpath:batch.properties")
-public class BatchConfig  implements ApplicationContextAware {
-
-	ApplicationContext appContext;
+public class BatchConfig  {
 
 	@Autowired
 	StepBuilderFactory stepBuilderFactory;
@@ -56,9 +54,10 @@ public class BatchConfig  implements ApplicationContextAware {
 	@Autowired
 	JobBuilderFactory jobBuilderFactory;
 
+
 	@Autowired
-	@Qualifier("jmsRequestReader")
-	ItemReader<String> jmsReader;
+	@Qualifier("itemReader")
+	ItemReader itemReader;
 
 	@Autowired
 	@Qualifier("builderProcessor")
@@ -74,62 +73,19 @@ public class BatchConfig  implements ApplicationContextAware {
 
 
 	@Bean
-	ItemProcessor<JAXBElement, Job> builderAndAdaptiveProcessor(){
+	ItemProcessor<JAXBElement, Job> compositeProcessor(){
 		CompositeItemProcessor compositeProcessor = new CompositeItemProcessor();
 		List<ItemProcessor> processors = new ArrayList<ItemProcessor>();
 		processors.add(builderProcessor);
 		processors.add(adaptiveProcessor);
-		compositeProcessor.setDelegates(processors);
-		return compositeProcessor;
-	}
-
-	@Bean
-	ItemProcessor<JAXBElement, Job> builderAndClusterProcessor(){
-		CompositeItemProcessor compositeProcessor = new CompositeItemProcessor();
-		List<ItemProcessor> processors = new ArrayList<ItemProcessor>();
-		processors.add(builderProcessor);
 		processors.add(clusterProcessor);
 		compositeProcessor.setDelegates(processors);
 		return compositeProcessor;
 	}
 
-
 	@Autowired
-	@Qualifier("jmsJobItemWriter")
-	ItemWriter jmsWriter;
+	ItemWriter itemWriter;
 
-	@Autowired
-	@Qualifier("cmlFileResponseWriter")
-	ItemWriter fileWriter;
-
-	@Bean
-	org.springframework.batch.core.Job jmsAdaptive(){ return job(jmsStep(builderAndAdaptiveProcessor()),"jmsAdaptive");}
-
-	@Bean
-	org.springframework.batch.core.Job jmsCluster(){ return job(jmsStep(builderAndClusterProcessor()),"jmsCluster");}
-
-	@Bean
-	org.springframework.batch.core.Job fileAdaptive(){ return job(fileStep(builderAndAdaptiveProcessor()),"fileAdaptive");}
-
-	@Bean
-	org.springframework.batch.core.Job fileCluster(){ return job(fileStep(builderAndClusterProcessor()),"fileCluster");}
-
-	/**
-	 * build executing steps
-	 *
-	 * @param processor to do computation
-	 *
-	 * @return Step -{@link org.springframework.batch.core.Step}
-	 */
-	@Bean
-	public Step fileStep(ItemProcessor processor) {
-		return stepBuilderFactory
-				.get("adaptiveQMMMBatch").<JAXBElement, Job> chunk(1)
-				.reader((ItemReader) appContext.getBean("cmlFilesReader"))
-				.processor(processor) // ADAPTIVE OR CLUSTERER
-				.writer(fileWriter)
-				.build();
-	}
 
 	/**
 	 * build a batch job using a batch based approach.
@@ -138,26 +94,9 @@ public class BatchConfig  implements ApplicationContextAware {
 	 * @param name string to be used as job ID.
 	 * @return Job -{@link org.springframework.batch.core.Job}
 	 */
-	private org.springframework.batch.core.Job fileJob(Step step,String name) {
-		return jobBuilderFactory.get(name)
-				.incrementer(new RunIdIncrementer())
-				.flow(step)
-				.end()
-				.build();
-	}
-
-
-	/**
-	 * build a batch job using a JMS based approach.
-	 *
-	 * @param step to be executed
-	 * @param name string to be used as job ID.
-	 *
-	 *
-	 * @return Job -{@link org.springframework.batch.core.Job}
-	 */
-	public org.springframework.batch.core.Job job( Step step, String name) {
-		return jobBuilderFactory.get(name)
+	@Bean
+	public org.springframework.batch.core.Job fileJob(@Qualifier("compositeStep") Step step) {
+		return jobBuilderFactory.get("yoink")
 				.incrementer(new RunIdIncrementer())
 				.flow(step)
 				.end()
@@ -167,22 +106,21 @@ public class BatchConfig  implements ApplicationContextAware {
 	/**
 	 * build executing steps
 	 *
-	 * @param processor for computation
+	 * @param processor to do computation
 	 *
-	 * @return Step -{@link org.springframework.batch.core.Step}
+	 * @return Step -{@link Step}
 	 */
 	@Bean
-	public Step jmsStep(ItemProcessor processor) {
-		return stepBuilderFactory.get("adaptiveQMMMJms")
-				.<String, Job> chunk(1)
-				.reader(jmsReader)
+	public Step compositeStep(@Qualifier("compositeProcessor") ItemProcessor processor) {
+		return stepBuilderFactory
+				.get("step")
+				.<JAXBElement, Job> chunk(1)
+				.reader(itemReader)
 				.processor(processor)
-				.writer(jmsWriter)
+				.writer(itemWriter)
 				.build();
 	}
 
-	@Override
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		this.appContext = applicationContext;
-	}
+
+
 }

@@ -3,9 +3,16 @@ package org.wallerlab.yoink.batch.config;
 import org.springframework.batch.item.file.MultiResourceItemReader;
 import org.springframework.batch.item.file.ResourceAwareItemReaderItemStream;
 import org.springframework.batch.item.xml.StaxEventItemReader;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.oxm.Unmarshaller;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.xml_cml.schema.Cml;
@@ -14,8 +21,12 @@ import javax.xml.bind.JAXBElement;
 import java.io.IOException;
 import java.util.Arrays;
 
+@Profile("batch")
 @Configuration
-public class XmlConfig extends BatchConfig{
+public class XmlConfig {
+
+    private PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+
 
     /**
      * Standard Spring Batch bean
@@ -23,10 +34,10 @@ public class XmlConfig extends BatchConfig{
      * @return a bean to read all xml files within a given folder
      */
     @Bean
-    MultiResourceItemReader cmlFilesReader() {
+    MultiResourceItemReader itemReader() {
         MultiResourceItemReader multiResourceItemReader = new MultiResourceItemReader();
         try {
-            multiResourceItemReader.setResources((Resource[]) appContext.getResources("classpath:inputs/*.xml"));
+            multiResourceItemReader.setResources(resolver.getResources("classpath:inputs/*.xml"));
         } catch (IOException e) {
             e.printStackTrace();
         }

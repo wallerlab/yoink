@@ -15,14 +15,14 @@
  */
 package org.wallerlab.yoink.adaptive.services.smoothners
 
-import org.wallerlab.yoink.adaptive.services.ConfigurationAdaptiveProcessor
-import org.wallerlab.yoink.api.model.molecular.Atom
-import org.wallerlab.yoink.api.model.molecular.Coord
+import org.wallerlab.yoink.adaptive.services.ConfigurationSmoothner
+import org.wallerlab.yoink.api.model.molecule.Atom
+import org.wallerlab.yoink.api.model.molecule.Coord
 import spock.lang.Specification
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
 import org.wallerlab.yoink.api.model.batch.Job;
-import org.wallerlab.yoink.api.model.molecular.Molecule;
-import org.wallerlab.yoink.api.model.regionizer.Region
+import org.wallerlab.yoink.api.model.molecule.Molecule;
+import org.wallerlab.yoink.api.model.region.Region
 import org.wallerlab.yoink.api.service.plugin.QmMmWrapper
 import org.wallerlab.yoink.api.service.math.Vector.Vector3DType;
 import org.wallerlab.yoink.api.service.Calculator;
@@ -73,7 +73,7 @@ class ConfigurationAdaptiveProcessorSpec  extends Specification{
 		properties.put("weightfactors",molecularIndicesAndWeightFactor)
 		job.getProperties()>>properties
 		when:
-		def bf=new ConfigurationAdaptiveProcessor();
+		def bf=new ConfigurationSmoothner();
 		bf.myVector3D=myVector3D
 		bf.qmmmProcessor=qmmmProcessor
 		

@@ -18,15 +18,15 @@ package org.wallerlab.yoink.region.partitioner
 import org.wallerlab.yoink.api.enums.*
 import org.wallerlab.yoink.api.model.batch.JobParameter;
 import org.wallerlab.yoink.api.model.density.DensityPoint.DensityType
-import org.wallerlab.yoink.api.model.molecular.Element
-import org.wallerlab.yoink.api.model.molecular.Atom
-import org.wallerlab.yoink.api.model.molecular.RadialGrid;
-import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.model.molecule.Element
+import org.wallerlab.yoink.api.model.molecule.Atom
+import org.wallerlab.yoink.api.model.molecule.RadialGrid;
+import org.wallerlab.yoink.api.model.region.Region;
 import org.wallerlab.yoink.api.service.Calculator
-import org.wallerlab.yoink.api.model.molecular.Molecule
+import org.wallerlab.yoink.api.model.molecule.Molecule
 import org.wallerlab.yoink.api.service.region.RegionizerMath
 import org.wallerlab.yoink.api.service.molecule.FilesReader
-import org.wallerlab.yoink.region.service.partitioner.DensityPartitioner
+import org.wallerlab.yoink.region.service.regionizer.density.partitioner.DensityPartitioner
 import org.wallerlab.yoink.region.domain.SimpleRegionFactory;
 import spock.lang.Specification
 

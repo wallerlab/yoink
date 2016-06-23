@@ -16,13 +16,13 @@
  
 package org.wallerlab.yoink.region.service
 
-import org.wallerlab.yoink.region.service.regionizer.ParameterRegionizer
+import org.wallerlab.yoink.region.service.regionizer.parameter.ParameterRegionizer
 import spock.lang.Specification;
 
 import org.wallerlab.yoink.api.enums.*
-import org.wallerlab.yoink.api.model.molecular.Coord;
-import org.wallerlab.yoink.api.model.molecular.Molecule;
-import org.wallerlab.yoink.api.model.regionizer.Region
+import org.wallerlab.yoink.api.model.molecule.Coord;
+import org.wallerlab.yoink.api.model.molecule.Molecule;
+import org.wallerlab.yoink.api.model.region.Region
 import org.wallerlab.yoink.region.domain.SimpleRegionFactory
 
 class ParameterRegionizerSpec extends Specification{
@@ -44,7 +44,7 @@ class ParameterRegionizerSpec extends Specification{
 
 		when:"set up a new ParameterRegionizer"
 		def regionizer=new ParameterRegionizer()
-		regionizer.simpleRegionFactory=simpleRegionFactory
+		regionizer.regionFactory=simpleRegionFactory
 
 		then:"the new parameterRegionizer is executable"
 		regionizer.regionize(regions,parameters)

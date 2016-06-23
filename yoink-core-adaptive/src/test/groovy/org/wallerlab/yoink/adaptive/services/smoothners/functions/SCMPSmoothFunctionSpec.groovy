@@ -15,7 +15,7 @@
  */
 package org.wallerlab.yoink.adaptive.services.smoothners.functions
 
-import org.wallerlab.yoink.adaptive.services.smooth.functions.SCMPSmoothFunction
+import org.wallerlab.yoink.adaptive.services.smooth.functions.ScmpFunction
 import spock.lang.Specification;
 
 class SCMPSmoothFunctionSpec extends Specification{
@@ -24,7 +24,7 @@ class SCMPSmoothFunctionSpec extends Specification{
 		def  min=(double)2.0
 		def max=(double)3.0
 		double currentValue;
-		def sf= new SCMPSmoothFunction()
+		def sf= new ScmpFunction()
 
 		when:"current value is larger than max"
 		currentValue=3.1

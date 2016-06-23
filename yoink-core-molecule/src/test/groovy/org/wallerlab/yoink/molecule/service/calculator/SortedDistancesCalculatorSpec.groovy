@@ -1,8 +1,8 @@
 package org.wallerlab.yoink.molecule.service.calculator
 
-import org.wallerlab.yoink.api.model.molecular.Atom;
-import org.wallerlab.yoink.api.model.molecular.Coord;
-import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.molecule.Atom;
+import org.wallerlab.yoink.api.model.molecule.Coord;
+import org.wallerlab.yoink.api.model.molecule.Molecule;
 import org.wallerlab.yoink.api.service.Calculator
 import org.wallerlab.yoink.math.linear.CommonsVector3D
 

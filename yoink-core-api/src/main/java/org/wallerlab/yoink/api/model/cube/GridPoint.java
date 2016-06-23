@@ -18,9 +18,9 @@ package org.wallerlab.yoink.api.model.cube;
 import java.util.Map;
 import java.util.Set;
 
-import org.wallerlab.yoink.api.model.molecular.Atom;
-import org.wallerlab.yoink.api.model.molecular.Coord;
-import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.molecule.Atom;
+import org.wallerlab.yoink.api.model.molecule.Coord;
+import org.wallerlab.yoink.api.model.molecule.Molecule;
 
 /**
  * this interface is for a grid point in the cube

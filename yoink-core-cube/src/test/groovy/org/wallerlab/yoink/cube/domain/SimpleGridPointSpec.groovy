@@ -15,9 +15,9 @@
  */
 package org.wallerlab.yoink.cube.domain
 
-import org.wallerlab.yoink.api.model.molecular.Atom;
-import org.wallerlab.yoink.api.model.molecular.Coord
-import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.molecule.Atom;
+import org.wallerlab.yoink.api.model.molecule.Coord
+import org.wallerlab.yoink.api.model.molecule.Molecule;
 import spock.lang.Specification;
 
 class SimpleGridPointSpec extends Specification{

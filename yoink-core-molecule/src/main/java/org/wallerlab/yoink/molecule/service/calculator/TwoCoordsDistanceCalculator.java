@@ -16,7 +16,7 @@
 package org.wallerlab.yoink.molecule.service.calculator;
 
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.model.molecule.Coord;
 import org.wallerlab.yoink.api.service.Calculator;
 
 /**

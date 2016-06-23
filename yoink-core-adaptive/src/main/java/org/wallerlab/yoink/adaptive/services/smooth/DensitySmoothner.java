@@ -1,18 +1,19 @@
 package org.wallerlab.yoink.adaptive.services.smooth;
 
+import org.wallerlab.yoink.api.model.batch.JobParameter;
+import org.wallerlab.yoink.api.model.molecule.Coord;
+import org.wallerlab.yoink.api.model.molecule.Molecule;
+import org.wallerlab.yoink.api.service.Calculator;
+import org.wallerlab.yoink.api.service.adaptive.SmoothFunction;
+
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.IntStream;
 
-import javax.annotation.Resource;
-
-import org.wallerlab.yoink.api.model.batch.JobParameter;
-import org.wallerlab.yoink.api.model.molecular.Coord;
-import org.wallerlab.yoink.api.model.molecular.Molecule;
-import org.wallerlab.yoink.api.service.Calculator;
-import org.wallerlab.yoink.api.service.adaptive.SmoothFunction;
-import static org.wallerlab.yoink.api.model.batch.JobParameter.*;
+import static org.wallerlab.yoink.api.model.batch.JobParameter.DENSITY_BUFFER;
+import static org.wallerlab.yoink.api.model.batch.JobParameter.DENSITY_QM;
 
 /**
  * this class is to electronic density based smoothing.
@@ -20,7 +21,7 @@ import static org.wallerlab.yoink.api.model.batch.JobParameter.*;
  * @author Min Zheng
  *
  */
-public class DensitySmoothner extends SmoothnerImpl {
+public class DensitySmoothner extends AbstractSmoothner {
 
 	@Resource
 	private Calculator<Double, Coord, Set<Molecule>> densityCalculator;
@@ -43,7 +44,6 @@ public class DensitySmoothner extends SmoothnerImpl {
 
 		IntStream.range(0,smoothParameters.size())
 				 .forEach(i -> smoothParameters.set(i, Math.abs(Math.log10(smoothParameters.get(i)))));
-
 	}
 
 	protected void getOriginalMinAndMax(List<Double> smoothParameters, Map<JobParameter, Object> parameters) {

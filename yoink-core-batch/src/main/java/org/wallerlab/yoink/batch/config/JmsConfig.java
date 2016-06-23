@@ -7,6 +7,7 @@ import org.springframework.batch.item.jms.JmsItemReader;
 import org.springframework.batch.item.jms.JmsItemWriter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.jms.core.JmsOperations;
 import org.springframework.jms.core.JmsTemplate;
 import org.wallerlab.yoink.api.model.batch.Job;
@@ -18,11 +19,12 @@ import javax.jms.ConnectionFactory;
 /**
  * This is for JMS integration. It offers a service.
  */
+@Profile("slave")
 @Configuration
 public class JmsConfig extends BatchConfig{
 
     /**
-     * This is a bean that wraps around the standard jmsItemReader. It converts
+     * This is a bean that wraps around the standard itemReader. It converts
      * it to a long running service. I.e. it does not return null, because this
      * would terminate the Spring Batch job. Instead, if no message is received
      * it goes to sleep for some time and tries again later.
@@ -34,7 +36,7 @@ public class JmsConfig extends BatchConfig{
     @Bean
     ItemReader<String> jmsRequestReader() {
         JmsRequestReader jmsRequestReader = new JmsRequestReader();
-        jmsRequestReader.setJmsItemReader(jmsItemReader());
+        jmsRequestReader.setJmsItemReader(itemReader());
         return jmsRequestReader;
     }
 
@@ -61,7 +63,7 @@ public class JmsConfig extends BatchConfig{
      * @return -{@link org.springframework.batch.item.jms.JmsItemReader<T>}
      */
     @Bean
-    ItemReader<String> jmsItemReader() {
+    ItemReader<String> itemReader() {
         JmsItemReader<String> jmsItemReader = new JmsItemReader<String>();
         jmsItemReader.setJmsTemplate(jmsRequestTemplate());
         return jmsItemReader;

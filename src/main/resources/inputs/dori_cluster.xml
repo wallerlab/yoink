@@ -622,6 +622,6 @@
         <parameter name="DGRID" value="true"/>
 	 <parameter name="INTERACTION_WEIGHT" value="false"/>
 	<parameter name="MAX_COMMS" value="2"/>
-        <parameter name="WFC_PATH" value="./yoink-core-molecular/dat"/>
+        <parameter name="WFC_PATH" value="./yoink-core-molecule/dat"/>
     </parameterList>
 </cml>

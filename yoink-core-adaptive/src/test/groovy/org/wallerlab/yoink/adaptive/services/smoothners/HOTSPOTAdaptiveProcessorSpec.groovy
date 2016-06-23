@@ -15,13 +15,13 @@
  */
 package org.wallerlab.yoink.adaptive.services.smoothners
 
-import org.wallerlab.yoink.adaptive.services.HOTSPOTAdaptiveProcessor
-import org.wallerlab.yoink.api.model.molecular.Coord
+import org.wallerlab.yoink.adaptive.services.HotspotSmoothner
+import org.wallerlab.yoink.api.model.molecule.Coord
 import spock.lang.Specification
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
 import org.wallerlab.yoink.api.model.batch.Job;
-import org.wallerlab.yoink.api.model.molecular.Molecule;
-import org.wallerlab.yoink.api.model.regionizer.Region
+import org.wallerlab.yoink.api.model.molecule.Molecule;
+import org.wallerlab.yoink.api.model.region.Region
 import org.wallerlab.yoink.api.service.plugin.QmMmWrapper
 import org.wallerlab.yoink.api.service.math.Vector.Vector3DType;
 class HOTSPOTAdaptiveProcessorSpec  extends Specification{
@@ -59,7 +59,7 @@ class HOTSPOTAdaptiveProcessorSpec  extends Specification{
 		properties.put("smoothfactors",smoothfactors)
 		job.getProperties()>>properties
 		when:
-		def bf=new HOTSPOTAdaptiveProcessor();
+		def bf=new HotspotSmoothner();
 		bf.mmProcessor=mmProcessor
 		bf.qmmmProcessor=qmmmProcessor
 		then:

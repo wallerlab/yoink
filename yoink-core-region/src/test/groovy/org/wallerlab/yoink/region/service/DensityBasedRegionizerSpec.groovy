@@ -17,7 +17,7 @@
 package org.wallerlab.yoink.region.service
 
  import org.wallerlab.yoink.api.service.region.RegionizerComponent
- import org.wallerlab.yoink.region.service.regionizer.DensityBasedRegionizer
+ import org.wallerlab.yoink.region.service.regionizer.density.DensityRegionizer
  import spock.lang.Specification;
 
 import org.wallerlab.yoink.api.enums.*
@@ -27,7 +27,7 @@ import org.wallerlab.yoink.api.enums.*
 
 	def "test method regionize(Map<Region.Name, Region> regions,Map<JobParameter, Object> parameters)  return type"(){
 		when:"set up a new BufferRegionizer"
-		def regionizer= new DensityBasedRegionizer()
+		def regionizer= new DensityRegionizer()
 		def regions=Mock(Map)
 		def parameters=Mock(Map)
 		regionizer.adaptiveQMCoreRegionizer=Mock(RegionizerComponent)

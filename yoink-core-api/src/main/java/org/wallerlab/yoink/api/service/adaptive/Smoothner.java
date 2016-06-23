@@ -25,6 +25,7 @@ import org.wallerlab.yoink.api.model.batch.Job;
  * @author Min Zheng
  *
  */
+@FunctionalInterface
 public interface Smoothner {
 
 	/**
@@ -35,7 +36,17 @@ public interface Smoothner {
 	 */
 	void smooth(Job<JAXBElement> job);
 
-	public enum Type {
-		BUFFERED_FORCE, DISTANCE_DAS, DISTANCE_XS, ABRUPT, DISTANCE_HOTSPOT, DISTANCE_PAP, DISTANCE_SAP, DISTANCE_SCMP,FIRES;
+	enum Type {
+
+		BUFFERED_FORCE,
+		DISTANCE_DAS,
+		DISTANCE_XS,
+		ABRUPT,
+		DISTANCE_HOTSPOT,
+		DISTANCE_PAP,
+		DISTANCE_SAP,
+		DISTANCE_SCMP,
+		FIRES;
+
 	}
 }

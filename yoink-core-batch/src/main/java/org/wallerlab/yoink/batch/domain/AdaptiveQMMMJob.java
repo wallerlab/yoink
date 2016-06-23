@@ -25,8 +25,8 @@ import javax.xml.bind.JAXBElement;
 import org.springframework.stereotype.Component;
 import org.wallerlab.yoink.api.model.batch.JobParameter;
 import org.wallerlab.yoink.api.model.batch.Job;
-import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
-import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.model.molecule.MolecularSystem;
+import org.wallerlab.yoink.api.model.region.Region;
 import org.xml_cml.schema.Cml;
 
 /**
