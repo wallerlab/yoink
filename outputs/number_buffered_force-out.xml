@@ -3366,8 +3366,8 @@
     </parameterList>
     <propertyList title="Partitioning result  : ">
         <property title="QM and Buffer molecule indices">
-            <scalar dataType="QM molecules">[375, 373, 337, 1, 474, 120, 18, 129, 234]</scalar>
-            <scalar dataType="BUFFER molecules">[45, 207, 150, 455, 470]</scalar>
+            <scalar dataType="QM molecules">[1]</scalar>
+            <scalar dataType="BUFFER molecules">[150, 455, 470, 207, 45]</scalar>
         </property>
     </propertyList>
     <propertyList title="Smoothing result  :">

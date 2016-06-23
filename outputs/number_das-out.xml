@@ -3366,8 +3366,8 @@
     </parameterList>
     <propertyList title="Partitioning result  : ">
         <property title="QM and Buffer molecule indices">
-            <scalar dataType="QM molecules">[234, 1, 120, 337, 18, 474, 373, 129, 375]</scalar>
-            <scalar dataType="BUFFER molecules">[455, 470, 207, 150, 45]</scalar>
+            <scalar dataType="QM molecules">[1]</scalar>
+            <scalar dataType="BUFFER molecules">[470, 207, 455, 45, 150]</scalar>
         </property>
     </propertyList>
     <propertyList title="Smoothing result  :  weights factors   average smooth factor:  ">
@@ -3378,11 +3378,11 @@
             <scalar dataType="weighted function" title="molecule indeices" id="[455]">0.22760761382014638</scalar>
             <scalar dataType="weighted function" title="molecule indeices" id="[150, 455, 470]">0.17190135939651707</scalar>
             <scalar dataType="weighted function" title="molecule indeices" id="[45, 150, 455, 470]">0.047339465131545855</scalar>
-            <scalar dataType="smooth function" title="molecule index" id="455">0.5423316119614954</scalar>
             <scalar dataType="smooth function" title="molecule index" id="470">0.7807591754719345</scalar>
             <scalar dataType="smooth function" title="molecule index" id="207">0.9999999999999974</scalar>
-            <scalar dataType="smooth function" title="molecule index" id="150">0.7699392257816418</scalar>
+            <scalar dataType="smooth function" title="molecule index" id="455">0.5423316119614954</scalar>
             <scalar dataType="smooth function" title="molecule index" id="45">0.9526605348684516</scalar>
+            <scalar dataType="smooth function" title="molecule index" id="150">0.7699392257816418</scalar>
         </property>
         <property/>
         <property/>

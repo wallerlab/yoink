@@ -29,16 +29,16 @@ class AdaptiveQMMMProcessorSpec extends Specification{
 		def preRegionizer=Mock(RegionizerMath)
 		def postRegionizer=Mock(RegionizerMath)
 		def adaptiveQMMMRegionizer=Mock(Regionizer)
-		List<Regionizer> adaptiveQMMMRegionizers=new ArrayList<Regionizer>();
-		adaptiveQMMMRegionizers.add(adaptiveQMMMRegionizer)
-		adaptiveQMMMRegionizers.add(adaptiveQMMMRegionizer)
+		List<Regionizer> compositeRegionizers=new ArrayList<Regionizer>();
+		compositeRegionizers.add(adaptiveQMMMRegionizer)
+		compositeRegionizers.add(adaptiveQMMMRegionizer)
 		jobBuilder.build(_)>>Mock(Job)
 
 		when:"set up a new QmMmWrapper"
 		def processor = new QmMmWrapper() {} {}
 		processor.preRegionizer=preRegionizer
 		processor.postRegionizer=postRegionizer
-		processor.adaptiveQMMMRegionizers=adaptiveQMMMRegionizers
+		processor.compositeRegionizers=compositeRegionizers
 		processor.propertyWrapper=propertyWrapper
 		processor.adaptiveQMMMSmoothnerRouter=adaptiveQMMMSmoothnerRouter
 

@@ -55,6 +55,7 @@ public class CmlFileResponseWriter implements ItemWriter<Job<JAXBElement>> {
 		for (Job<JAXBElement> job : jobs) {
 			String name = (String) job.getParameters().get(JobParameter.JOB_NAME);
 			String parentDirName = (String) job.getParameters().get(JobParameter.OUTPUT_FOLDER) + "/";
+			System.out.println("name " + parentDirName + " name file " + name );
 			String outputFileName = parentDirName + name + "-out.xml";
 			jaxbWriter.write(outputFileName, job.getInput().getValue());
 			log.info("finish writing all output  for " + name);

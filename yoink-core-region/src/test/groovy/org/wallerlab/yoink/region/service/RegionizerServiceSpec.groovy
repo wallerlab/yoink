@@ -17,7 +17,7 @@
 package org.wallerlab.yoink.region.service
 
 import org.wallerlab.yoink.api.service.region.RegionizerMath
-import org.wallerlab.yoink.region.service.regionizer.RegionizerService
+import org.wallerlab.yoink.region.service.regionizer.utils.RegionizerUtil
 import spock.lang.Specification;
 
 import org.wallerlab.yoink.api.enums.*
@@ -62,7 +62,7 @@ class RegionizerServiceSpec extends Specification{
 		def regions=new HashMap<Region.Name, Region>()
 		def simpleRegionFactory=new SimpleRegionFactory()
 
-		def service = new RegionizerService()
+		def service = new RegionizerUtil()
 
 		when:"set up a new RegionizerService "
 

@@ -26,7 +26,7 @@ import org.wallerlab.yoink.api.service.region.Regionizer;
 import org.wallerlab.yoink.api.service.region.RegionizerComponent;
 import org.wallerlab.yoink.api.service.region.RegionizerMath;
 import org.wallerlab.yoink.region.service.regionizer.density.components.AdaptiveRegionizer;
-import org.wallerlab.yoink.region.service.regionizer.RegionizerService;
+import org.wallerlab.yoink.region.service.regionizer.utils.RegionizerUtil;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
@@ -58,11 +58,11 @@ public class RegionConfig {
 	 * region math service before adaptive partitioning
 	 * 
 	 * @return regionizerService
-	 *         {@link RegionizerService}
+	 *         {@link RegionizerUtil}
 	 */
 	@Bean
 	RegionizerMath<Map<Region.Name, Region>, MolecularSystem> preRegionizer() {
-		RegionizerService regionizerService = new RegionizerService();
+		RegionizerUtil regionizerService = new RegionizerUtil();
 		Region.Name[] regionReqeusts = {QM_CORE_FIXED,SYSTEM,QM_CORE,QM,NONQM_CORE};
 		regionizerService.setRegionNames(Arrays.asList(regionReqeusts));
 		return (RegionizerMath<Map<Region.Name, Region>, MolecularSystem>) regionizerService;
@@ -95,11 +95,11 @@ public class RegionConfig {
 	 * region math service after adaptive partitioning
 	 *
 	 * @return regionizerService
-	 *         {@link RegionizerService}
+	 *         {@link RegionizerUtil}
 	 */
 	@Bean
 	RegionizerMath<Map<Region.Name, Region>, MolecularSystem> postRegionizer() {
-		RegionizerService regionizerService = new RegionizerService();
+		RegionizerUtil regionizerService = new RegionizerUtil();
 		Region.Name[] regionReqeusts = {MM,MM_NONBUFFER};
 		regionizerService.setRegionNames(Arrays.asList(regionReqeusts));
 		return (RegionizerMath<Map<Region.Name, Region>, MolecularSystem>) regionizerService;

@@ -15,7 +15,7 @@
  */
 package org.wallerlab.yoink.region.service
 
-import org.wallerlab.yoink.region.service.regionizer.SingleRegionizerService
+import org.wallerlab.yoink.region.service.regionizer.utils.SingleRegionizerUtil
 import spock.lang.Specification;
 
 import org.wallerlab.yoink.api.enums.*
@@ -27,7 +27,7 @@ class SingleRegionizerServiceSpec extends Specification{
 
 	def" test method regionize(Map<Region.Name, Region> regions,Region.Name name)"(){
 		Region.Name name;
-		def regionizerService=new SingleRegionizerService()
+		def regionizerService=new SingleRegionizerUtil()
 		def region=Mock(Region)
 		def mMap=new HashMap<Molecule,Integer>()
 		def m=Mock(Molecule)

@@ -24,11 +24,8 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.support.CompositeItemProcessor;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.*;
 import org.wallerlab.yoink.api.model.batch.Job;
 
@@ -54,7 +51,6 @@ public class BatchConfig  {
 	@Autowired
 	JobBuilderFactory jobBuilderFactory;
 
-
 	@Autowired
 	@Qualifier("itemReader")
 	ItemReader itemReader;
@@ -64,21 +60,30 @@ public class BatchConfig  {
 	public ItemProcessor<JAXBElement, Job<JAXBElement>> builderProcessor;
 
 	@Autowired
-	@Qualifier("adaptiveProcessor")
-	public ItemProcessor<Job<JAXBElement>, Job> adaptiveProcessor;
+	@Qualifier("regionizerProcessor")
+	public ItemProcessor<Job<JAXBElement>, Job> regionizerProcessor;
+
+	@Autowired
+	@Qualifier("smoothnerProcessor")
+	public ItemProcessor<Job<JAXBElement>, Job> smoothnerProcessor;
 
 	@Autowired
 	@Qualifier("clusteringProcessor")
 	public ItemProcessor<Job<JAXBElement>, Job> clusterProcessor;
 
+	@Autowired
+	@Qualifier("wrapperProcessor")
+	public ItemProcessor<Job<JAXBElement>, Job> wrapperProcessor;
 
 	@Bean
 	ItemProcessor<JAXBElement, Job> compositeProcessor(){
 		CompositeItemProcessor compositeProcessor = new CompositeItemProcessor();
 		List<ItemProcessor> processors = new ArrayList<ItemProcessor>();
 		processors.add(builderProcessor);
-		processors.add(adaptiveProcessor);
+		processors.add(regionizerProcessor);
+		processors.add(smoothnerProcessor);
 		processors.add(clusterProcessor);
+		processors.add(wrapperProcessor);
 		compositeProcessor.setDelegates(processors);
 		return compositeProcessor;
 	}

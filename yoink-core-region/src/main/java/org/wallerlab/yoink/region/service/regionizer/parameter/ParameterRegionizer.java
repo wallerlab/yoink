@@ -26,7 +26,9 @@ public class ParameterRegionizer implements Regionizer<Map<Region.Name, Region>,
 	@Qualifier("simpleRegionFactory")
 	protected Factory<Region, Region.Name> regionFactory;
 
-	public Map<Region.Name, Region> regionize(Map<Region.Name, Region> regions, Map<JobParameter, Object> parameters) {
+	public Map<Region.Name, Region> regionize(Map<Region.Name,
+											  Region> regions,
+											  Map<JobParameter, Object> parameters) {
 		Region qmAdaptiveRegion = regionFactory.create(QM_ADAPTIVE);
 		calculateQMAdaptiveAndBufferRegionRegion(qmAdaptiveRegion, regions, parameters);
 		setQMRegion(regions, qmAdaptiveRegion);
@@ -55,8 +57,10 @@ public class ParameterRegionizer implements Regionizer<Map<Region.Name, Region>,
 
 	// rewrite in child class
 	protected void checkEveryNonQMCoreMolecule(Region qmAdaptiveRegion,
-			Map<JobParameter, Object> parameters, Region bufferRegion,
-			Coord centerCoord, Set<Molecule> nonQMCoreMolecules) {
+											   Map<JobParameter, Object> parameters,
+											   Region bufferRegion,
+											   Coord centerCoord,
+											   Set<Molecule> nonQMCoreMolecules) {
 	}
 
 	protected void setQMRegion(Map<Region.Name, Region> regions, Region qmAdaptiveRegion) {

@@ -15,52 +15,62 @@
  */
 package org.wallerlab.yoink.batch.service.processor;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.xml.bind.JAXBElement;
 
 import org.springframework.batch.item.ItemProcessor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.batch.Job;
+import org.wallerlab.yoink.api.model.batch.JobParameter;
 import org.wallerlab.yoink.api.model.molecule.MolecularSystem;
 import org.wallerlab.yoink.api.model.region.Region;
-import org.wallerlab.yoink.api.service.cluster.Clusterer;
+import org.wallerlab.yoink.api.model.region.Region.Name;
+import org.wallerlab.yoink.api.service.region.Regionizer;
 import org.wallerlab.yoink.api.service.region.RegionizerMath;
-import org.wallerlab.yoink.cluster.service.interaction.InteractionSet;
 
 /**
- * This class is to set up and execute region based on DORI analysis.
+ * This class is to set up and execute adaptive QM/MM partitioning.
+ *
+ * Spring batch should wrap this class in a processor
  * 
  * @author Min Zheng
  *
  */
 @Service
-public class ClusteringProcessor implements ItemProcessor<Job<JAXBElement>, Job> {
-
-	@Resource
-	private InteractionSet interactionSet;
-
-	@Resource
-	private Clusterer doriClustering;
-
+public class RegionizerProcessor implements ItemProcessor<Job<JAXBElement>,Job>{
+	
 	@Resource
 	@Qualifier("preRegionizer")
 	protected RegionizerMath<Map<Region.Name, Region>, MolecularSystem> preRegionizer;
+
+	@Resource
+	@Qualifier("postRegionizer")
+	protected RegionizerMath<Map<Region.Name, Region>, MolecularSystem> postRegionizer;
+
+	//This is our composite
+	@Autowired
+	protected List<Regionizer<Map<Name, Region>, Map<JobParameter, Object>>> compositeRegionizers;
 
 	/**
 	 * read in a list of requests and execute them.
 	 *
 	 * @param job
-	 *            - a moelcular system and properties to perform clustering on.
+	 *            - a job to be processed
 	 * @return jobs - a list of YoinkJob
 	 *         {@link Job}
 	 */
 	public Job process(Job<JAXBElement> job) throws Exception {
-		preRegionizer.regionize(job.getRegions(), job.getMolecularSystem());
-		interactionSet.getDoriInteractionSet(job);
-		doriClustering.cluster(job);
+		Map<Region.Name, Region> regions = job.getRegions();
+		preRegionizer.regionize(regions, job.getMolecularSystem());
+		for (Regionizer<Map<Region.Name, Region>, Map<JobParameter, Object>> regionizer : compositeRegionizers) {
+			regions = (Map<Region.Name, Region>) regionizer.regionize(regions, job.getParameters());
+		}
+		postRegionizer.regionize(regions, job.getMolecularSystem());
 		return job;
 	}
 

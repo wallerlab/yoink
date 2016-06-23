@@ -232,7 +232,7 @@
                 <atom id="103" x3="19.77" z3="21.07" y3="9.03" elementType="H"/>
             </atomArray>
         </molecule>
-        <molecule id="MM">
+        <molecule id="QM_ADAPTIVE">
             <atomArray>
                 <atom id="104" x3="10.33" z3="12.39" y3="7.94" elementType="O"/>
                 <atom id="105" x3="9.92" z3="12.59" y3="7.1" elementType="H"/>
@@ -316,7 +316,7 @@
                 <atom id="139" x3="18.57" z3="2.81" y3="7.12" elementType="H"/>
             </atomArray>
         </molecule>
-        <molecule id="MM">
+        <molecule id="QM_ADAPTIVE">
             <atomArray>
                 <atom id="140" x3="11.17" z3="15.01" y3="9.47" elementType="O"/>
                 <atom id="141" x3="10.29" z3="15.37" y3="9.46" elementType="H"/>
@@ -1450,7 +1450,7 @@
                 <atom id="625" x3="17.13" z3="21.7" y3="15.43" elementType="H"/>
             </atomArray>
         </molecule>
-        <molecule id="MM">
+        <molecule id="QM_ADAPTIVE">
             <atomArray>
                 <atom id="626" x3="9.51" z3="16.1" y3="13.03" elementType="O"/>
                 <atom id="627" x3="9.58" z3="17.05" y3="13.02" elementType="H"/>
@@ -2388,7 +2388,7 @@
                 <atom id="1027" x3="6.45" z3="6.73" y3="1.87" elementType="H"/>
             </atomArray>
         </molecule>
-        <molecule id="MM">
+        <molecule id="QM_ADAPTIVE">
             <atomArray>
                 <atom id="1028" x3="13.27" z3="17.37" y3="12.79" elementType="O"/>
                 <atom id="1029" x3="14.0" z3="17.05" y3="12.26" elementType="H"/>
@@ -2584,7 +2584,7 @@
                 <atom id="1111" x3="3.34" z3="20.82" y3="13.16" elementType="H"/>
             </atomArray>
         </molecule>
-        <molecule id="MM">
+        <molecule id="QM_ADAPTIVE">
             <atomArray>
                 <atom id="1112" x3="14.4" z3="11.51" y3="8.69" elementType="O"/>
                 <atom id="1113" x3="13.74" z3="12.17" y3="8.46" elementType="H"/>
@@ -2668,7 +2668,7 @@
                 <atom id="1147" x3="20.28" z3="8.37" y3="22.77" elementType="H"/>
             </atomArray>
         </molecule>
-        <molecule id="MM">
+        <molecule id="QM_ADAPTIVE">
             <atomArray>
                 <atom id="1148" x3="12.84" z3="13.42" y3="7.82" elementType="O"/>
                 <atom id="1149" x3="12.29" z3="13.98" y3="8.37" elementType="H"/>
@@ -3186,7 +3186,7 @@
                 <atom id="1369" x3="14.24" z3="17.61" y3="1.37" elementType="H"/>
             </atomArray>
         </molecule>
-        <molecule id="MM">
+        <molecule id="QM_ADAPTIVE">
             <atomArray>
                 <atom id="1370" x3="10.66" z3="10.05" y3="9.11" elementType="O"/>
                 <atom id="1371" x3="9.97" z3="9.92" y3="9.77" elementType="H"/>
@@ -3291,7 +3291,7 @@
                 <atom id="1414" x3="20.19" z3="19.39" y3="0.08" elementType="H"/>
             </atomArray>
         </molecule>
-        <molecule id="MM">
+        <molecule id="QM_ADAPTIVE">
             <atomArray>
                 <atom id="1415" x3="14.61" z3="14.14" y3="10.5" elementType="O"/>
                 <atom id="1416" x3="14.04" z3="14.65" y3="9.93" elementType="H"/>
@@ -3343,7 +3343,7 @@
     </moleculeList>
     <parameterList title="parameters">
         <parameter name="NUMBER_QM" value="8"/>
-        <parameter name="NUMBER_BUFFER" value="0"/>
+        <parameter name="NUMBER_BUFFER" value="5"/>
         <parameter name="DISTANCE_QM" value="5"/>
         <parameter name="DENSITY_ASR_QM" value="0.000001"/>
         <parameter name="DENSITY_DORI" value="0.0001"/>
@@ -3354,15 +3354,17 @@
         <parameter name="DENSITY_RATIO_MAX" value="15.67"/>
         <parameter name="DENSITY_ASR_QMCORE" value="0.0001"/>
         <parameter name="DISTANCE_BUFFER" value="0.9"/>
-        <parameter name="DENSITY_BUFFER" value="0.0000001"/>
+        <parameter name="DENSITY_BUFFER" value="1"/>
         <parameter name="DENSITY_QM" value="0.001"/>
         <parameter name="REGION_CUBE" value="ADAPTIVE_SEARCH"/>
         <parameter name="SEDD_STEPSIZE" value="0.9 0.9 0.9"/>
         <parameter name="DORI_STEPSIZE" value="0.5 0.5 0.5"/>
-        <parameter name="PARTITIONER" value="NUMBER"/>
+        <parameter name="PARTITIONER" value="DORI"/>
         <parameter name="SMOOTHNER" value="ABRUPT"/>
-        <parameter name="JOB_NAME" value="number_abrupt"/>
+        <parameter name="JOB_NAME" value="dori_abrupt"/>
         <parameter name="OUTPUT_FOLDER" value="./outputs"/>
+        <parameter name="DGRID" value="false"/>
+        <parameter name="WFC_PATH" value="./yoink-core-molecular/dat"/>
     </parameterList>
     <propertyList title="Partitioning result  : ">
         <property title="QM and Buffer molecule indices">

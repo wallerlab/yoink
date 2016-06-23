@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wallerlab.yoink.region.service.regionizer;
+package org.wallerlab.yoink.region.service.regionizer.utils;
 
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.molecule.MolecularSystem;
@@ -36,15 +36,14 @@ import static org.wallerlab.yoink.api.model.region.Region.Name.*;
  *
  */
 @Service
-public class RegionizerService implements
-		RegionizerMath<Map<Region.Name, Region>, MolecularSystem> {
+public class RegionizerUtil implements RegionizerMath<Map<Region.Name, Region>, MolecularSystem> {
 
 	@Resource
 	private Factory<Region, Region.Name> simpleRegionFactory;
 
 	@Resource
 	private RegionizerMath<Region, Region.Name> singleRegionizerService;
-	
+
 	private List<Region.Name> regionNames = new ArrayList<Region.Name>();
 
 	/**

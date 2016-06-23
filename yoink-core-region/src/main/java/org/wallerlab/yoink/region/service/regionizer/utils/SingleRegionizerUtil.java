@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wallerlab.yoink.region.service.regionizer;
+package org.wallerlab.yoink.region.service.regionizer.utils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +36,7 @@ import static org.wallerlab.yoink.api.model.region.Region.Name.*;
  *
  */
 @Service
-public class SingleRegionizerService implements RegionizerMath<Region, Region.Name> {
+public class SingleRegionizerUtil implements RegionizerMath<Region, Region.Name> {
 
 	@Resource
 	private Factory<Region, Region.Name> simpleRegionFactory;
