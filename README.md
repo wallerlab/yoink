@@ -7,11 +7,9 @@
 
 # Adaptive QM/MM
 
-Multi-scale Modeling is an interesting area of Computational Science.
-A large number of important systems can be studied using hybrid methods.
-
-One of the challenges in this area is to switch representation on-the-fly.
+Multi-scale Modeling is an interesting area of Computational Science.A large number of important systems can be studied using hybrid methods. One of the challenges in this area is to switch representation on-the-fly.
 Partitioning of the system is followed by smoothening of the buffer region.
+
 Yoink is a framework that contains many of the published solutions.
 
 ![waller_yoink_github 008](https://cloud.githubusercontent.com/assets/13583117/16300758/2a23bd5a-3974-11e6-9c09-79b84cb61a9a.jpeg)
@@ -32,6 +30,10 @@ then use [gradle](https://gradle.org/) to run yoink
 `./gradlew yoink`
 
 
+
+#User Guide
+
+[Wiki](https://github.com/wallerlab/yoink/wiki)
 
 #Documentation
 
