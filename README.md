@@ -16,11 +16,7 @@ Yoink is a framework that contains many of the published solutions.
 
 ![waller_yoink_github 008](https://cloud.githubusercontent.com/assets/13583117/16300758/2a23bd5a-3974-11e6-9c09-79b84cb61a9a.jpeg)
 
-[Yoink homepage](https:yoink.wallerlab.org/)
 
-[Yoink wiki](https://github.com/wallerlab/yoink/wiki)
-
-[Group page](https:wallerlab.org/)
 
 
 #Quickstart
@@ -37,5 +33,11 @@ then use [gradle](https://gradle.org/) to run yoink
 
 
 
+#Documentation
+
+[Wiki](https://github.com/wallerlab/yoink/wiki)
 
 
+#Contact us
+
+[Group page](https:wallerlab.org/)
