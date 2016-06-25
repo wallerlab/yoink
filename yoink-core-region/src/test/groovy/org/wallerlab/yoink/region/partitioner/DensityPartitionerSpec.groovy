@@ -26,13 +26,13 @@ import org.wallerlab.yoink.api.service.Calculator
 import org.wallerlab.yoink.api.model.molecule.Molecule
 import org.wallerlab.yoink.api.service.region.RegionizerMath
 import org.wallerlab.yoink.api.service.molecule.FilesReader
-import org.wallerlab.yoink.region.service.regionizer.density.partitioner.DensityPartitioner
+import org.wallerlab.yoink.region.service.partitioners.DensityPartitioner
 import org.wallerlab.yoink.region.domain.SimpleRegionFactory;
 import spock.lang.Specification
 
 class DensityPartitionerSpec extends Specification{
 
-	def "test method getDensiyThreshold"(){
+	def "test method getDensityThreshold"(){
 		def partitioner= new DensityPartitioner()
 		def parameters=Mock(Map)
 		when:"store thresholds  in parameters"

@@ -18,7 +18,8 @@ package org.wallerlab.yoink.cube.service
 import org.wallerlab.yoink.api.model.molecule.Atom
 import org.wallerlab.yoink.api.model.molecule.Coord
 import org.wallerlab.yoink.api.model.molecule.Molecule
-import org.wallerlab.yoink.api.service.Calculator;
+import org.wallerlab.yoink.api.service.Calculator
+import org.wallerlab.yoink.cube.service.old_stuff.VoronoiCalculator;
 import spock.lang.Specification;
 
 class VoronoiCalculatorSpec extends Specification {

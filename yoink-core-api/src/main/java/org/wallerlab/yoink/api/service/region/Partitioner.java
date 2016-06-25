@@ -15,6 +15,7 @@
  */
 package org.wallerlab.yoink.api.service.region;
 
+import java.util.List;
 import java.util.Map;
 
 import org.wallerlab.yoink.api.model.batch.JobParameter;
@@ -41,7 +42,7 @@ import org.wallerlab.yoink.api.model.density.DensityPoint;
  * @param <V>
  *            -the specified type for argument.
  */
-public interface Partitioner<K, V> {
+public interface Partitioner {
 
 	/**
 	 * 
@@ -59,12 +60,13 @@ public interface Partitioner<K, V> {
 	 *            -the specified argument
 	 * @return return type is K
 	 */
-	K partition(Map<Region.Name, Region> regions,
-			Map<JobParameter, Object> parameters, V v);
+	List<Region> partition(List<Region> regions, List<JobParameter> parameters);
 
 	public enum Type {
 
-		DORI, NUMBER, DISTANCE,SIZE,FIRES,CLUSTER;
+		NUMBER, DISTANCE,SIZE,
+		DORI,SEDD,
+		FIRES,CLUSTER;
 
 	}
 }

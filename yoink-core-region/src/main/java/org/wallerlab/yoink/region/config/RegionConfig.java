@@ -22,16 +22,14 @@ import org.springframework.context.annotation.PropertySource;
 import org.wallerlab.yoink.api.model.molecule.MolecularSystem;
 import org.wallerlab.yoink.api.model.region.Region;
 import org.wallerlab.yoink.api.service.region.*;
-import org.wallerlab.yoink.region.service.regionizer.density.components.AdaptiveRegionizer;
-import org.wallerlab.yoink.region.service.regionizer.utils.RegionizerUtil;
+import org.wallerlab.yoink.region.service.regionizers.RegionizerUtil;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.Map;
 
-import static org.wallerlab.yoink.api.model.density.DensityPoint.DensityType.DORI;
-import static org.wallerlab.yoink.api.model.density.DensityPoint.DensityType.SEDD;
 import static org.wallerlab.yoink.api.model.region.Region.Name.*;
+import static org.wallerlab.yoink.api.model.density.DensityPoint.DensityType.*;
 
 /**
  * This class is the configuration for region project.
@@ -52,7 +50,7 @@ public class RegionConfig {
 	private Partitioner seddPartitioner;
 
 	/**
-	 * region math service before adaptive partitioning
+	 * Region service before adaptive partitioning
 	 * 
 	 * @return regionizerService
 	 *         {@link RegionizerUtil}
@@ -89,7 +87,7 @@ public class RegionConfig {
 
 
 	/**
-	 * region math service after adaptive partitioning
+	 * Regionizer service after adaptive partitioning
 	 *
 	 * @return regionizerService
 	 *         {@link RegionizerUtil}

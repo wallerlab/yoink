@@ -15,6 +15,7 @@
  */
 package org.wallerlab.yoink.api.model.cube;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -121,5 +122,14 @@ public interface GridPoint<String, V> {
 	 *         {@link Atom}
 	 */
 	 Set<Atom> getAtomsInTwoClosestMolecules();
+
+	void setNearestAtoms(List<Atom> nearestAtoms);
+
+	List<Atom> getNearestAtoms();
+
+	void setNearestMolecules(List<Molecule> nearestMolecule);
+
+	List<Molecule> getNearestMolecules();
+
 
 }

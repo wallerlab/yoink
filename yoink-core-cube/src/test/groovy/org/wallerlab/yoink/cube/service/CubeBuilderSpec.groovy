@@ -23,6 +23,7 @@ import org.wallerlab.yoink.api.model.molecule.Coord
 import org.wallerlab.yoink.api.model.molecule.Molecule
 import org.wallerlab.yoink.api.service.Calculator
 import org.wallerlab.yoink.cube.domain.SimpleCube
+import org.wallerlab.yoink.cube.service.old_stuff.SimpleCubeBuilder
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
 import org.wallerlab.yoink.molecule.domain.SimpleCoordFactory
 
@@ -54,7 +55,7 @@ class CubeBuilderSpec extends Specification{
 		coordInCubeCalculator.calculate(_, cube)>>simpleCoordFactory.create((double[])[1, 2, 3])
 
 		when:"make a new CubeBuilder"
-		def builder= new CubeBuilderImpl()
+		def builder= new SimpleCubeBuilder()
 		builder.simpleCoordFactory=simpleCoordFactory
 		builder.coordInCubeCalculator=coordInCubeCalculator
 		then:"assert the return type"
@@ -65,7 +66,7 @@ class CubeBuilderSpec extends Specification{
 
 		double[] d=[0.05, 0.05, 0.05]
 		def cube= new SimpleCube(d)
-		def builder= new CubeBuilderImpl()
+		def builder= new SimpleCubeBuilder()
 		def myVector3D=new SimpleVector3DFactory()
 		myVector3D.myVectorType=Vector.Vector3DType.COMMONS
 		def simpleCoordFactory=new  SimpleCoordFactory()

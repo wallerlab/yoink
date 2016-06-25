@@ -16,7 +16,7 @@
 package org.wallerlab.yoink.region.service
 
 import org.wallerlab.yoink.math.map.MapSorter
-import org.wallerlab.yoink.region.service.regionizer.parameter.SizeRegionizer
+
 import spock.lang.Specification;
 
 import org.wallerlab.yoink.api.enums.*

@@ -36,8 +36,7 @@ import org.wallerlab.yoink.math.constants.Constants;
  *
  */
 @Service
-public class DensityCalculator implements
-		Calculator<Double, Coord, Set<Molecule>> {
+public class DensityCalculator implements Calculator<Double, Coord, Set<Molecule>> {
 
 	@Resource
 	private Calculator<Double, Coord, Atom> atomDensityCalculator;
@@ -88,9 +87,7 @@ public class DensityCalculator implements
 		return molecules
 				.parallelStream()
 				.flatMap(molecule -> molecule.getAtoms().stream())
-				.mapToDouble(
-						atom -> atomDensityCalculator.calculate(currentCoord,
-								atom)).sum();
+				.mapToDouble(atom -> atomDensityCalculator.calculate(currentCoord, atom)).sum();
 	}
 
 }

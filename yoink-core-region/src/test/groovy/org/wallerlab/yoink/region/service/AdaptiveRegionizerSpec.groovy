@@ -15,33 +15,32 @@
  */
 package org.wallerlab.yoink.region.service
 
-import org.wallerlab.yoink.region.service.regionizer.density.components.AdaptiveRegionizer
+
 import spock.lang.Specification;
 
 import org.wallerlab.yoink.api.enums.*
-import org.wallerlab.yoink.api.model.density.DensityPoint.DensityType;
 import org.wallerlab.yoink.api.service.region.Partitioner
 import org.wallerlab.yoink.api.model.batch.JobParameter;
+import static org.wallerlab.yoink.api.model.density.DensityPoint.DensityType.*;
+
 class AdaptiveRegionizerSpec extends Specification{
 
 	def "test constructor AdaptiveRegionizer(DensityType densityType, Partitioner partitioner)"(){
 		def partitioner=Mock(Partitioner)
-		def densityType=DensityType.DENSITY
+		def densityType=DENSITY
 
 		when:"use densityTyep,partitioner to construct AdaptiveRegionizer"
 		def regionizer=new AdaptiveRegionizer( densityType,  partitioner)
 
 		then:"get a new AdaptiveRegionizer, its densityType and partitioner equal the  arguments of construtor method"
 		regionizer instanceof AdaptiveRegionizer
-		regionizer.densityType==DensityType.DENSITY
+		regionizer.densityType==DENSITY
 		regionizer.partitioner==partitioner
-		regionizer.getDensityType()==DensityType.DENSITY
+		regionizer.getDensityType()==DENSITY
 	}
 
-
-
 	def "test method egionize(Map<Region.Name, Region> regions,	Map<JobParameter, Object> parameters)"(){
-		def densityType=DensityType.DENSITY
+		def densityType=DENSITY
 		def densityPartitioner=Mock(Partitioner)
 		def  cubePartitioner=Mock(Partitioner)
 		def partitioner=Mock(Partitioner)
@@ -61,4 +60,5 @@ class AdaptiveRegionizerSpec extends Specification{
 		def result=regionizer.regionize(regions,parameters)
 		result instanceof Map
 	}
+
 }

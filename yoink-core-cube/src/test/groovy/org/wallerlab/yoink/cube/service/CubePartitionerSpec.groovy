@@ -16,6 +16,7 @@
  */
 package org.wallerlab.yoink.cube.service
 
+import org.wallerlab.yoink.cube.service.old_stuff.CubePartitioner
 import spock.lang.Specification;
 
 import org.wallerlab.yoink.api.enums.*

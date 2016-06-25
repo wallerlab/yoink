@@ -42,7 +42,7 @@ import org.wallerlab.yoink.api.service.Computer;
 import org.wallerlab.yoink.api.service.Factory;
 import org.wallerlab.yoink.api.service.molecule.FilesReader;
 import org.wallerlab.yoink.api.service.region.Partitioner;
-import org.wallerlab.yoink.region.service.regionizer.density.partitioner.DensityPartitioner;
+import org.wallerlab.yoink.region.service.partitioners.DensityPartitioner;
 
 /**
  * This class is to get all pairs having interaction(yes or no) base on DORI analysis.

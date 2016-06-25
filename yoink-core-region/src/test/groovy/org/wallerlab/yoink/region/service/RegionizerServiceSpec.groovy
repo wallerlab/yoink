@@ -17,7 +17,7 @@
 package org.wallerlab.yoink.region.service
 
 import org.wallerlab.yoink.api.service.region.RegionizerMath
-import org.wallerlab.yoink.region.service.regionizer.utils.RegionizerUtil
+import org.wallerlab.yoink.region.service.regionizers.RegionizerUtil
 import spock.lang.Specification;
 
 import org.wallerlab.yoink.api.enums.*
@@ -36,7 +36,7 @@ class RegionizerServiceSpec extends Specification{
 		Region.Name QM = Region.Name.QM;
 		Region.Name ADAPTIVE_SEARCH = Region.Name.ADAPTIVE_SEARCH;
 		Region.Name NONQM_CORE = Region.Name.NONQM_CORE;
-		Region.Name NONQM_CORE_ADAPTIVE_SEARCH = Region.Name.NONQM_CORE_ADAPTIVE_SEARCH;
+		Region.Name NONQM_CORE_ADAPTIVE_SEARCH = Region.Name.NON_QM_CORE_ADAPTIVE_SEARCH;
 		Region.Name QM_CORE_FIXED = Region.Name.QM_CORE_FIXED;
 		Region.Name QM_CORE = Region.Name.QM_CORE;
 		Region.Name QM_ADAPTIVE = Region.Name.QM_ADAPTIVE;

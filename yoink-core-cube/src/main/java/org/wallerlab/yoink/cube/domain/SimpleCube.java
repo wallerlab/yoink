@@ -32,8 +32,10 @@ import static java.util.stream.Collectors.toSet;
 
 /**
  * Cube domain Model stores all information about cube. Constructing a cube
- * needs the coordinate of the origin grid point, number of steps along x/y/z
- * axis, and also step size along x/y/z axis.
+ * needs:
+ * 1. Coordinate of the origin
+ * 2. Number of steps along x/y/z axis
+ * 3. Step size along x/y/z axis.
  */
 @Component
 public class SimpleCube implements Cube {
@@ -118,20 +120,17 @@ public class SimpleCube implements Cube {
 		return molecules;
 	}
 
-	/**
-	 * get all atoms in the cube
-	 */
+	@Override
+	public void setMolecules(Set<Molecule> molecules) {
+		this.molecules = molecules;
+	}
+
 	@Override
 	public Set<Atom> getAtoms() {
 		return this.molecules
 				   .stream()
 				   .flatMap(molecule -> molecule.getAtoms().stream())
 		           .collect(toSet());
-	}
-
-	@Override
-	public void setMolecules(Set<Molecule> molecules) {
-		this.molecules = molecules;
 	}
 
 	@Override
@@ -165,9 +164,7 @@ public class SimpleCube implements Cube {
 	}
 
 	@Override
-	public List<Coord> getCoordinates() {
-		return coordinates;
-	}
+	public List<Coord> getCoordinates() { return this.coordinates;}
 
 	@Override
 	public void setCoordinates(List<Coord> coordinates) {

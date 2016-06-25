@@ -15,14 +15,10 @@
  */
 package org.wallerlab.yoink.cube.domain;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
+import org.wallerlab.yoink.api.model.molecule.*;
 import org.wallerlab.yoink.api.model.cube.GridPoint;
-import org.wallerlab.yoink.api.model.molecule.Atom;
-import org.wallerlab.yoink.api.model.molecule.Coord;
-import org.wallerlab.yoink.api.model.molecule.Molecule;
 import static java.util.stream.Collectors.toSet;
 /**
  * This domain model is to store information and properties of a grid point
@@ -32,9 +28,13 @@ import static java.util.stream.Collectors.toSet;
  */
 public class SimpleGridPoint<String, V> implements GridPoint<String, V> {
 
+	private int indexInCube;
+
 	private Coord coordinate;
 
-	private int indexInCube;
+	private List<Atom> nearestAtoms;
+
+	private List<Molecule> nearestMolecules;
 
 	private Map<String, V> properties = new HashMap<String, V>();
 
@@ -95,5 +95,22 @@ public class SimpleGridPoint<String, V> implements GridPoint<String, V> {
 				 		.flatMap(molecule -> molecule.getAtoms().stream())
 						.collect(toSet());
 	}
+
+	public void setNearestAtoms(List<Atom> nearestAtoms) {
+		this.nearestAtoms = nearestAtoms;
+	}
+
+	public List<Atom> getNearestAtoms() {
+		return nearestAtoms;
+	}
+
+	public List<Molecule> getNearestMolecules() {
+		return nearestMolecules;
+	}
+
+	public void setNearestMolecules(List<Molecule> nearestMolecules) {
+		this.nearestMolecules = nearestMolecules;
+	}
+
 
 }

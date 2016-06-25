@@ -45,7 +45,13 @@ public class SimpleMolecule implements Molecule {
 
 	@Override
 	public String toString() {
-		return "index=" + index ;}
+		return "SimpleMolecule{" +
+				"index=" + index +
+				", atoms=" + atoms +
+				", name=" + name +
+				", centerOfMass=" + centerOfMass +
+				'}';
+	}
 
 	/**
 	 * get the molecule name

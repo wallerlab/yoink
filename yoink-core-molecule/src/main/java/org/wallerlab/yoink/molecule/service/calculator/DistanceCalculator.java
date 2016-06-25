@@ -32,6 +32,7 @@ import org.wallerlab.yoink.api.service.math.Vector;
 @Service
 public class DistanceCalculator implements Calculator<Double, Coord, Atom> {
 
+
 	/**
 	 * calculate the distance between a coordinate and an atom.
 	 * 
