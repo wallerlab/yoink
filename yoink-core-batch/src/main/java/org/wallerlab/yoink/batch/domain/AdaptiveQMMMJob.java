@@ -15,17 +15,14 @@
  */
 package org.wallerlab.yoink.batch.domain;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import javax.xml.bind.JAXBElement;
 
-import org.springframework.stereotype.Component;
 import org.wallerlab.yoink.api.model.batch.JobParameter;
 import org.wallerlab.yoink.api.model.batch.Job;
 import org.wallerlab.yoink.api.model.molecule.MolecularSystem;
+import org.wallerlab.yoink.api.model.molecule.Molecule;
 import org.wallerlab.yoink.api.model.region.Region;
 import org.xml_cml.schema.Cml;
 
@@ -35,7 +32,6 @@ import org.xml_cml.schema.Cml;
  * @author Min Zheng
  *
  */
-@Component
 public class AdaptiveQMMMJob implements Job<JAXBElement> {
 
 	// keep original cml in order to wrap results back to properties in the JAXB
@@ -44,12 +40,12 @@ public class AdaptiveQMMMJob implements Job<JAXBElement> {
 	// Internal domain model
 	private MolecularSystem molecularSystem;
 
+	// Results from RegionizerService
+	private Map<Region.Name,Region> regions;
+	//
 	private Map<JobParameter, Object> parameters = new HashMap<JobParameter, Object>();
 
 	private Map<String, Object> properties = new HashMap<String, Object>();
-
-	// Results from Regionizer
-	private Map<Region.Name, Region> regions = new HashMap<Region.Name, Region>();
 
 	// Results from Clusterer
 	private List<List<Integer>> interactionList;
@@ -77,13 +73,16 @@ public class AdaptiveQMMMJob implements Job<JAXBElement> {
 	}
 
 	@Override
-	public Map<Region.Name, Region> getRegions() {
+	public Map<Region.Name,Region> getRegions() {
 		return regions;
 	}
 
 	@Override
+	public void addRegion(Region region) {
+	}
+
+	@Override
 	public void setRegions(Map<Region.Name, Region> regions) {
-		this.regions = regions;
 	}
 
 	@Override
@@ -99,6 +98,11 @@ public class AdaptiveQMMMJob implements Job<JAXBElement> {
 	@Override
 	public Map<String, Object> getProperties() {
 		return this.properties;
+	}
+
+	@Override
+	public Object getProperty(String string) {
+		return null;
 	}
 
 	@Override
@@ -124,6 +128,21 @@ public class AdaptiveQMMMJob implements Job<JAXBElement> {
 	@Override
 	public List<Set<Integer>> getClusters() {
 		return this.clusters;
+	}
+
+	@Override
+	public Set<Molecule> getMoleculesInRegion(Region.Name regionName) {
+		return null;
+	}
+
+	@Override
+	public Region getRegion(Region.Name name) {
+		return null;
+	}
+
+	@Override
+	public JobParameter getParameter(JobParameter jobParameter) {
+		return null;
 	}
 
 	@Override

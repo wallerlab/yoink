@@ -19,6 +19,5 @@ public interface Community {
 	String getId();
 	
 	long size();
-	
-	
+
 }

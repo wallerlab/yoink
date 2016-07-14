@@ -161,7 +161,6 @@ public interface Vector<T> {
 	 *
 	 */
 	public enum Vector3DType {
-
 		COMMONS
 	}
 

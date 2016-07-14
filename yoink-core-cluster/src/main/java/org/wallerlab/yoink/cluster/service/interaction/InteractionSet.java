@@ -29,7 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.batch.Job;
 import org.wallerlab.yoink.api.model.batch.JobParameter;
-import org.wallerlab.yoink.api.model.cube.GridPoint;
+import org.wallerlab.yoink.api.model.cube.VoronoiPoint;
 import org.wallerlab.yoink.api.model.density.DensityPoint;
 import org.wallerlab.yoink.api.model.density.DensityPoint.DensityType;
 import org.wallerlab.yoink.api.model.molecule.Atom;
@@ -37,15 +37,17 @@ import org.wallerlab.yoink.api.model.molecule.Coord;
 import org.wallerlab.yoink.api.model.molecule.Molecule;
 import org.wallerlab.yoink.api.model.molecule.RadialGrid;
 import org.wallerlab.yoink.api.model.region.Region;
-import org.wallerlab.yoink.api.service.Calculator;
-import org.wallerlab.yoink.api.service.Computer;
+import org.wallerlab.yoink.api.service.cube.Voronoizer;
+import org.wallerlab.yoink.api.service.molecule.Calculator;
+import org.wallerlab.yoink.molecule.service.Computer;
 import org.wallerlab.yoink.api.service.Factory;
 import org.wallerlab.yoink.api.service.molecule.FilesReader;
-import org.wallerlab.yoink.api.service.region.Partitioner;
+import org.wallerlab.yoink.region.service.partitioners.Partitioner;
 import org.wallerlab.yoink.region.service.partitioners.DensityPartitioner;
 
 /**
- * This class is to get all pairs having interaction(yes or no) base on DORI analysis.
+ * This class is to get all pairs having interaction
+ * (yes or no) base on DORI analysis.
  * 
  * 
  * @author Min Zheng
@@ -55,7 +57,7 @@ import org.wallerlab.yoink.region.service.partitioners.DensityPartitioner;
 public class InteractionSet {
 
 	@Resource
-	private Partitioner<List<GridPoint>, DensityType> cubePartitioner;
+	private Voronoizer voronoizer;
 
 	@Resource
 	protected Calculator<DensityPoint, Set<Atom>, Coord> densityPropertiesCalculator;
@@ -76,7 +78,6 @@ public class InteractionSet {
 	private DensityPartitioner densityPartitioner;
 
 	public InteractionSet() {
-
 	}
 
 	public void getDoriInteractionSet(Job job) {
@@ -90,10 +91,9 @@ public class InteractionSet {
 			Region.Name cubeRegionName = (Region.Name) parameters
 					.get(JobParameter.REGION_CUBE);
 
-			densityPartitioner.readWFC(parameters,
-					regions.get((Region.Name) parameters
-							.get(JobParameter.REGION_CUBE)));
-			List<GridPoint> gridPoints = cubePartitioner.partition(regions,
+			//densityPartitioner.readWFC(parameters, regions.get((Region.Name) parameters
+			//				.get(JobParameter.REGION_CUBE)));
+			List<VoronoiPoint> gridPoints = voronoizer.voronoize(regions,
 					parameters, DensityType.DORI);
 			interactionAndWeightLists = calculateInteractionPairList(regions,
 					parameters, gridPoints);
@@ -127,7 +127,7 @@ public class InteractionSet {
 
 	private List<List> calculateInteractionPairList(
 			Map<Region.Name, Region> regions,
-			Map<JobParameter, Object> parameters, List<GridPoint> gridPoints) {
+			Map<JobParameter, Object> parameters, List<VoronoiPoint> gridPoints) {
 		List<List<Integer>> interactionListTemp = new ArrayList<List<Integer>>();
 		Set<Set<Integer>> interactionSetTemp = new HashSet<Set<Integer>>();
 		List<Double> weightListTemp = new ArrayList<Double>();
@@ -141,7 +141,7 @@ public class InteractionSet {
 		gridPoints.parallelStream().forEach(
 				gridPoint -> {
 					Set<Molecule> neighbours = gridPoint
-							.getTwoClosestMolecules();
+							.getNearestMolecules();
 
 					List<Integer> pair = new ArrayList<Integer>();
 					for (Molecule m : neighbours) {
@@ -172,7 +172,7 @@ public class InteractionSet {
 	}
 
 	protected void checkCriteria(Map<Region.Name, Region> regions,
-			List<List<Integer>> pairList, GridPoint gridPoint,
+			List<List<Integer>> pairList, VoronoiPoint gridPoint,
 			Set<Molecule> neighbours, List<Integer> pair,
 			Map<JobParameter, Object> parameters, List<Double> weightList,
 			Set<Set<Integer>> interactionSet) {
@@ -189,7 +189,7 @@ public class InteractionSet {
 	}
 
 	private void calculateAndCheckDensity(Set<Atom> atomsInCube,
-			List<List<Integer>> pairList, GridPoint gridPoint,
+			List<List<Integer>> pairList, VoronoiPoint gridPoint,
 			Set<Molecule> neighbours, List<Integer> pair,
 			Map<JobParameter, Object> parameters,
 			Set<Molecule> moleculesInCube, List<Double> weightList,
@@ -199,28 +199,27 @@ public class InteractionSet {
 				parameters, density, weightList, interactionSet);
 	}
 
-	private double getDensity(Set<Molecule> moleculesInCube, GridPoint gridPoint) {
-		// calculate density
+	private double getDensity(Set<Molecule> moleculesInCube, VoronoiPoint gridPoint) {
+		// molecular density
 		double density = densityCalculator.calculate(gridPoint.getCoordinate(),
 				moleculesInCube);
 		return density;
 	}
 
 	private void checkDensity(Set<Atom> atomsInCube,
-			List<List<Integer>> pairList, GridPoint gridPoint,
+			List<List<Integer>> pairList, VoronoiPoint gridPoint,
 			Set<Molecule> neighbours, List<Integer> pair,
 			Map<JobParameter, Object> parameters, double density,
 			List<Double> weightList, Set<Set<Integer>> interactionSet) {
 		// check density
 		if (density >= (double) parameters.get(JobParameter.DENSITY_DORI)) {
-
 			calculateAndCheckDori(atomsInCube, pairList, gridPoint, neighbours,
 					pair, parameters, density, weightList, interactionSet);
 		}
 	}
 
 	private void calculateAndCheckDori(Set<Atom> atomsInCube,
-			List<List<Integer>> pairList, GridPoint gridPoint,
+			List<List<Integer>> pairList, VoronoiPoint gridPoint,
 			Set<Molecule> neighbours, List<Integer> pair,
 			Map<JobParameter, Object> parameters, double density,
 			List<Double> weightList, Set<Set<Integer>> interactionSet) {
@@ -229,8 +228,8 @@ public class InteractionSet {
 				density, weightList, interactionSet);
 	}
 
-	private double getDoriValue(Set<Atom> atomsInCube, GridPoint gridPoint) {
-		// calculate dori
+	private double getDoriValue(Set<Atom> atomsInCube, VoronoiPoint gridPoint) {
+		// molecular dori
 		DensityPoint densityPoint = densityPropertiesCalculator.calculate(
 				atomsInCube, gridPoint.getCoordinate());
 		double doriTemp = doriComputer

@@ -15,13 +15,13 @@
  */
 package org.wallerlab.yoink.molecule.domain;
 
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.molecule.Coord;
 import org.wallerlab.yoink.api.service.Factory;
 import org.wallerlab.yoink.api.service.math.Vector;
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory;
+
+import javax.annotation.Resource;
+import org.springframework.stereotype.Service;
 
 /**
  * factory to generate new SimpleCoord instance
@@ -43,6 +43,18 @@ public class SimpleCoordFactory implements Factory<Coord, double[]> {
 	 */
 	public Coord create() {
 		Vector coordVector = myVector3D.create(0, 0, 0);
+		Coord newCooord = new SimpleCoord(coordVector);
+		return newCooord;
+	}
+
+	/**
+	 * make a new Coord. x/y/z values are zero.
+	 *
+	 * @return newCooord -Coord
+	 *         {@link Coord}
+	 */
+	public static Coord createStatic() {
+		Vector coordVector = SimpleVector3DFactory.staticCreate(0, 0, 0);
 		Coord newCooord = new SimpleCoord(coordVector);
 		return newCooord;
 	}

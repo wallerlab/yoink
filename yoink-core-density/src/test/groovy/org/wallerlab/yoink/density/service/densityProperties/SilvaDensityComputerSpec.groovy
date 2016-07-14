@@ -18,7 +18,7 @@ package org.wallerlab.yoink.density.service.densityProperties
 import org.wallerlab.yoink.api.model.density.DensityPoint
 import org.wallerlab.yoink.api.service.math.Vector
 import org.wallerlab.yoink.api.service.math.Matrix
-import org.wallerlab.yoink.density.service.density.properties.SilvaDensityComputer
+import org.wallerlab.yoink.density.service.SimpleDensityCalculator
 import org.wallerlab.yoink.math.linear.SimpleMatrixFactory
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
 
@@ -37,8 +37,8 @@ class SilvaDensityComputerSpec extends Specification{
 		densityPoint.getGradientVector()>>myVector3D.create(1,1,1)
 		densityPoint.getGradient()>>(double)1.0
 
-		then:"call calculate method in SilvaDensityComputer,no error thrown "
-		def SilvaDensityComputer=new SilvaDensityComputer()
+		then:"call molecular method in SilvaDensityComputer,no error thrown "
+		def SilvaDensityComputer=new SimpleDensityCalculator()
 		SilvaDensityComputer.calculate(densityPoint)
 	}
 }

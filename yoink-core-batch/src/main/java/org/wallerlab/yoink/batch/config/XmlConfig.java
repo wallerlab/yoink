@@ -27,7 +27,6 @@ public class XmlConfig {
 
     private PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
 
-
     /**
      * Standard Spring Batch bean
      *

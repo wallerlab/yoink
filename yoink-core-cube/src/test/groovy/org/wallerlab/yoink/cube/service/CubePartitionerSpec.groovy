@@ -16,18 +16,16 @@
  */
 package org.wallerlab.yoink.cube.service
 
-import org.wallerlab.yoink.cube.service.old_stuff.CubePartitioner
+
 import spock.lang.Specification;
 
 import org.wallerlab.yoink.api.enums.*
 import org.wallerlab.yoink.api.model.batch.JobParameter;
-import org.wallerlab.yoink.api.model.cube.Cube;
+import org.wallerlab.yoink.cube.domain.Cube;
 import org.wallerlab.yoink.api.model.density.DensityPoint.DensityType;
 import org.wallerlab.yoink.api.model.molecule.Coord;
 import org.wallerlab.yoink.api.model.molecule.Molecule;
-import org.wallerlab.yoink.api.model.region.Region;
-import org.wallerlab.yoink.api.service.cube.Assigner;
-import org.wallerlab.yoink.api.service.cube.CubeBuilder
+import org.wallerlab.yoink.api.model.region.Region
 
 class CubePartitionerSpec extends Specification{
 

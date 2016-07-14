@@ -34,19 +34,18 @@ public interface Smoothner {
 	 * @param job
 	 *            {@link Job}
 	 */
-	void smooth(Job<JAXBElement> job);
+	Job<JAXBElement> smooth(Job<JAXBElement> job);
 
 	enum Type {
 
 		BUFFERED_FORCE,
-		DISTANCE_DAS,
-		DISTANCE_XS,
+		DAS,
+		XS,
 		ABRUPT,
-		DISTANCE_HOTSPOT,
-		DISTANCE_PAP,
-		DISTANCE_SAP,
-		DISTANCE_SCMP,
+		HOTSPOT,
+		PAP,
+		SAP,
+		SCMP,
 		FIRES;
-
 	}
 }

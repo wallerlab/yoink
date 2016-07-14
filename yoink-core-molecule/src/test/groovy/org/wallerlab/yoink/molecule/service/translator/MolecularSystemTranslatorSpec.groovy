@@ -24,7 +24,6 @@ import org.wallerlab.yoink.molecule.data.JaxbFileReader
 import org.wallerlab.yoink.molecule.domain.SimpleCoordFactory
 import org.xml_cml.schema.Cml
 import org.wallerlab.yoink.api.model.molecule.Coord
-import org.wallerlab.yoink.api.service.Computer;
 import org.wallerlab.yoink.api.service.math.Vector;
 
 import spock.lang.Specification

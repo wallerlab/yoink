@@ -15,7 +15,7 @@
  */
 package org.wallerlab.yoink.adaptive.services.smoothners
 
-import org.wallerlab.yoink.adaptive.services.FiresSmoothner
+
 import org.wallerlab.yoink.api.model.molecule.Atom
 import org.wallerlab.yoink.api.model.molecule.Coord
 import spock.lang.Specification
@@ -25,8 +25,10 @@ import org.wallerlab.yoink.api.model.molecule.Molecule;
 import org.wallerlab.yoink.api.model.region.Region
 import org.wallerlab.yoink.api.service.plugin.QmMmWrapper
 import org.wallerlab.yoink.api.service.math.Vector.Vector3DType;
-import org.wallerlab.yoink.api.service.Calculator;
+import org.wallerlab.yoink.api.service.molecule.Calculator;
+
 class FIRESAdaptiveProcessorSpec  extends Specification{
+
 	def "test FIRESAdaptiveProcessor smooth" (){
 		def job=Mock(Job)
 		def regions=new HashMap<Region.Name,Region>()

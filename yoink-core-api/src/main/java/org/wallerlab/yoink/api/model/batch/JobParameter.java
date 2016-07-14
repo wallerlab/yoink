@@ -95,6 +95,7 @@ public enum JobParameter {
 	WFC_PATH,
 	MAX_COMMS,
 	INTERACTION_WEIGHT,
-	DGRID;
+	DGRID,
+	SMOOTH_FUNCTION;
 	
 }

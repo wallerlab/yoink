@@ -18,7 +18,7 @@ package org.wallerlab.yoink.adaptive.services
 import spock.lang.Specification
 import org.wallerlab.yoink.api.enums.*
 import org.wallerlab.yoink.api.service.adaptive.Smoothner;
-import org.wallerlab.yoink.api.service.adaptive.SmoothFunction;
+import org.wallerlab.yoink.adaptive.services.functions.SmoothFunction;
 import org.wallerlab.yoink.api.model.batch.Job
 
 class SmoothnerSpec extends Specification{

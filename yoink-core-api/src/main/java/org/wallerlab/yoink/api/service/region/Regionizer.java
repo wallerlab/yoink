@@ -17,8 +17,11 @@ package org.wallerlab.yoink.api.service.region;
 
 import java.util.Map;
 
-import org.wallerlab.yoink.api.model.region.Region;
+import org.wallerlab.yoink.api.model.batch.Job;
 import org.wallerlab.yoink.api.model.molecule.MolecularSystem;
+import org.wallerlab.yoink.api.model.region.Region;
+
+import javax.xml.bind.JAXBElement;
 
 /**
  * this interface is for region operations
@@ -34,7 +37,8 @@ import org.wallerlab.yoink.api.model.molecule.MolecularSystem;
  *            {@link Region.Name} or
  *            {@link MolecularSystem}
  */
-public interface Regionizer<T, K> {
+@FunctionalInterface
+public interface Regionizer {
 
 	/**
 	 * 
@@ -44,10 +48,20 @@ public interface Regionizer<T, K> {
 	 *            as Key,
 	 *            {@link Region} as
 	 *            Value
-	 * @param k
-	 *            -specified argument
+	 *
 	 * @return return type is specified T
 	 */
-	 T regionize(Map<Region.Name, Region> regions, K k);
+	Job<JAXBElement> regionize(Job<JAXBElement> job);
 
+
+	enum Type {
+		NUMBER,
+		DISTANCE,
+		SIZE,
+		DENSITY,
+		DORI,
+		SEDD,
+		FIRES,
+		CLUSTER;
+	}
 }

@@ -21,13 +21,12 @@ import org.wallerlab.yoink.api.service.math.Vector;
 /**
  * Vector Adaptor pattern.
  * 
- * thsi class is to convert from our own implementation to the appache commons
- * maths lib.
+ * this class is to convert from our own implementation to the
+ * apache commons maths lib.
  * 
  * @author Min Zheng
  *
  */
-
 public class CommonsVector3D implements Vector<Vector3D> {
 
 	private Vector3D internalVector;
@@ -37,11 +36,9 @@ public class CommonsVector3D implements Vector<Vector3D> {
 
 	public CommonsVector3D(double x, double y, double z) {
 		this.internalVector = new Vector3D(x, y, z);
-
 	}
 
 	public CommonsVector3D() {
-
 	}
 
 	public CommonsVector3D(double[] d) {
@@ -68,8 +65,7 @@ public class CommonsVector3D implements Vector<Vector3D> {
 
 	@Override
 	public Vector subtract(Vector m) {
-		tempVector = this.internalVector.subtract((Vector3D) m
-				.getInternalVector());
+		tempVector = this.internalVector.subtract((Vector3D) m.getInternalVector());
 		Vector temp = new CommonsVector3D();
 		temp.setInternalVector(tempVector);
 		return temp;

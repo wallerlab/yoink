@@ -34,7 +34,7 @@ class TwoAtomsDistanceCalculatorSpec extends Specification {
 		def atom2=Mock(Atom)
 		atom2.getCoordinate()>>coordinate2
 		when:"calulate distance bwtween two atoms"
-		def calculator=new TwoAtomsDistanceCalculator()
+		def calculator=new DistanceCalculator()
 		double distance=calculator.calculate( atom1,atom2)
 		then:"assert distance value"
 		assert distance==3

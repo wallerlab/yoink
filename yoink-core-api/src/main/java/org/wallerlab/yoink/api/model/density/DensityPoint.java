@@ -35,14 +35,6 @@ public interface DensityPoint {
 	double getDensity();
 
 	/**
-	 * set the value of density at this point
-	 * 
-	 * @param density
-	 *            -{@link java.lang.Double}, electronic density,
-	 */
-	void setDensity(double density);
-
-	/**
 	 * get the density gradient vector at this point
 	 * 
 	 * @return density gradient vector -
@@ -50,13 +42,6 @@ public interface DensityPoint {
 	 */
 	Vector getGradientVector();
 
-	/**
-	 * set the value of density gradient vector at this point
-	 * 
-	 * @param gradientVector
-	 *            , - {@link Vector}
-	 */
-	void setGradientVector(Vector gradientVector);
 
 	/**
 	 * get the hessian matrix at this point
@@ -67,14 +52,6 @@ public interface DensityPoint {
 	Matrix getHessian();
 
 	/**
-	 * set the hessian matrix at this point
-	 * 
-	 * @param hessian
-	 *            - {@link Matrix}
-	 */
-	void setHessian(Matrix hessian);
-
-	/**
 	 * get the density gradient value at this point
 	 * 
 	 * @return density gradient -{@link java.lang.Double}
@@ -82,22 +59,13 @@ public interface DensityPoint {
 	double getGradient();
 
 	/**
-	 * set the density gradient value at this point
-	 * 
-	 * @param gradient
-	 *            , -{@link java.lang.Double}
-	 */
-	void setGradient(double gradient);
-
-	/**
 	 * get the coordinate of the point
 	 * 
 	 * @return current coordinate -{@link Coord}
 	 */
-	 Coord getCurrentCoord();
+	 Coord getCoord();
 
 	public enum DensityType {
-
 		DORI, RDG, DENSITY, SEDD, ELECTRONIC;
 	}
 

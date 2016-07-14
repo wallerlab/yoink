@@ -12,8 +12,7 @@ public class CommunityFactory {
 	 * @param graph
 	 * @param edgeType
 	 */
-	public CommunityFactory(GraphDatabaseService graph,
-			RelationshipType edgeType) {
+	public CommunityFactory(GraphDatabaseService graph, RelationshipType edgeType) {
 		this.graph = graph;
 		this.edgeType = edgeType;
 	}
@@ -34,12 +33,8 @@ public class CommunityFactory {
 	}
 	
 	public Community of(String id) {
-
 		Label label = DynamicLabel.label(String.valueOf(id));
-
-		return new CommunityImpl(graph.findNodes(label), label, id, edgeType,
-				graph);
-
+		return new CommunityImpl(graph.findNodes(label), label, id, edgeType, graph);
 	}
 
 }

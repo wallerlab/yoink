@@ -20,20 +20,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
-import javax.xml.bind.JAXBElement;
-
-import org.springframework.stereotype.Service;
+import org.wallerlab.yoink.adaptive.services.WeightFactors;
 import org.wallerlab.yoink.api.model.batch.Job;
 import org.wallerlab.yoink.api.model.molecule.Coord;
 import org.wallerlab.yoink.api.model.molecule.Molecule;
-import org.wallerlab.yoink.api.model.region.Region;
-import org.wallerlab.yoink.api.service.Calculator;
-import org.wallerlab.yoink.api.service.adaptive.Smoothner;
+import org.wallerlab.yoink.api.service.molecule.Calculator;
 import org.wallerlab.yoink.math.map.MapSorter;
+import static org.wallerlab.yoink.api.model.region.Region.Name.*;
+
+import javax.annotation.Resource;
+import javax.xml.bind.JAXBElement;
+import org.springframework.stereotype.Service;
 
 /**
- * this class is to get weights factor in SAP. for details please see: see:
+ * this class is to use weights factor in SAP. for details please see: see:
  * Heyden, Andreas, Hai Lin, and Donald G. Truhlar. "Adaptive partitioning in
  * combined quantum mechanical and molecule mechanical calculations of
  * potential energy functions for multiscale simulations." The Journal of
@@ -43,37 +43,39 @@ import org.wallerlab.yoink.math.map.MapSorter;
  *
  */
 @Service("sapWeightFactors")
-public class SAPWeightFactors implements Smoothner {
+public class SAPWeightFactors implements WeightFactors.WeightFactor {
 
 	@Resource
 	private Calculator<Double, Coord, Molecule> closestDistanceToMoleculeCalculator;
 
 	/**
-	 * use smooth factors to calculate the weights factors.
+	 * use smooth factors to molecular the weights factors.
 	 * 
 	 * @param job
 	 *            -parameters and results in job
 	 */
-	public void smooth(Job<JAXBElement> job) {
+	public List<Double> compute(Job<JAXBElement> job) {
 		// initialize
 		// sort buffer region based on radial coordiante
 		List<Double> sortedSmoothFactors = new ArrayList<Double>();
 		List<Integer> sortedBufferIndices = new ArrayList<Integer>();
-		sortBufferRegionByDistanceToQMCore(job, sortedSmoothFactors,
-				sortedBufferIndices);
+		sortBufferRegionByDistanceToQMCore(job, sortedSmoothFactors, sortedBufferIndices);
 		Map<List<Integer>, Double> molecularIndicesAndWeightFactor = new HashMap<List<Integer>, Double>();
-		calculateWeightFactors(molecularIndicesAndWeightFactor,
-				sortedSmoothFactors, sortedBufferIndices);
-		job.getProperties().put("weightfactors",
-				molecularIndicesAndWeightFactor);
+
+		calculateWeightFactors(molecularIndicesAndWeightFactor, sortedSmoothFactors, sortedBufferIndices);
+
+		job.getProperties().put("weightfactors", molecularIndicesAndWeightFactor);
 	}
 
-	private void calculateWeightFactors(
-			Map<List<Integer>, Double> molecularIndicesAndWeightFactor,
-			List<Double> sortedSmoothFactors, List<Integer> sortedBufferIndices) {
+	private void calculateWeightFactors(Map<List<Integer>, Double> molecularIndicesAndWeightFactor,
+										List<Double> sortedSmoothFactors,
+										List<Integer> sortedBufferIndices) {
+
 		int bufferSize = sortedBufferIndices.size();
+
 		List<Double> weightFactors= new ArrayList<Double>();
 		List<List<Integer>> activeBuffers=new ArrayList<List<Integer>>();
+
 		for (int i = 0; i < bufferSize; i++) {
 			double pi = sortedSmoothFactors.get(i);
 			double x1 = 0;
@@ -111,31 +113,29 @@ public class SAPWeightFactors implements Smoothner {
 	}
 
 	private void sortBufferRegionByDistanceToQMCore(Job<JAXBElement> job,
-			List<Double> sortedSmoothFactors, List<Integer> sortedBufferIndices) {
-		Map<Molecule, Integer> bufferMoleculeMap = job.getRegions()
-				.get(Region.Name.BUFFER).getMolecularMap();
-		Coord centerCoord = job.getRegions().get(Region.Name.QM_CORE)
-				.getCenterOfMass();
+													List<Double> sortedSmoothFactors,
+													List<Integer> sortedBufferIndices) {
+
+		Map<Molecule, Integer> bufferMoleculeMap = job.getRegion(BUFFER).getMolecularMap();
+
+		Coord centerCoord = job.getRegion(QM_CORE).getCenterOfMass();
+
 		Map<Map, Double> bufferDistanceMap = new HashMap<Map, Double>();
-		List<Integer> bufferIndices = new ArrayList<Integer>(
-				bufferMoleculeMap.values());
-		List<Double> smoothFactors = (List<Double>) job.getProperties().get(
-				"smoothfactors");
-		List<Molecule> bufferMolecules = new ArrayList<Molecule>(
-				bufferMoleculeMap.keySet());
+		List<Integer> bufferIndices = new ArrayList<Integer>(bufferMoleculeMap.values());
+		List<Double> smoothFactors = (List<Double>) job.getProperty("smoothfactors");
+		List<Molecule> bufferMolecules = new ArrayList<Molecule>(bufferMoleculeMap.keySet());
+
 		for (int count = 0; count < bufferMolecules.size(); count++) {
 			Molecule molecule = bufferMolecules.get(count);
-			double distance = closestDistanceToMoleculeCalculator.calculate(
-					centerCoord, molecule);
+			double distance = closestDistanceToMoleculeCalculator.calculate(centerCoord, molecule);
 			Map<Integer, Double> moleculeFactor = new HashMap<Integer, Double>();
-			moleculeFactor.put(bufferIndices.get(count),
-					smoothFactors.get(count));
+			moleculeFactor.put(bufferIndices.get(count), smoothFactors.get(count));
 			bufferDistanceMap.put(moleculeFactor, distance);
 		}
+
 		bufferDistanceMap = MapSorter.sortByValue(bufferDistanceMap);
 
-		List<Map> moleculeFactorMapList = new ArrayList<Map>(
-				bufferDistanceMap.keySet());
+		List<Map> moleculeFactorMapList = new ArrayList<Map>(bufferDistanceMap.keySet());
 
 		for (Map moleculeFactorMap : moleculeFactorMapList) {
 			sortedSmoothFactors.addAll(moleculeFactorMap.values());

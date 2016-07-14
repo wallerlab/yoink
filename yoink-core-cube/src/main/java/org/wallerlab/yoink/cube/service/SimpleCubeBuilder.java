@@ -17,39 +17,34 @@ package org.wallerlab.yoink.cube.service;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.api.model.cube.Cube;
-import org.wallerlab.yoink.api.model.molecule.Atom;
+import org.wallerlab.yoink.cube.domain.Cube;
 import org.wallerlab.yoink.api.model.molecule.Coord;
 import org.wallerlab.yoink.api.model.molecule.Molecule;
-import org.wallerlab.yoink.api.service.Calculator;
+import org.wallerlab.yoink.api.service.math.Vector;
+import org.wallerlab.yoink.api.service.molecule.Calculator;
 import org.wallerlab.yoink.api.service.Factory;
-import org.wallerlab.yoink.api.service.cube.CubeBuilder;
-import org.wallerlab.yoink.api.service.math.*;
 import org.wallerlab.yoink.cube.domain.SimpleCube;
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory;
 import org.wallerlab.yoink.molecule.domain.SimpleCoord;
 
 import javax.annotation.Resource;
 import java.util.*;
-import java.util.Vector;
 import java.util.stream.IntStream;
 import static java.util.stream.Collectors.*;
+
 /**
- * This class is to calculate the grid origin and the number of steps along XYZ
+ * This class is to calculate the grid origin
+ * and the number of steps along XYZ
  * axis to construct a cube.
  * 
  * @author Min Zheng
  *
  */
-//@Service
-//@Qualifier("simpleCubeBuilder")
+@Service
 public class SimpleCubeBuilder implements CubeBuilder<Set<Molecule>> {
 
 	@Resource
 	private Calculator<Coord, int[], Cube> coordInCubeCalculator;
-
-	@Resource
-	private Factory<Coord, double[]> simpleCoordFactory;
 
 	@Resource
 	private SimpleVector3DFactory myVector3D;
@@ -61,7 +56,7 @@ public class SimpleCubeBuilder implements CubeBuilder<Set<Molecule>> {
 	/**
 	 * build a cube based on a Set of molecules
 	 *
-	 * @param xyzStepSize
+	 * @param xyzStepSizes
 	 *            - a double array for step sizes along x/y/z axes
 	 * @param molecules
 	 *            - a Set of molecules -
@@ -69,52 +64,44 @@ public class SimpleCubeBuilder implements CubeBuilder<Set<Molecule>> {
 	 *
 	 * @return cube -{@link Cube}
 	 */
-	public Cube build(double[] xyzStepSize, Set<Molecule> molecules) {
+	public Cube build(double[] xyzStepSizes, Set<Molecule> molecules) {
 
-
-		Cube cube = new SimpleCube(xyzStepSize);
-
-
-		List<List<Double>> coords = new ArrayList();
+		List<List<Double>> coords = new ArrayList<>();
 		IntStream.rangeClosed(0,2).forEach(i -> coords.add(new ArrayList<>()));
-		getxyzLists(molecules,coords );
+		getxyzLists(molecules,coords);
 
 		List<Double> cubeMins = new ArrayList();
 		List<Double> cubeMaxs = new ArrayList();
-		getMinMax(coords,cube, cubeMins, cubeMaxs);
-		System.out.println("Min in Main "+ cubeMins);
+		getMinMax(coords, cubeMins, cubeMaxs);
 
-		setOrigin(cube,cubeMins);
-		setNumberOfSteps(cube, cubeMins,cubeMaxs);
+		Coord origin = getOrigin(cubeMins);
 
-		cube.setMolecules(molecules);
-		// get coordinates for all the grid points in cube
-		List<Coord> coordinates = getAllCoordinates(cube);
-		// set coordinates for all the grid points in cube
-		cube.setCoordinates(coordinates);
-		return cube;
+		int[] numberOfXYZSteps = getNumberOfSteps(cubeMins,cubeMaxs,xyzStepSizes);
+		int size = numberOfXYZSteps[0] * numberOfXYZSteps[1] * numberOfXYZSteps[2];
+
+		List<Coord> coordinates = getAllCoordinates(size,numberOfXYZSteps,origin,xyzStepSizes);
+
+		return new SimpleCube(size,origin,numberOfXYZSteps,xyzStepSizes,coordinates,molecules);
 	}
 
-	private List<Coord> getAllCoordinates(Cube cube) {
-		Coord[] initialValues = new SimpleCoord[cube.getSize()];
+	private List<Coord> getAllCoordinates(int size,
+										  int[] numberOfXYZSteps,
+										  Coord origin,
+										  double[] xyzStepSizes ) {
+
+		Coord[] initialValues = new SimpleCoord[size];
 		List<Coord> coordinates = Collections.synchronizedList(Arrays.asList(initialValues));
-		//List<Coord> coordinates = Arrays.asList(initialValues);
 
+		int xMax = numberOfXYZSteps[0];
+		int yMax = numberOfXYZSteps[1];
+		int zMax = numberOfXYZSteps[2];
 
-		int xMax = cube.getNumberOfXYZSteps()[0];
-		int yMax = cube.getNumberOfXYZSteps()[1];
-		int zMax = cube.getNumberOfXYZSteps()[2];
-
-		System.out.println("x , y z are : " + xMax +" " + yMax  + " " +  zMax +" ");
-
-
-		IntStream.range(0, cube.getNumberOfXYZSteps()[0])
-				//.parallel()
+		IntStream.range(0, numberOfXYZSteps[0])
 				.forEach(nXStep -> {
 					for (int y = 0; y < yMax; y++) {
 				for (int z = 0; z < zMax; z++) {
 					int[] xyzCurrentStep = new int[] { nXStep, y, z };
-					Coord currentCoord = calculate(xyzCurrentStep, cube);
+					Coord currentCoord = calculate(xyzCurrentStep,origin, xyzStepSizes);
 					int indexInCube = nXStep * yMax * xMax + y * zMax + z;
 					coordinates.set(indexInCube, currentCoord);
 				}
@@ -123,43 +110,26 @@ public class SimpleCubeBuilder implements CubeBuilder<Set<Molecule>> {
 		return coordinates;
 	}
 
-	private void setNumberOfSteps(Cube cube, List<Double> cubeMins, List<Double> cubeMaxs) {
+	private int[] getNumberOfSteps( List<Double> cubeMins, List<Double> cubeMaxs, double[] xyzStepSize ) {
 		int[] numberOfXYZSteps = new int[3];
-		System.out.println("step size " + Arrays.toString(cube.getXyzStepSize()));
-
 		for(int i= 0; i <= 2; i++){
-			System.out.println("i is " + i);
-			System.out.println("diff " + (cubeMaxs.get(i) - cubeMins.get(i)));
-			numberOfXYZSteps[i] = (int) Math.floor(((cubeMaxs.get(i) - cubeMins.get(i)) / cube.getXyzStepSize()[i])+1);
+			numberOfXYZSteps[i] = (int) Math.floor(((cubeMaxs.get(i) - cubeMins.get(i)) / xyzStepSize[i])+1);
 		}
-
-		System.out.println("numberOfXYZSteps is : " + Arrays.toString(numberOfXYZSteps));
-		cube.setNumberOfXYZSteps(numberOfXYZSteps);
-		cube.setSize(numberOfXYZSteps[0] * numberOfXYZSteps[1] * numberOfXYZSteps[2]);
-		System.out.println("steps in  " +  Arrays.toString(cube.getNumberOfXYZSteps()));
-
+		return numberOfXYZSteps;
 	}
 
-	private void setOrigin(Cube cube, List<Double> cubeMins) {
-
+	private Coord getOrigin(List<Double> cubeMins) {
 		double[] dimensions = new double[] { cubeMins.get(0), cubeMins.get(1), cubeMins.get(2)};
-		Coord gridOrigin = simpleCoordFactory.create(dimensions);
-		cube.setGridOrigin(gridOrigin);
+		Coord gridOrigin = coordFactory.create(dimensions);
+		return gridOrigin;
 	}
 
-	private void getMinMax(List<List<Double>> coords, Cube cube, List<Double> cubeMins, List<Double> cubeMaxs ) {
-
+	private void getMinMax(List<List<Double>> coords, List<Double> cubeMins, List<Double> cubeMaxs ) {
 		cubeMins.addAll( coords.stream().map(coord -> Collections.min(coord)).collect(toList()));
-
 		cubeMaxs.addAll(coords.stream().map(coord -> Collections.max(coord)).collect(toList()));
-
-		 double border = 2.0;
+		double border = 2.0;
 		for(Double min:cubeMins) min =  min - border;
 		for(Double max:cubeMaxs) max =  max - border;
-
-		System.out.println("Min is inside "+cubeMins);
-
-
 	}
 
 	private void getxyzLists(Set<Molecule> molecules, List<List<Double>> coords ) {
@@ -171,7 +141,6 @@ public class SimpleCubeBuilder implements CubeBuilder<Set<Molecule>> {
 						coords.get(2).add(atom.getZ3());
 				});
 	}
-
 
 	/**
 	 * calculate the coordinate of a grid point in cube based on current x/y/z
@@ -185,10 +154,10 @@ public class SimpleCubeBuilder implements CubeBuilder<Set<Molecule>> {
 	 * @return gridPointCoord -
 	 *         {@link Coord}
 	 */
-	private Coord calculate(int[] xyzCurrentStep, Cube cube) {
-		org.wallerlab.yoink.api.service.math.Vector originCoordMatrix = cube.getGridOrigin().getCoords();
-		org.wallerlab.yoink.api.service.math.Vector xyzStepSize = myVector3D.create(cube.getXyzStepSize());
-		org.wallerlab.yoink.api.service.math.Vector currentSteps = create(xyzCurrentStep);
+	private Coord calculate(int[] xyzCurrentStep, Coord origin, double[] xyzStepSizes) {
+		Vector originCoordMatrix = origin.getCoords();
+		Vector xyzStepSize = myVector3D.create(xyzStepSizes);
+		Vector currentSteps = create(xyzCurrentStep);
 		currentSteps.ebeMultiply(xyzStepSize);
 		currentSteps.add(xyzStepSize);
 		org.wallerlab.yoink.api.service.math.Vector coordinate = (currentSteps.ebeMultiply(xyzStepSize)).add(originCoordMatrix);
@@ -197,9 +166,8 @@ public class SimpleCubeBuilder implements CubeBuilder<Set<Molecule>> {
 		return gridPointCoord;
 	}
 
-	public org.wallerlab.yoink.api.service.math.Vector create(int[] xyzCurrentStep){
+	private org.wallerlab.yoink.api.service.math.Vector create(int[] xyzCurrentStep){
 		return myVector3D.create(new double[] {xyzCurrentStep[0], xyzCurrentStep[1], xyzCurrentStep[2] });
 	}
-
 
 }

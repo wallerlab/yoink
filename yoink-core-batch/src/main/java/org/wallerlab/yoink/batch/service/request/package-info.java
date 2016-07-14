@@ -1,4 +1,4 @@
-/** this package is to get all job requests
+/** this package is to use all job requests
  * @author Min Zheng
  *
  */

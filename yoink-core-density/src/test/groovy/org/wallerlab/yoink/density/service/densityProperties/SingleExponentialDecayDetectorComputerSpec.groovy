@@ -15,7 +15,7 @@
  */
 package org.wallerlab.yoink.density.service.densityProperties
 
-import org.wallerlab.yoink.density.service.density.properties.SeddComputer
+import org.wallerlab.yoink.density.service.SimpleDensityCalculator
 import spock.lang.Specification;
 
 import org.wallerlab.yoink.math.linear.SimpleMatrixFactory
@@ -59,8 +59,8 @@ class SingleExponentialDecayDetectorComputerSpec extends Specification{
 		dv.getHessian()>>matrix2
 
 		then:"assert the calculated sedd value"
-		def calculator= new SeddComputer()
-		(calculator.calculate(dv)-0)<=1.0E-5
+		def calculator= new SimpleDensityCalculator()
+		(calculator.sedd(dv)-0)<=1.0E-5
 	}
 
 
@@ -96,7 +96,7 @@ class SingleExponentialDecayDetectorComputerSpec extends Specification{
 		dv.getHessian()>>matrix2
 
 		then:"assert the calculated sedd value"
-		def calculator= new SeddComputer()
-		(calculator.calculate(dv)-11.949362462482528)<=1.0E-5
+		def calculator= new SimpleDensityCalculator()
+		(calculator.sedd(dv)-11.949362462482528)<=1.0E-5
 	}
 }

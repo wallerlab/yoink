@@ -15,12 +15,13 @@
  */
 package org.wallerlab.yoink.density.service.density
 
+import org.wallerlab.yoink.density.service.SimpleDensityCalculator
 import spock.lang.Specification
 
 import org.wallerlab.yoink.api.model.molecule.Atom;
 import org.wallerlab.yoink.api.model.molecule.Coord
 import org.wallerlab.yoink.api.model.molecule.Molecule;
-import org.wallerlab.yoink.api.service.Calculator;
+import org.wallerlab.yoink.api.service.molecule.Calculator;
 
 class DensityCalculatorSpec extends Specification {
 
@@ -41,7 +42,7 @@ class DensityCalculatorSpec extends Specification {
 		atomDensityCalculator.calculate(currentCoord, atom2)>>(double)2.0
 
 		when:"set up DensityCalculator"
-		def calculator= new DensityCalculator()
+		def calculator= new SimpleDensityCalculator()
 		calculator.atomDensityCalculator=atomDensityCalculator
 
 		then:"assert density value"
@@ -66,7 +67,7 @@ class DensityCalculatorSpec extends Specification {
 		atomDensityCalculator.calculate(currentCoord, atom2)>>(double)2.0E-31
 
 		when:"set up DensityCalculator"
-		def calculator= new DensityCalculator()
+		def calculator= new SimpleDensityCalculator()
 		calculator.atomDensityCalculator=atomDensityCalculator
 
 		then:"assert density value"

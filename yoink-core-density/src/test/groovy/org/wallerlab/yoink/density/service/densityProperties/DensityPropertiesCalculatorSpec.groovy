@@ -15,13 +15,13 @@
  */
 package org.wallerlab.yoink.density.service.densityProperties
 
-import org.wallerlab.yoink.density.service.density.properties.DensityPropertiesCalculator
+import org.wallerlab.yoink.density.service.SimpleDensityCalculator
 import spock.lang.Specification;
 
 import org.wallerlab.yoink.api.model.density.DensityPoint;
 import org.wallerlab.yoink.api.model.molecule.Atom;
 import org.wallerlab.yoink.api.model.molecule.Coord
-import org.wallerlab.yoink.api.service.Calculator;
+import org.wallerlab.yoink.api.service.molecule.Calculator;
 import org.wallerlab.yoink.api.service.Factory;
 import org.wallerlab.yoink.api.service.math.Matrix;
 import org.wallerlab.yoink.api.service.math.Vector;
@@ -61,11 +61,11 @@ class DensityPropertiesCalculatorSpec extends Specification{
 		simpleDensityPointFactory.create(_)>>new SimpleDensityPoint()
 
 		when:"set up a new DensityPropertiesCalculator"
-		def calculator= new DensityPropertiesCalculator()
-		calculator.myVector3D=myVector3D;
-		calculator.myMatrix=myMatrix;
+		def calculator= new SimpleDensityCalculator()
+		calculator.vectorFactory=myVector3D;
+		calculator.matrixFactory=myMatrix;
 		calculator.atomicDensityPropertiesCalculator=atomicDensityPropertiesCalculator
-		calculator.simpleDensityPointFactory=simpleDensityPointFactory;
+		calculator.densityPointFactory=simpleDensityPointFactory;
 
 		then:"assert the return type and value"
 		def dp=calculator.calculate(atoms,currentCoord)

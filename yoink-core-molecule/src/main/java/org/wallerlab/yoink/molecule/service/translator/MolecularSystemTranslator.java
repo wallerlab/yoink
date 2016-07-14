@@ -15,34 +15,24 @@
  */
 package org.wallerlab.yoink.molecule.service.translator;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Resource;
-import javax.xml.bind.JAXBElement;
-
-import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.api.model.molecule.Atom;
-import org.wallerlab.yoink.api.model.molecule.Coord;
-import org.wallerlab.yoink.api.model.molecule.Element;
-import org.wallerlab.yoink.api.model.molecule.MolecularSystem;
-import org.wallerlab.yoink.api.model.molecule.Molecule;
+import org.wallerlab.yoink.molecule.domain.*;
+import org.wallerlab.yoink.api.model.molecule.*;
 import org.wallerlab.yoink.api.model.region.Region;
-import org.wallerlab.yoink.api.service.Computer;
 import org.wallerlab.yoink.api.service.Factory;
 import org.wallerlab.yoink.api.service.math.Vector;
 import org.wallerlab.yoink.api.service.molecule.Translator;
 import org.wallerlab.yoink.api.service.molecule.Converter;
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory;
-import org.wallerlab.yoink.molecule.domain.SimpleAtom;
-import org.wallerlab.yoink.molecule.domain.SimpleMolecularSystem;
-import org.wallerlab.yoink.molecule.domain.SimpleMolecule;
+import org.wallerlab.yoink.molecule.service.Computer;
+
 import org.xml_cml.schema.AtomArray;
 import org.xml_cml.schema.Cml;
 import org.xml_cml.schema.MoleculeList;
 
+import java.util.*;
+import org.springframework.stereotype.Service;
+import javax.annotation.Resource;
+import javax.xml.bind.JAXBElement;
 /**
  * This class is to translate JAXB Cml to MolecularSystem model.
  * 
@@ -50,8 +40,7 @@ import org.xml_cml.schema.MoleculeList;
  *
  */
 @Service
-public class MolecularSystemTranslator implements
-		Translator<MolecularSystem, JAXBElement<Cml>> {
+public class MolecularSystemTranslator implements Translator<MolecularSystem, JAXBElement<Cml>> {
 
 	// This is the raw JAXB data.
 	private JAXBElement<Cml> cml;
@@ -94,7 +83,7 @@ public class MolecularSystemTranslator implements
 	public MolecularSystem translate(JAXBElement<Cml> cml) {
 		init(cml);
 		findMoleculeListInCml(molecules, cmlMolecularSystem);
-		this.molecularSystem = new SimpleMolecularSystem(molecules);
+		this.molecularSystem = new SimpleMolecularSystem((Set) molecules);
 		return molecularSystem;
 	}
 
@@ -108,8 +97,7 @@ public class MolecularSystemTranslator implements
 	}
 
 	// loop over elements in a cml to find the molcule list??
-	private void findMoleculeListInCml(List<Molecule> molecules,
-			Cml cmlMolecularSystem) {
+	private void findMoleculeListInCml(List<Molecule> molecules, Cml cmlMolecularSystem) {
 		for (Object elementMoleculeList : cmlMolecularSystem
 				.getAnyCmlOrAnyOrAny()) {
 			checkIfMoleculeList(elementMoleculeList);
@@ -142,7 +130,7 @@ public class MolecularSystemTranslator implements
 	private void parseMolecule(org.xml_cml.schema.Molecule cmlMolecule) {
 		moleculeIndexCounter++;
 		List<Atom> atoms = parseAtoms(cmlMolecule);
-		Molecule molecule = new SimpleMolecule(moleculeIndexCounter, atoms);
+		Molecule molecule = new SimpleMolecule(moleculeIndexCounter, (Set) atoms);
 		Region.Name name = Region.Name.valueOf(cmlMolecule.getId());
 		molecule.setName(name);
 		Set<Molecule> moleculeSet = new HashSet<>();
@@ -159,8 +147,7 @@ public class MolecularSystemTranslator implements
 			JAXBElement<AtomArray> element = (JAXBElement<AtomArray>) elementAtomArray;
 			if (element.getDeclaredType() == AtomArray.class) {
 				@SuppressWarnings("unchecked")
-				AtomArray cmlAtomArray = ((JAXBElement<AtomArray>) elementAtomArray)
-						.getValue();
+				AtomArray cmlAtomArray = ((JAXBElement<AtomArray>) elementAtomArray).getValue();
 				loopOverAtoms(atoms, cmlAtomArray);
 			}
 		}
@@ -193,8 +180,7 @@ public class MolecularSystemTranslator implements
 				cmlAtom.getY3(), cmlAtom.getZ3() });
 		// get from property file
 		@SuppressWarnings("rawtypes")
-		Vector bohrCoordVector = coordVector.scalarMultiply(unitConverterType
-				.value());
+		Vector bohrCoordVector = coordVector.scalarMultiply(unitConverterType.value());
 		Coord atomCoord = simpleCoordFactory.create();
 		atomCoord.setCoords(bohrCoordVector);
 		return atomCoord;

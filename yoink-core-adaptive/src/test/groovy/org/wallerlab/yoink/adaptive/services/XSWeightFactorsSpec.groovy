@@ -16,7 +16,7 @@
 package org.wallerlab.yoink.adaptive.services
 
 import org.wallerlab.yoink.api.enums.*
-import org.wallerlab.yoink.adaptive.services.weights.XSWeightFactors
+
 import org.wallerlab.yoink.api.model.molecule.Molecule
 import org.wallerlab.yoink.api.model.region.Region
 import org.wallerlab.yoink.api.model.batch.Job
@@ -49,7 +49,7 @@ class XSWeightFactorsSpec extends Specification {
 		properties.put("smoothfactors",smoothfactors)
 		job.getProperties()>>properties
 
-		when:"make a weightFactors"
+		when:"make a weights"
 		def weightFactors=new XSWeightFactors()
 
 		then:"call method smooth, assert the size fo calculated value"

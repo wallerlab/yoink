@@ -15,7 +15,7 @@
  */
 package org.wallerlab.yoink.api.model.molecule;
 
-import java.util.List;
+import java.util.Set;
 
 import org.wallerlab.yoink.api.model.region.Region;
 
@@ -50,7 +50,7 @@ public interface Molecule {
 	 * @return a List of atoms,
 	 *         {@link Atom}
 	 */
-	List<Atom> getAtoms();
+	Set<Atom> getAtoms();
 
 	/**
 	 * get the index of molecule in the molecule system
@@ -74,5 +74,9 @@ public interface Molecule {
 	 *            - {@link Coord}
 	 */
 	 void setCenterOfMass(Coord centerOfMass);
+
+	Double getDistanceToPoint();
+
+	void setDistanceToPoint(Double distanceToPoint);
 
 }

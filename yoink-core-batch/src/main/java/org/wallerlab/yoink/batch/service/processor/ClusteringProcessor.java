@@ -15,6 +15,7 @@
  */
 package org.wallerlab.yoink.batch.service.processor;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -27,7 +28,7 @@ import org.wallerlab.yoink.api.model.batch.Job;
 import org.wallerlab.yoink.api.model.molecule.MolecularSystem;
 import org.wallerlab.yoink.api.model.region.Region;
 import org.wallerlab.yoink.api.service.cluster.Clusterer;
-import org.wallerlab.yoink.api.service.region.RegionizerMath;
+import org.wallerlab.yoink.api.service.region.Regionizer;
 import org.wallerlab.yoink.cluster.service.interaction.InteractionSet;
 
 /**
@@ -45,23 +46,22 @@ public class ClusteringProcessor implements ItemProcessor<Job<JAXBElement>, Job>
 	@Resource
 	private Clusterer doriClustering;
 
-	@Resource
-	@Qualifier("preRegionizer")
-	protected RegionizerMath<Map<Region.Name, Region>, MolecularSystem> preRegionizer;
 
 	/**
 	 * read in a list of requests and execute them.
 	 *
 	 * @param job
-	 *            - a moelcular system and properties to perform clustering on.
+	 *            - a molecular system and properties to perform clustering on.
 	 * @return jobs - a list of YoinkJob
 	 *         {@link Job}
 	 */
 	public Job process(Job<JAXBElement> job) throws Exception {
-		preRegionizer.regionize(job.getRegions(), job.getMolecularSystem());
 		interactionSet.getDoriInteractionSet(job);
 		doriClustering.cluster(job);
 		return job;
 	}
+
+
+	//Should also be responsible for getting params from XML
 
 }

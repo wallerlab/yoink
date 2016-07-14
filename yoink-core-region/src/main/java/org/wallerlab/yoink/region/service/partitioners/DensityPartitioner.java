@@ -15,29 +15,30 @@
  */
 package org.wallerlab.yoink.region.service.partitioners;
 
-import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.api.model.batch.JobParameter;
-import org.wallerlab.yoink.api.model.density.DensityPoint;
-import org.wallerlab.yoink.api.model.density.DensityPoint.DensityType;
-import org.wallerlab.yoink.api.model.molecule.Atom;
-import org.wallerlab.yoink.api.model.molecule.Coord;
-import org.wallerlab.yoink.api.model.molecule.Molecule;
-import org.wallerlab.yoink.api.model.molecule.RadialGrid;
+import org.wallerlab.yoink.api.model.batch.Job;
+
+import org.wallerlab.yoink.api.model.molecule.MolecularSystem;
 import org.wallerlab.yoink.api.model.region.Region;
-import org.wallerlab.yoink.api.service.Calculator;
-import org.wallerlab.yoink.api.service.Factory;
-import org.wallerlab.yoink.api.service.molecule.FilesReader;
-import org.wallerlab.yoink.api.service.region.Partitioner;
-import org.wallerlab.yoink.api.service.region.RegionizerMath;
-import org.wallerlab.yoink.molecule.domain.SimpleRadialGrid;
-
-import javax.annotation.Resource;
-import java.util.*;
-
-import static java.util.stream.Collectors.*;
-
-import static org.wallerlab.yoink.api.model.batch.JobParameter.*;
 import static org.wallerlab.yoink.api.model.region.Region.Name.*;
+
+import org.wallerlab.yoink.api.model.molecule.Atom;
+import org.wallerlab.yoink.api.model.molecule.Molecule;
+
+import org.wallerlab.yoink.api.model.cube.VoronoiPoint;
+import org.wallerlab.yoink.api.service.cube.Voronoizer;
+
+import org.wallerlab.yoink.api.service.density.DensityCalculator;
+import static org.wallerlab.yoink.api.model.density.DensityPoint.DensityType.*;
+
+import static org.wallerlab.yoink.math.set.SetOps.*;
+
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import static java.util.stream.Collectors.toSet;
 
 /**
  * This class is to use the density of qm core to define the region (adaptive
@@ -50,114 +51,179 @@ import static org.wallerlab.yoink.api.model.region.Region.Name.*;
 @Service
 public class DensityPartitioner implements Partitioner{
 
-	@Resource
-	private Calculator<Double, Coord, Set<Molecule>> densityCalculator;
+	@Autowired private Voronoizer voronoizer;
 
-	@Resource
-	private RegionizerMath<Region, Region.Name> singleRegionizerService;
+	@Autowired private DensityCalculator densityCalculator;
 
-	@Resource
-	private Factory<Region, Region.Name> simpleRegionFactory;
+	public Map<Region.Name,Set<Molecule>> partition(Job job) {
 
-	@Resource
-	protected FilesReader<RadialGrid, String> radialGridReader;
+		Map<Region.Name,Set<Molecule>> qmAdaptiveAndBuffer = new HashMap<>();
+
+		MolecularSystem molecularSystem = job.getMolecularSystem();
+		Set<Molecule> qmCoreFixed   = job.getMolecularSystem().getMolecules("QM_CORE");
+
+		List<Set<Molecule>> partitionedMolecules  = densityPartitioner(molecularSystem);
+		Set<Molecule> moleculesInCoreSearch 	  = partitionedMolecules.get(0);
+		Set<Molecule> moleculesInAdaptiveSearch   = partitionedMolecules.get(1);
+		Set<Molecule> buffer					  = partitionedMolecules.get(2);
+
+		Set<Molecule> stronglyBound = stronglyBound(qmCoreFixed, moleculesInCoreSearch, molecularSystem);
+		Set<Molecule> qmCore        = union(qmCoreFixed, stronglyBound);
+
+		Set<Molecule> weaklyBound   = weaklyBound(qmCore, moleculesInAdaptiveSearch, molecularSystem);
+		Set<Molecule> qmAdaptive    = union(qmCore, weaklyBound);
+
+		qmAdaptiveAndBuffer.put(QM_ADAPTIVE, qmAdaptive);
+		qmAdaptiveAndBuffer.put(BUFFER,buffer);
+		return qmAdaptiveAndBuffer;
+	}
 
 	/**
-	 * based on the density of QM core , define adaptive search region , the
-	 * non-QM core molecules in adaptive search region, and buffer region.
-	 * 
-	 * @param regions
-	 *            - a Map, Region.Name
+	 * based on the density of QM core:
+	 * - adaptive search region
+	 * - non-QM core molecules in adaptive search region
+	 * - and buffer region.
+	 *
+	 * @param job
+	 *            - a Map, RegionEnum.Name
 	 *            {@link Region.Name }
-	 *            as key, Region
+	 *            as key, RegionEnum
 	 *            {@link Region} as
 	 *            value
-	 * @param parameters
-	 *            - a Map, JobParameter
-	 *            {@link JobParameter}
-	 *            as Key, Object {@link java.lang.Object} as value
-	 * @param densityType
-	 *            {@link DensityPoint.DensityType}
-	 * @return regions - a Map, Region.Name
+
+	 * @return regions - a Map, RegionEnum.Name
 	 *         {@link Region.Name } as
-	 *         key, Region
+	 *         key, RegionEnum
 	 *         {@link Region} as value
 	 */
-	@Override
-	public List<Region> partition(List<Region> regions, List<JobParameter> parameters){
+	private static final double asrQmCoreThreshold = 0.1d;
+	private static final double asrQmThreshold	   = 0.0001d;
+	private static final double asrThreshold 	   = 0.000001d;
 
-		double densityThreshold = getDensityThreshold(parameters, parameters.get("densityType"));
+	public List<Set<Molecule>> densityPartitioner(MolecularSystem molecularSystem) {
 
-		Set<Molecule> moleculesInQmCore = regions.get(QM_CORE).getMolecules();
-		Set<Molecule> moleculesInNonQmCore = regions.get(NONQM_CORE).getMolecules();
+		Set<Molecule> asrQmCore = new HashSet<>();
+		Set<Molecule> asrQm     = new HashSet<>();
+		Set<Molecule> buffer    = new HashSet<>();
 
-		List<Molecule> moleculesInAdaptiveSearch = moleculesInNonQmCore.stream()
-				.filter( molecule -> {
-							Coord centerOfMass = molecule.getCenterOfMass();
-							double density = densityCalculator.calculate(centerOfMass, moleculesInQmCore);
-							return  (density >= densityThreshold)? true: false;
-						}
-				)
-				.collect(toList());
+		//Careful I am assuming here that it is only the fixed. I think that is wrong.
+		Set<Molecule> moleculesInQmCoreFixed = molecularSystem.getMolecules("QM_CORE");
+		Set<Molecule> moleculesInNonQmCore = new HashSet<Molecule>( molecularSystem.getMolecules());
+				      moleculesInNonQmCore.removeAll(moleculesInQmCoreFixed);
 
-		moleculesInAdaptiveSearch.addAll(regions.get(QM_CORE).getMolecularMap());
-
-		regions.add(simpleRegionFactory.create(ADAPTIVE_SEARCH,moleculesInAdaptiveSearch));
-		regions.add(singleRegionizerService.regionize(regions, NON_QM_CORE_ADAPTIVE_SEARCH));
-		regions.add(singleRegionizerService.regionize(regions, BUFFER));
-
-		readWFC(parameters, regions.get(QM_CORE));
-		// initialize wfc for adaptive search region
-		readWFC(parameters, adaptiveSearchRegion);
-		return regions;
-	}
-
-	// the density parameters to define adaptive search region for adaptive
-	// QM, adaptive search region for adaptive QM core, and adaptive search
-	// region for buffer are different.
-	private double getDensityThreshold(List<JobParameter> parameters, DensityType densityType) {
-		double densityThreshold;
-		switch (densityType) {
-			case SEDD:
-				densityThreshold = (double) parameters.get(DENSITY_ASR_QMCORE);
-				break;
-			case DORI:
-				densityThreshold = (double) parameters.get(DENSITY_ASR_QM);
-				break;
-			case ELECTRONIC:
-				// define buffer region by QM core density analysis
-				densityThreshold = (double) parameters.get(DENSITY_BUFFER);
-				break;
-			default:
-				throw new IllegalArgumentException("invalid  name");
+		for(Molecule molecule: moleculesInNonQmCore){
+			//Evaluate the density of the QM Core fixed at the center of mass for every other molecule.
+			double density = densityCalculator.electronic(molecule.getCenterOfMass(), moleculesInQmCoreFixed);
+			if (density >= asrQmCoreThreshold) asrQmCore.add(molecule);
+			if (density >= asrQmThreshold) asrQm.add(molecule);
+			if (density >= asrThreshold) buffer.add(molecule);
 		}
-		return densityThreshold;
+
+		List<Set<Molecule>> asrs = new ArrayList<>();
+		asrs.add(asrQmCore);
+		asrs.add(asrQm);
+		asrs.add(buffer);
+		return asrs;
 	}
 
-	//Does not belong here!
-	public void readWFC(Map<JobParameter, Object> parameters, Region adaptiveSearchRegion) {
-		if ((boolean) parameters.get(DGRID) == true) {
+	/**
+	 * This class is to analyze SEDD for those grid points in the intersection
+	 * between QM core region and non-QM core region based on Voronoi partitioning.
+	 * If a grid point satisfies the SEDD criteria, the corresponding non-QM
+	 * molecule will treated as QM core.
+	 *
+	 * @author Min Zheng
+	 *
+	 */
+	/**
+	 * This method is to get QM core region and QM core adaptive region . for a
+	 * grid point, if its SEDD from molecules in cube is larger than
+	 * seddThreshold, and the sedd value from its two closest atoms is larger
+	 * than seddThreshold and densityRatio is the range
+	 * [densityRatioMin,densityRatioMax] ,then the non-QM molecule of the grid
+	 * point should be in QM core region.
+	 */
+	private static final double densitySedd      = 0.1d;
+	private static final double densityRationMin = 0.064d;
+	private static final double densityRatioMax  = 15.67;
+	private static final double seddThreshold  	 = 2;
 
-			List<Atom> atoms = adaptiveSearchRegion.getAtoms();
+	@SuppressWarnings("unchecked")
+	public Set<Molecule> stronglyBound(Set<Molecule> qmFixedMolecules, Set<Molecule> searchMolecules, MolecularSystem molecularSystem) {
 
-			atoms.parallelStream()
-					.forEach(atom -> {
-						if (atom.getRadialGrid() == null) {
-							RadialGrid grid = new SimpleRadialGrid();
-							String wfc_name = atom.getElementType().toString()
-									.toLowerCase();
-							if (wfc_name.length() == 1) {
-								wfc_name = wfc_name + "_";
-							}
-							String wfc_file = parameters
-									.get(JobParameter.WFC_PATH)
-									+ "/"
-									+ wfc_name + "_lda.wfc";
-							grid = radialGridReader.read(wfc_file, grid);
-							atom.setRadialGrid(grid);
-						}
-					});
+		Predicate<VoronoiPoint> bothNotInQmFixed = gridPoint -> qmFixedMolecules.containsAll(gridPoint.getNearestMolecules());
 
-		}
+		Predicate<VoronoiPoint> density = gridPoint ->
+			 densityCalculator.atomPair(gridPoint.getCoordinate(), gridPoint.getNearestAtoms()) > densitySedd;
+
+		Predicate<VoronoiPoint> densityRatio = gridPoint -> {
+			double atomPairDensityRatio = densityCalculator.electronic(gridPoint.getCoordinate(), gridPoint.getNearestAtoms());
+			return ((atomPairDensityRatio >= densityRationMin && atomPairDensityRatio <= densityRatioMax));
+		};
+
+		Predicate<VoronoiPoint> atomicSedd = gridPoint ->
+			densityCalculator.sedd(gridPoint.getCoordinate(),gridPoint.getNearestAtoms()) <= seddThreshold;
+
+		Predicate<VoronoiPoint> molecularSedd = gridPoint ->
+			densityCalculator.sedd(gridPoint.getCoordinate(),mapToAtoms(searchMolecules)) <= seddThreshold;
+
+
+		List<VoronoiPoint> gridPoints = voronoizer.voronoize(SEDD, searchMolecules, molecularSystem);
+
+		return (Set<Molecule>) gridPoints.stream()
+									 	 .filter(bothNotInQmFixed)
+										 .filter(density)
+						 			     .filter(densityRatio)
+									     .filter(atomicSedd)
+				  			 		     .filter(molecularSedd)
+						 				 .flatMap(gridPoint -> gridPoint.getNearestMolecules().stream())
+						 				 .collect(toSet());
 	}
+
+	/**
+	 * This class is to analyze Density Overlap RegionEnum Indicator(DORI) for those
+	 * grid points in the intersection between QM core region and non-QM core region
+	 * based on Voronoi partitioning. If a grid point satisfies the DORI criteria,
+	 * the corresponding non-QM molecule will be switched into QM region. then we
+	 * can get qm region and adaptive qm region.
+	 *
+	 * for a grid point which satisfies the criteria:
+	 * - density is larger than densityThreshold
+	 * - dori value is the range[doriThreshold, 1],
+	 * the non-QM molecule of this grid point
+	 * will be added to a set, and returned.
+	 * This is used to define the QM_ADAPTIVE region.
+	 *
+	 *
+	 * @param qmCore, moleculesInAdaptiveSearch, and the molecularSystem
+	 *
+	 * @return set of molecules that are weakly bound
+	 */
+	private static final double doriDensityThreshold = 0.0001d;
+	private static final double doriThreshold 		 = 0.9d;
+
+	@SuppressWarnings("unchecked")
+	public Set<Molecule> weaklyBound(Set<Molecule> qmCore, Set<Molecule> searchMolecules, MolecularSystem molecularSystem) {
+
+		List<VoronoiPoint> gridPoints = voronoizer.voronoize(DORI, searchMolecules, molecularSystem );
+
+		return (Set<Molecule>) gridPoints.stream()
+				.filter(gridPoint -> qmCore.containsAll(gridPoint.getNearestMolecules()))
+				.filter(gridPoint -> {
+					double density = this.densityCalculator.electronic(gridPoint.getCoordinate(), searchMolecules);
+					return (density >= doriDensityThreshold);
+				})
+				.filter(gridPoint -> {
+					double dori = this.densityCalculator.dori(gridPoint.getCoordinate(),mapToAtoms(searchMolecules));
+					return (1 >= dori && dori >= doriThreshold);
+				})
+				.flatMap(gridPoint -> gridPoint.getNearestMolecules().stream())
+				.collect(toSet());
+	}
+
+	//convenience method
+	private Set<Atom> mapToAtoms(Set<Molecule> molecules){
+		return molecules.stream().flatMap(molecule -> molecule.getAtoms().stream()).collect(Collectors.toSet());
+	}
+
 }

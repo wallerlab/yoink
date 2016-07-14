@@ -16,14 +16,14 @@
 package org.wallerlab.yoink.adaptive.services
 
 import org.wallerlab.yoink.api.enums.*
-import org.wallerlab.yoink.adaptive.services.smooth.FIRESmoothner
+
 import org.wallerlab.yoink.api.model.batch.Job
 import org.wallerlab.yoink.api.model.molecule.Atom
 import org.wallerlab.yoink.api.model.molecule.Coord
 import org.wallerlab.yoink.api.model.molecule.Molecule
 import org.wallerlab.yoink.api.model.region.Region
 import spock.lang.Specification
-import org.wallerlab.yoink.api.service.Calculator;
+import org.wallerlab.yoink.api.service.molecule.Calculator;
 class FiresWeightFactorsSpec extends Specification {
 
 	def "test method execute(YoinkJob<JAXBElement> job)"(){
@@ -51,7 +51,7 @@ class FiresWeightFactorsSpec extends Specification {
 		job.getProperties()>>properties
 
 		when:"make a weightFactors"
-		def smoothner=new FIRESmoothner()
+		def smoothner=new SmoothFactors()
 		smoothner.distanceCalculator=distanceCalculator
 		then:"call method smooth, assert the size fo calculated value"
 		smoothner.smooth(job)

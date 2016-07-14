@@ -21,31 +21,41 @@ import org.wallerlab.yoink.api.service.math.Matrix;
 import org.wallerlab.yoink.api.service.math.Vector;
 
 /**
- * This class is to store all density based properties on a point, those
- * properties will be used during DORI/SEDD/RDG calculation.
+ * This class is to store all density based properties on a grid point.
+ * These properties will be used during DORI/SEDD/RDG calculation.
  * 
  * @author Min Zheng
  *
  */
-
 public class SimpleDensityPoint implements DensityPoint {
 
-	private Coord currentCoord;
+	private final Coord coord;
 
-	private Vector gradientVector;
+	private final double density;
 
-	private Matrix hessian;
+	private final double gradient;
 
-	private double gradient;
+	private final Vector gradientVector;
 
-	private double density;
+	private final Matrix hessian;
 
-	public SimpleDensityPoint() {
-
+	public SimpleDensityPoint(final Coord coord,
+							  final double density,
+							  final double gradient,
+							  final Vector gradientVector,
+							  final Matrix hessian){
+		this.coord         = coord;
+		this.density       = density;
+		this.gradient      = gradient;
+		this.gradientVector= gradientVector;
+		this.hessian       = hessian;
 	}
 
-	public SimpleDensityPoint(Coord currentCoord) {
-		this.currentCoord = currentCoord;
+	/**
+	 * get the coordinate
+	 */
+	public Coord getCoord() {
+		return coord;
 	}
 
 	/**
@@ -57,11 +67,11 @@ public class SimpleDensityPoint implements DensityPoint {
 	}
 
 	/**
-	 * set density
+	 * get gradient
 	 */
 	@Override
-	public void setDensity(double density) {
-		this.density = density;
+	public double getGradient() {
+		return gradient;
 	}
 
 	/**
@@ -73,51 +83,11 @@ public class SimpleDensityPoint implements DensityPoint {
 	}
 
 	/**
-	 * set gradient vector.
-	 */
-	@Override
-	public void setGradientVector(Vector gradientVector) {
-		this.gradientVector = gradientVector;
-	}
-
-	/**
 	 * get hessian
 	 */
 	@Override
 	public Matrix getHessian() {
 		return hessian;
-	}
-
-	/**
-	 * set hessian
-	 */
-	@Override
-	public void setHessian(Matrix hessian) {
-		this.hessian = hessian;
-	}
-
-	/**
-	 * get gradient
-	 */
-	@Override
-	public double getGradient() {
-		return gradient;
-	}
-
-	/**
-	 * set gradient
-	 */
-	@Override
-	public void setGradient(double gradient) {
-		this.gradient = gradient;
-	}
-
-	/**
-	 * get the coordinate
-	 */
-	@Override
-	public Coord getCurrentCoord() {
-		return currentCoord;
 	}
 
 }

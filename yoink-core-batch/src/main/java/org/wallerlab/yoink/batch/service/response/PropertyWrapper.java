@@ -27,7 +27,7 @@ import org.wallerlab.yoink.api.service.math.Vector;
 import org.wallerlab.yoink.api.service.molecule.FilesWriter;
 import org.wallerlab.yoink.api.model.molecule.Molecule;
 import org.wallerlab.yoink.api.model.region.Region;
-import org.wallerlab.yoink.api.service.batch.Wrapper;
+import org.wallerlab.yoink.batch.service.Wrapper;
 import org.xml_cml.schema.Cml;
 import org.xml_cml.schema.Gradient;
 import org.xml_cml.schema.MoleculeList;
@@ -83,7 +83,7 @@ public class PropertyWrapper implements Wrapper<Job<JAXBElement>> {
 	}
 
 	private void loopOverAllMolecules(Job<JAXBElement> job, Object elementList) {
-		List<Molecule> molecules = job.getMolecularSystem().getMolecules();
+		List<Molecule> molecules = (List) job.getMolecularSystem().getMolecules();
 		MoleculeList cmlMoleculeList = ((JAXBElement<MoleculeList>) elementList)
 				.getValue();
 		int moleculeCounter = 0;

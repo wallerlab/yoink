@@ -15,16 +15,18 @@
  */
 package org.wallerlab.yoink.region.domain;
 
-import org.wallerlab.yoink.api.model.molecule.Atom;
-import org.wallerlab.yoink.api.model.molecule.Coord;
-import org.wallerlab.yoink.api.model.molecule.Molecule;
 import org.wallerlab.yoink.api.model.region.Region;
-import org.wallerlab.yoink.api.service.Computer;
+import org.wallerlab.yoink.api.model.molecule.*;
+import org.wallerlab.yoink.api.service.math.Vector;
+import org.wallerlab.yoink.math.linear.SimpleVector3DFactory;
 
 import java.util.*;
+import static java.util.stream.Collectors.toSet;
 
 /**
- * This domain model Region contains a certain type molecules.
+ * A region is a named set of molecules.
+ *
+ * it has a size and a center of mass.
  * 
  * @author Min Zheng
  * 
@@ -32,156 +34,103 @@ import java.util.*;
  */
 public class SimpleRegion implements Region {
 
-	private Region.Name name;
+	private final Integer size;
 
-	private Integer size;
+	private final Region.Name name;
 
-	private Map<Molecule, Integer> molecularMap = new HashMap<>();
-
-	private Computer<Coord, Set<Molecule>> centerOfMassComputer;
+	private final Set<Molecule> molecules;
 
 	private Coord centerOfMass;
 
-	/**
-	 * default Region constructor
-	 */
-	public SimpleRegion() {
-	}
-
-	/**
-	 * construct a new Region with the region name
-	 * 
-	 * @param name
-	 *            {@link Name}
-	 */
-	public SimpleRegion(Region.Name name) {
+	public SimpleRegion(final Region.Name name, final Set<Molecule> moleculesInRegion) {
 		this.name = name;
+		this.molecules = moleculesInRegion;
+		this.size = molecules.size();
 	}
 
 	/**
 	 * get the number of molecules in the region
 	 */
-	@Override
 	public Integer getSize() {
-		return molecularMap.size();
+		return size;
 	}
 
 	/**
 	 * get molecules in the region
 	 */
-	@Override
-	public Set<Molecule> getMolecules() {
-		return molecularMap.keySet();
-	}
+	public Set<Molecule> getMolecules() {return molecules;}
 
-	/**
-	 * add one element(Molecule,Integer) in this molecularMap
-	 */
-	@Override
-	public void addMolecule(Molecule molecule, Integer index) {
-		this.molecularMap.put(molecule, index);
-	}
 
-	/**
-	 * set the molecularMap in the region
-	 */
+	// Do we really want to add molecules to a set???? this should be final?
 	@Override
-	public void setMolecularMap(Map<Molecule, Integer> molecularMap) {
-		this.molecularMap = molecularMap;
-	}
-
-	/**
-	 * get the molecularMap in the region
-	 */
-	@Override
-	public Map<Molecule, Integer> getMolecularMap() {
-		return this.molecularMap;
+	public void addMolecule(Molecule molecule) {
+		this.molecules.add(molecule);
 	}
 
 	/**
 	 * get the name of the region
 	 */
-	@Override
-	public Region.Name getName() {
-		return name;
-	}
 
-	/**
-	 * set the name of the region
-	 */
-	@Override
-	public void setName(Region.Name name) {
-		this.name = name;
-	}
+	public Region.Name getName() { return name;}
 
-	/**
-	 * add a Map(Molecule, Integer) to this molecularMap
-	 */
-	@Override
-	public void addAll(Map<Molecule, Integer> map) {
-		this.molecularMap.putAll(map);
-	}
-
-	/**
-	 * check if all molecules are in the region
-	 */
 	@Override
 	public boolean containsAll(Set<Molecule> molecules) {
-		return this.molecularMap.keySet().containsAll(molecules);
+		return molecules.containsAll(molecules);
 	}
 
 	/**
 	 * get all atoms in the region
 	 */
-	@Override
-	public List<Atom> getAtoms() {
-		List<Atom> atoms = new ArrayList<>();
-		for (Molecule molecule : molecularMap.keySet()) {
-			for (Atom atom : molecule.getAtoms()) {
-				atoms.add(atom);
-			}
-		}
-		return atoms;
+	public Set<Atom> getAtoms() {
+		return  molecules.stream()
+				         .flatMap(molecule -> molecule.getAtoms().stream())
+						 .collect(toSet());
 	}
 
 	/**
 	 * get the center of mass of the region
 	 */
-	@Override
 	public Coord getCenterOfMass() {
-		this.centerOfMass = this.centerOfMassComputer.calculate(this.molecularMap.keySet());
+		if(centerOfMass !=null) return centerOfMass;
+		else {
+			double massOfMolecule = 0;
+			Vector massWeightedCoordinate = SimpleVector3DFactory.staticCreate(0, 0, 0);
+			for (Molecule molecule : molecules) {
+				for (Atom atom : molecule.getAtoms()) {
+					double atomMass = atom.getElementType().atomMass();
+					Vector matrix = atom.getCoordinate().getCoords();
+					matrix = matrix.scalarMultiply(atomMass);
+					massWeightedCoordinate = matrix.add(massWeightedCoordinate);
+					massOfMolecule = massOfMolecule + atomMass;
+				}
+			}
+			Vector centerCoordinate = massWeightedCoordinate.scalarMultiply(1.0 / massOfMolecule);
+		}
 		return centerOfMass;
+	}
+
+	//TODO deprecate this
+	@Override
+	public Map<Molecule, Integer> getMolecularMap() {
+		return null;
 	}
 
 	/**
 	 * change the id of molecules with the name of region
 	 */
-	@Override
+	//TODO Deprecate  this
 	public void changeMolecularId() {
-		if (getSize() != 0) {
-			for (Molecule molecule : this.molecularMap.keySet()) {
-				molecule.setName(this.name);
-			}
-		}
+		if (getSize() != 0)
+			for (Molecule molecule : molecules) molecule.setName(this.name);
 	}
 
 	/**
 	 * change the id of molecules with the given name
 	 */
-	@Override
-	public void changeMolecularId(Region.Name name) {
-		if (getSize() != 0) {
-			for (Molecule molecule : this.molecularMap.keySet()) {
-				molecule.setName(name);
-			}
-		}
-	}
-
-	/**
-	 * set the value of this.centerOfMassComputer
-	 */
-	public void setCenterOfMassComputer(Computer<Coord, Set<Molecule>> centerOfMassComputer) {
-		this.centerOfMassComputer = centerOfMassComputer;
+	//TODO Deprecate  this
+	public void changeMolecularId(org.wallerlab.yoink.api.model.region.Region.Name name) {
+		if (getSize() != 0)
+			for (Molecule molecule : molecules) molecule.setName(name);
 	}
 
 }

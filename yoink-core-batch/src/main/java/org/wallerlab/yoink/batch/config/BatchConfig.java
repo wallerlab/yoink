@@ -60,7 +60,7 @@ public class BatchConfig  {
 	public ItemProcessor<JAXBElement, Job<JAXBElement>> builderProcessor;
 
 	@Autowired
-	@Qualifier("partitionerProcessor")
+	@Qualifier("regionizerProcessor")
 	public ItemProcessor<Job<JAXBElement>, Job> regionizerProcessor;
 
 	@Autowired

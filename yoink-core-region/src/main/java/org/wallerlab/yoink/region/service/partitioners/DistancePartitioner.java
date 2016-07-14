@@ -1,128 +1,59 @@
 package org.wallerlab.yoink.region.service.partitioners;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.wallerlab.yoink.api.model.batch.JobParameter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.wallerlab.yoink.api.model.batch.Job;
 import org.wallerlab.yoink.api.model.molecule.Coord;
 import org.wallerlab.yoink.api.model.molecule.Molecule;
 import org.wallerlab.yoink.api.model.region.Region;
-import org.wallerlab.yoink.api.service.Calculator;
-import org.wallerlab.yoink.api.service.Factory;
-import org.wallerlab.yoink.api.service.region.Partitioner;
-import org.xml_cml.schema.Parameter;
+import org.wallerlab.yoink.molecule.service.calculator.DistanceCalculator;
 
-import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.wallerlab.yoink.api.model.batch.JobParameter.*;
+import static org.wallerlab.yoink.api.model.batch.JobParameter.DISTANCE_BUFFER;
+import static org.wallerlab.yoink.api.model.batch.JobParameter.DISTANCE_QM;
 import static org.wallerlab.yoink.api.model.region.Region.Name.*;
-import static java.util.stream.Collectors.*;
-import static org.wallerlab.yoink.api.service.region.Partitioner.Type.*;
+
+import java.util.*;
 
 /**
- * this class is for parameter based adaptive qm/mm partitioning
- * 			(Distance, Number and Size).
  *
- * it is to get QM_ADAPTIVE region , QM region, and the BUFFER region
- * 
- * @author Min Zheng
+ * A distance partitioner is used to create two sets of molecules.
+ *
+ * The molecules in the QM adaptive region are closer than distanceQM
+ *
+ * The molecules in the buffer region are closer than distanceBuffer
+ * but not closer than distanceQM.
  *
  */
+@Service
 public class DistancePartitioner implements Partitioner{
 
-	@Resource
-	@Qualifier("simpleRegionFactory")
-	protected Factory<Region, Region.Name> regionFactory;
+	@Autowired
+	DistanceCalculator distanceCalculator;
 
-	@Resource
-	private Calculator<Double, Coord, Molecule> closestDistanceToMoleculeCalculator;
+	public Map<Region.Name,Set<Molecule>> partition(Job job) {
 
-	@Override
-	public List<Region> regionize(List<Region> regions, List<JobParameter> parameters) {
+		double distanceQm = (double) Double.parseDouble(job.getParameter(DISTANCE_QM).toString());
+		double distanceBuffer = distanceQm + Double.parseDouble(job.getParameter(DISTANCE_BUFFER).toString());
 
-		Coord centerCoord = regions.get(QM_CORE).getCenterOfMass();
-		List<Molecule> bufferMolecules = new ArrayList<>();
-		List<Molecule> qmAdaptiveMolecules = new ArrayList<>();
+		Coord centerOfMass =  job.getRegion(QM_CORE).getCenterOfMass();
 
-		switch((Partitioner.Type) parameters.get(PARTITIONER)) {
-			DISTANCE:
-				distance(parameters, regions, qmAdaptiveMolecules, bufferMolecules, centerCoord);
-				break;
-			NUMBER, SIZE:
-				numberOrSize(parameters, regions, qmAdaptiveMolecules, bufferMolecules, centerCoord);
-				break;
-		}
+		Map<Region.Name,Set<Molecule>> qmAdaptiveAndBuffer = new HashMap<>();
+		Set<Molecule> bufferMolecules = new HashSet<>();
+		Set<Molecule> qmAdaptiveMolecules = new HashSet<>();
 
-		regions.add(regionFactory.create(BUFFER, bufferMolecules));
-		regions.add(regionFactory.create(QM_ADAPTIVE,qmAdaptiveMolecules));
-		regions.add(regionFactory.create((QM,qmAdaptiveMolecules + regions.get(QM_CORE).getMolecularMap();
-		return regions;
-	}
+		Set<Molecule> moleculesInNonQmCore = new HashSet<Molecule>(job.getMoleculesInRegion(SYSTEM));
+		moleculesInNonQmCore.removeAll(job.getMoleculesInRegion(QM_CORE));
 
-	public void distance(List<Parameter> parameters,
-						 List<Region> regions,
-						 List<Molecule> qmAdaptiveMolecules,
-						 List<Molecule> bufferMolecules,
-						 Coord centerCoord) {
-
-		double qmThreshold = (double) parameters.get(DISTANCE_QM);
-		double bufferThreshold = qmThreshold + (double) parameters.get(DISTANCE_BUFFER);
-
-		return regions.get(NONQM_CORE)
-				.getMolecules()
-				.stream()
+		moleculesInNonQmCore.stream()
 				.forEach(molecule -> {
-					double distance = closestDistanceToMoleculeCalculator.calculate(centerCoord, molecule);
-					if (distance < qmThreshold) qmAdaptiveMolecules.add(molecule);
-					else if (distance < bufferThreshold) bufferMolecules.add(molecule);
+					Double distance = distanceCalculator.closest(centerOfMass, molecule);
+					if (distance < distanceQm) qmAdaptiveMolecules.add(molecule);
+					else if (distance < distanceBuffer) bufferMolecules.add(molecule);
 				});
+
+		qmAdaptiveAndBuffer.put(QM_ADAPTIVE,qmAdaptiveMolecules);
+		qmAdaptiveAndBuffer.put(BUFFER, bufferMolecules);
+		return qmAdaptiveAndBuffer;
 	}
-
-	public void numberOrSize(List<Parameter> parameters,
-					  List<Region> regions,
-					  List<Molecule> qmAdaptiveMolecules,
-					  List<Molecule> bufferMolecules,
-					  Coord centerCoord) {
-
-		int qmNumber = (int) parameters.get(NUMBER_QM);
-		int bufferNumber = qmNumber + (int) parameters.get(NUMBER_BUFFER);
-
-		List<Molecule> sortedMolecules =
-				regions.get(NONQM_CORE)
-						.getMolecules()
-						.stream()
-						.sorted((m1, m2) -> {
-							Double distance1 = closestDistanceToMoleculeCalculator.calculate(centerCoord, m1);
-							Double distance2 = closestDistanceToMoleculeCalculator.calculate(centerCoord, m2);
-							return distance1.compareTo(distance2);
-						})
-						.limit(bufferNumber)
-						.collect(toList());
-
-		Partitioner.Type partitionType = (Partitioner.Type) parameters.get(PARTITIONER);
-
-		if (partitionType==SIZE){
-			int qmNumberSize = (int) parameters.get(JobParameter.NUMBER_QM) * 2 / 3;
-			double distance_s_qm_in = (double) parameters.get(DISTANCE_S_QM_IN);
-			double distance_t_qm_out = (double) parameters.get(DISTANCE_T_QM_OUT);
-			//find first molecule that is outside of limit.
-			Molecule moleculeAtT_Qm_Out =
-				sortedMolecules.stream()
-						       .filter(molecule ->{
-										double distance = closestDistanceToMoleculeCalculator.calculate(centerCoord, molecule);
-										return ( distance > distance_t_qm_out);
-										})
-					.findFirst();
-
-			qmAdaptiveMolecules = sortedMolecules.subList(0, qmNumber);
-			List<Molecule> bufferMolecules = sortedMolecules.subList(qmNumber, sortedMolecules.indexOf(moleculeAtT_Qm_Out) + 1);
-
-		}else if(partitionType==NUMBER) {
-			qmAdaptiveMolecules = sortedMolecules.subList(0, qmNumber);
-			bufferMolecules = sortedMolecules.subList(qmNumber, bufferNumber);
-		}
-		return;
-	}
-
 
 }

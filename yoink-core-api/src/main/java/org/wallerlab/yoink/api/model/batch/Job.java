@@ -19,7 +19,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.wallerlab.yoink.api.model.adaptive.AdaptiveMolecularSystem;
 import org.wallerlab.yoink.api.model.molecule.MolecularSystem;
+import org.wallerlab.yoink.api.model.molecule.Molecule;
 import org.wallerlab.yoink.api.model.region.Region;
 
 /**
@@ -78,6 +80,15 @@ public interface Job<T> {
 	 */
 	Map<Region.Name, Region> getRegions();
 
+
+	/**
+	 * adds a region to the job
+	 *
+	 * @param a Region {@link Region}.
+	 *
+	 */
+	void addRegion(Region region);
+
 	/**
 	 * set the regions inside the job
 	 * 
@@ -112,6 +123,14 @@ public interface Job<T> {
 	 *         key, {@link java.lang.Object} as value.
 	 */
 	Map<String, Object> getProperties();
+
+	/**
+	 * get the properties from the job.
+	 *
+	 * @return a Map contains the result of job. - {@link java.lang.String} as
+	 *         key, {@link java.lang.Object} as value.
+	 */
+	Object getProperty(String string);
 
 	/**
 	 * set the value of properties in the job.
@@ -163,4 +182,13 @@ public interface Job<T> {
 	 * @return result of region
 	 */
 	List<Set<Integer>> getClusters();
+
+	Set<Molecule> getMoleculesInRegion(Region.Name regionName);
+
+	Region getRegion(Region.Name name);
+
+	JobParameter getParameter(JobParameter jobParameter);
+
+	void setAdaptiveMolecularSystem(AdaptiveMolecularSystem adaptiveMolecularSystem);
+
 }

@@ -26,24 +26,21 @@ import org.wallerlab.yoink.api.model.region.Region;
 import org.wallerlab.yoink.api.service.adaptive.Smoothner;
 import org.wallerlab.yoink.api.service.molecule.Translator;
 import org.wallerlab.yoink.api.service.molecule.Converter.UnitConverterType;
-import org.wallerlab.yoink.api.service.region.Partitioner;
+import org.wallerlab.yoink.api.service.region.Regionizer;
 import org.xml_cml.schema.Cml;
 import org.xml_cml.schema.Parameter;
 import org.xml_cml.schema.ParameterList;
 
 /**
- * this class is to get a Map(JobParameter -
- * {@link JobParameter}, Object) by
+ * this class is to get a Map(JobParameter - {@link JobParameter}, Object) by
  * parsing ParameterList in JAXBElement Cml.
  * 
  * @author Min Zheng
  *
  */
 @Service
-public class ParameterTranslator implements
-		Translator<Map<JobParameter, Object>, JAXBElement<Cml>> {
+public class ParameterTranslator implements Translator<Map<JobParameter, Object>, JAXBElement<Cml>> {
 
-	//@Value("${yoink.job.unitconvertertype}")
 	private UnitConverterType unitConverterType = UnitConverterType.AngstromToBohr;
 
 	/**
@@ -67,43 +64,27 @@ public class ParameterTranslator implements
 		return parameters;
 	}
 
-	private void parseParameterList(Map<JobParameter, Object> parameters,
-			Cml cmlMolecularSystem) {
+	private void parseParameterList(Map<JobParameter, Object> parameters, Cml cmlMolecularSystem) {
 		for (Object elementList : cmlMolecularSystem.getAnyCmlOrAnyOrAny()) {
-			checkIfParameterList(parameters, elementList);
+			JAXBElement element = (JAXBElement) elementList;
+			if (element.getDeclaredType() == ParameterList.class)
+				parseParameters(parameters, element);
 		}
 	}
 
-	private void checkIfParameterList(Map<JobParameter, Object> parameters,
-			Object elementList) {
-		// check parameterList
-		JAXBElement element = (JAXBElement) elementList;
-		if (element.getDeclaredType() == ParameterList.class) {
-			parseParameters(parameters, element);
-		}
-	}
-
-	private void parseParameters(Map<JobParameter, Object> parameters,
-			JAXBElement element) {
+	private void parseParameters(Map<JobParameter, Object> parameters, JAXBElement element) {
 		ParameterList cmlParameterList = (ParameterList) element.getValue();
 		if (cmlParameterList.getTitle().equalsIgnoreCase("parameters")) {
-			parseParameter(parameters, cmlParameterList);
-		}
-	}
-
-	private void parseParameter(Map<JobParameter, Object> parameters,
-			ParameterList cmlParameterList) {
-		for (Object elementParameter : cmlParameterList.getAnyCmlOrAnyOrAny()) {
-			JAXBElement elementJAXB = (JAXBElement) elementParameter;
-			// check parameter
-			if (elementJAXB.getDeclaredType() == Parameter.class) {
-				parseParameterValue(parameters, elementJAXB);
+			for (Object elementParameter : cmlParameterList.getAnyCmlOrAnyOrAny()) {
+				JAXBElement elementJAXB = (JAXBElement) elementParameter;
+				if (elementJAXB.getDeclaredType() == Parameter.class)
+					parseParameterValue(parameters, elementJAXB);
 			}
 		}
 	}
 
-	private void parseParameterValue(Map<JobParameter, Object> parameters,
-			JAXBElement elementJAXB) {
+
+	private void parseParameterValue(Map<JobParameter, Object> parameters, JAXBElement elementJAXB) {
 		Parameter cmlParameter = (Parameter) elementJAXB.getValue();
 		String name = cmlParameter.getName().toUpperCase();
 		JobParameter jobParameter = JobParameter.valueOf(name);
@@ -139,7 +120,7 @@ public class ParameterTranslator implements
 			parameters.put(jobParameter, Smoothner.Type.valueOf(value));
 			break;
 		case PARTITIONER:
-			parameters.put(jobParameter, Partitioner.Type.valueOf(value));
+			parameters.put(jobParameter, Regionizer.Type.valueOf(value));
 			break;
 		case JOB_NAME:
 		case WFC_PATH:
@@ -156,8 +137,7 @@ public class ParameterTranslator implements
 		case DISTANCE_T_MM_IN:
 		case DISTANCE_S_MM_OUT:
 		case DISTANCE_T_MM_OUT:
-			parameters.put(jobParameter, Double.parseDouble(value)
-					* unitConverterType.value());
+			parameters.put(jobParameter, Double.parseDouble(value) * unitConverterType.value());
 			break;
 		case DGRID:
 		case INTERACTION_WEIGHT:	

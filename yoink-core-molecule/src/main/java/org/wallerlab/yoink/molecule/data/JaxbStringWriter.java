@@ -56,6 +56,4 @@ public class JaxbStringWriter extends AbstractJaxbWriter{
 		this.output = output;
 	}
 
-	
-	
 }

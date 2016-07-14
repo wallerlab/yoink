@@ -19,7 +19,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * This class is to make configuration for project Processor
+ * This class is to make configuration for external plugins
  * 
  * @author Min Zheng
  *

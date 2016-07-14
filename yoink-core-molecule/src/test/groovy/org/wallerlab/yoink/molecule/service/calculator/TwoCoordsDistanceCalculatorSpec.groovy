@@ -29,7 +29,7 @@ class TwoCoordsDistanceCalculatorSpec extends Specification{
 		def coordinate2=Mock(Coord)
 		coordinate2.getCoords()>>new CommonsVector3D(1,2,2);
 		when:"calculate the distance between two coords"
-		def calculator= new TwoCoordsDistanceCalculator()
+		def calculator= new DistanceCalculator()
 		double distance=calculator.calculate(coordinate1, coordinate2)
 		then:"assert distance value"
 		assert distance==3

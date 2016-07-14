@@ -1,5 +1,5 @@
 /** 
- * this package is for domain models in region project
+ * this package is for  the domain models in the yoink-core-region project
  * @author Min Zheng
  *
  */

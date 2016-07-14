@@ -15,7 +15,7 @@
  */
 package org.wallerlab.yoink.adaptive.services.smoothners
 
-import org.wallerlab.yoink.adaptive.services.PapSmoothner
+
 import org.wallerlab.yoink.api.model.molecule.Atom
 import org.wallerlab.yoink.api.model.molecule.Coord
 import spock.lang.Specification
@@ -25,7 +25,7 @@ import org.wallerlab.yoink.api.model.molecule.Molecule;
 import org.wallerlab.yoink.api.model.region.Region
 import org.wallerlab.yoink.api.service.plugin.QmMmWrapper
 import org.wallerlab.yoink.api.service.math.Vector.Vector3DType;
-import org.wallerlab.yoink.api.service.Calculator;
+import org.wallerlab.yoink.api.service.molecule.Calculator;
 class PAPAdaptiveProcessorSpec  extends Specification{
 	def "test PAPAdaptiveProcessor smooth" (){
 		def job=Mock(Job)
@@ -71,8 +71,8 @@ class PAPAdaptiveProcessorSpec  extends Specification{
 		properties.put("smoothfactors",smoothfactors)
 		job.getProperties()>>properties
 		when:
-		def bf=new PapSmoothner();
-		bf.myVector3D=myVector3D
+		def bf=new PapProcessor();
+		bf.vectorFactory=myVector3D
 		bf.qmmmProcessor=qmmmProcessor
 		
 		then:

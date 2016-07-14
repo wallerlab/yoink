@@ -24,12 +24,12 @@ import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.batch.Job;
 import org.wallerlab.yoink.api.model.batch.JobParameter;
 import org.wallerlab.yoink.api.service.cluster.Clusterer;
-import org.wallerlab.yoink.api.service.region.Partitioner;
+import org.wallerlab.yoink.region.service.partitioners.Partitioner;
 import org.wallerlab.yoink.cluster.service.louvain.LouvainClusteringFacade;
 import org.wallerlab.yoink.cluster.service.interaction.InteractionTriple;
 
 /**
- * This class is to build a graph based on DORI interaction(yes or no) and do
+ * This class is to build a graph based on DORI interaction (yes or no) and do
  * louvain region.
  * 
  * 

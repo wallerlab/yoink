@@ -24,7 +24,6 @@ import org.wallerlab.yoink.api.service.math.Vector;
  *
  * 
  */
-
 public class SimpleCoord implements Coord {
 
 	private Vector coords;

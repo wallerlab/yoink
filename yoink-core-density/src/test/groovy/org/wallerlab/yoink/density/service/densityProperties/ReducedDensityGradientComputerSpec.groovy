@@ -15,13 +15,15 @@
  */
 package org.wallerlab.yoink.density.service.densityProperties
 import org.wallerlab.yoink.api.model.density.DensityPoint
-import org.wallerlab.yoink.density.service.density.properties.RdgComputer
+import org.wallerlab.yoink.api.service.density.DensityCalculator
+import org.wallerlab.yoink.density.service.SimpleDensityCalculator
 import spock.lang.Specification;
 
 class ReducedDensityGradientComputerSpec  extends Specification {
+
 	def "test method calculate(DensityPoint densityPoint) "(){
 
-		def calculator= new RdgComputer()
+		def calculator= new SimpleDensityCalculator()
 
 		when:"make a  DensityPoint"
 		def dv=Mock(DensityPoint)

@@ -26,8 +26,8 @@ class SimpleDensityPointSpec extends Specification{
 		def coord=Mock(Coord);
 		when:"make a new SimpleDensityPoint with mocked coord"
 		def point=new SimpleDensityPoint(coord)
-		then:"assert the type of point.currentCoord"
-		assert	point.currentCoord instanceof Coord
+		then:"assert the type of point.coord"
+		assert	point.coord instanceof Coord
 	}
 
 

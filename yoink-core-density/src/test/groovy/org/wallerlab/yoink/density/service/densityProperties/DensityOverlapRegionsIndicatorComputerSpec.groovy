@@ -15,7 +15,7 @@
  */
 package org.wallerlab.yoink.density.service.densityProperties
 
-import org.wallerlab.yoink.density.service.density.properties.DoriComputer
+import org.wallerlab.yoink.density.service.SimpleDensityCalculator
 import spock.lang.Specification;
 
 import org.wallerlab.yoink.math.linear.SimpleMatrixFactory
@@ -57,7 +57,7 @@ class DensityOverlapRegionsIndicatorComputerSpec extends  Specification{
 		dv.getHessian()>>matrix2
 
 		then:"assert the calcualted dori value"
-		def calculator= new DoriComputer()
+		def calculator= new SimpleDensityCalculator()
 		Math.abs(calculator.calculate(dv)- 0.16560E-30)<=1.0E-5
 	}
 
@@ -94,7 +94,7 @@ class DensityOverlapRegionsIndicatorComputerSpec extends  Specification{
 		dv.getHessian()>>matrix2
 
 		then:"assert the calcualted dori value"
-		def calculator= new DoriComputer()
+		def calculator= SimpleDensityCalculator()
 		Math.abs(calculator.calculate(dv)-  0.16748E-07)<=1.0E-5
 	}
 }

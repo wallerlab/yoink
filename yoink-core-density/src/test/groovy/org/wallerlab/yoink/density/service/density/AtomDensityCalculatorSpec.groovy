@@ -18,10 +18,11 @@ package org.wallerlab.yoink.density.service.density
 import org.wallerlab.yoink.api.model.molecule.Element
 import org.wallerlab.yoink.api.model.molecule.Atom
 import org.wallerlab.yoink.api.model.molecule.Coord
-import org.wallerlab.yoink.api.service.Calculator
+import org.wallerlab.yoink.api.service.molecule.Calculator
+import org.wallerlab.yoink.density.service.SimpleDensityCalculator
 import org.wallerlab.yoink.math.linear.SimpleMatrixFactory
-import org.wallerlab.yoink.molecule.data.RadialGridReader
-import org.wallerlab.yoink.molecule.domain.SimpleRadialGrid
+import org.wallerlab.yoink.density.data.RadialGridReader
+import org.wallerlab.yoink.density.domain.SimpleRadialGrid
 import org.wallerlab.yoink.api.service.math.Matrix;
 import spock.lang.Specification
 
@@ -42,7 +43,7 @@ class AtomDensityCalculatorSpec extends Specification {
 		Calculator<Double, Coord, Atom> distanceCalculator=Mock(Calculator)
 		distanceCalculator.calculate(currentCoord, atom)>>(double)   3.4641016151377544
 		when:"make a new AtomDensityCalculator"
-		def calculator= new AtomDensityCalculator()
+		def calculator= new SimpleDensityCalculator()
 		calculator.distanceCalculator=distanceCalculator
 		then:
 		 Math.abs(calculator.calculate(currentCoord, atom)-1.52625795738137279E-003)<=1.0E-5
@@ -57,7 +58,7 @@ class AtomDensityCalculatorSpec extends Specification {
 		distanceCalculator.calculate(currentCoord, atom)>>Math.sqrt(12)
 
 		when:"make a new AtomDensityCalculator"
-		def calculator= new AtomDensityCalculator()
+		def calculator= new SimpleDensityCalculator()
 		calculator.distanceCalculator=distanceCalculator
 
 		then:"assert density value"
@@ -72,7 +73,7 @@ class AtomDensityCalculatorSpec extends Specification {
 		distanceCalculator.calculate(currentCoord, atom)>>(double)1.0
 
 		when:"make a new AtomDensityCalculator"
-		def calculator= new AtomDensityCalculator()
+		def calculator= new SimpleDensityCalculator()
 		calculator.distanceCalculator=distanceCalculator
 
 		then:"assert density value"

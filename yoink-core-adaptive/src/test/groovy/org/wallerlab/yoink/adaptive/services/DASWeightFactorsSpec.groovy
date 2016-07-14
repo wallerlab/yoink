@@ -16,7 +16,7 @@
 package org.wallerlab.yoink.adaptive.services
 
 import org.wallerlab.yoink.api.enums.*
-import org.wallerlab.yoink.adaptive.services.weights.DASWeightFactors
+
 import org.wallerlab.yoink.api.model.region.Region
 import org.wallerlab.yoink.api.model.batch.Job
 import org.wallerlab.yoink.api.model.molecule.Molecule
@@ -28,25 +28,29 @@ class DASWeightFactorsSpec extends Specification {
 
 		given:"a Job"
 		def job=Mock(Job)
+
 		def m1=Mock(Molecule)
 		def m2=Mock(Molecule)
+
 		m1.getIndex()>>(int)1
 		m2.getIndex()>>(int)2
+
 		def region=Mock(Region)
 		region.getMolecules()>>[m1, m2]
 		def regions=Mock(Map)
 		regions.get(Region.Name.BUFFER)>>region
 		job.getRegions()>>regions
-		def properties=new HashMap<String,Object>()
-		ArrayList<Double> smoothfactors = new ArrayList<Double>(
-				Arrays.asList((double)0.1,(double)0.2));
+
+		def properties= [:]
+
+		def smoothfactors = [0.1d,0.2d]
 		properties.put("smoothfactors",smoothfactors)
 		job.getProperties()>>properties
 
-		when:"make a weightFactors"
+		when:"make DAS weights"
 		def weightFactors=new DASWeightFactors()
 
-		then:"call method smooth, assert the size fo calculated value"
+		then:"call method smooth, assert the size of calculated value"
 		weightFactors.smooth(job)
 		properties.get("weightfactors").size()==3
 	}

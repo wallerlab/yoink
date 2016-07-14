@@ -20,7 +20,7 @@ import org.wallerlab.yoink.adaptive.services.weights.SAPWeightFactors
 import org.wallerlab.yoink.api.model.batch.Job
 import org.wallerlab.yoink.api.model.molecule.Molecule
 import org.wallerlab.yoink.api.model.region.Region
-import org.wallerlab.yoink.api.service.Calculator
+import org.wallerlab.yoink.api.service.molecule.Calculator
 import spock.lang.Specification
 import org.wallerlab.yoink.api.model.molecule.Coord;
 class SAPWeightFactorsSpec extends Specification {
@@ -59,7 +59,7 @@ class SAPWeightFactorsSpec extends Specification {
 		closestDistanceToMoleculeCalculator.calculate(_,m1)>>(double)0.1
 		closestDistanceToMoleculeCalculator.calculate(_,m2)>>(double)0.2
 
-		when:"make a weightFactors"
+		when:"make a weights"
 		def weightFactors=new SAPWeightFactors()
 		weightFactors.closestDistanceToMoleculeCalculator=closestDistanceToMoleculeCalculator
 		then:"call method smooth, assert the size fo calculated value"

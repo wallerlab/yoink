@@ -3,8 +3,8 @@ package org.wallerlab.yoink.density.service.density
 import org.wallerlab.yoink.api.model.molecule.Atom;
 import org.wallerlab.yoink.api.model.molecule.Coord;
 import org.wallerlab.yoink.api.model.molecule.Molecule;
-import org.wallerlab.yoink.api.service.Calculator;
-
+import org.wallerlab.yoink.api.service.molecule.Calculator
+import org.wallerlab.yoink.density.service.SimpleDensityCalculator;
 import spock.lang.Specification
 
 class MolecularDensityRatioCalculatorSpec extends Specification {
@@ -25,7 +25,7 @@ class MolecularDensityRatioCalculatorSpec extends Specification {
 		Molecule[] neighbours=[m1, m2]
 
 		when:"make a  new MolecularDensityRatioCalculator"
-		def calculator= new MolecularDensityRatioCalculator()
+		def calculator= new SimpleDensityCalculator()
 		calculator.atomDensityCalculator=atomDensityCalculator
 
 		then :"assert calculated value"

@@ -15,14 +15,10 @@
  */
 package org.wallerlab.yoink.api.model.region;
 
-import java.util.List;
+import org.wallerlab.yoink.api.model.molecule.*;
+
 import java.util.Map;
 import java.util.Set;
-
-import org.wallerlab.yoink.api.model.molecule.Atom;
-import org.wallerlab.yoink.api.model.molecule.Coord;
-import org.wallerlab.yoink.api.model.molecule.Molecule;
-import org.wallerlab.yoink.api.service.Computer;
 
 /**
  * this interface is for domain model region which contains a certain type of
@@ -32,17 +28,6 @@ import org.wallerlab.yoink.api.service.Computer;
  *
  */
 public interface Region {
-
-	/**
-	 * the names of regions used during adaptive QM/MM partitioning
-	 * 
-	 * @author Min Zheng
-	 *
-	 */
-	public enum Name {
-		SYSTEM, QM_CORE_FIXED, QM_CORE, QM_ADAPTIVE, QM_CORE_ADAPTIVE, QM, MM, ADAPTIVE_SEARCH, NONQM_CORE, NON_QM_CORE_ADAPTIVE_SEARCH, BUFFER, MM_NONBUFFER
-
-	}
 
 	/**
 	 * get the number of molecules in the region
@@ -60,30 +45,22 @@ public interface Region {
 	 Set<Molecule> getMolecules();
 
 	/**
+	 * get all atoms in the region
+	 *
+	 * @return a Set of Atoms-
+	 *         {@link Atom}
+	 */
+	Set<Atom> getAtoms();
+
+
+	/**
 	 * add one molecule into molecularMap
 	 * 
 	 * @param molecule
 	 *            - the key
-	 * @param index
-	 *            - the value
+	 *
 	 */
-	void addMolecule(Molecule molecule, Integer index);
-
-	/**
-	 * set the value of moleculeMap
-	 * 
-	 * @param molecularMap
-	 *            - Molecule as key, Integer as value
-	 */
-	void setMolecularMap(Map<Molecule, Integer> molecularMap);
-
-	/**
-	 * get the value of molecularMap
-	 * 
-	 * @return molecularMap,- {@link java.util.Map} Molecule as key, Integer as
-	 *         value
-	 */
-	 Map<Molecule, Integer> getMolecularMap();
+	void addMolecule(Molecule molecule);
 
 	/**
 	 * get the name of the region
@@ -92,21 +69,6 @@ public interface Region {
 	 */
 	 Name getName();
 
-	/**
-	 * set the name of the region
-	 * 
-	 * @param name
-	 *            {@link Region.Name}
-	 */
-	void setName(Name name);
-
-	/**
-	 * add a map into the region
-	 * 
-	 * @param map
-	 *            - {@link java.util.Map} Molecule as key, Integer as value
-	 */
-	 void addAll(Map<Molecule, Integer> map);
 
 	/**
 	 * check if the regions contains all molecules
@@ -118,12 +80,6 @@ public interface Region {
 	 */
 	boolean containsAll(Set<Molecule> molecules);
 
-	/**
-	 * Convenient method for getting atoms from a region
-	 * 
-	 * @return a List of atoms
-	 */
-	 List<Atom> getAtoms();
 
 	/**
 	 * get the center of mass of this region
@@ -132,27 +88,30 @@ public interface Region {
 	 */
 	 Coord getCenterOfMass();
 
-	/**
-	 * set molecule name as same as region name
-	 */
-	 void changeMolecularId();
+
+	//TODO deprecate this
+	Map<Molecule,Integer> getMolecularMap();
 
 	/**
-	 * change molecule name as the given name
-	 * 
-	 * @param name
-	 *            -{@link Region.Name}
+	 * the names of regions used during adaptive QM/MM partitioning
+	 *
+	 * @author Min Zheng
 	 *
 	 */
-	void changeMolecularId(Name name);
+	enum Name {
+		SYSTEM,
+		QM_CORE_FIXED,
+		QM_CORE,
+		QM_ADAPTIVE,
+		QM_CORE_ADAPTIVE,
+		QM,
+		MM,
+		ADAPTIVE_SEARCH,
+		NONQM_CORE,
+		NON_QM_CORE_ADAPTIVE_SEARCH,
+		BUFFER,
+		MM_NONBUFFER
 
-	/**
-	 * set the value of CenterOfMassComputer
-	 * 
-	 * @param centerOfMassComputer
-	 *            - {@link Computer}
-	 *
-	 */
-	void setCenterOfMassComputer(Computer<Coord, Set<Molecule>> centerOfMassComputer);
+	}
 
 }

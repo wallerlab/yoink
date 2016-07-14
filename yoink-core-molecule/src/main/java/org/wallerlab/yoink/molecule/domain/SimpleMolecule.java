@@ -15,7 +15,7 @@
  */
 package org.wallerlab.yoink.molecule.domain;
 
-import java.util.List;
+import java.util.Set;
 
 import org.wallerlab.yoink.api.model.molecule.Atom;
 import org.wallerlab.yoink.api.model.molecule.Coord;
@@ -32,25 +32,17 @@ public class SimpleMolecule implements Molecule {
 
 	private final int index;
 
-	private final List<Atom> atoms;
+	private final Set<Atom> atoms;
 
 	protected Region.Name name;
 
 	private Coord centerOfMass;
 
-	public SimpleMolecule(int index, List<Atom> atoms) {
+	private Double distanceToPoint;
+
+	public SimpleMolecule(final int index, final Set<Atom> atoms) {
 		this.index = index;
 		this.atoms = atoms;
-	}
-
-	@Override
-	public String toString() {
-		return "SimpleMolecule{" +
-				"index=" + index +
-				", atoms=" + atoms +
-				", name=" + name +
-				", centerOfMass=" + centerOfMass +
-				'}';
 	}
 
 	/**
@@ -73,7 +65,7 @@ public class SimpleMolecule implements Molecule {
 	 * get atoms in molecule
 	 */
 	@Override
-	public List<Atom> getAtoms() {
+	public Set<Atom> getAtoms() {
 		return this.atoms;
 	}
 
@@ -93,7 +85,24 @@ public class SimpleMolecule implements Molecule {
 	@Override
 	public void setCenterOfMass(Coord centerOfMass) {
 		this.centerOfMass = centerOfMass;
+	}
 
+	public Double getDistanceToPoint() {
+		return distanceToPoint;
+	}
+
+	public void setDistanceToPoint(Double distanceToPoint) {
+		this.distanceToPoint = distanceToPoint;
+	}
+
+	@Override
+	public String toString() {
+		return "SimpleMolecule{" +
+				"index=" + index +
+				", atoms=" + atoms +
+				", name=" + name +
+				", calculate=" + centerOfMass +
+				'}';
 	}
 
 }

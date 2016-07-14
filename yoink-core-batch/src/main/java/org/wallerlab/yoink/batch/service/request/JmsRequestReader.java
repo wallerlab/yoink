@@ -24,7 +24,7 @@ import org.springframework.batch.item.UnexpectedInputException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * this class is for job request, to get all xml files off JMS
+ * this class is for job request, to use all xml files off JMS
  * 
  *
  */

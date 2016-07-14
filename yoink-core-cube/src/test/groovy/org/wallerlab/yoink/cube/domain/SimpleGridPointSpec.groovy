@@ -22,19 +22,19 @@ import spock.lang.Specification;
 
 class SimpleGridPointSpec extends Specification{
 	def "coordinate,densityValues,indexInCube"(){
-		when:"make a new new SimpleGridPoint()"
-		def gp=new SimpleGridPoint()
+		when:"make a new new SimpleVoronoiPoint()"
+		def gp=new SimpleVoronoiPoint()
 		def coordinate =Mock(Coord)
 		then:"test setters and getters"
 		gp.setCoordinate(coordinate)
 		gp.setIndexInCube(0)
 		gp.getCoordinate()==coordinate
-		gp.getIndexInCube()==0
+		gp.getIndex()==0
 	}
 
 	def "properties in  SimpleGridPoint"(){
-		when:"make a new SimpleGridPoint()"
-		def gp=new SimpleGridPoint()
+		when:"make a new SimpleVoronoiPoint()"
+		def gp=new SimpleVoronoiPoint()
 		def properties=new HashMap<String,Object>()
 		then:"test properties setter and getter"
 		gp.setProperties(properties)

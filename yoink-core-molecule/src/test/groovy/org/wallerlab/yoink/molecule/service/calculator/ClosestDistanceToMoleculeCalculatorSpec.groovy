@@ -18,7 +18,7 @@ package org.wallerlab.yoink.molecule.service.calculator
 import org.wallerlab.yoink.api.model.molecule.Atom
 import org.wallerlab.yoink.api.model.molecule.Coord
 import org.wallerlab.yoink.api.model.molecule.Molecule
-import org.wallerlab.yoink.api.service.Calculator;
+import org.wallerlab.yoink.api.service.molecule.Calculator;
 import spock.lang.Specification
 
 class ClosestDistanceToMoleculeCalculatorSpec extends Specification{
@@ -30,11 +30,11 @@ class ClosestDistanceToMoleculeCalculatorSpec extends Specification{
 		def m=Mock(Molecule)
 		m.getAtoms()>>[atom1,atom2]
 		def distanceCalculator=Mock(Calculator)
-		distanceCalculator.calculate(coordinate,atom1)>>(double)1.0
-		distanceCalculator.calculate(coordinate,atom2)>>(double)2.0
+		distanceCalculator.calculate(coordinate,atom1)>> 1.0d
+		distanceCalculator.calculate(coordinate,atom2)>> 2.0d
 		
 		when:"calculate distance between atom and coordinate"
-		def calculator=new ClosestDistanceToMoleculeCalculator()
+		def calculator=new DistanceCalculator()
 		calculator.distanceCalculator=distanceCalculator
 		double distance=calculator.calculate( coordinate,m)
 		then:"assert the distance value"

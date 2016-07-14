@@ -38,4 +38,5 @@ public interface Factory<T, K> {
 	 * @return  a new object of type T with an initial value
 	 */
 	T create(K k);
+
 }

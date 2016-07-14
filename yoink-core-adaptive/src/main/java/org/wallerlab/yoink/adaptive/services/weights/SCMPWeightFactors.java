@@ -15,34 +15,29 @@
  */
 package org.wallerlab.yoink.adaptive.services.weights;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Resource;
-import javax.xml.bind.JAXBElement;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.batch.Job;
 import org.wallerlab.yoink.api.model.batch.JobParameter;
 import org.wallerlab.yoink.api.model.molecule.Coord;
 import org.wallerlab.yoink.api.model.molecule.Molecule;
 import org.wallerlab.yoink.api.model.region.Region;
-import org.wallerlab.yoink.api.service.Calculator;
-import org.wallerlab.yoink.api.service.adaptive.SmoothFunction;
+import org.wallerlab.yoink.api.service.molecule.Calculator;
 import org.wallerlab.yoink.api.service.adaptive.Smoothner;
 import org.wallerlab.yoink.math.map.MapSorter;
 import org.wallerlab.yoink.math.set.Subsets;
+import org.wallerlab.yoink.adaptive.services.SmoothFunctions;
+import static org.wallerlab.yoink.api.model.region.Region.Name.*;
+import static org.wallerlab.yoink.api.model.batch.JobParameter.*;
+import static org.wallerlab.yoink.adaptive.services.SmoothFunctions.SmoothFunction.NAME.*;
 
+import java.util.*;
+import javax.annotation.Resource;
+import javax.xml.bind.JAXBElement;
 import com.google.common.primitives.Ints;
+import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * this class is to get weights factor in SCMP. for details please see:
+ * this class is to use weights factor in SCMP. for details please see:
  * "Size-Consistent Multipartitioning QM/MM: A Stable and Efficient Adaptive
  * QM/MM Method"
  * 
@@ -53,103 +48,81 @@ import com.google.common.primitives.Ints;
 public class SCMPWeightFactors implements Smoothner {
 
 	@Resource
-	private Calculator<Double, Coord, Molecule> closestDistanceToMoleculeCalculator;
+	private Calculator<Double, Coord, Molecule> closest;
 
-	@Resource
-	@Qualifier("buloSmoothFunction")
-	private SmoothFunction buloSmoothFunction;// for QM
-
-	@Resource
-	@Qualifier("scmpSmoothFunction")
-	private SmoothFunction scmpSmoothFunction;// for MM
+	@Autowired
+	SmoothFunctions smoothFunctions;
 
 	private Map<List<Integer>, Double> sigmaIndexMap;
 
 	/**
-	 * use smooth factors to calculate the weights factors.
+	 * use smooth factors to molecular the weights factors.
 	 * 
 	 * @param job
 	 *            -parameters and results in job
 	 */
-	public void smooth(Job<JAXBElement> job) {
+	public List<Double> compute(Job<JAXBElement> job) {
 		// initialize
 		getWeightForAllPartitioningConfiguration(job);
-		int partitionNumber = (int) job.getParameters().get(
-				JobParameter.NUMBER_PARTITION);
+
+		int partitionNumber = (int) job.getParameters().get(NUMBER_PARTITION);
 		double sigmas[] = new double[partitionNumber];
 		List<List<Integer>> qmSets = new ArrayList<List<Integer>>();
-		Map<List<Integer>, Double> molecularIndicesAndWeightFactor = getWeightForSelectedPartitioningConfiguration(
-				partitionNumber, sigmas, qmSets);
-		job.getProperties().put("weightfactors",
-				molecularIndicesAndWeightFactor);
+
+		Map<List<Integer>, Double> molecularIndicesAndWeightFactor = getWeightForSelectedPartitioningConfiguration(partitionNumber, sigmas, qmSets);
+		job.getProperties().put("weightfactors", molecularIndicesAndWeightFactor);
+		return job;
 	}
 
 	private void getWeightForAllPartitioningConfiguration(Job<JAXBElement> job) {
 		Map<JobParameter, Object> parameters = job.getParameters();
-		Map<Molecule, Integer> bufferMoleculeMap = job.getRegions()
-				.get(Region.Name.BUFFER).getMolecularMap();
-		List<Molecule> bufferMolecules = new ArrayList<Molecule>(
-				bufferMoleculeMap.keySet());
-		List<Integer> bufferIndices = new ArrayList<Integer>(
-				bufferMoleculeMap.values());
-		double s_qm_out = (double) parameters
-				.get(JobParameter.DISTANCE_S_QM_OUT);
-		double t_qm_out = (double) parameters
-				.get(JobParameter.DISTANCE_T_QM_OUT);
-		double s_qm_in = (double) parameters.get(JobParameter.DISTANCE_S_QM_IN);
-		double t_qm_in = (double) parameters.get(JobParameter.DISTANCE_T_QM_IN);
-		double s_mm_out = (double) parameters
-				.get(JobParameter.DISTANCE_S_MM_OUT);
-		double t_mm_out = (double) parameters
-				.get(JobParameter.DISTANCE_T_MM_OUT);
-		double s_mm_in = (double) parameters.get(JobParameter.DISTANCE_S_MM_IN);
-		double t_mm_in = (double) parameters.get(JobParameter.DISTANCE_T_MM_IN);
-		sigmaIndexMap = new HashMap<List<Integer>, Double>();
-		sigmaIndexMap = Collections.synchronizedMap(sigmaIndexMap);
-		int qmNumber = (int) parameters.get(JobParameter.NUMBER_QM);
-		int number_qmInBuffer = qmNumber - qmNumber * 2 / 3;
-		Map<Region.Name, Region> regions = job.getRegions();
-		Coord centerCoord = regions.get(Region.Name.QM_CORE).getCenterOfMass();
-		calculateWeightForEachConfiguration(bufferMolecules, bufferIndices,
-				s_qm_out, t_qm_out, s_qm_in, t_qm_in, s_mm_out, t_mm_out,
-				s_mm_in, t_mm_in, number_qmInBuffer, centerCoord);
-	}
+		Map<Molecule, Integer> bufferMoleculeMap = job.getRegion(BUFFER).getMolecularMap();
+		List<Molecule> bufferMolecules = new ArrayList<Molecule>(bufferMoleculeMap.keySet());
+		List<Integer> bufferIndices = new ArrayList<Integer>(bufferMoleculeMap.values());
 
-	private void calculateWeightForEachConfiguration(
-			List<Molecule> bufferMolecules, List<Integer> bufferIndices,
-			double s_qm_out, double t_qm_out, double s_qm_in, double t_qm_in,
-			double s_mm_out, double t_mm_out, double s_mm_in, double t_mm_in,
-			int number_qmInBuffer, Coord centerCoord) {
+		double s_qm_out = (double) parameters.get(DISTANCE_S_QM_OUT);
+		double t_qm_out = (double) parameters.get(DISTANCE_T_QM_OUT);
+		double s_qm_in =  (double) parameters.get(DISTANCE_S_QM_IN);
+		double t_qm_in =  (double) parameters.get(DISTANCE_T_QM_IN);
+		double s_mm_out = (double) parameters.get(DISTANCE_S_MM_OUT);
+		double t_mm_out = (double) parameters.get(DISTANCE_T_MM_OUT);
+		double s_mm_in =  (double) parameters.get(DISTANCE_S_MM_IN);
+		double t_mm_in =  (double) parameters.get(DISTANCE_T_MM_IN);
+
+		sigmaIndexMap = Collections.synchronizedMap(new HashMap<List<Integer>, Double>());
+
+		int qmNumber = (int) parameters.get(NUMBER_QM);
+
+		int number_qmInBuffer = qmNumber - qmNumber * 2 / 3;
+
+		Map<Region.Name, Region> regions = job.getRegions();
+
+		Coord centerCoord = regions.get(Region.Name.QM_CORE).getCenterOfMass();
+
 		Subsets.split(Ints.toArray(bufferIndices), number_qmInBuffer)
 				.parallelStream()
 				.forEach(
 						qmSet -> {
-							Set<Integer> mmSet = new HashSet<Integer>(
-									bufferIndices);
+							Set<Integer> mmSet = new HashSet<Integer>(bufferIndices);
 							mmSet.removeAll(qmSet);
-
-							double sigma = calculateSigma(centerCoord,
-									bufferMolecules, bufferIndices, s_qm_out,
-									t_qm_out, s_qm_in, t_qm_in, s_mm_out,
-									t_mm_out, s_mm_in, t_mm_in, qmSet, mmSet);
+							double fadeOutQM = fade(centerCoord, bufferMolecules, bufferIndices, s_qm_out, t_qm_out, qmSet,smoothFunctions.use(SCMP));
+							double fadeInQM = 1 - fade(centerCoord, bufferMolecules, bufferIndices, s_qm_in, t_qm_in, qmSet,smoothFunctions.use(SCMP));
+							double fadeOutMM = fade(centerCoord, bufferMolecules, bufferIndices, s_mm_out, t_mm_out, mmSet,smoothFunctions.use(BULO));
+							double fadeInMM = 1 - fade(centerCoord, bufferMolecules, bufferIndices, s_mm_in, t_mm_in, mmSet,smoothFunctions.use(BULO));
+							double sigma = fadeOutQM * fadeOutMM * fadeInQM * fadeInMM;
 							sigmaIndexMap.put(qmSet, sigma);
-
 						});
 	}
 
 	private Map<List<Integer>, Double> getWeightForSelectedPartitioningConfiguration(
 			int partitionNumber, double[] sigmas, List<List<Integer>> qmSets) {
-		Map<List<Integer>, Double> sortedSigmaIndexMap = MapSorter
-				.sortByValue(sigmaIndexMap);
-		List<List<Integer>> sortedIndices = new ArrayList<List<Integer>>(
-				sortedSigmaIndexMap.keySet());
-		List<Double> sortedSigmas = new ArrayList<Double>(
-				sortedSigmaIndexMap.values());
+
+		Map<List<Integer>, Double> sortedSigmaIndexMap = MapSorter.sortByValue(sigmaIndexMap);
+		List<List<Integer>> sortedIndices = new ArrayList<List<Integer>>(sortedSigmaIndexMap.keySet());
+		List<Double> sortedSigmas = new ArrayList<Double>(sortedSigmaIndexMap.values());
 		double sum_sigmas = 0;
-		List<Double> subSigmas = sortedSigmas.subList(sortedSigmas.size()
-				- partitionNumber, sortedSigmas.size());
-		List<List<Integer>> subIndices = sortedIndices.subList(
-				sortedSigmas.size() - partitionNumber, sortedSigmas.size());
+		List<Double> subSigmas = sortedSigmas.subList(sortedSigmas.size() - partitionNumber, sortedSigmas.size());
+		List<List<Integer>> subIndices = sortedIndices.subList(sortedSigmas.size() - partitionNumber, sortedSigmas.size());
 		for (int num = 0; num < subSigmas.size(); num++) {
 			double sigma = subSigmas.get(num);
 			sigmas[num] = sigma;
@@ -165,53 +138,20 @@ public class SCMPWeightFactors implements Smoothner {
 		return molecularIndicesAndWeightFactor;
 	}
 
-	private double calculateSigma(Coord centerCoord,
-			List<Molecule> bufferMolecules, List<Integer> bufferIndices,
-			double s_qm_out, double t_qm_out, double s_qm_in, double t_qm_in,
-			double s_mm_out, double t_mm_out, double s_mm_in, double t_mm_in,
-			ArrayList<Integer> qmSet, Set<Integer> mmSet) {
-		double fadeOutQM = fadeQM(centerCoord, bufferMolecules, bufferIndices,
-				s_qm_out, t_qm_out, qmSet);
-		double fadeInQM = 1 - fadeQM(centerCoord, bufferMolecules,
-				bufferIndices, s_qm_in, t_qm_in, qmSet);
-		double fadeOutMM = fadeMM(centerCoord, bufferMolecules, bufferIndices,
-				s_mm_out, t_mm_out, mmSet);
-		double fadeInMM = 1 - fadeMM(centerCoord, bufferMolecules,
-				bufferIndices, s_mm_in, t_mm_in, mmSet);
-		double sigma = fadeOutQM * fadeOutMM * fadeInQM * fadeInMM;
-		return sigma;
-	}
-
-	private double fadeQM(Coord centerCoord, List<Molecule> bufferMolecules,
-			List<Integer> bufferIndices, double s_qm_out, double t_qm_out,
-			List<Integer> qmSet) {
-		double fadeQM = 1.0;
-		for (Integer molecularIndex : qmSet) {
-			int index = bufferIndices.indexOf(molecularIndex);
-			Molecule molecule = bufferMolecules.get(index);
-			double currentDistance = closestDistanceToMoleculeCalculator
-					.calculate(centerCoord, molecule);
-			double lamdba = scmpSmoothFunction.evaluate(currentDistance,
-					s_qm_out, t_qm_out);
-			fadeQM *= lamdba;
+	private double fade(Coord centerCoord,
+						List<Molecule> molecules,
+						List<Integer> indices,
+						double s_qm_out,
+						double t_qm_out,
+						List<Integer> set,
+						SmoothFunctions.SmoothFunction smoothFunction) {
+		double fade = 1.0;
+		for (Integer index : set) {
+			double currentDistance = closest.calculate(centerCoord, molecules.get(indices.indexOf(index)));
+			double lamdba = smoothFunction.evaluate(currentDistance, s_qm_out, t_qm_out);
+			fade *= lamdba;
 		}
-		return fadeQM;
-	}
-
-	private double fadeMM(Coord centerCoord, List<Molecule> bufferMolecules,
-			List<Integer> bufferIndices, double s_qm_out, double t_qm_out,
-			Set<Integer> mmSet) {
-		double fadeMM = 1.0;
-		for (Integer molecularIndex : mmSet) {
-			int index = bufferIndices.indexOf(molecularIndex);
-			Molecule molecule = bufferMolecules.get(index);
-			double currentDistance = closestDistanceToMoleculeCalculator
-					.calculate(centerCoord, molecule);
-			double lamdba = buloSmoothFunction.evaluate(currentDistance,
-					s_qm_out, t_qm_out);
-			fadeMM *= lamdba;
-		}
-		return fadeMM;
+		return fade;
 	}
 
 }

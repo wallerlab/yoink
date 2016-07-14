@@ -15,75 +15,56 @@
  */
 package org.wallerlab.yoink.region.domain
 
-
-import org.wallerlab.yoink.api.enums.*
 import org.wallerlab.yoink.api.model.molecule.Element
 import org.wallerlab.yoink.api.model.molecule.Atom
 import org.wallerlab.yoink.api.model.molecule.Coord
 import org.wallerlab.yoink.api.model.molecule.Molecule
-import org.wallerlab.yoink.api.service.Computer
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
 import org.wallerlab.yoink.molecule.domain.SimpleCoordFactory
 import org.wallerlab.yoink.molecule.domain.SimpleMolecule
-import org.wallerlab.yoink.api.model.region.Region
 import org.wallerlab.yoink.api.service.math.Vector;
+import static org.wallerlab.yoink.api.model.region.Region.Name.*;
 
 import spock.lang.Specification
+
 class SimpleRegionSpec extends Specification{
 
 
-	def"test constructor SimpleRegion(name)"(){
+	def"test constructor SimpleRegion(Name, Set<Molecule>)"(){
 
-		def region= new SimpleRegion(Region.Name.MM)
-		def m=Mock(Molecule)
-		Map<Molecule, Integer> molecularMap=Mock(Map)
-		def a=Mock(Atom)
-		m.getAtoms()>>[a]
+		def molecule=Mock(Molecule)
+		def molecules = [molecule]
+		def atom = Mock(Atom)
+		molecule.getAtoms()>>[atom]
 
 		when:"add a molecule"
-		region.addMolecule(m,1)
-		Set<Molecule> ms=new HashSet<Molecule>()
-		ms.add(m)
-		then:"get right information about added molecule"
-		region.getName()==Region.Name.MM
-		region.getSize()==1
-		region.getAtoms()==[a]
-		region.containsAll(ms)
-		region.addAll(molecularMap)
+		def region= new SimpleRegion(MM,molecules)
 
-		when:"set the value of molecularMap"
-		region.setMolecularMap(molecularMap)
-		then:"get the value of molecularMap"
-		region.getMolecularMap()==molecularMap
+		then:"get right information about added molecule"
+		region.getName()==MM
+		region.getSize()==1
+		region.getAtoms()==[atom]
 	}
 
-
-	def"test methods : changeMolecularId and getCenterOfMass"(){
+	def"test getCenterOfMass"(){
 		def myVector3D=new SimpleVector3DFactory()
 		myVector3D.myVectorType=Vector.Vector3DType.COMMONS
 		def simpleCoordFactory=new  SimpleCoordFactory()
 		simpleCoordFactory.myVector3D= myVector3D
-		def region= new SimpleRegion(Region.Name.MM)
+		def molecules = [Mock(Molecule)]
+		def region= new SimpleRegion(MM, molecules)
 		def coordinate=Mock(Coord)
 		coordinate.getCoords()>>myVector3D.create(1,1,1);
 		def a=Mock(Atom)
 		a.getCoordinate()>>coordinate
 		a.getElementType()>>Element.H
 		def m=new SimpleMolecule(1,[a])
-		def centerOfMassComputer=Mock(Computer)
-		centerOfMassComputer.calculate(_)>>simpleCoordFactory.create((double[])[1, 1, 1])
-		region.setCenterOfMassComputer(centerOfMassComputer)
 
-		when:"change molecule name using the region name"
+		when:
 		region.addMolecule(m,1)
-		region.changeMolecularId()
-		then:"molecule name equals region name"
-		Math.abs(region.getCenterOfMass().getCoords().getEntry(0)-1)<=1.0E-5
-		m.getName()==Region.Name.MM
 
-		when:"change molecule name using given name"
-		region.changeMolecularId(Region.Name.QM)
-		then:"molecule name equals given name"
-		m.getName()==Region.Name.QM
+		then:
+		Math.abs(region.getCenterOfMass().getCoords().getEntry(0)-1)<=1.0E-5
 	}
+
 }

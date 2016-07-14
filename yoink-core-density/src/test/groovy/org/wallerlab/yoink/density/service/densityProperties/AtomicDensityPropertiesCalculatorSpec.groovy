@@ -16,15 +16,16 @@
 package org.wallerlab.yoink.density.service.densityProperties
 
 import org.wallerlab.yoink.api.model.molecule.Element
+import org.wallerlab.yoink.api.service.density.DensityCalculator
 import org.wallerlab.yoink.api.service.math.Vector
 import org.wallerlab.yoink.api.model.molecule.Atom
 import org.wallerlab.yoink.api.service.math.Matrix
 import org.wallerlab.yoink.density.domain.SimpleDensityPoint
-import org.wallerlab.yoink.density.service.density.properties.AtomicDensityPropertiesCalculator
+import org.wallerlab.yoink.density.service.SimpleDensityCalculator
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
-import org.wallerlab.yoink.molecule.data.RadialGridReader
+import org.wallerlab.yoink.density.data.RadialGridReader
 import org.wallerlab.yoink.molecule.domain.SimpleCoordFactory
-import org.wallerlab.yoink.molecule.domain.SimpleRadialGrid
+import org.wallerlab.yoink.density.domain.SimpleRadialGrid
 import org.wallerlab.yoink.math.linear.SimpleMatrixFactory
 import spock.lang.Specification
 
@@ -65,8 +66,8 @@ class AtomicDensityPropertiesCalculatorSpec extends Specification{
 		]
 
 		when:"make a new AtomicDensityPropertiesCalculator"
-		def calculator= new AtomicDensityPropertiesCalculator()
-		calculator.myMatrix=myMatrix
+		def calculator= new SimpleDensityCalculator()
+		calculator.matrixFactory=myMatrix
 		def dv=new SimpleDensityPoint(coordinate)
 
 		then:"assert gradient vector and hessian matrix"
@@ -137,8 +138,8 @@ class AtomicDensityPropertiesCalculatorSpec extends Specification{
 			-3.89914189430043967E-002
 		]
 		when:"make a new AtomicDensityPropertiesCalculator"
-		def calculator= new AtomicDensityPropertiesCalculator()
-		calculator.myMatrix=myMatrix
+		def calculator= new SimpleDensityCalculator()
+		calculator.matrixFactory=myMatrix
 		def dv=new SimpleDensityPoint(coordinate)
 
 		then:"assert gradient vector and hessian matrix"

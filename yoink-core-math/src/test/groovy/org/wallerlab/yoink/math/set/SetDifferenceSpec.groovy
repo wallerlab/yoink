@@ -22,8 +22,8 @@ class SetDifferenceSpec extends Specification {
 	def " method diff can read two sets as parameters "(){
 		def set1=new HashSet<>()
 		def set2=new HashSet<>()
-		when:"make a new SetDifference"
-		def setDifference= new SetDifference()
+		when:"make a new SetOps"
+		def setDifference= new SetOps()
 		then:"diff needs two Sets as arguments"
 		def setDiff=setDifference.diff(set1,set2)
 	}
@@ -32,8 +32,8 @@ class SetDifferenceSpec extends Specification {
 
 		def set1=new HashSet<String>()
 		def set2=new HashSet<Integer>()
-		when:"make a new SetDifference"
-		def setDifference= new SetDifference()
+		when:"make a new SetOps"
+		def setDifference= new SetOps()
 		then:"diff can read two different Sets as arguments"
 		def setDiff=setDifference.diff(set1,set2)
 	}
@@ -46,8 +46,8 @@ class SetDifferenceSpec extends Specification {
 		def set2=new HashSet<Integer>()
 		set2.add(1)
 		set2.add(2)
-		when:"make a new SetDifference"
-		def setDifference= new SetDifference()
+		when:"make a new SetOps"
+		def setDifference= new SetOps()
 		then:"difference of two different type Sets is the their sum"
 		def setDiff=setDifference.diff(set1,set2)
 		def result=new HashSet<>(Arrays.asList("one","two",1,2))
@@ -56,8 +56,8 @@ class SetDifferenceSpec extends Specification {
 
 
 	def " when  two sets are in same type, but no  same elements, the difference   is the sum of two sets"(){
-		given:"a new SetDifference"
-		def setDifference= new SetDifference()
+		given:"a new SetOps"
+		def setDifference= new SetOps()
 		when:"two same type Sets have no same elements"
 		def set1=new HashSet<String>()
 		set1.add("one")
@@ -72,7 +72,7 @@ class SetDifferenceSpec extends Specification {
 
 	def "when  two sets are in same type and have  same elements,the difference of is the subtraction of two sets"(){
 		given:
-		def setDifference= new SetDifference()
+		def setDifference= new SetOps()
 		when:"two same type Sets have same elements"
 		def set1=new HashSet<String>()
 		set1.add("one")

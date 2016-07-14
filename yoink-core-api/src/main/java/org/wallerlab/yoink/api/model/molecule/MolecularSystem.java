@@ -16,6 +16,7 @@
 package org.wallerlab.yoink.api.model.molecule;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * this interface is for domain model MolecularSystem
@@ -31,14 +32,25 @@ public interface MolecularSystem {
 	 * @return a list of atoms, -
 	 *         {@link Atom}
 	 */
-	List<Atom> getAtoms();
+	Set<Atom> getAtoms();
 
 	/**
 	 * get all molecules in the molecule system
 	 * 
-	 * @return a lsit of molecules, -
+	 * @return a list of molecules, -
 	 *         {@link Molecule}
 	 */
-	 List<Molecule> getMolecules();
+	 Set<Molecule> getMolecules();
+
+	/**
+	 * get all molecules in the molecule system
+	 * with a string query
+	 *
+	 * @param String the id of the molecule that you
+	 *               are interested in.
+	 * @return a list of molecules, -
+	 *         {@link Molecule}
+	 */
+	Set<Molecule> getMolecules(String string);
 
 }

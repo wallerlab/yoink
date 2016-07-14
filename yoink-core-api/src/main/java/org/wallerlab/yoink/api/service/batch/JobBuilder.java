@@ -32,7 +32,7 @@ import org.wallerlab.yoink.api.model.batch.Job;
 public interface JobBuilder<I,O> {
 
 	/**
-	 * this method take the builderInput to build a job
+	 * this method takes the builderInput to build a job
 	 * 
 	 * @param input to be used
 	 * @return {@link Job}

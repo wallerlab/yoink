@@ -12,67 +12,145 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *//*
+
 package org.wallerlab.yoink.adaptive.config;
 
-import javax.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.wallerlab.yoink.adaptive.services.smooth.DensitySmoothner;
-import org.wallerlab.yoink.adaptive.services.smooth.DistanceSmoothner;
-import org.wallerlab.yoink.api.service.adaptive.Smoothner;
-import org.wallerlab.yoink.api.service.adaptive.SmoothFunction;
+import org.wallerlab.yoink.adaptive.services.Smoothner;
+import org.wallerlab.yoink.adaptive.services.AdaptiveProcessor;
+import org.wallerlab.yoink.adaptive.services.factors.Lambdas;
+import org.wallerlab.yoink.adaptive.services.SmoothFunctions;
+import org.wallerlab.yoink.adaptive.services.processors.Processor;
+import org.wallerlab.yoink.adaptive.services.processors.Processors;
+import org.wallerlab.yoink.adaptive.services.WeightFactors;
+import org.wallerlab.yoink.adaptive.services.functions.SmoothFunction;
 
+import java.util.EnumMap;
+import java.util.Map;
+
+import static org.wallerlab.yoink.adaptive.services.processors.Processor.NAME.*;
+import static org.wallerlab.yoink.adaptive.services.factors.Lambdas.NAME.*;
+import static org.wallerlab.yoink.adaptive.services.SmoothFunctions.NAME.*;
+import static org.wallerlab.yoink.adaptive.services.WeightFactors.NAME.*;
+
+*/
 /**
  * this class is for adaptive project configuration
  * 
  * @author Min Zheng
  *
- */
+ *//*
+
 @Configuration
 public class AdaptiveConfig {
 
-	@Resource SmoothFunction brooksSmoothFunction;
-	@Resource SmoothFunction buloSmoothFunction;
-	@Resource SmoothFunction morokumaSmoothFunction;
-	@Resource SmoothFunction permutedSmoothFunction;
+    @Bean
+    Smoothner bf(){
+      return new Smoothner.Builder()
+                          .processor(use(BF))
+                          .build();
+    }
 
-	@Bean public Smoothner densitySmoothnerBF() {
-		return new DensitySmoothner(brooksSmoothFunction);
-	}
+    @Bean
+    Smoothner fires(){
+        return new Smoothner.Builder()
+                            .processor(use(Processor.NAME.FIRES))
+                            .build();
+    }
 
-	@Bean public Smoothner distanceSmoothnerBF() {
-		return new DistanceSmoothner(brooksSmoothFunction);
-	}
+    @Bean
+    Smoothner hotSpot(){
+        return new Smoothner.Builder()
+                            .processor(use(HOT_SPOT))
+                            .factors(use(DISTANCE_OR_DENSITY))
+                            .functions(use(BROOKS))
+                            .build();
+    }
 
-	@Bean public Smoothner densitySmoothnerSPOT() {
-		return new DensitySmoothner(brooksSmoothFunction);
-	}
+    @Bean
+    Smoothner xs(){
+        return new Smoothner.Builder()
+                .processor(use(CONFIG))
+                .factors(use(DISTANCE_OR_DENSITY))
+                .weights(use(XS))
+                .functions(use(BROOKS))
+                .build();
+    }
 
-	@Bean public Smoothner distanceSmoothnerSPOT() {
-		return new DistanceSmoothner(brooksSmoothFunction);
-	}
+    @Bean
+    Smoothner scmp(){
+        return new Smoothner.Builder()
+                .processor(use(CONFIG))
+                .factors(use(DISTANCE_OR_DENSITY))
+                .weights(use(WeightFactors.NAME.SCMP))
+                .functions(use(BROOKS))
+                .build();
+    }
 
-	@Bean public Smoothner densitySmoothnerDAS() {
-		return new DensitySmoothner(buloSmoothFunction);
-	}
+    @Bean
+    Smoothner das(){
+        return new Smoothner.Builder()
+                .processor(use(CONFIG))
+                .factors(use(DISTANCE_OR_DENSITY))
+                .weights(use(DAS))
+                .functions(use(BROOKS))
+                .build();
+    }
 
-	@Bean public Smoothner distanceSmoothnerDAS() {
-		return new DistanceSmoothner(buloSmoothFunction);
-	}
+    @Bean
+    Smoothner sap(){
+        return new Smoothner.Builder()
+                .processor(use(CONFIG))
+                .factors(use(DISTANCE_OR_DENSITY))
+                .weights(use(SAP))
+                .functions(use(BROOKS))
+                .build();
+    }
 
-	@Bean public Smoothner densitySmoothnerXS() {
-		return new DensitySmoothner(morokumaSmoothFunction);
-	}
+    @Bean
+    Smoothner pap(){
+        return new Smoothner.Builder()
+                .processor(use(PAP))
+                .factors(use(DISTANCE_OR_DENSITY))
+                .weights(use(SAP))
+                .functions(use(BROOKS))
+                .build();
+    }
 
-	@Bean public Smoothner distanceSmoothnerXS() {
-		return new DistanceSmoothner(morokumaSmoothFunction);
-	}
 
-	@Bean public Smoothner densitySmoothnerPAP() {return new DensitySmoothner(permutedSmoothFunction);}
+    @Bean
+    AdaptiveProcessor smoothnerService(){
+        Map<Smoothner.NAME, Smoothner> smoothners = new EnumMap<>(Processor.NAME.class);
+        smoothners.put(Smoothner.NAME.BF, bf());
+        smoothners.put(Smoothner.NAME.FIRES,fires());
+        smoothners.put(Smoothner.NAME.HOT_SPOT,hotSpot());
+        smoothners.put(Smoothner.NAME.XS,xs());
+        smoothners.put(Smoothner.NAME.SCMP, scmp());
+        smoothners.put(Smoothner.NAME.PAP,pap());
+        smoothners.put(Smoothner.NAME.SAP,sap());
+        smoothners.put(Smoothner.NAME.DAS,das());
+        return new AdaptiveProcessor(smoothners);
+    }
 
-	@Bean public Smoothner distanceSmoothnerPAP() {
-		return new DistanceSmoothner(permutedSmoothFunction);
-	}
+
+    @Autowired Processors processors;
+    private Processors use(Processor.NAME name){ return this.processors.use(name);}
+
+    @Autowired
+    Lambdas factors;
+    private Lambdas use(Lambdas.NAME name){ return this.factors.use(name);}
+
+    @Autowired
+    WeightFactors weights;
+    private WeightFactors use(WeightFactors.NAME name){ return this.factors.use(name);}
+
+    @Autowired
+    SmoothFunctions functions;
+    private SmoothFunction use(SmoothFunctions.NAME name){ return this.functions.use(name);}
+
 
 }
+*/

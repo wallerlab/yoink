@@ -15,27 +15,29 @@
  */
 package org.wallerlab.yoink.region.service
 
-
+import org.wallerlab.yoink.region.service.partitioners.NumberPartitioner
 import spock.lang.Specification;
 
-import org.wallerlab.yoink.api.enums.*
 import org.wallerlab.yoink.api.model.batch.JobParameter;
 import org.wallerlab.yoink.api.model.molecule.Atom;
 import org.wallerlab.yoink.api.model.molecule.Coord;
 import org.wallerlab.yoink.api.model.molecule.Molecule;
 import org.wallerlab.yoink.api.model.region.Region;
-import org.wallerlab.yoink.api.service.Calculator;
+import org.wallerlab.yoink.api.service.molecule.Calculator;
 import org.wallerlab.yoink.api.service.Factory
 import org.wallerlab.yoink.region.domain.SimpleRegion
-import org.wallerlab.yoink.api.service.region.Partitioner;
+import static org.wallerlab.yoink.api.model.region.Region.Name.*;
+import static org.wallerlab.yoink.api.service.region.Regionizer.Type.*;
+import static org.wallerlab.yoink.api.model.batch.JobParameter.*;
 
 class NumberRegionizerSpec extends Specification{
 	def "test method regionize(Map<Region.Name, Region> regions,Map<JobParameter, Object> parameters)"(){
 
+		def job = Mock(Job)
 		def regions=new HashMap<Region.Name,Region>()
 		def region=Mock(Region)
 		def m=Mock(Molecule)
-		region.getCenterOfMass()>>Mock(Coord)
+		region.getCenterOfMass() >> Mock(Coord)
 
 		def region2=Mock(Region)
 		def a1=Mock(Atom)
@@ -59,28 +61,23 @@ class NumberRegionizerSpec extends Specification{
 		def molecularMap=new HashMap<Molecule, Integer>()
 		molecularMap.put(m,0)
 		region.getMolecularMap()>>molecularMap
-		regions.put(Region.Name.QM_CORE,region)
-		regions.put(Region.Name.NONQM_CORE,region2)
-		def parameters=Mock(Map)
-		parameters.get(JobParameter.NUMBER_QM)>>(int)2
-		parameters.get(JobParameter.NUMBER_BUFFER)>>(int)1
-		parameters.get(JobParameter.PARTITIONER)>>Partitioner.Type.NUMBER
+		regions.put(QM_CORE,region)
+		regions.put(NONQM_CORE,region2)
 
-		def simpleRegionFactory=Mock(Factory)
-		simpleRegionFactory.create(Region.Name.QM_ADAPTIVE)>>new SimpleRegion(Region.Name.QM_ADAPTIVE)
-		simpleRegionFactory.create(Region.Name.QM)>>new SimpleRegion(Region.Name.QM)
-		simpleRegionFactory.create(Region.Name.BUFFER)>>new SimpleRegion(Region.Name.BUFFER)
+		def parameters=Mock(Map)
+		parameters.get(NUMBER_QM)>> 2
+		parameters.get(NUMBER_BUFFER)>> 1
+		parameters.get(PARTITIONER)>> NUMBER
+
 
 		when:"start up a new NumberRegionizer"
-		def regionizer=new NumberRegionizer()
-		regionizer.sortedDistancesCalculator=sortedDistancesCalculator
-		regionizer.regionFactory=simpleRegionFactory
+		def regionizer=new NumberPartitioner()
+		regionizer.distanceCalculator=sortedDistancesCalculator
 
 
 		then:"the new numberRegionizer is executable and gets right results"
-		regionizer.regionize(regions,parameters)
-		regions.size()==5
-		regions.get(Region.Name.QM_ADAPTIVE).getSize()==2
-		regions.get(Region.Name.BUFFER).getSize()==1
+		def results = regionizer.partition(job)
+		results.get(QM_ADAPTIVE).size()==2
+		results.get(BUFFER).size()==1
 	}
 }

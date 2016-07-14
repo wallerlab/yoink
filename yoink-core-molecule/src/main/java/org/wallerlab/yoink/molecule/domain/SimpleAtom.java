@@ -15,10 +15,7 @@
  */
 package org.wallerlab.yoink.molecule.domain;
 
-import org.wallerlab.yoink.api.model.molecule.Atom;
-import org.wallerlab.yoink.api.model.molecule.Coord;
-import org.wallerlab.yoink.api.model.molecule.Element;
-import org.wallerlab.yoink.api.model.molecule.RadialGrid;
+import org.wallerlab.yoink.api.model.molecule.*;
 
 /**
  * the domain model of atom
@@ -34,7 +31,7 @@ public class SimpleAtom implements Atom {
 
 	private final Coord coordinate;
 
-	private RadialGrid radial_grid;
+	private RadialGrid radial_grid; //We dont want to store this for each and every atom
 
 	public SimpleAtom(int index, Element elementType, Coord coordinate) {
 		this.index = index;
@@ -95,7 +92,6 @@ public class SimpleAtom implements Atom {
 	 */
 	@Override
 	public RadialGrid getRadialGrid() {
-		
 		return this.radial_grid;
 	}
 
@@ -104,7 +100,6 @@ public class SimpleAtom implements Atom {
 	 */
 	@Override
 	public void setRadialGrid(RadialGrid radial_grid) {
-
 		this.radial_grid=radial_grid;
 	}
 }

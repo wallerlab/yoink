@@ -15,79 +15,54 @@
  */
 package org.wallerlab.yoink.cube.domain;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-import org.wallerlab.yoink.api.model.cube.Cube;
-import org.wallerlab.yoink.api.model.density.DensityPoint.DensityType;
 import org.wallerlab.yoink.api.model.molecule.Atom;
 import org.wallerlab.yoink.api.model.molecule.Coord;
 import org.wallerlab.yoink.api.model.molecule.Molecule;
 import org.wallerlab.yoink.math.constants.Constants;
-import static java.util.stream.Collectors.toSet;
 
 /**
- * Cube domain Model stores all information about cube. Constructing a cube
- * needs:
+ * Cube domain Model stores all information about cube.
+ *
+ * Constructing a cube needs:
  * 1. Coordinate of the origin
  * 2. Number of steps along x/y/z axis
  * 3. Step size along x/y/z axis.
  */
-@Component
 public class SimpleCube implements Cube {
 
-	private Coord origin;
-
-	private List<Double> values;
-
-	private int[] numberOfXYZSteps = new int[3];
-
-	private final double[] xyzStepSize = new double[3];
-
-	private Set<Molecule> molecules;
+	private final int size;
 
 	private String name;
 
-	private int size;
+	private final Coord origin;
 
-	private List<Coord> coordinates;
+	private final int[] numberOfXYZSteps;
 
-	private List<DensityType> densityTypes = new ArrayList<DensityType>();
+	private final double[] xyzStepSize;
 
-	/**
-	 * use xyz step sizes construct a cube and convert the unit of step size
-	 * from angstrom to bohr
-	 * 
-	 * @param xyzStepSize
-	 *            -a double array with xyz step sizes
-	 * 
-	 */
-	public SimpleCube(double[] xyzStepSize) {
+	private final List<Coord> coordinates;
+
+	private final Set<Molecule> molecules;
+
+	public SimpleCube(int size,
+					  Coord origin,
+					  int[] numberOfXYZSteps,
+					  double[] xyzStepSize,
+					  List<Coord> coordinates,
+					  final Set<Molecule> molecules){
+		this.size=size;
+		this.origin = origin;
+		this.numberOfXYZSteps = numberOfXYZSteps;
+		this.xyzStepSize = xyzStepSize;
+		this.coordinates = coordinates;
+		this.molecules = molecules;
+
 		for (int i = 0; i < 3; i++) {
 			this.xyzStepSize[i] = xyzStepSize[i] * Constants.ANGSTROM_TO_BOHR;
 		}
-	}
-
-	/**
-	 * Construct when size is known, or use setter to set number of size
-	 * 
-	 * @param cubeSize
-	 *            , the total number of grid points in the cube
-	 * 
-	 */
-	public SimpleCube(int cubeSize) {
-		this.size = cubeSize;
-		this.values = Arrays.asList(new Double[cubeSize]);
-	}
-
-	/**
-	 * default cube constructor
-	 */
-	public SimpleCube() {
 	}
 
 	@Override
@@ -96,18 +71,8 @@ public class SimpleCube implements Cube {
 	}
 
 	@Override
-	public void setGridOrigin(Coord gridOrigin) {
-		this.origin = gridOrigin;
-	}
-
-	@Override
 	public int[] getNumberOfXYZSteps() {
 		return numberOfXYZSteps;
-	}
-
-	@Override
-	public void setNumberOfXYZSteps(int[] numberOfXYZSteps) {
-		this.numberOfXYZSteps = numberOfXYZSteps;
 	}
 
 	@Override
@@ -117,20 +82,12 @@ public class SimpleCube implements Cube {
 
 	@Override
 	public Set<Molecule> getMolecules() {
-		return molecules;
-	}
-
-	@Override
-	public void setMolecules(Set<Molecule> molecules) {
-		this.molecules = molecules;
+		return  molecules;
 	}
 
 	@Override
 	public Set<Atom> getAtoms() {
-		return this.molecules
-				   .stream()
-				   .flatMap(molecule -> molecule.getAtoms().stream())
-		           .collect(toSet());
+		return null;
 	}
 
 	@Override
@@ -139,46 +96,13 @@ public class SimpleCube implements Cube {
 	}
 
 	@Override
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	@Value("#{'${yoink.cube.densityTypes}'.split(',')}")
-	public List<DensityType> getDensityTypes() {
-		return densityTypes;
-	}
-
-	@Override
-	public void setDensityTypes(List<DensityType> densityTypes) {
-		this.densityTypes = densityTypes;
-	}
-
-	@Override
 	public int getSize() {
 		return size;
 	}
 
 	@Override
-	public void setSize(int size) {
-		this.size = size;
-	}
-
-	@Override
-	public List<Coord> getCoordinates() { return this.coordinates;}
-
-	@Override
-	public void setCoordinates(List<Coord> coordinates) {
-		this.coordinates = coordinates;
-	}
-
-	@Override
-	public List<Double> getValues() {
-		return this.values;
-	}
-
-	@Override
-	public void setValues(List<Double> values) {
-		this.values = values;
+	public List<Coord> getCoordinates() {
+		return this.coordinates;
 	}
 
 }

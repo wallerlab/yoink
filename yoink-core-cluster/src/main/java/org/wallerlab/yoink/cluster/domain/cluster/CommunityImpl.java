@@ -108,13 +108,11 @@ class CommunityImpl implements Community {
 
 	@Override
 	public long size(){
-		
 		return size;
 	}
 	
 	@Override
 	public String getId(){
-		
 		return id;
 	}
 	
@@ -125,8 +123,13 @@ class CommunityImpl implements Community {
 	
 	@Override
 	public String toString() {
-		
-		return "Community(Size: " + size + ", ID: " + id + ", Label: " +label + ", Sum_int: " + internalEdgeWeightSum + ", Sum_tot: " + totalEdgeWeightSum + ", members: " + memberset+")";
+		return "Community(Size: " + size +
+						  ", ID: " + id +
+					      ", Label: " +label +
+					      ", Sum_int: " + internalEdgeWeightSum +
+				          ", Sum_tot: " + totalEdgeWeightSum +
+				          ", members: " + memberset+
+				          ")";
 	}
 	
 }

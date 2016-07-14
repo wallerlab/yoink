@@ -41,5 +41,4 @@ public class SmoothnerProcessor implements ItemProcessor<Job<JAXBElement>,Job> {
 		adaptiveQMMMSmoothnerRouter.smooth(job);
 		return job;
 	}
-
 }

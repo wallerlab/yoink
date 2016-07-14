@@ -43,9 +43,9 @@ class CenterOfMassComputerSpec extends Specification {
 		simpleCoordFactory.myVector3D=myVector3D
 
 		when:"set up a new CenterOfMassComputer"
-		def COMcomputer= new  CenterOfMassComputer()
+		def COMcomputer= new DistanceCalculator()
 		COMcomputer.simpleCoordFactory=simpleCoordFactory
-		COMcomputer.myVector3D=myVector3D
+		COMcomputer.vectorFactory=myVector3D
 		then:"get the center of mass of molecules"
 		def COM =  COMcomputer.calculate(molecules)
 		Math.abs((COM.getCoords().getEntry(0)-1))<=1.0E-5

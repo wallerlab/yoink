@@ -16,7 +16,10 @@ public class SimpleVector3DFactory {
 	private Vector3DType myVectorType = Vector3DType.COMMONS;
 
 	public SimpleVector3DFactory() {
+	}
 
+	public static Vector staticCreate(double x, double y, double z){
+		return new CommonsVector3D(x, y, z);
 	}
 
 	public SimpleVector3DFactory(Vector3DType myVectorType) {

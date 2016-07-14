@@ -15,12 +15,7 @@
  */
 package org.wallerlab.yoink.molecule.config;
 
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
 
 /**
  * this class is to configure molecule project
@@ -29,7 +24,6 @@ import org.springframework.context.annotation.PropertySource;
  *
  */
 @Configuration
-@ComponentScan("org.wallerlab.yoink.molecule")
 @PropertySource("classpath:molecule.properties")
 public class MolecularConfig {
 }

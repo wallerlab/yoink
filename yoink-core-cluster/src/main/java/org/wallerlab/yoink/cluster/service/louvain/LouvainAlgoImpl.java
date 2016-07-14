@@ -52,7 +52,7 @@ public class LouvainAlgoImpl {
 
 	}
 
-	// calculate modularity gain for community assignment
+	// molecular modularity gain for community assignment
 	private double deltaQ(Community community, Node node) {
 
 		double sumIn = community.getInternalEdgeWeightSum();

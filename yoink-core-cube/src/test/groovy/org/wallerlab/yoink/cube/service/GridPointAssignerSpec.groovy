@@ -15,14 +15,14 @@
  */
 package org.wallerlab.yoink.cube.service
 
-import org.wallerlab.yoink.cube.service.old_stuff.GridPointAssigner
+
 import spock.lang.Specification;
 
 import org.wallerlab.yoink.api.enums.*
 import org.wallerlab.yoink.api.model.molecule.Coord;
 import org.wallerlab.yoink.api.model.molecule.Molecule;
 import org.wallerlab.yoink.api.model.region.Region;
-import org.wallerlab.yoink.api.service.Calculator
+import org.wallerlab.yoink.api.service.molecule.Calculator
 
 class GridPointAssignerSpec extends Specification{
 

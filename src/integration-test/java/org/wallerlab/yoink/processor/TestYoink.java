@@ -37,7 +37,7 @@ public class TestYoink {
 		Application yoink = new Application();
 		String[] args = new String[1];
 		args[0] = "integration test- run batch version";
-		yoink.main(args);
+		//yoink.main(args);
 		try {
 
 			if (files_in.list().length > 0 && files_out.list().length > 0) {
