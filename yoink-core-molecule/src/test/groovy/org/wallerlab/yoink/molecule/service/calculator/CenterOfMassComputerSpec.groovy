@@ -15,26 +15,27 @@
  */
 package org.wallerlab.yoink.molecule.service.calculator
 
-import org.wallerlab.yoink.api.model.molecule.Atom;
-import org.wallerlab.yoink.api.model.molecule.Coord;
-import org.wallerlab.yoink.api.model.molecule.Element;
-import org.wallerlab.yoink.api.model.molecule.Molecule;
+
+import org.wallerlab.yoink.api.model.Coord;
+import org.wallerlab.yoink.api.model.molecular.Element
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
+
 import org.wallerlab.yoink.api.service.math.Vector
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
 import org.wallerlab.yoink.molecule.domain.SimpleCoordFactory
-
+import org.wallerlab.yoink.molecule.service.DistanceCalculator
 import spock.lang.Specification
 
 class CenterOfMassComputerSpec extends Specification {
 	def "test method  calculate(Set<Molecule> molecules)"(){
 
-		def molecules= new HashSet<Molecule>()
-		def m=Mock(Molecule)
+		def molecules= new HashSet<MolecularSystem.Molecule>()
+		def m=Mock(MolecularSystem.Molecule)
 		def coordinate=Mock(Coord)
 		def myVector3D=new SimpleVector3DFactory()
 		myVector3D.myVectorType=Vector.Vector3DType.COMMONS
 		coordinate.getCoords()>>myVector3D.create(1,1,1);
-		def a=Mock(Atom)
+		def a=Mock(MolecularSystem.Molecule.Atom)
 		a.getCoordinate()>>coordinate
 		a.getElementType()>>Element.H
 		m.getAtoms()>>[a]

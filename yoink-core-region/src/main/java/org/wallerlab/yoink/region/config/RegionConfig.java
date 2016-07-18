@@ -16,7 +16,7 @@
 package org.wallerlab.yoink.region.config;
 
 import org.wallerlab.yoink.api.service.region.Regionizer;
-import org.wallerlab.yoink.region.service.RegionizerService;
+import org.wallerlab.yoink.region.service.SimpleRegionizer;
 import static org.wallerlab.yoink.api.service.region.Regionizer.Type.*;
 import org.wallerlab.yoink.region.service.partitioners.Partitioner;
 
@@ -46,9 +46,9 @@ public class RegionConfig {
        Map<Regionizer.Type,Partitioner> partitioners =
                 new EnumMap<Regionizer.Type,Partitioner>(Regionizer.Type.class);
        partitioners.put(DISTANCE,distancePartitioner);
-       partitioners.put(NUMBER,densityPartitioner);
+       partitioners.put(NUMBER,numberPartitioner);
        partitioners.put(DENSITY,densityPartitioner);
-       Regionizer regionizerService = new RegionizerService(partitioners);
+       Regionizer regionizerService = new SimpleRegionizer(partitioners);
        return regionizerService;
     }
 

@@ -15,11 +15,9 @@
  */
 package org.wallerlab.yoink.api.service.region;
 
-import java.util.Map;
-
-import org.wallerlab.yoink.api.model.batch.Job;
-import org.wallerlab.yoink.api.model.molecule.MolecularSystem;
-import org.wallerlab.yoink.api.model.region.Region;
+import org.wallerlab.yoink.api.model.Job;
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
+import org.wallerlab.yoink.api.model.adaptive.Region;
 
 import javax.xml.bind.JAXBElement;
 

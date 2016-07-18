@@ -615,7 +615,7 @@
  <parameter name="REGION_CUBE" value="SYSTEM"/>  
       <parameter name="SEDD_STEPSIZE" value="0.3 0.3 0.3"/>
         <parameter name="DORI_STEPSIZE" value="0.9 0.9 0.9"/>
-        <parameter name="PARTITIONER" value="CLUSTER"/>
+        <parameter name="PARTITIONER" value="DENSITY"/>
         <parameter name="SMOOTHNER" value="ABRUPT"/>
         <parameter name="JOB_NAME" value="dori_cluster"/>
         <parameter name="OUTPUT_FOLDER" value="./outputs"/>

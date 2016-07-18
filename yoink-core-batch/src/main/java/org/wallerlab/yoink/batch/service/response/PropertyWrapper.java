@@ -21,13 +21,11 @@ import java.util.Map;
 import java.util.Set;
 import javax.xml.bind.JAXBElement;
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.api.model.batch.JobParameter;
-import org.wallerlab.yoink.api.model.batch.Job;
+import org.wallerlab.yoink.api.model.Job;
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
 import org.wallerlab.yoink.api.service.math.Vector;
 import org.wallerlab.yoink.api.service.molecule.FilesWriter;
-import org.wallerlab.yoink.api.model.molecule.Molecule;
-import org.wallerlab.yoink.api.model.region.Region;
-import org.wallerlab.yoink.batch.service.Wrapper;
+import org.wallerlab.yoink.api.model.adaptive.Region;
 import org.xml_cml.schema.Cml;
 import org.xml_cml.schema.Gradient;
 import org.xml_cml.schema.MoleculeList;
@@ -63,7 +61,7 @@ public class PropertyWrapper implements Wrapper<Job<JAXBElement>> {
 	 */
 	public void wrap(Job<JAXBElement> job) {
 		JAXBElement<Cml> cmlElement = job.getInput();
-		Map<JobParameter, Object> parameters = job.getParameters();
+		Map<Job.JobParameter, Object> parameters = job.getParameters();
 		Map<String, Object> properties = job.getProperties();
 		changeMoleculeId(job, cmlElement);
 		putPartitioningResultInProperty(job, cmlElement, parameters, properties);
@@ -83,18 +81,16 @@ public class PropertyWrapper implements Wrapper<Job<JAXBElement>> {
 	}
 
 	private void loopOverAllMolecules(Job<JAXBElement> job, Object elementList) {
-		List<Molecule> molecules = (List) job.getMolecularSystem().getMolecules();
-		MoleculeList cmlMoleculeList = ((JAXBElement<MoleculeList>) elementList)
-				.getValue();
+		Set<MolecularSystem.Molecule> molecules =  job.getMolecularSystem().getMolecules();
+		MoleculeList cmlMoleculeList = ((JAXBElement<MoleculeList>) elementList).getValue();
 		int moleculeCounter = 0;
 		for (Object elementMolecule : cmlMoleculeList.getAnyCmlOrAnyOrAny()) {
 			JAXBElement element = (JAXBElement) elementMolecule;
 			// check molecule
 			if (element.getDeclaredType() == org.xml_cml.schema.Molecule.class) {
-				org.xml_cml.schema.Molecule cmlMolecule = ((JAXBElement<org.xml_cml.schema.Molecule>) element)
-						.getValue();
-				cmlMolecule.setId(molecules.get(moleculeCounter).getName()
-						.toString());
+				org.xml_cml.schema.Molecule cmlMolecule = ((JAXBElement<org.xml_cml.schema.Molecule>) element).getValue();
+				//cmlMolecule.setId(molecules.get(moleculeCounter).getName().toString());
+				cmlMolecule.setId("processed");
 				moleculeCounter++;
 			}
 		}
@@ -102,7 +98,7 @@ public class PropertyWrapper implements Wrapper<Job<JAXBElement>> {
 
 	
 	private void putPartitioningResultInProperty(Job<JAXBElement> job,
-												JAXBElement<Cml> cmlElement, Map<JobParameter, Object> parameters,
+												JAXBElement<Cml> cmlElement, Map<Job.JobParameter, Object> parameters,
 												Map<String, Object> properties) {
 		ObjectFactory objectFactory = new ObjectFactory();
 		PropertyList propertyList = objectFactory.createPropertyList();
@@ -126,7 +122,7 @@ public class PropertyWrapper implements Wrapper<Job<JAXBElement>> {
 	}
 	
 	private void putSmoothingResultInProperty(Job<JAXBElement> job,
-											  JAXBElement<Cml> cmlElement, Map<JobParameter, Object> parameters,
+											  JAXBElement<Cml> cmlElement, Map<Job.JobParameter, Object> parameters,
 											  Map<String, Object> properties) {
 		ObjectFactory objectFactory = new ObjectFactory();
 		PropertyList propertyList = objectFactory.createPropertyList();
@@ -142,7 +138,7 @@ public class PropertyWrapper implements Wrapper<Job<JAXBElement>> {
 									  ObjectFactory objectFactory,
 									  PropertyList propertyList) {
 		Property property = objectFactory.createProperty();
-		property.setTitle("weights and smooth factors ");
+		property.setTitle("weights and compute factors ");
 		loopOverAllWeightConfigurations(properties, objectFactory,
 				propertyList, property);
 		loopOverBufferMolecules(job, objectFactory, propertyList, property);
@@ -214,13 +210,12 @@ public class PropertyWrapper implements Wrapper<Job<JAXBElement>> {
 										 PropertyList propertyList,
 										 Property property) {
 		if (job.getProperties().containsKey("smoothfactors")) {
-			List<Double> smoothFactors = (List<Double>) job.getProperties()
-					.get("smoothfactors");
+			List<Double> smoothFactors = (List<Double>) job.getProperties().get("smoothfactors");
 			if (job.getRegions().containsKey(Region.Name.BUFFER)) {
-				Set<Molecule> bufferMolecules = job.getRegions()
+				Set<MolecularSystem.Molecule> bufferMolecules = job.getRegions()
 						.get(Region.Name.BUFFER).getMolecules();
 				List<Integer> bufferIndices = new ArrayList<Integer>();
-				for (Molecule molecule : bufferMolecules) {
+				for (MolecularSystem.Molecule molecule : bufferMolecules) {
 					bufferIndices.add(molecule.getIndex());
 				}
 
@@ -229,9 +224,7 @@ public class PropertyWrapper implements Wrapper<Job<JAXBElement>> {
 							property, bufferIndices.get(counter),
 							smoothFactors.get(counter));
 				}
-
-				propertyList.setTitle(propertyList.getTitle()
-						+ "   average smooth factor:  ");
+				propertyList.setTitle(propertyList.getTitle() + "   average compute factor:  ");
 			}
 		}
 	}
@@ -242,15 +235,13 @@ public class PropertyWrapper implements Wrapper<Job<JAXBElement>> {
 											Property property) {
 		List<Region.Name> regions= new ArrayList<Region.Name>();
 		regions.add(Region.Name.QM);
-		regions.add(Region.Name.BUFFER);	
-		for(Region.Name region:regions){
+		regions.add(Region.Name.BUFFER);
+		for(Region.Name region: regions){
 			if (job.getRegions().containsKey(region)) {
-				Set<Molecule> molecules = job.getRegions()
-						.get(region).getMolecules();
+				Set<MolecularSystem.Molecule> molecules = job.getRegions().get(region).getMolecules();
 				List<Integer> indices = new ArrayList<Integer>();
-				for (Molecule molecule : molecules) {
+				for (MolecularSystem.Molecule molecule : molecules)
 					indices.add(molecule.getIndex());
-				}        
 				Scalar scalar = objectFactory.createScalar();
 				scalar.setDataType(region.toString()+" molecules");
 				scalar.setValue(String.valueOf(indices));		
@@ -264,7 +255,7 @@ public class PropertyWrapper implements Wrapper<Job<JAXBElement>> {
 													  Integer bufferIndex,
 													  Double smoothFactor) {
 		Scalar scalar = objectFactory.createScalar();
-		scalar.setDataType("smooth function");
+		scalar.setDataType("compute function");
 		scalar.setValue(String.valueOf(smoothFactor));
 		scalar.setTitle("molecule index");
 		scalar.setId(String.valueOf(bufferIndex));

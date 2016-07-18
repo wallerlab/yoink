@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jms.core.JmsOperations;
 import org.springframework.jms.core.JmsTemplate;
-import org.wallerlab.yoink.api.model.batch.Job;
+import org.wallerlab.yoink.api.model.Job;
 import org.wallerlab.yoink.batch.service.request.JmsRequestReader;
 import org.wallerlab.yoink.batch.service.response.JmsJobItemWriter;
 

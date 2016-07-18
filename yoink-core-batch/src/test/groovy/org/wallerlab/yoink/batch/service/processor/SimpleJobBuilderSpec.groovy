@@ -20,9 +20,9 @@ import org.xml_cml.schema.ObjectFactory
 
 import spock.lang.Specification
 import org.wallerlab.yoink.api.enums.*
-import org.wallerlab.yoink.api.model.molecule.MolecularSystem;
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
 import org.wallerlab.yoink.api.service.molecule.Translator
-import org.wallerlab.yoink.api.model.batch.Job
+import org.wallerlab.yoink.api.model.Job
 
 class SimpleJobBuilderSpec extends Specification {
 

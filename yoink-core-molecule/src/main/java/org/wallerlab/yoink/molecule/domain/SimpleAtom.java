@@ -15,7 +15,9 @@
  */
 package org.wallerlab.yoink.molecule.domain;
 
-import org.wallerlab.yoink.api.model.molecule.*;
+import org.wallerlab.yoink.api.model.molecular.Element;
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
+import org.wallerlab.yoink.api.service.math.Vector;
 
 /**
  * the domain model of atom
@@ -23,19 +25,18 @@ import org.wallerlab.yoink.api.model.molecule.*;
  * @author Min Zheng
  *
  */
-public class SimpleAtom implements Atom {
+public class SimpleAtom implements MolecularSystem.Molecule.Atom {
 
 	protected final int index;
 
-	protected final Element elementType;
+	protected final Element element;
 
-	private final Coord coordinate;
+	//The unit is Bohr.
+	private final Vector coordinate;
 
-	private RadialGrid radial_grid; //We dont want to store this for each and every atom
-
-	public SimpleAtom(int index, Element elementType, Coord coordinate) {
+	public SimpleAtom(int index, Element elementType, Vector coordinate) {
 		this.index = index;
-		this.elementType = elementType;
+		this.element = elementType;
 		this.coordinate = coordinate;
 	}
 
@@ -43,8 +44,8 @@ public class SimpleAtom implements Atom {
 	 * get the element type of the atom
 	 */
 	@Override
-	public Element getElementType() {
-		return elementType;
+	public Element getElement() {
+		return element;
 	}
 
 	/**
@@ -58,48 +59,15 @@ public class SimpleAtom implements Atom {
 	/**
 	 * get the coordinate of the atom
 	 */
-	@Override
-	public Coord getCoordinate() {
-		return coordinate;
-	}
+	public Vector getCoordinate() {return coordinate;}
 
-	/**
-	 * get the x coordinate of the atom
-	 */
-	@Override
-	public double getX3() {
-		return this.coordinate.getCoords().getX();
-	}
 
-	/**
-	 * get the y coordinate of the atom
-	 */
 	@Override
-	public double getY3() {
-		return this.coordinate.getCoords().getY();
-	}
-
-	/**
-	 * get the z coordinate of the atom
-	 */
-	@Override
-	public double getZ3() {
-		return this.coordinate.getCoords().getZ();
-	}
-
-	/**
-	 * set the radial grid
-	 */
-	@Override
-	public RadialGrid getRadialGrid() {
-		return this.radial_grid;
-	}
-
-	/**
-	 * get the radial grid
-	 */
-	@Override
-	public void setRadialGrid(RadialGrid radial_grid) {
-		this.radial_grid=radial_grid;
+	public String toString() {
+		return "Atom{" +
+				"index=" + index +
+				", element=" + element +
+				", coordinate=" + coordinate +
+				'}';
 	}
 }

@@ -27,7 +27,7 @@ import org.springframework.batch.item.support.CompositeItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.*;
-import org.wallerlab.yoink.api.model.batch.Job;
+import org.wallerlab.yoink.api.model.Job;
 
 import javax.xml.bind.JAXBElement;
 import java.util.ArrayList;
@@ -64,7 +64,7 @@ public class BatchConfig  {
 	public ItemProcessor<Job<JAXBElement>, Job> regionizerProcessor;
 
 	@Autowired
-	@Qualifier("smoothnerProcessor")
+	@Qualifier("adaptiveProcessor")
 	public ItemProcessor<Job<JAXBElement>, Job> smoothnerProcessor;
 
 	@Autowired

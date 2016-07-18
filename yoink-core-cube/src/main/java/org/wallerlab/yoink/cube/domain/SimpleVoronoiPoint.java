@@ -15,8 +15,8 @@
  */
 package org.wallerlab.yoink.cube.domain;
 
-import org.wallerlab.yoink.api.model.molecule.*;
-import org.wallerlab.yoink.api.model.cube.VoronoiPoint;
+import org.wallerlab.yoink.api.model.*;
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
 
 import java.util.Set;
 
@@ -28,35 +28,29 @@ import java.util.Set;
  */
 public class SimpleVoronoiPoint implements VoronoiPoint {
 
-	private int index;
-
 	private final Coord coordinate;
 
-	private final Set<Atom> nearestAtoms;
+	private final Set<MolecularSystem.Molecule.Atom> nearestAtoms;
 
-	private final Set<Molecule> nearestMolecules;
+	private final Set<MolecularSystem.Molecule> nearestMolecules;
 
 	public SimpleVoronoiPoint(final Coord coord,
-							  final Set<Molecule> nearestMolecules,
-							  final Set<Atom> nearestAtoms){
+							  final Set<MolecularSystem.Molecule> nearestMolecules,
+							  final Set<MolecularSystem.Molecule.Atom> nearestAtoms){
 		this.coordinate = coord;
 		this.nearestMolecules = nearestMolecules;
 		this.nearestAtoms = nearestAtoms;
-	}
-
-	public int getIndex() {
-		return index;
 	}
 
 	public Coord getCoordinate() {
 		return coordinate;
 	}
 
-	public Set<Atom> getNearestAtoms() {
+	public Set<MolecularSystem.Molecule.Atom> getNearestAtoms() {
 		return nearestAtoms;
 	}
 
-	public Set<Molecule> getNearestMolecules() {
+	public Set<MolecularSystem.Molecule> getNearestMolecules() {
 		return nearestMolecules;
 	}
 

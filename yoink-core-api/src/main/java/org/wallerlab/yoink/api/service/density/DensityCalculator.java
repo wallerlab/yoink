@@ -1,27 +1,25 @@
 package org.wallerlab.yoink.api.service.density;
 
-import org.wallerlab.yoink.api.model.molecule.Atom;
-import org.wallerlab.yoink.api.model.molecule.Coord;
-import org.wallerlab.yoink.api.model.molecule.Molecule;
+import org.wallerlab.yoink.api.model.Coord;
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
 
 import java.util.Set;
 
 public interface DensityCalculator {
 
-	Double electronic(Coord currentCoord, Set<Molecule> molecules);
+	Double electronic(Coord coord, Set<MolecularSystem.Molecule> molecules);
 
-	Double atomPair(Coord currentCoord, Set<Atom> atoms);
+	Double atomic(Coord coord, Set<MolecularSystem.Molecule.Atom> atoms);
 
-	Double rdg(Coord currentCoord, Set<Molecule> molecules);
+	Double ratio(Coord coord, MolecularSystem.Molecule.Atom[] neighbours);
 
-	Double sedd(Coord currentCoord, Set<Atom> atoms);
+	Double ratio(Coord coord, MolecularSystem.Molecule[] neighbours);
 
-	Double dori(Coord currentCoord, Set<Atom> atoms);
+	Double rdg(Coord coord, Set<MolecularSystem.Molecule> molecules);
 
-	//AtomicRatio
-	Double calculate(Coord coordinate, Atom[] neighbours);
+	Double sedd(Coord coord, Set<MolecularSystem.Molecule.Atom> atoms);
 
-	//MoleculeRatio
-	Double calculate(Coord coordinate, Molecule[] neighbours);
+	Double dori(Coord coord, Set<MolecularSystem.Molecule.Atom> atoms);
+
 
 }

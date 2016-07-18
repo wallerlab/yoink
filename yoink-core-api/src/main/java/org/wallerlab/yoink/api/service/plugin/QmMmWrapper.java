@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.xml.bind.JAXBElement;
 
-import org.wallerlab.yoink.api.model.batch.Job;
+import org.wallerlab.yoink.api.model.Job;
 import org.wallerlab.yoink.api.service.math.Vector;
 
 /**

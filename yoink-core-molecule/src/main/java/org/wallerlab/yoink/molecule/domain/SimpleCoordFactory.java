@@ -15,7 +15,7 @@
  */
 package org.wallerlab.yoink.molecule.domain;
 
-import org.wallerlab.yoink.api.model.molecule.Coord;
+import org.wallerlab.yoink.api.model.Coord;
 import org.wallerlab.yoink.api.service.Factory;
 import org.wallerlab.yoink.api.service.math.Vector;
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory;
@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
  * @author Min Zheng
  *
  */
+//TODO Deprecate this.
 @Service
 public class SimpleCoordFactory implements Factory<Coord, double[]> {
 
@@ -58,6 +59,7 @@ public class SimpleCoordFactory implements Factory<Coord, double[]> {
 		Coord newCooord = new SimpleCoord(coordVector);
 		return newCooord;
 	}
+
 
 	/**
 	 * use an array with 3 elements to make a new Coord

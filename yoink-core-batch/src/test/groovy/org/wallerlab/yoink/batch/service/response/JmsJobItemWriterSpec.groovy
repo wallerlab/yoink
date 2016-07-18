@@ -19,9 +19,9 @@ import org.xml_cml.schema.ObjectFactory
 
 import spock.lang.Specification
 import org.wallerlab.yoink.api.enums.*
-import org.wallerlab.yoink.api.model.batch.JobParameter;
+
 import org.springframework.batch.item.ItemWriter;
-import org.wallerlab.yoink.api.model.batch.Job
+import org.wallerlab.yoink.api.model.Job
 import org.wallerlab.yoink.molecule.data.JaxbStringWriter
 
 class JmsJobItemWriterSpec extends Specification{
@@ -30,8 +30,8 @@ class JmsJobItemWriterSpec extends Specification{
 		def job=Mock(Job)
 		def jobList=[job, job]
 		def parameters=Mock(Map)
-		parameters.get(JobParameter.JOB_NAME)>>"test"
-		parameters.get(JobParameter.OUTPUT_FOLDER)>>"./src/test/resources"
+		parameters.get(Job.JobParameter.JOB_NAME)>>"test"
+		parameters.get(Job.JobParameter.OUTPUT_FOLDER)>>"./src/test/resources"
 		job.getParameters()>>parameters
 		def factory=new ObjectFactory()
 		def cml=factory.createCml()

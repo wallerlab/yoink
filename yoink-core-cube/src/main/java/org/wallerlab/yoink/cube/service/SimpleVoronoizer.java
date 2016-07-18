@@ -15,33 +15,27 @@
  */
 package org.wallerlab.yoink.cube.service;
 
-import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.api.model.molecule.MolecularSystem;
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
 import org.wallerlab.yoink.cube.domain.Cube;
-import org.wallerlab.yoink.api.model.cube.VoronoiPoint;
-import org.wallerlab.yoink.api.model.density.DensityPoint;
-import org.wallerlab.yoink.api.model.molecule.Atom;
-import org.wallerlab.yoink.api.model.molecule.Coord;
-import org.wallerlab.yoink.api.model.molecule.Molecule;
-import org.wallerlab.yoink.api.service.molecule.Calculator;
+import org.wallerlab.yoink.api.model.VoronoiPoint;
+import org.wallerlab.yoink.api.model.DensityPoint;
+import org.wallerlab.yoink.api.model.Coord;
 import org.wallerlab.yoink.api.service.cube.Voronoizer;
 import org.wallerlab.yoink.cube.domain.SimpleVoronoiPoint;
-import org.wallerlab.yoink.math.set.SetOps;
+import org.wallerlab.yoink.math.SetOps;
+import org.wallerlab.yoink.molecule.service.DistanceCalculator;
+import static org.wallerlab.yoink.api.model.Job.JobParameter.*;
 
-import javax.annotation.Resource;
 import java.util.*;
-
+import javax.annotation.Resource;
+import org.springframework.stereotype.Service;
 import static java.util.stream.Collectors.toList;
-import static org.wallerlab.yoink.api.model.batch.JobParameter.*;
 
 /**
  * This class is to get those grid points that belong to the intersection region
  * of QM core region and non-QM core region. Then further calculation(dori and
  * sedd) will just be carried out on those grid points.
  *
- *
- */
-/**
  * This class assigns a grid point to two molecules and two atoms it is closest
  * to based on Voronoi partitioning and returns two molecules and two atoms in a
  * map.
@@ -50,10 +44,10 @@ import static org.wallerlab.yoink.api.model.batch.JobParameter.*;
 public class SimpleVoronoizer implements Voronoizer {
 
 	@Resource
-	private CubeBuilder<Set<Molecule>> cubeBuilder;
+	private CubeBuilder<Set<MolecularSystem.Molecule>> cubeBuilder;
 
 	@Resource
-	private Calculator<Double, Coord, Atom> distance;
+	private DistanceCalculator distanceCalculator;
 
 	private static final double[] seddStepSize = {0.9d,0.9d,0.9d};
 	private static final double[] doriStepSize = {0.5d,0.5d,0.5d};
@@ -73,28 +67,28 @@ public class SimpleVoronoizer implements Voronoizer {
 	 *         {@link VoronoiPoint }
 	 */
 	public List<VoronoiPoint> voronoize(DensityPoint.DensityType densityType,
-										Set<Molecule> moleculesInAdaptiveSearchRegion,
+										Set<MolecularSystem.Molecule> moleculesInAdaptiveSearchRegion,
 										MolecularSystem molecularSystem){
 
-		Set<Molecule> moleculesInSystem = molecularSystem.getMolecules();
-		Set<Molecule> moleculesInQmCore = molecularSystem.getMolecules("QM_CORE");
-		Set<Molecule> moleculesInNonQmCore = SetOps.diff(moleculesInSystem,moleculesInQmCore);
+		Set<MolecularSystem.Molecule> moleculesInSystem = molecularSystem.getMolecules();
+		Set<MolecularSystem.Molecule> moleculesInQmCore = molecularSystem.getMolecules("QM_CORE");
+		Set<MolecularSystem.Molecule> moleculesInNonQmCore = SetOps.diff(moleculesInSystem,moleculesInQmCore);
 
 
 		double[] xyzStepSize = (densityType.equals(SEDD)) ? seddStepSize: doriStepSize;
 
 		Cube cube = cubeBuilder.build(xyzStepSize, moleculesInAdaptiveSearchRegion);
 
-	/*
-	 * Find the distances between a grid point and atoms, then get two atoms
-	 * corresponding to the first and second lowest distances. Next get two
-	 * molecules corresponding to the first and second lowest distances.
-	 */
+		/*
+	 	* Find the distances between a grid point and atoms, then get two atoms
+	 	* corresponding to the first and second lowest distances. Next get two
+	 	* molecules corresponding to the first and second lowest distances.
+	 	*/
 		return cube.getCoordinates()
 				   .stream()
 				   .map(coord -> {
 							VoronoiPoint gridPoint = null;
-							Set<Molecule> nearestMolecules = nearestMolecules(coord, moleculesInAdaptiveSearchRegion);
+							Set<MolecularSystem.Molecule> nearestMolecules = nearestMolecules(coord, moleculesInAdaptiveSearchRegion);
 					  		boolean isPair = nearestMolecules.size() != 2;
 					   		boolean bothInNonQmCore = moleculesInNonQmCore.containsAll(nearestMolecules);
 					   		boolean bothInQmCore    = moleculesInQmCore.containsAll(nearestMolecules);
@@ -105,28 +99,28 @@ public class SimpleVoronoizer implements Voronoizer {
 				   .collect(toList());
 	}
 
-	private Set<Molecule> nearestMolecules(Coord coord, Set<Molecule> molecules ) {
-		Molecule[] moleculeArray = new Molecule[2];
-		for (Molecule molecule: molecules){
-			double first = Integer.MAX_VALUE;
-			double second = Integer.MAX_VALUE;
-			moleculeArray[0] = molecule;
-			moleculeArray[1] = molecule;
-			double current = shortestDistanceToMolecule(coord,molecule);
+	private Set<MolecularSystem.Molecule> nearestMolecules(Coord coord, Set<MolecularSystem.Molecule> molecules ) {
+		MolecularSystem.Molecule[] moleculePair = new MolecularSystem.Molecule[2];
+		double first = Integer.MAX_VALUE;
+		double second = Integer.MAX_VALUE;
+		for (MolecularSystem.Molecule molecule: molecules){
+			double current = distanceCalculator.closest(coord,molecule);
 			if ( current < first ) {
+				//switch 1 to 2
 				second = first;
-				moleculeArray[1] = moleculeArray[0];
+				moleculePair[1] = moleculePair[0];
+				//Then set 1
+				moleculePair[0] = molecule;
 				first = current;
-				moleculeArray[0]  = moleculeArray[1];
 			}
 			else if ( current < second && second != first ){
 				second = current;
-				moleculeArray[1]= moleculeArray[0];
+				moleculePair[1]= molecule;
 			}
 		}
-		Set<Molecule> nearest = new HashSet();
-		nearest.add(moleculeArray[0]);
-		nearest.add(moleculeArray[1]);
+		Set<MolecularSystem.Molecule> nearest = new HashSet();
+		nearest.add(moleculePair[0]);
+		nearest.add(moleculePair[1]);
 		return nearest;
 	}
 
@@ -136,29 +130,21 @@ public class SimpleVoronoizer implements Voronoizer {
 	 * @param coord -the coordinate of the grid point,
 	 *                  {@link Coord}
 	 * @param molecules - a Set of molecules,
-	 *                  {@link Molecule}
+	 *                  {@link MolecularSystem.Molecule}
 	 * @return properties, a Map, String as key, Object as value
 	 */
-	private Set<Atom> nearestAtoms(Coord coord, Set<Molecule> molecules){
-		Set<Atom> nearestAtoms = new HashSet<>();
-		for(Molecule molecule :molecules) nearestAtoms.add(getClosestAtom(coord, molecule));
+	private Set<MolecularSystem.Molecule.Atom> nearestAtoms(Coord coord, Set<MolecularSystem.Molecule> molecules){
+		Set<MolecularSystem.Molecule.Atom> nearestAtoms = new HashSet<>();
+		for(MolecularSystem.Molecule molecule :molecules) nearestAtoms.add(getClosestAtom(coord, molecule));
 		return nearestAtoms;
 	}
 
-
-	private double shortestDistanceToMolecule(Coord coord, Molecule molecule) {
+	private MolecularSystem.Molecule.Atom getClosestAtom(Coord coord, MolecularSystem.Molecule molecule){
 		return molecule.getAtoms()
 						.stream()
-						.mapToDouble(atom -> distance.calculate(coord,atom))
-						.min()
-						.getAsDouble();
-	}
-
-
-	private Atom getClosestAtom(Coord coord, Molecule molecule){
-		return molecule.getAtoms()
-						.stream()
-						.min((atomOne,atomTwo) -> distance.calculate(coord,atomOne).compareTo(distance.calculate(coord,atomTwo)))
+						.min((atomOne,atomTwo) ->
+								((Double)distanceCalculator.distance(coord,atomOne))
+										        .compareTo((Double) distanceCalculator.distance(coord,atomTwo)))
 						.get();
 	}
 

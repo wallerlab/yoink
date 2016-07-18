@@ -1,13 +1,14 @@
 package org.wallerlab.yoink.adaptive.services;
 
-import org.wallerlab.yoink.adaptive.domain.AdaptiveMolecule;
-import org.wallerlab.yoink.api.model.batch.Job;
-import org.wallerlab.yoink.api.model.molecule.*;
-import org.wallerlab.yoink.molecule.service.Computer;
-import org.wallerlab.yoink.api.service.molecule.Calculator;
+import org.wallerlab.yoink.adaptive.domain.BufferMolecule;
+import org.wallerlab.yoink.api.model.Coord;
+import org.wallerlab.yoink.api.model.Job;
+import org.wallerlab.yoink.api.service.density.DensityCalculator;
 import org.wallerlab.yoink.adaptive.services.SmoothFunctions.SmoothFunction;
-import static org.wallerlab.yoink.api.model.batch.JobParameter.*;
-import static org.wallerlab.yoink.api.model.region.Region.Name.*;
+
+import static java.util.stream.Collectors.toSet;
+import static org.wallerlab.yoink.api.model.Job.JobParameter.*;
+import static org.wallerlab.yoink.api.model.adaptive.Region.Name.*;
 import static org.wallerlab.yoink.adaptive.services.SmoothFactors.SmoothFactor.NAME;
 import static org.wallerlab.yoink.adaptive.services.SmoothFactors.SmoothFactor.NAME.*;
 
@@ -15,15 +16,14 @@ import java.util.*;
 import javax.xml.bind.JAXBElement;
 import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
-import static java.util.stream.Collectors.toList;
+import org.wallerlab.yoink.molecule.service.DistanceCalculator;
 
 @Service
 public class SmoothFactors {
 
-	@Resource private Calculator<Double, Coord, Molecule> shortestDistance;
-	@Resource private Computer<Coord, Set<Molecule>> centerOfMassComputer;
+	@Resource private DistanceCalculator distanceCalculator;
 
-	@Resource private Calculator<Double, Coord, Set<Molecule>> densityCalculator;
+	@Resource private DensityCalculator densityCalculator;
 
 	private Map<NAME,SmoothFactor> factors;
 
@@ -43,17 +43,16 @@ public class SmoothFactors {
 		double min = (double) job.getParameters().get(DISTANCE_QM);
 		double max = (double) job.getParameters().get(DISTANCE_BUFFER) + (double) job.getParameters().get(DISTANCE_QM);
 
-		Coord centerOfMass = centerOfMassComputer.calculate(job.getRegions().get(QM_CORE).getMolecules());
+		Coord centerOfMass = distanceCalculator.centerOfMass(job.getRegions().get(QM_CORE).getMolecules());
 		return job.getRegions()
 				  .get(BUFFER)
 				  .getMolecules()
 				  .stream()
 				  .map(molecule -> {
-						double current = shortestDistance.calculate(centerOfMass, molecule);
-						return new AdaptiveMolecule( molecule, smoothFunction.evaluate(current, min, max));
+						double current = distanceCalculator.closest(centerOfMass, molecule);
+						return new BufferMolecule( molecule, smoothFunction.evaluate(current, min, max));
 			       })
-			 	  .collect(toList());
-		//Instead of returning lambdas, store them on the molecules.
+			 	  .collect(toSet());
 	};
 
 	private static final double densityMin = Math.abs(Math.log10(0.001d));
@@ -67,10 +66,10 @@ public class SmoothFactors {
 				  .stream()
 				  .map(molecule -> {
 							Coord  com = molecule.getCenterOfMass();
-							double current = Math.abs(Math.log10(densityCalculator.calculate(com, qmCoreMolecules)));
-							return new AdaptiveMolecule(molecule, smoothFunction.evaluate(current, densityMin, densityMax));
+							double current = Math.abs(Math.log10(densityCalculator.electronic(com, qmCoreMolecules)));
+							return new BufferMolecule( molecule, smoothFunction.evaluate(current, densityMin, densityMax));
 				  })
-				 .collect(toList());
+				 .collect(toSet());
 	};
 
 	SmoothFactor distanceOrDensity = (job, smoothFunction) -> {
@@ -84,7 +83,7 @@ public class SmoothFactors {
 	@FunctionalInterface
 	public interface SmoothFactor {
 
-		List<AdaptiveMolecule> compute(Job<JAXBElement> job , SmoothFunction smoothFunction);
+		Set<BufferMolecule> compute(Job<JAXBElement> job , SmoothFunction smoothFunction);
 
 		enum NAME{
 			DISTANCE,

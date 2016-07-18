@@ -24,10 +24,10 @@ import org.apache.commons.math3.linear.RealVector;
 import org.wallerlab.yoink.api.service.math.Matrix;
 
 /**
- * Matrix Adaptor pattern.
+ * Matrix Adaptor.
  * 
- * this class i sto convert from our own implementation to the appache commons
- * maths lib.
+ * This class is to convert from our own implementation to the
+ * Apache Commons Math Lib.
  * 
  * @author Min Zheng
  *
@@ -69,14 +69,12 @@ public class CommonsMatrix implements Matrix<RealMatrix> {
 
 	@Override
 	public double getEntry(int row, int column) {
-
 		return this.internalMatrix.getEntry(row, column);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public Matrix transpose() {
-
 		tempMatrix = this.internalMatrix.transpose();
 		Matrix newMatrix = new CommonsMatrix();
 		newMatrix.setInternalMatrix(tempMatrix);
@@ -86,8 +84,7 @@ public class CommonsMatrix implements Matrix<RealMatrix> {
 
 	@Override
 	public Matrix add(Matrix m) {
-		tempMatrix = this.internalMatrix
-				.add((RealMatrix) m.getInternalMatrix());
+		tempMatrix = this.internalMatrix.add((RealMatrix) m.getInternalMatrix());
 		Matrix newMatrix = new CommonsMatrix();
 		newMatrix.setInternalMatrix(tempMatrix);
 		return newMatrix;
@@ -95,8 +92,7 @@ public class CommonsMatrix implements Matrix<RealMatrix> {
 
 	@Override
 	public Matrix subtract(Matrix m) {
-		tempMatrix = this.internalMatrix.subtract((RealMatrix) m
-				.getInternalMatrix());
+		tempMatrix = this.internalMatrix.subtract((RealMatrix) m.getInternalMatrix());
 		Matrix newMatrix = new CommonsMatrix();
 		newMatrix.setInternalMatrix(tempMatrix);
 		return newMatrix;

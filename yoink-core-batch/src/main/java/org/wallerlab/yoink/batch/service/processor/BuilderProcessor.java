@@ -16,19 +16,18 @@
 
 package org.wallerlab.yoink.batch.service.processor;
 
+import org.wallerlab.yoink.api.model.Job;
 import org.springframework.batch.item.ItemProcessor;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.api.model.batch.Job;
-import org.wallerlab.yoink.api.model.batch.JobParameter;
-import org.wallerlab.yoink.api.model.molecule.MolecularSystem;
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
 import org.wallerlab.yoink.api.service.molecule.Translator;
+import org.wallerlab.yoink.batch.domain.AdaptiveQMMMJob;
 import org.xml_cml.schema.Cml;
 
-import javax.annotation.Resource;
-import javax.xml.bind.JAXBElement;
 import java.util.Map;
+import javax.xml.bind.JAXBElement;
+import javax.annotation.Resource;
+import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
  * this class is to read in all inputs (like molecule system and parameters)
@@ -38,15 +37,14 @@ import java.util.Map;
  *
  */
 @Service
-public class BuilderProcessor implements ItemProcessor<JAXBElement, Job<JAXBElement>>, ApplicationContextAware {
+public class BuilderProcessor implements ItemProcessor<JAXBElement, Job<JAXBElement>> {
 
 	@Resource
+	@Qualifier("molecularSystemTranslator")
 	protected Translator<MolecularSystem, JAXBElement<Cml>> molecularSystemTranslator;
 
 	@Resource
-	protected Translator<Map<JobParameter, Object>, JAXBElement<Cml>> parameterTranslator;
-
-	private ApplicationContext appContext;
+	protected Translator<Map<Job.JobParameter, Object>, JAXBElement<Cml>> parameterTranslator;
 
 	/**
 	 * read in cml file, and convert it to molecule system and parameters for
@@ -59,15 +57,9 @@ public class BuilderProcessor implements ItemProcessor<JAXBElement, Job<JAXBElem
 	 */
 	@Override
 	public Job<JAXBElement> process(JAXBElement input) {
-		Job<JAXBElement> job= (Job<JAXBElement>) appContext.getBean("adaptiveQMMMJob");
-		job.setInput(input);
-		job.setMolecularSystem(molecularSystemTranslator.translate(job.getInput()));
-		job.setParameters(parameterTranslator.translate(job.getInput()));
-		return job;
-	}
-
-	public void setApplicationContext(ApplicationContext appContext){
-		this.appContext = appContext;
+		return new AdaptiveQMMMJob(input,
+								   molecularSystemTranslator.translate(input),
+								   parameterTranslator.translate(input));
 	}
 
 }

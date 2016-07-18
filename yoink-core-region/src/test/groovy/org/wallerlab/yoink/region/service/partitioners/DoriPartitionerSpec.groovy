@@ -15,19 +15,20 @@
  */
 package org.wallerlab.yoink.region.service.partitioners
 
+import org.wallerlab.yoink.api.model.Job
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem
 import org.wallerlab.yoink.api.service.region.Regionizer
 import org.wallerlab.yoink.density.service.SimpleDensityCalculator
-import org.wallerlab.yoink.api.model.batch.JobParameter;
-import org.wallerlab.yoink.api.model.cube.VoronoiPoint;
-import org.wallerlab.yoink.api.model.density.DensityPoint;
-import org.wallerlab.yoink.api.model.molecule.Atom;
-import org.wallerlab.yoink.api.model.molecule.Molecule;
-import org.wallerlab.yoink.api.model.region.Region;
+
+import org.wallerlab.yoink.api.model.VoronoiPoint;
+import org.wallerlab.yoink.api.model.DensityPoint;
+
+import org.wallerlab.yoink.api.model.adaptive.Region;
 import org.wallerlab.yoink.api.service.molecule.Calculator;
 import org.wallerlab.yoink.molecule.service.Computer
 import org.wallerlab.yoink.region.domain.SimpleRegion
 
-import static org.wallerlab.yoink.api.model.region.Region.Name.*;
+import static Region.Name.*;
 import spock.lang.Specification;
 
 class DoriPartitionerSpec extends Specification{
@@ -36,8 +37,8 @@ class DoriPartitionerSpec extends Specification{
 
 		def regions=Mock(Map)
 		def parameters=Mock(Map)
-		def m1=Mock(Molecule)
-		def m2=Mock(Molecule)
+		def m1=Mock(MolecularSystem.Molecule)
+		def m2=Mock(MolecularSystem.Molecule)
 		def grid1=Mock(VoronoiPoint)
 		def grid2=Mock(VoronoiPoint)
 		grid1.getNearestMolecules()>>[m1]
@@ -48,7 +49,7 @@ class DoriPartitionerSpec extends Specification{
 		region.getName()>>Region.Name.QM_ADAPTIVE
 
 		region.getMolecularMap()>>Mock(Map)
-		region.getAtoms()>>[Mock(Atom)]
+		region.getAtoms()>>[Mock(MolecularSystem.Molecule.Atom)]
 
 		regions.get(_)>>region
 		def singleRegionizerService=Mock(Regionizer)
@@ -63,8 +64,8 @@ class DoriPartitionerSpec extends Specification{
 		def densityOverlapRegionsIndicatorComputer=Mock(Computer)
 		densityOverlapRegionsIndicatorComputer.calculate(_)>>(double)0.99
 
-		parameters.get(JobParameter.DENSITY_DORI)>>(double)1.0E-4
-		parameters.get(JobParameter.DORI)>>(double)0.9
+		parameters.get(Job.JobParameter.DENSITY_DORI)>>(double)1.0E-4
+		parameters.get(Job.JobParameter.DORI)>>(double)0.9
 		def simpleRegionFactory=new SimpleRegion()
 
 		when:"set up a new DensityOverlapRegionsIndicatorPartitioner"

@@ -19,7 +19,7 @@ import org.xml_cml.schema.ObjectFactory
 
 import spock.lang.Specification;
 
-import org.wallerlab.yoink.api.model.molecule.MolecularSystem;
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
 
 class AdaptiveQMMMJobSpec extends Specification{
 
@@ -29,15 +29,12 @@ class AdaptiveQMMMJobSpec extends Specification{
 		def parameters=Mock(Map)
 		def properties=Mock(Map)
 		def regions=Mock(Map)
-		def job=new AdaptiveQMMMJob()
 		def factory=new ObjectFactory()
 		def cml=factory.createCml()
 		def input=factory.createCml(cml)
+		def job=new AdaptiveQMMMJob(input,ms,properties)
 
 		when:  " when used as a javabean"
-		job.setInput(input)
-		job.setMolecularSystem(ms)
-		job.setParameters(parameters)
 		job.setProperties(properties)
 		job.setRegions(regions)
 

@@ -24,12 +24,12 @@ class AdaptiveQMMMProcessorSpec extends Specification{
 		def file=new File("./src/test/resources/AdaptiveQMMMProcessorSpec.xml")
 		def requests=[file]
 		def propertyWrapper=Mock(Wrapper)
-		def  adaptiveQMMMSmoothnerRouter=Mock(Smoothner)
+		def  adaptiveQMMMSmoothnerRouter=Mock(Adaptive)
 		def jobBuilder=Mock(JobBuilder)
-		def preRegionizer=Mock(RegionizerService)
-		def postRegionizer=Mock(RegionizerService)
-		def adaptiveQMMMRegionizer=Mock(RegionizerService)
-		List<RegionizerService> regionizers=new ArrayList<RegionizerService>();
+		def preRegionizer=Mock(SimpleRegionizer)
+		def postRegionizer=Mock(SimpleRegionizer)
+		def adaptiveQMMMRegionizer=Mock(SimpleRegionizer)
+		List<SimpleRegionizer> regionizers=new ArrayList<SimpleRegionizer>();
 		regionizers.add(adaptiveQMMMRegionizer)
 		regionizers.add(adaptiveQMMMRegionizer)
 		jobBuilder.build(_)>>Mock(Job)

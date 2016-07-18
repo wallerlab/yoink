@@ -16,11 +16,12 @@
 package org.wallerlab.yoink.cube.service
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem
 import org.wallerlab.yoink.api.service.math.Vector
 import org.wallerlab.yoink.cube.domain.Cube
-import org.wallerlab.yoink.api.model.molecule.Atom
-import org.wallerlab.yoink.api.model.molecule.Coord
-import org.wallerlab.yoink.api.model.molecule.Molecule
+
+import org.wallerlab.yoink.api.model.Coord
+
 import org.wallerlab.yoink.api.service.molecule.Calculator
 import org.wallerlab.yoink.cube.domain.SimpleCube
 
@@ -38,13 +39,13 @@ class CubeBuilderSpec extends Specification{
 		myVector3D.myVectorType=Vector.Vector3DType.COMMONS
 		def simpleCoordFactory=new  SimpleCoordFactory()
 		simpleCoordFactory.myVector3D= myVector3D
-		def m1=Mock(Molecule)
-		def a1=Mock(Atom)
+		def m1=Mock(MolecularSystem.Molecule)
+		def a1=Mock(MolecularSystem.Molecule.Atom)
 		m1.getAtoms()>>[a1]
-		def m2=Mock(Molecule)
-		def a2=Mock(Atom)
+		def m2=Mock(MolecularSystem.Molecule)
+		def a2=Mock(MolecularSystem.Molecule.Atom)
 		m2.getAtoms()>>[a2]
-		Set<Molecule> mSet=[m1, m2]
+		Set<MolecularSystem.Molecule> mSet=[m1, m2]
 		double[] d=[0.01, 0.01, 0.01]
 		cube.getXyzStepSize()>>d
 		cube.getDensityTypes()>>[]
@@ -71,19 +72,19 @@ class CubeBuilderSpec extends Specification{
 		myVector3D.myVectorType=Vector.Vector3DType.COMMONS
 		def simpleCoordFactory=new  SimpleCoordFactory()
 		simpleCoordFactory.myVector3D= myVector3D
-		def m1=Mock(Molecule)
-		def a1=Mock(Atom)
+		def m1=Mock(MolecularSystem.Molecule)
+		def a1=Mock(MolecularSystem.Molecule.Atom)
 		a1.getX3()>>0.0
 		a1.getY3()>>0.0
 		a1.getZ3()>>0.0
 		m1.getAtoms()>>[a1]
-		def m2=Mock(Molecule)
-		def a2=Mock(Atom)
+		def m2=Mock(MolecularSystem.Molecule)
+		def a2=Mock(MolecularSystem.Molecule.Atom)
 		a2.getX3()>>0.1
 		a2.getY3()>>0.1
 		a2.getZ3()>>0.1
 		m2.getAtoms()>>[a2]
-		Set<Molecule> mSet=[m1, m2]
+		Set<MolecularSystem.Molecule> mSet=[m1, m2]
 		Calculator<Coord, int[], Cube> coordInCubeCalculator =Mock(Calculator)
 		coordInCubeCalculator.calculate(_, cube)>>simpleCoordFactory.create((double[])[-2, -2, -2])
 		builder.coordInCubeCalculator=coordInCubeCalculator

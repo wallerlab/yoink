@@ -16,146 +16,192 @@
 
 package org.wallerlab.yoink.density.data;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.apache.commons.io.FileUtils;
-import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.api.model.molecule.RadialGrid;
+import org.wallerlab.yoink.api.model.molecular.Element;
+import org.wallerlab.yoink.math.Constants;
+import org.wallerlab.yoink.density.domain.RadialGrid;
 import org.wallerlab.yoink.api.service.math.Matrix;
-import org.wallerlab.yoink.api.service.molecule.FilesReader;
-import org.wallerlab.yoink.math.constants.Constants;
+import org.wallerlab.yoink.density.domain.SimpleRadialGrid;
 import org.wallerlab.yoink.math.linear.SimpleMatrixFactory;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
+import javax.annotation.Resource;
+import org.springframework.stereotype.Service;
+import static java.nio.file.Files.readAllLines;
+
+
+/**
+ * This class is needed to read in wfc files and then convert them to Radial Grid domain models.
+ * Because this is only needed once, we can serialize the domain models once they are created.
+ * Then when we want to use yoink in the future just de-serialize them.
+ *
+ * This code is left here, just in case the grids are updated one day.
+ *
+ *
+ */
 @Service
-public class RadialGridReader implements FilesReader<RadialGrid, String> {
+public class RadialGridReader {
 
-	@Resource
-	private SimpleMatrixFactory myMatrix;
+    @Resource
+    private SimpleMatrixFactory myMatrix;
 
-	@Override
-	public RadialGrid read(String wfc_file, RadialGrid radial_grid) {
+    private static final double prefactorFirstDerivative = 1.0 / 120.0; // fac1
 
-		List<String> lines = new ArrayList<String>();
+    private static final double prefactorSecondDerivative = 2.0 / 120.0;// fac2
 
-		Matrix occ_electrons = myMatrix.matrix();
-		Matrix wfcin = myMatrix.matrix();
+    private static final double coreCutoff = 1E-12; // Cutoff contribution for core radial grids
 
-		lines = read_wfc_lines(wfc_file);
+    private static final int[][] nodeOffsets = new int[][]{
+            {0, -2, -5},
+            {1, -1, -4},
+            {2, 0, -3},
+            {3, 1, -2},
+            {4, 2, -1},
+            {5, 3, 0}};
 
-		int num_orbitals = Integer.parseInt(lines.get(0).trim().split("\\s+")[0]);
+    private static final double[][] coefficientsFirstDerivative = new double[][]{
+            {-274, 6, -24},
+            {600, -60, 150},
+            {-600, -40, -400},
+            {400, 120, 600},
+            {-150, -30, -600},
+            {24, 4, 274}};
 
-		double[][] occ_electrons_array = new double[1][num_orbitals];
-		String[] line_three = lines.get(2).trim().split("\\s+");
-		for (int i = 0; i < line_three.length; i++)
-			occ_electrons_array[0][i] = Integer.parseInt(line_three[i]);
+    private static final double[][] coefficientsSecondDerivative = new double[][]{
+            {225, -5, -50},
+            {-770, 80, 305},
+            {1070, -150, -780},
+            {-780, 80, 1070},
+            {305, -5, -770},
+            {-50, 0, 225}};
 
 
-		occ_electrons.array2DRowRealMatrix(occ_electrons_array);
+    private final String FILEPATH = "yoink-core-density/src/main/java/org/wallerlab/yoink/density/data/dat";
 
-		String[] line_four = lines.get(3).trim().split("\\s+");
+    public Map<Element,RadialGrid> read() throws IOException {
 
-		double xmin = Double.parseDouble(line_four[0]);
-		double   zz = Double.parseDouble(line_four[1]);
-		double   dx = Double.parseDouble(line_four[2]);
-		int   ngrid = Integer.parseInt(line_four[3]);
+        //Save a lot of effort by reading in serialized version of the radial grids.
+        String serializedFilePath = "yoink-core-density/src/main/java/org/wallerlab/yoink/density/data/radialGrids.serialized";
+        File file = new File(serializedFilePath);
+        try{
+            if(file.exists() && !file.isDirectory()) {
+                System.out.println("Deserializing radial grids");
+                InputStream inputFile = new FileInputStream(serializedFilePath);
+                InputStream buffer = new BufferedInputStream(inputFile);
+                ObjectInput input = new ObjectInputStream(buffer);
+                return (Map<Element,RadialGrid>) input.readObject();
+            }
+        } catch (ClassNotFoundException e){
+            System.out.println("Error deserializing radial grid" + e);
+        }
 
-		// Read the grid and build the density
-		double[][] temp_rr_array = new double[ngrid][3];
-		double[]   temp_r_array = new double[ngrid];
-		double[][] wfcin_array = new double[1][num_orbitals];
+        Map<Element,RadialGrid> radialGrids =  new EnumMap<>(Element.class);
 
-		for (int j = 0; j < ngrid; j++) {
-			String[] line = lines.get(4 + j).trim().split("\\s+");
-			temp_r_array[j] = Double.parseDouble(line[0]);
-			for (int m = 1; m < line.length; m++) {
-				wfcin_array[0][m - 1] = Double.parseDouble(line[m]);
+        Files.walk(Paths.get(FILEPATH))
+             .filter(Files::isRegularFile)
+             .forEach(filePath -> {
+                  String[] paths = filePath.toString().split("/");
 
-			}
-			wfcin.array2DRowRealMatrix(wfcin_array);
-			Matrix wfcin_square = wfcin.ebeMultiply(wfcin);
-			temp_rr_array[j][0] = wfcin_square.dotProduct(occ_electrons);
+                 //SOooOOoOOoO Ugly. Sorry
+                 String fileNamePrefix = Arrays.asList(Arrays.asList(paths).get(paths.length-1).split("_")).get(0);
+                 String elementName = fileNamePrefix.substring(0, 1).toUpperCase() + fileNamePrefix.substring(1);
+                 Element element = Element.valueOf(elementName);
 
-			if (temp_rr_array[j][0]
-					/ (4.0 * Constants.PI * Math.pow(temp_r_array[j], 2)) < radial_grid
-						.getCore_cutdens()) {
-				ngrid = j + 1;
-				break;
-			}
+                 List<String> lines = null;
+                 try {lines = readAllLines(filePath);
+                     } catch (IOException e) {e.printStackTrace();}
 
-		}
+                 int numberOfOrbitals = Integer.parseInt(lines.get(0).trim().split("\\s+")[0]);
 
-		double[][] rr_array = new double[ngrid][3];
+                 double[][] orbitalOccupation = new double[1][numberOfOrbitals];
+                 String[] line_three = lines.get(2).trim().split("\\s+");
+                 for (int index = 0; index < line_three.length; index++)
+                     orbitalOccupation[0][index] = Integer.parseInt(line_three[index]);
 
-		double[] r_array = new double[ngrid];
-		System.arraycopy(temp_rr_array, 0, rr_array, 0, ngrid);
-		System.arraycopy(temp_r_array, 0, r_array, 0, ngrid);
+                 Matrix occupationNumbers = myMatrix.matrix();
+                 occupationNumbers.array2DRowRealMatrix(orbitalOccupation);
 
-		// calculate derivatives
-		double[] first_derivative_of_grid_values = new double[ngrid];
-		double[] second_derivative_of_grid_values = new double[ngrid];
-		double[] grid_values = new double[ngrid];
-		int[][] noef = radial_grid.getNode_offsets();
-		double[][] coef1 = radial_grid.getCoefficients_of_first_derivative();
-		double[][] coef2 = radial_grid.getCoefficients_of_second_derivative();
-		double fac1 = radial_grid.getPrefactor_of_first_derivative();
-		double fac2 = radial_grid.getPrefactor_of_second_derivative();
-		for (int i = 0; i < ngrid; i++) {
-			int ic = 1;
-			if (i <= 1) {
-				ic = 0;
-			} else if (i >= ngrid - 3) {
-				ic = 2;
-			}
-			for (int j = 0; j < 6; j++) {
-				rr_array[i][1] = rr_array[i][1] + coef1[j][ic]
-						* rr_array[i + noef[j][ic]][0];
-				rr_array[i][2] = rr_array[i][2] + coef2[j][ic]
-						* rr_array[i + noef[j][ic]][0];
-			}
-			rr_array[i][1] = rr_array[i][1] * fac1;
-			rr_array[i][2] = rr_array[i][2] * fac2;
-			double r = r_array[i];
-			double r1 = 1.0 / r;
-			double r2 = r1 * r1;
-			double r3 = r2 * r1;
-			double r4 = r3 * r1;
-			double delta = 1.0 / dx;
-			double delta2 = delta * delta;
-			grid_values[i] = rr_array[i][0] * r2 / (4.0 * Constants.PI);
-			first_derivative_of_grid_values[i] = (rr_array[i][1] * delta - 2.0 * rr_array[i][0])
-					* r3 / (4.0 * Constants.PI);
-			second_derivative_of_grid_values[i] = (rr_array[i][2] * delta2
-					- 5.0 * rr_array[i][1] * delta + 6.0 * rr_array[i][0])
-					* r4 / (4.0 * Constants.PI);
-		}
+                 Matrix chis = myMatrix.matrix(); //vector of Chi's
 
-		// fill grid info
-		radial_grid.setGrid_positions(r_array);
-		radial_grid.setA(Math.exp(xmin) / zz);
-		radial_grid.setB(dx);
-		radial_grid.setNgrid(ngrid);
-		radial_grid.setPosition_max(r_array[ngrid - 1]);
-		radial_grid.setSquare_position_max(Math.pow(r_array[ngrid - 1], 2));
-		radial_grid.setFirst_derivative_of_grid_values(first_derivative_of_grid_values);
-		radial_grid.setSecond_derivative_of_grid_values(second_derivative_of_grid_values);
-		radial_grid.setGrid_values(grid_values);
-		return radial_grid;
-	}
+                 String[] line_four = lines.get(3).trim().split("\\s+");
+                 double xMin = Double.parseDouble(line_four[0]); //always -6 ?
+                 double zz = Double.parseDouble(line_four[1]);
+                 double exponent = Double.parseDouble(line_four[2]); //always 0.002 ?
+                 int numberOfGridPoints = Integer.parseInt(line_four[3]);
 
-	private List<String> read_wfc_lines(String wfc_file) {
-		List<String> lines = new ArrayList<String>();
-		File file = new File(wfc_file);
-		try {
-			lines = FileUtils.readLines(file);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return lines;
-	}
+                 // Read the grid
+                 double[] gridPosition = new double[numberOfGridPoints];
+                 double[] density = new double[numberOfGridPoints];
+                 double[][] coefficients = new double[1][numberOfOrbitals];
+
+                 for (int j = 0; j < numberOfGridPoints; j++) {
+                        String[] line = lines.get(4 + j).trim().split("\\s+");
+                        gridPosition[j] = Double.parseDouble(line[0]);
+                        for (int m = 1; m < line.length; m++)
+                            coefficients[0][m - 1] = Double.parseDouble(line[m]);
+                        chis.array2DRowRealMatrix(coefficients);
+                        Matrix wfcSquared = chis.ebeMultiply(chis);
+                        density[j] = wfcSquared.dotProduct(occupationNumbers);
+                        if (density[j] / (4.0 * Constants.PI * Math.pow(gridPosition[j], 2)) < coreCutoff) {
+                            numberOfGridPoints = j + 1;
+                            break;
+                        }
+                 }
+                 radialGrids.put(element,buildDensityAndDerivatives(xMin, zz, exponent, numberOfGridPoints, gridPosition));
+             });
+        return radialGrids;
+     }
+
+    private RadialGrid buildDensityAndDerivatives(double xMin, double zz, double exponent, int numberOfGridPoints, double[] gridPosition) {
+        double[] gridValues = new double[numberOfGridPoints];
+        double[] firstDerivativeOfGridValues = new double[numberOfGridPoints];
+        double[] secondDerivativeOfGridValues = new double[numberOfGridPoints];
+
+        for (int i = 0; i < numberOfGridPoints; i++) {
+            int ic = 1;
+            if (i <= 1)
+                ic = 0;
+            else if (i >= numberOfGridPoints - 3)
+                ic = 2;
+            for (int j = 0; j < 6; j++) {
+                firstDerivativeOfGridValues[i] += coefficientsFirstDerivative[j][ic] * gridValues[i + nodeOffsets[j][ic]];
+                secondDerivativeOfGridValues[i] += coefficientsSecondDerivative[j][ic] * gridValues[i + nodeOffsets[j][ic]];
+            }
+            firstDerivativeOfGridValues[i] *= prefactorFirstDerivative;
+            secondDerivativeOfGridValues[i] *= prefactorSecondDerivative;
+
+            double position = gridPosition[i];
+            double r1 = 1.0 / position;
+            double r2 = r1 * r1;
+            double r3 = r2 * r1;
+            double r4 = r3 * r1;
+            double delta = 1.0 / exponent;
+
+            gridValues[i] = r2 / (4.0 * Constants.PI);
+
+            firstDerivativeOfGridValues[i] =
+                    (firstDerivativeOfGridValues[i] * delta - 2.0 * gridValues[i]) *
+                            r3 / (4.0 * Constants.PI);
+            secondDerivativeOfGridValues[i] = (secondDerivativeOfGridValues[i] * (delta * delta)
+                    - 5.0 * firstDerivativeOfGridValues[i] * delta + 6.0 * gridValues[i])
+                    * r4 / (4.0 * Constants.PI);
+        }
+
+        double zeta = Math.exp(xMin) / zz;
+        double maxGridDistance = gridPosition[numberOfGridPoints - 1];
+
+        return new SimpleRadialGrid(exponent,
+                                    zeta,
+                                    numberOfGridPoints,
+                                    gridPosition,
+                                    gridValues,
+                                    firstDerivativeOfGridValues,
+                                    secondDerivativeOfGridValues,
+                                    maxGridDistance);
+    }
+
+    public void setMyMatrix(SimpleMatrixFactory myMatrix) {this.myMatrix = myMatrix;}
 
 }

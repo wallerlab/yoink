@@ -15,23 +15,24 @@
  */
 package org.wallerlab.yoink.molecule.service.calculator
 
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem
 import org.wallerlab.yoink.math.linear.CommonsVector3D
-
+import org.wallerlab.yoink.molecule.service.DistanceCalculator
 import spock.lang.Specification
 
-import org.wallerlab.yoink.api.model.molecule.Atom;
-import org.wallerlab.yoink.api.model.molecule.Coord;
+
+import org.wallerlab.yoink.api.model.Coord;
 class TwoAtomsDistanceCalculatorSpec extends Specification {
 
 	def "test method calculate(Atom atom1, Atom atom2) "(){
 
 		def coordinate1=Mock(Coord)
 		coordinate1.getCoords()>>new CommonsVector3D(0,0,0);
-		def atom1=Mock(Atom)
+		def atom1=Mock(MolecularSystem.Molecule.Atom)
 		atom1.getCoordinate()>>coordinate1
 		def coordinate2=Mock(Coord)
 		coordinate2.getCoords()>>new CommonsVector3D(1,2,2);
-		def atom2=Mock(Atom)
+		def atom2=Mock(MolecularSystem.Molecule.Atom)
 		atom2.getCoordinate()>>coordinate2
 		when:"calulate distance bwtween two atoms"
 		def calculator=new DistanceCalculator()

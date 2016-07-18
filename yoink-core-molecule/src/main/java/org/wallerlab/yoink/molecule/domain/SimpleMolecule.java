@@ -17,10 +17,9 @@ package org.wallerlab.yoink.molecule.domain;
 
 import java.util.Set;
 
-import org.wallerlab.yoink.api.model.molecule.Atom;
-import org.wallerlab.yoink.api.model.molecule.Coord;
-import org.wallerlab.yoink.api.model.molecule.Molecule;
-import org.wallerlab.yoink.api.model.region.Region;
+import org.wallerlab.yoink.api.model.*;
+import org.wallerlab.yoink.api.model.adaptive.Region;
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
 
 /**
  * the domain model for molecule.
@@ -28,7 +27,7 @@ import org.wallerlab.yoink.api.model.region.Region;
  * @author Min Zheng
  *
  */
-public class SimpleMolecule implements Molecule {
+public class SimpleMolecule implements MolecularSystem.Molecule {
 
 	private final int index;
 
@@ -37,8 +36,6 @@ public class SimpleMolecule implements Molecule {
 	protected Region.Name name;
 
 	private Coord centerOfMass;
-
-	private Double distanceToPoint;
 
 	public SimpleMolecule(final int index, final Set<Atom> atoms) {
 		this.index = index;
@@ -87,21 +84,13 @@ public class SimpleMolecule implements Molecule {
 		this.centerOfMass = centerOfMass;
 	}
 
-	public Double getDistanceToPoint() {
-		return distanceToPoint;
-	}
-
-	public void setDistanceToPoint(Double distanceToPoint) {
-		this.distanceToPoint = distanceToPoint;
-	}
-
 	@Override
 	public String toString() {
-		return "SimpleMolecule{" +
+		return "Molecule{" +
 				"index=" + index +
 				", atoms=" + atoms +
 				", name=" + name +
-				", calculate=" + centerOfMass +
+				", ratio=" + centerOfMass +
 				'}';
 	}
 

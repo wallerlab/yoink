@@ -15,13 +15,13 @@
  */
 package org.wallerlab.yoink.density.domain;
 
-import org.wallerlab.yoink.api.model.density.DensityPoint;
-import org.wallerlab.yoink.api.model.molecule.Coord;
+import org.wallerlab.yoink.api.model.DensityPoint;
+import org.wallerlab.yoink.api.model.Coord;
 import org.wallerlab.yoink.api.service.math.Matrix;
 import org.wallerlab.yoink.api.service.math.Vector;
 
 /**
- * This class is to store all density based properties on a grid point.
+ * This class is to store all density based properties on exponent grid point.
  * These properties will be used during DORI/SEDD/RDG calculation.
  * 
  * @author Min Zheng

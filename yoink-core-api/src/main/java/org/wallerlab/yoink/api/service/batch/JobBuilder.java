@@ -16,7 +16,7 @@
 package org.wallerlab.yoink.api.service.batch;
 
 
-import org.wallerlab.yoink.api.model.batch.Job;
+import org.wallerlab.yoink.api.model.Job;
 
 /**
  * this interface is to build a job -

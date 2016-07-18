@@ -27,8 +27,7 @@ public class CommunityFactory {
 
 		Label label = DynamicLabel.label(String.valueOf(id));
 
-		return new CommunityImpl(graph.findNodes(label), label, id, edgeType,
-				graph);
+		return new CommunityImpl(graph.findNodes(label), label, id, edgeType, graph);
 
 	}
 	

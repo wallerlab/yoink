@@ -15,16 +15,18 @@
  */
 package org.wallerlab.yoink.molecule.service.translator;
 
+import org.wallerlab.yoink.api.model.*;
+import org.wallerlab.yoink.api.model.molecular.Element;
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
 import org.wallerlab.yoink.molecule.domain.*;
-import org.wallerlab.yoink.api.model.molecule.*;
-import org.wallerlab.yoink.api.model.region.Region;
+import org.wallerlab.yoink.api.model.adaptive.Region;
 import org.wallerlab.yoink.api.service.Factory;
 import org.wallerlab.yoink.api.service.math.Vector;
 import org.wallerlab.yoink.api.service.molecule.Translator;
 import org.wallerlab.yoink.api.service.molecule.Converter;
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory;
-import org.wallerlab.yoink.molecule.service.Computer;
 
+import org.wallerlab.yoink.molecule.service.DistanceCalculator;
 import org.xml_cml.schema.AtomArray;
 import org.xml_cml.schema.Cml;
 import org.xml_cml.schema.MoleculeList;
@@ -52,7 +54,7 @@ public class MolecularSystemTranslator implements Translator<MolecularSystem, JA
 	private MolecularSystem molecularSystem;
 
 	// This list contains all of the molecules from the CML.
-	private List<Molecule> molecules;
+	private Set<MolecularSystem.Molecule> molecules;
 
 	//@Value("${yoink.job.unitconvertertype}")
 	private Converter.UnitConverterType unitConverterType = Converter.UnitConverterType.AngstromToBohr;
@@ -68,7 +70,7 @@ public class MolecularSystemTranslator implements Translator<MolecularSystem, JA
 	private SimpleVector3DFactory myVector3D;
 
 	@Resource
-	private Computer<Coord, Set<Molecule>> centerOfMassComputer;
+	private DistanceCalculator distanceCalculator;
 
 	/**
 	 * translate JAXBElement Cml to MolecularSystem
@@ -83,8 +85,7 @@ public class MolecularSystemTranslator implements Translator<MolecularSystem, JA
 	public MolecularSystem translate(JAXBElement<Cml> cml) {
 		init(cml);
 		findMoleculeListInCml(molecules, cmlMolecularSystem);
-		this.molecularSystem = new SimpleMolecularSystem((Set) molecules);
-		return molecularSystem;
+		return new SimpleMolecularSystem( molecules);
 	}
 
 	// This class initializes the instance variables
@@ -92,14 +93,13 @@ public class MolecularSystemTranslator implements Translator<MolecularSystem, JA
 		moleculeIndexCounter = 0;
 		atomIndexCounter = 0;
 		this.cml = cml;
-		this.molecules = new ArrayList<Molecule>();
+		this.molecules = new HashSet<>();
 		this.cmlMolecularSystem = cml.getValue();
 	}
 
 	// loop over elements in a cml to find the molcule list??
-	private void findMoleculeListInCml(List<Molecule> molecules, Cml cmlMolecularSystem) {
-		for (Object elementMoleculeList : cmlMolecularSystem
-				.getAnyCmlOrAnyOrAny()) {
+	private void findMoleculeListInCml(Set<MolecularSystem.Molecule> molecules, Cml cmlMolecularSystem) {
+		for (Object elementMoleculeList : cmlMolecularSystem.getAnyCmlOrAnyOrAny()) {
 			checkIfMoleculeList(elementMoleculeList);
 		}
 	}
@@ -120,8 +120,7 @@ public class MolecularSystemTranslator implements Translator<MolecularSystem, JA
 			JAXBElement<org.xml_cml.schema.Molecule> element = (JAXBElement<org.xml_cml.schema.Molecule>) elementMolecule;
 			// check molecule
 			if (element.getDeclaredType() == org.xml_cml.schema.Molecule.class) {
-				org.xml_cml.schema.Molecule cmlMolecule = ((JAXBElement<org.xml_cml.schema.Molecule>) element)
-						.getValue();
+				org.xml_cml.schema.Molecule cmlMolecule = ((JAXBElement<org.xml_cml.schema.Molecule>) element).getValue();
 				parseMolecule(cmlMolecule);
 			}
 		}
@@ -129,19 +128,19 @@ public class MolecularSystemTranslator implements Translator<MolecularSystem, JA
 
 	private void parseMolecule(org.xml_cml.schema.Molecule cmlMolecule) {
 		moleculeIndexCounter++;
-		List<Atom> atoms = parseAtoms(cmlMolecule);
-		Molecule molecule = new SimpleMolecule(moleculeIndexCounter, (Set) atoms);
+		Set<MolecularSystem.Molecule.Atom> atoms = parseAtoms(cmlMolecule);
+		MolecularSystem.Molecule molecule = new SimpleMolecule(moleculeIndexCounter, (Set) atoms);
 		Region.Name name = Region.Name.valueOf(cmlMolecule.getId());
 		molecule.setName(name);
-		Set<Molecule> moleculeSet = new HashSet<>();
+		Set<MolecularSystem.Molecule> moleculeSet = new HashSet<>();
 		moleculeSet.add(molecule);
-		Coord centerOfMass = centerOfMassComputer.calculate(moleculeSet);
+		Coord centerOfMass = this.distanceCalculator.centerOfMass(moleculeSet);
 		molecule.setCenterOfMass(centerOfMass);
 		molecules.add(molecule);
 	}
 
-	private List<Atom> parseAtoms(org.xml_cml.schema.Molecule cmlMolecule) {
-		List<Atom> atoms = new ArrayList<Atom>();
+	private Set<MolecularSystem.Molecule.Atom> parseAtoms(org.xml_cml.schema.Molecule cmlMolecule) {
+		Set<MolecularSystem.Molecule.Atom> atoms = new HashSet<>();
 		for (Object elementAtomArray : cmlMolecule.getAnyCmlOrAnyOrAny()) {
 			@SuppressWarnings("unchecked")
 			JAXBElement<AtomArray> element = (JAXBElement<AtomArray>) elementAtomArray;
@@ -154,36 +153,32 @@ public class MolecularSystemTranslator implements Translator<MolecularSystem, JA
 		return atoms;
 	}
 
-	private void loopOverAtoms(List<Atom> atoms, AtomArray cmlAtomArray) {
+	private void loopOverAtoms(Set<MolecularSystem.Molecule.Atom> atoms, AtomArray cmlAtomArray) {
 		for (Object elementAtom : cmlAtomArray.getAnyCmlOrAnyOrAny()) {
 			@SuppressWarnings("unchecked")
 			JAXBElement<org.xml_cml.schema.Atom> element = (JAXBElement<org.xml_cml.schema.Atom>) elementAtom;
 			if (element.getDeclaredType() == org.xml_cml.schema.Atom.class) {
-				org.xml_cml.schema.Atom cmlAtom = (org.xml_cml.schema.Atom) element
-						.getValue();
+				org.xml_cml.schema.Atom cmlAtom = (org.xml_cml.schema.Atom) element.getValue();
 				parseAtom(atoms, cmlAtom);
 			}
 		}
 	}
 
-	private void parseAtom(List<Atom> atoms, org.xml_cml.schema.Atom cmlAtom) {
+	private void parseAtom(Set<MolecularSystem.Molecule.Atom> atoms, org.xml_cml.schema.Atom cmlAtom) {
 		atomIndexCounter++;
 		Element elementType = Element.valueOf(cmlAtom.getElementType());
-		Coord atomCoord = parseCoord(cmlAtom);
-		Atom atom = new SimpleAtom(atomIndexCounter, elementType, atomCoord);
+		Vector atomCoord = parseCoord(cmlAtom);
+		MolecularSystem.Molecule.Atom atom = new SimpleAtom(atomIndexCounter, elementType, atomCoord);
 		atoms.add(atom);
 	}
 
-	private Coord parseCoord(org.xml_cml.schema.Atom cmlAtom) {
+	private Vector parseCoord(org.xml_cml.schema.Atom cmlAtom) {
 		@SuppressWarnings("rawtypes")
-		Vector coordVector = myVector3D.create(new double[] { cmlAtom.getX3(),
-				cmlAtom.getY3(), cmlAtom.getZ3() });
+		Vector coordVector = myVector3D.create(new double[] { cmlAtom.getX3(), cmlAtom.getY3(), cmlAtom.getZ3() });
 		// get from property file
 		@SuppressWarnings("rawtypes")
 		Vector bohrCoordVector = coordVector.scalarMultiply(unitConverterType.value());
-		Coord atomCoord = simpleCoordFactory.create();
-		atomCoord.setCoords(bohrCoordVector);
-		return atomCoord;
+		return bohrCoordVector;
 	}
 
 }

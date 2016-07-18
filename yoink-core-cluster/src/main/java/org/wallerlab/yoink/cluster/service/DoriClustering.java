@@ -21,12 +21,13 @@ import java.util.Map;
 import java.util.Set;
 
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.api.model.batch.Job;
-import org.wallerlab.yoink.api.model.batch.JobParameter;
+import org.wallerlab.yoink.api.model.Job;
 import org.wallerlab.yoink.api.service.cluster.Clusterer;
-import org.wallerlab.yoink.region.service.partitioners.Partitioner;
+import org.wallerlab.yoink.api.service.region.Regionizer;
 import org.wallerlab.yoink.cluster.service.louvain.LouvainClusteringFacade;
 import org.wallerlab.yoink.cluster.service.interaction.InteractionTriple;
+
+import javax.xml.bind.JAXBElement;
 
 /**
  * This class is to build a graph based on DORI interaction (yes or no) and do
@@ -43,23 +44,36 @@ public class DoriClustering implements Clusterer {
 	}
 
 	@Override
-	public void cluster(Job job) {
-		Map<JobParameter, Object> parameters = job.getParameters();
-
-		Partitioner.Type partitionType = (Partitioner.Type) parameters
-				.get(JobParameter.PARTITIONER);
-		if (partitionType == Partitioner.Type.CLUSTER) {
+	public Job cluster(Job<JAXBElement> job) {
+		Map<Job.JobParameter, Object> parameters = job.getParameters();
+		Regionizer.Type regionizer = (Regionizer.Type) parameters.get(Job.JobParameter.PARTITIONER);
+		if (regionizer == Regionizer.Type.CLUSTER) {
 			List<InteractionTriple<Integer>> interactionTriples = getInteractionTriples(
 					job, parameters);
 			List<Set<Integer>> clusters = louvainClustering(interactionTriples,
 					parameters);
 			job.setClusters(clusters);
 		}
+		return job;
+	}
+
+	public List<Set<Integer>> louvainClustering(List<InteractionTriple<Integer>> interactionSet,
+			Map<Job.JobParameter, Object> parameters) {
+		String parentDirName = (String) parameters
+				.get(Job.JobParameter.OUTPUT_FOLDER) + "/";
+		LouvainClusteringFacade<Integer> louvain = new LouvainClusteringFacade<Integer>(
+				parentDirName + "testDb/databases/graph.db");
+		louvain.populate(interactionSet);
+		int maxCommunities = (int) parameters.get(Job.JobParameter.MAX_COMMS);
+		Map<Long, Integer> result = louvain.cluster(maxCommunities);
+		List<Set<Integer>> clusters = louvain.getResult(result.size() - 1);
+		louvain.shutdown();
+		System.out.println("clusters: " + clusters);
+		return clusters;
 
 	}
 
-	private List<InteractionTriple<Integer>> getInteractionTriples(Job job,
-			Map<JobParameter, Object> parameters) {
+	private List<InteractionTriple<Integer>> getInteractionTriples(Job job, Map<Job.JobParameter, Object> parameters) {
 		List<InteractionTriple<Integer>> interactionTriples = new ArrayList<InteractionTriple<Integer>>();
 		List<Double> weightList = job.getInteractionWeight();
 		List<List<Integer>> interactionList = job.getInteractionList();
@@ -72,21 +86,5 @@ public class DoriClustering implements Clusterer {
 		return interactionTriples;
 	}
 
-	public List<Set<Integer>> louvainClustering(
-			List<InteractionTriple<Integer>> interactionSet,
-			Map<JobParameter, Object> parameters) {
-		String parentDirName = (String) parameters
-				.get(JobParameter.OUTPUT_FOLDER) + "/";
-		LouvainClusteringFacade<Integer> louvain = new LouvainClusteringFacade<Integer>(
-				parentDirName + "testDb/databases/graph.db");
-		louvain.populate(interactionSet);
-		int maxCommunities = (int) parameters.get(JobParameter.MAX_COMMS);
-		Map<Long, Integer> result = louvain.cluster(maxCommunities);
-		List<Set<Integer>> clusters = louvain.getResult(result.size() - 1);
-		louvain.shutdown();
-		System.out.println("clusters: " + clusters);
-		return clusters;
-
-	}
 
 }

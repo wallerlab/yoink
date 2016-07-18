@@ -27,14 +27,14 @@ public class SmoothFunctions {
     }
 
     /**
-     * this smooth function is used in hot-spot method. for details please see:
+     * this compute function is used in hot-spot method. for details please see:
      * "A QM/MM simulation method applied to the solution of Li+ in liquid ammonia."
      * Chemical physics 211.1 (1996): 313-323.
      *
-     * @param currentValue, currentValue(variable) in smooth function
-     * @param min, minimum value in smooth function
-     * @param max, maximum value in smooth function
-     * @return smooth factor
+     * @param currentValue, currentValue(variable) in compute function
+     * @param min, minimum value in compute function
+     * @param max, maximum value in compute function
+     * @return compute factor
      */
     SmoothFunction brooks = (currentValue, min, max) -> {
         double smoothFactor;
@@ -49,18 +49,18 @@ public class SmoothFunctions {
     };
 
     /**
-     * this smooth function is used in difference-based adaptive solvation(DAS)
+     * this compute function is used in difference-based adaptive solvation(DAS)
      * method. for details please see:
      * "Toward a practical method for adaptive QM/MM simulations." Journal of
      * Chemical Theory and Computation 5.9 (2009): 2212-2221.
      *
      * @param currentValue
-     *            , currentValue(variable) in smooth function
+     *            , currentValue(variable) in compute function
      * @param min
-     *            , minimum value in smooth function
+     *            , minimum value in compute function
      * @param max
-     *            , maximum value in smooth function
-     * @return smooth factor
+     *            , maximum value in compute function
+     * @return compute factor
      */
     SmoothFunction bulo =(currentValue, min, max) ->{
         double smoothFactor;
@@ -75,18 +75,18 @@ public class SmoothFunctions {
     };
 
     /**
-     * this smooth function is used in ONIOM-XS method. for details please see:
+     * this compute function is used in ONIOM-XS method. for details please see:
      * "ONIOM-XS: An extension of the ONIOM method for molecule simulation in condensed phase"
      * Chemical Physics Letters, Volume 355, Number 3, 2 April 2002, pp.
      * 257-262(6).
      *
      * @param currentValue
-     *            , currentValue(variable) in smooth function
+     *            , currentValue(variable) in compute function
      * @param min
-     *            , minimum value in smooth function
+     *            , minimum value in compute function
      * @param max
-     *            , maximum value in smooth function
-     * @return smooth factor
+     *            , maximum value in compute function
+     * @return compute factor
      */
     SmoothFunction morokuma = (currentValue, min, max) -> {
         double smoothFactor;
@@ -101,19 +101,19 @@ public class SmoothFunctions {
     };
 
     /**
-     * this smooth function is used in PAP and SAP methods. for details please
+     * this compute function is used in PAP and SAP methods. for details please
      * see: Heyden, Andreas, Hai Lin, and Donald G. Truhlar. "Adaptive
      * partitioning in combined quantum mechanical and molecule mechanical
      * calculations of potential energy functions for multiscale simulations."
      * The Journal of Physical Chemistry B 111.9 (2007): 2231-2241.
      *
      * @param currentValue
-     *            , currentValue(variable) in smooth function
+     *            , currentValue(variable) in compute function
      * @param min
-     *            , minimum value in smooth function
+     *            , minimum value in compute function
      * @param max
-     *            , maximum value in smooth function
-     * @return smooth factor
+     *            , maximum value in compute function
+     * @return compute factor
      */
     SmoothFunction permuted = (currentValue, min, max) -> {
         double smoothFactor;
@@ -128,14 +128,14 @@ public class SmoothFunctions {
     };
 
     /**
-     * this smooth function is used in SCMP method. for details please see:
+     * this compute function is used in SCMP method. for details please see:
      * "Size-Consistent Multipartitioning QM/MM: A Stable and Efficient Adaptive
      * QM/MM Method"
      *
-     * @param currentValue, currentValue(variable) in smooth function
-     * @param min , minimum value in smooth function
-     * @param max , maximum value in smooth function
-     * @return smooth factor
+     * @param currentValue, currentValue(variable) in compute function
+     * @param min , minimum value in compute function
+     * @param max , maximum value in compute function
+     * @return compute factor
      */
     SmoothFunction scmp = (currentValue, min, max) -> {
         double  smoothFactor;
@@ -150,7 +150,7 @@ public class SmoothFunctions {
     };
 
     /**
-     * this interface is for the smooth function
+     * this interface is for the compute function
      *
      * @author Min Zheng
      *
@@ -166,7 +166,7 @@ public class SmoothFunctions {
          *            , the minimum value of the variable
          * @param max
          *            , the maximum value of the variable
-         * @return smooth value, {@link java.lang.Double}
+         * @return compute value, {@link java.lang.Double}
          */
         double evaluate(double current, double min, double max);
 

@@ -37,17 +37,15 @@ public class TestYoink {
 		Application yoink = new Application();
 		String[] args = new String[1];
 		args[0] = "integration test- run batch version";
-		//yoink.main(args);
+		yoink.main(args);
 		try {
 
 			if (files_in.list().length > 0 && files_out.list().length > 0) {
-				Assert.assertEquals(files_in.list().length,
-						files_out.list().length);
-				System.out.println("pass integration test");
+			//	assert files_in.list().length == files_out.list().length;
 				deleteDirectory(files_in);
 				deleteDirectory(files_out);
 			} else {
-			//	throw new Exception("example test failed");
+			    throw new Exception("example test failed");
 			}
 
 		} catch (SecurityException | IllegalArgumentException e) {

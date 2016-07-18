@@ -15,8 +15,8 @@
  */
 package org.wallerlab.yoink.cube.service;
 
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
 import org.wallerlab.yoink.cube.domain.Cube;
-import org.wallerlab.yoink.api.model.molecule.Molecule;
 
 @FunctionalInterface
 public interface CubeBuilder<T> {
@@ -27,7 +27,7 @@ public interface CubeBuilder<T> {
 	 *            , a double array for step size along x/y/z axes
 	 * @param t
 	 *            , it contains the molecule information to build the cube. eg.
-	 *            a Set of molecules, {@link Molecule}
+	 *            a Set of molecules, {@link MolecularSystem.Molecule}
 	 * @return cube {@link Cube}
 	 */
 	 Cube build(double[] xyzStepSize, T t);

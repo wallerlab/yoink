@@ -15,11 +15,11 @@
  */
 package org.wallerlab.yoink.density.service.densityProperties
 
-import org.wallerlab.yoink.api.model.molecule.Element
-import org.wallerlab.yoink.api.service.density.DensityCalculator
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem
 import org.wallerlab.yoink.api.service.math.Vector
-import org.wallerlab.yoink.api.model.molecule.Atom
+
 import org.wallerlab.yoink.api.service.math.Matrix
+import org.wallerlab.yoink.density.domain.ExponentialFit
 import org.wallerlab.yoink.density.domain.SimpleDensityPoint
 import org.wallerlab.yoink.density.service.SimpleDensityCalculator
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
@@ -31,8 +31,6 @@ import spock.lang.Specification
 
 class AtomicDensityPropertiesCalculatorSpec extends Specification{
 
-
-
 	def"calculate(densityValues,atom), check result values: density,gradientVector,hessian"(){
 
 		given:
@@ -43,8 +41,8 @@ class AtomicDensityPropertiesCalculatorSpec extends Specification{
 		def simpleCoordFactory=new  SimpleCoordFactory()
 		simpleCoordFactory.myVector3D= myVector3D
 		def coordinate=  simpleCoordFactory.create((double[])[-5.448858, -1.592916 , -2])
-		def a = Mock(Atom)
-		a.getElementType()>>Element.H
+		def a = Mock(MolecularSystem.Molecule.Atom)
+		a.getElementType()>>ExponentialFit.H
 		def aCoord=simpleCoordFactory.create((double[])[-3.448858, 0.407084 , 0])
 		a.getCoordinate()>>aCoord
 		double[][]	h=[
@@ -110,8 +108,8 @@ class AtomicDensityPropertiesCalculatorSpec extends Specification{
 			1.0816225869801266
 		])
 
-		def a = Mock(Atom)
-		a.getElementType()>>Element.C
+		def a = Mock(MolecularSystem.Molecule.Atom)
+		a.getElementType()>>ExponentialFit.C
 		a.getRadialGrid()>>grid
 
 		a.getCoordinate()>>aCoord

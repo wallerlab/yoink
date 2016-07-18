@@ -18,10 +18,9 @@ package org.wallerlab.yoink.cube.domain;
 import java.util.List;
 import java.util.Set;
 
-import org.wallerlab.yoink.api.model.molecule.Atom;
-import org.wallerlab.yoink.api.model.molecule.Coord;
-import org.wallerlab.yoink.api.model.molecule.Molecule;
-import org.wallerlab.yoink.math.constants.Constants;
+import org.wallerlab.yoink.api.model.Coord;
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
+import org.wallerlab.yoink.math.Constants;
 
 /**
  * Cube domain Model stores all information about cube.
@@ -35,8 +34,6 @@ public class SimpleCube implements Cube {
 
 	private final int size;
 
-	private String name;
-
 	private final Coord origin;
 
 	private final int[] numberOfXYZSteps;
@@ -45,14 +42,14 @@ public class SimpleCube implements Cube {
 
 	private final List<Coord> coordinates;
 
-	private final Set<Molecule> molecules;
+	private final Set<MolecularSystem.Molecule> molecules;
 
 	public SimpleCube(int size,
 					  Coord origin,
 					  int[] numberOfXYZSteps,
 					  double[] xyzStepSize,
 					  List<Coord> coordinates,
-					  final Set<Molecule> molecules){
+					  final Set<MolecularSystem.Molecule> molecules){
 		this.size=size;
 		this.origin = origin;
 		this.numberOfXYZSteps = numberOfXYZSteps;
@@ -81,18 +78,13 @@ public class SimpleCube implements Cube {
 	}
 
 	@Override
-	public Set<Molecule> getMolecules() {
+	public Set<MolecularSystem.Molecule> getMolecules() {
 		return  molecules;
 	}
 
 	@Override
-	public Set<Atom> getAtoms() {
+	public Set<MolecularSystem.Molecule.Atom> getAtoms() {
 		return null;
-	}
-
-	@Override
-	public String getName() {
-		return name;
 	}
 
 	@Override

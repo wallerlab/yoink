@@ -100,6 +100,13 @@ public interface Vector<T> {
 	double dotProduct();
 
 	/**
+	 * get the dot product
+	 *
+	 * @return {@link java.lang.Double}
+	 */
+	double dotProduct(Vector vector);
+
+	/**
 	 * get the distance between this vector and another vector
 	 * 
 	 * @param m
@@ -137,7 +144,7 @@ public interface Vector<T> {
 	 * 
 	 * @return a vector in the vector type in the library
 	 */
-	public T getInternalVector();
+	T getInternalVector();
 
 	/**
 	 * set the value of internal vector
@@ -145,7 +152,7 @@ public interface Vector<T> {
 	 * @param internalVector
 	 *            , a vector in the vector type in the library
 	 */
-	public void setInternalVector(T internalVector);
+	void setInternalVector(T internalVector);
 
 	/**
 	 * do Math.exp() calculation for every element in the vector
@@ -160,7 +167,7 @@ public interface Vector<T> {
 	 * @author Min Zheng
 	 *
 	 */
-	public enum Vector3DType {
+	enum Vector3DType {
 		COMMONS
 	}
 

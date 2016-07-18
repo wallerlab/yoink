@@ -15,9 +15,10 @@
  */
 package org.wallerlab.yoink.cube.domain
 
-import org.wallerlab.yoink.api.model.molecule.Atom;
-import org.wallerlab.yoink.api.model.molecule.Coord
-import org.wallerlab.yoink.api.model.molecule.Molecule;
+
+import org.wallerlab.yoink.api.model.Coord
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem
+
 import spock.lang.Specification;
 
 class SimpleGridPointSpec extends Specification{
@@ -47,20 +48,20 @@ class SimpleGridPointSpec extends Specification{
 		gp.getProperty("d")==d
 
 		when:"Mock Set<Molecule> for property value"
-		def a1=Mock(Atom)
-		def a2=Mock(Atom)
-		def m1=Mock(Molecule)
-		def m2=Mock(Molecule)
-		Set<Atom> aSet= new HashSet<Atom>([a1 , a2])
+		def a1=Mock(MolecularSystem.Molecule.Atom)
+		def a2=Mock(MolecularSystem.Molecule.Atom)
+		def m1=Mock(MolecularSystem.Molecule)
+		def m2=Mock(MolecularSystem.Molecule)
+		Set<MolecularSystem.Molecule.Atom> aSet= new HashSet<MolecularSystem.Molecule.Atom>([a1, a2])
 		m1.getAtoms()>>[a1]
 		m2.getAtoms()>>[a2]
-		Set<Molecule> mSet= new HashSet<Molecule>([m1, m2])
+		Set<MolecularSystem.Molecule> mSet= new HashSet<MolecularSystem.Molecule>([m1, m2])
 		properties.put("twoClosestAtoms", aSet)
 		properties.put("twoClosestMolecules", mSet)
 		gp.setProperties(properties)
 		then:"test getters for properties' value"
-		gp.getTwoClosestAtoms().equals((Set<Atom>)[a1, a2])
-		gp.getTwoClosestMolecules().equals((Set<Molecule>)[m1, m2])
-		gp.getAtomsInTwoClosestMolecules().equals((Set<Atom>)[a1, a2])
+		gp.getTwoClosestAtoms().equals((Set<MolecularSystem.Molecule.Atom>)[a1, a2])
+		gp.getTwoClosestMolecules().equals((Set<MolecularSystem.Molecule>)[m1, m2])
+		gp.getAtomsInTwoClosestMolecules().equals((Set<MolecularSystem.Molecule.Atom>)[a1, a2])
 	}
 }

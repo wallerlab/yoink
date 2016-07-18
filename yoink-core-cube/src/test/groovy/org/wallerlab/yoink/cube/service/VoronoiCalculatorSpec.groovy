@@ -15,9 +15,10 @@
  */
 package org.wallerlab.yoink.cube.service
 
-import org.wallerlab.yoink.api.model.molecule.Atom
-import org.wallerlab.yoink.api.model.molecule.Coord
-import org.wallerlab.yoink.api.model.molecule.Molecule
+
+import org.wallerlab.yoink.api.model.Coord
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem
+
 import org.wallerlab.yoink.api.service.molecule.Calculator
 
 import spock.lang.Specification;
@@ -26,43 +27,43 @@ class VoronoiCalculatorSpec extends Specification {
 
 	def "test method  calculate(Coord tempCoord,Set<Molecule> molecules)"(){
 		def tempCoord= Mock(Coord)
-		def m1=Mock(Molecule)
-		def a1=Mock(Atom)
+		def m1=Mock(MolecularSystem.Molecule)
+		def a1=Mock(MolecularSystem.Molecule.Atom)
 		m1.getAtoms()>>[a1]
-		def m2=Mock(Molecule)
-		def a2=Mock(Atom)
+		def m2=Mock(MolecularSystem.Molecule)
+		def a2=Mock(MolecularSystem.Molecule.Atom)
 		m2.getAtoms()>>[a2]
-		def m3=Mock(Molecule)
-		def a3=Mock(Atom)
+		def m3=Mock(MolecularSystem.Molecule)
+		def a3=Mock(MolecularSystem.Molecule.Atom)
 		m3.getAtoms()>>[a3]
-		Set<Molecule> mSet=(Set<Molecule>)[m1, m2, m3]
-		Calculator<Double, Coord, Atom> distanceCalculator=Mock(Calculator)
+		Set<MolecularSystem.Molecule> mSet=(Set<MolecularSystem.Molecule>)[m1, m2, m3]
+		Calculator<Double, Coord, MolecularSystem.Molecule.Atom> distanceCalculator=Mock(Calculator)
 		distanceCalculator.calculate(tempCoord, a1)>>(double)1
 		distanceCalculator.calculate(tempCoord, a2)>>(double)2
 		distanceCalculator.calculate(tempCoord, a3)>>(double)3
 
 		when:"make a new VoronoiCalculator"
-		def vp= new VoronoiCalculator()
+		def vp= new SimpleVoronoizer()
 		vp.distanceCalculator=distanceCalculator
 
-		then:"call method calculate and check the return value"
+		then:"call method ratio and check the return value"
 		def map=vp.calculate(tempCoord, mSet)
 		map.size()==2
-		map.get("twoClosestAtoms")==(Set<Atom>)[a1, a2]
-		map.get("twoClosestMolecules")==(Set<Molecule>)[m1, m2]
+		map.get("twoClosestAtoms")==(Set<MolecularSystem.Molecule.Atom>)[a1, a2]
+		map.get("twoClosestMolecules")==(Set<MolecularSystem.Molecule>)[m1, m2]
 	}
 
 
 	def"test method getTwoClosestNeighbours()"(){
 
 		when:"call VoronoiCalculator.getTwoClosestNeighbours(), the size of neighbourDistances is 3"
-		List<Atom> twoNeighbours=Mock(List)
+		List<MolecularSystem.Molecule.Atom> twoNeighbours=Mock(List)
 		List<Double> neighbourDistances=Mock(List)
-		def atom=Mock(Atom)
-		def molecule=Mock(Molecule)
-		List<Molecule> twoMolecules=Mock(List)
+		def atom=Mock(MolecularSystem.Molecule.Atom)
+		def molecule=Mock(MolecularSystem.Molecule)
+		List<MolecularSystem.Molecule> twoMolecules=Mock(List)
 		neighbourDistances.size()>>3
-		def vp= new VoronoiCalculator()
+		def vp= new SimpleVoronoizer()
 		vp.getTwoClosestNeighbours( twoNeighbours,
 				neighbourDistances,  atom,  2.9,
 				twoMolecules,  molecule)

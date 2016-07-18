@@ -15,13 +15,13 @@
  */
 package org.wallerlab.yoink.batch.service.processor;
 
-import javax.xml.bind.JAXBElement;
-
-import org.springframework.batch.item.ItemProcessor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.api.model.batch.Job;
+import org.wallerlab.yoink.api.model.Job;
 import org.wallerlab.yoink.api.service.region.Regionizer;
+
+import javax.xml.bind.JAXBElement;
+import org.springframework.batch.item.ItemProcessor;
+import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * This class is to set up and execute adaptive QM/MM partitioning.
@@ -33,7 +33,6 @@ import org.wallerlab.yoink.api.service.region.Regionizer;
  */
 @Service
 public class RegionizerProcessor implements ItemProcessor<Job<JAXBElement>,Job>{
-	
 
 	@Autowired
 	Regionizer regionizer;
@@ -49,8 +48,5 @@ public class RegionizerProcessor implements ItemProcessor<Job<JAXBElement>,Job>{
 	public Job process(Job<JAXBElement> job) throws Exception {
 		return regionizer.regionize(job);
 	}
-
-
-	//Should also be responsible for getting params from XML
 
 }

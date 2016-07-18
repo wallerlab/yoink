@@ -15,19 +15,19 @@
  */
 package org.wallerlab.yoink.region.service.partitioners
 
-import org.wallerlab.yoink.api.model.batch.JobParameter;
-import org.wallerlab.yoink.api.model.density.DensityPoint.DensityType
-import org.wallerlab.yoink.api.model.molecule.Element
-import org.wallerlab.yoink.api.model.molecule.Atom
-import org.wallerlab.yoink.api.model.molecule.RadialGrid;
-import org.wallerlab.yoink.api.model.region.Region;
+import org.wallerlab.yoink.api.model.Job
+
+import org.wallerlab.yoink.api.model.DensityPoint.DensityType
+
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem
+import org.wallerlab.yoink.density.domain.ExponentialFit
+import org.wallerlab.yoink.density.domain.RadialGrid;
+import org.wallerlab.yoink.api.model.adaptive.Region;
 import org.wallerlab.yoink.api.service.molecule.Calculator
-import org.wallerlab.yoink.api.model.molecule.Molecule
+
 import org.wallerlab.yoink.api.service.region.Regionizer
 import org.wallerlab.yoink.api.service.molecule.FilesReader
 import org.wallerlab.yoink.region.domain.SimpleRegion
-import org.wallerlab.yoink.region.service.partitioners.DensityPartitioner
-
 import spock.lang.Specification
 
 class DensityPartitionerSpec extends Specification{
@@ -36,9 +36,9 @@ class DensityPartitionerSpec extends Specification{
 		def partitioner= new DensityPartitioner()
 		def parameters=Mock(Map)
 		when:"store thresholds  in parameters"
-		parameters.get(JobParameter.DENSITY_ASR_QMCORE)>>(double)1.0E-5
-		parameters.get(JobParameter.DENSITY_ASR_QM)>>(double)1.0E-4
-		parameters.get(JobParameter.DENSITY_BUFFER)>>(double)1.0E-9
+		parameters.get(Job.JobParameter.DENSITY_ASR_QMCORE)>>(double)1.0E-5
+		parameters.get(Job.JobParameter.DENSITY_ASR_QM)>>(double)1.0E-4
+		parameters.get(Job.JobParameter.DENSITY_BUFFER)>>(double)1.0E-9
 
 		then:"density partitioner gets right thresholds"
 		partitioner.getDensityThreshold(parameters,DensityType.DORI)==1.0E-4
@@ -55,21 +55,21 @@ class DensityPartitionerSpec extends Specification{
 	def "calculateAdaptiveSearchRegion" (){
 
 		def parameters=Mock(Map)
-		parameters.get(JobParameter.DENSITY_BUFFER)>>(double)1.0E-9
-		parameters.get(JobParameter.DGRID)>>true
-		parameters.get(JobParameter.WFC_PATH)>>"./src/test/resources"
-		def m1=Mock(Molecule)
-		def m2=Mock(Molecule)
-		def m3=Mock(Molecule)
-		def mMap=new HashMap<Molecule,Integer>()
+		parameters.get(Job.JobParameter.DENSITY_BUFFER)>>(double)1.0E-9
+		parameters.get(Job.JobParameter.DGRID)>>true
+		parameters.get(Job.JobParameter.WFC_PATH)>>"./src/test/resources"
+		def m1=Mock(MolecularSystem.Molecule)
+		def m2=Mock(MolecularSystem.Molecule)
+		def m3=Mock(MolecularSystem.Molecule)
+		def mMap=new HashMap<MolecularSystem.Molecule,Integer>()
 		mMap.put(m2, 2)
 		mMap.put(m3,3)
-		def atom=Mock(Atom)
-		 atom.getElementType()>>Element.C
+		def atom=Mock(MolecularSystem.Molecule.Atom)
+		 atom.getElementType()>>ExponentialFit.C
 		m1.getAtoms()>>[atom]
 		m2.getAtoms()>>[atom]
 		m3.getAtoms()>>[atom]
-		def mMap0=new HashMap<Molecule,Integer>()
+		def mMap0=new HashMap<MolecularSystem.Molecule,Integer>()
 		mMap0.put(m1, 1)
 		def region0=Mock(Region)
 		region0.getMolecules()>>[m1]
@@ -97,6 +97,7 @@ class DensityPartitionerSpec extends Specification{
 		partitioner.regionizer=singleRegionizerService
 		partitioner.regionFactory=simpleRegionFactory
 		partitioner.radialGridReader=radialGridReader
+
 		then:"method partition  is executable and returns right result"
 		partitioner.partition(regions,parameters,DensityType.ELECTRONIC)
 		regions.get(Region.Name.ADAPTIVE_SEARCH).getSize()==3

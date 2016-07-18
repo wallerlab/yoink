@@ -1,6 +1,6 @@
 package org.wallerlab.yoink.api.service.cluster;
 
-import org.wallerlab.yoink.api.model.batch.Job;
+import org.wallerlab.yoink.api.model.Job;
 
 import javax.xml.bind.JAXBElement;
 

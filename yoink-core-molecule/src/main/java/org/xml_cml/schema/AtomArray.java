@@ -77,7 +77,7 @@ public class AtomArray {
 	protected java.util.List<BigInteger> hydrogenCount;
 	@XmlAttribute(name = "dictRef")
 	protected String dictRef;
-	@XmlAttribute(name = "elementType")
+	@XmlAttribute(name = "element")
 	protected java.util.List<String> elementType;
 	@XmlAttribute(name = "yFract")
 	protected java.util.List<Double> yFract;
@@ -299,19 +299,19 @@ public class AtomArray {
 	}
 
 	/**
-	 * Gets the value of the elementType property.
+	 * Gets the value of the element property.
 	 * 
 	 * <p>
 	 * This accessor method returns a reference to the live list, not a
 	 * snapshot. Therefore any modification you make to the returned list will
 	 * be present inside the JAXB object. This is why there is not a
-	 * <CODE>set</CODE> method for the elementType property.
+	 * <CODE>set</CODE> method for the element property.
 	 * 
 	 * <p>
 	 * For example, to add a new item, do as follows:
 	 * 
 	 * <pre>
-	 * getElementType().add(newItem);
+	 * getElement().add(newItem);
 	 * </pre>
 	 * 
 	 * 

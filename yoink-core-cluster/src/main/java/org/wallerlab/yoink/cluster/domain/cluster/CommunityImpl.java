@@ -63,46 +63,34 @@ class CommunityImpl implements Community {
 
 	@Override
 	public double getInternalEdgeWeightSum() {
-
 		return internalEdgeWeightSum;
 	}
 
 	@Override
 	public double getTotalEdgeWeightSum() {
-
 		return totalEdgeWeightSum;
 	}
 
 	@Override
 	public ResourceIterator<Node> getNodes() {
-
 		return graph.findNodes(label);
 	}
 
+	/*
+	 * TraversalDescription traversal = graph.traversalDescription()
+	 * .relationships(edgeType) .evaluator(Evaluators.atDepth(1))
+	 * .evaluator(Evaluators.includeWhereEndNodeIs(incidentNode));
+	*/
 	@Override
 	public double getEdgeWeightSumTo(Node incidentNode) {
-
-		/*
-		 * TraversalDescription traversal = graph.traversalDescription()
-		 * .relationships(edgeType) .evaluator(Evaluators.atDepth(1))
-		 * .evaluator(Evaluators.includeWhereEndNodeIs(incidentNode));
-		 */
 		double sum = 0;
 		ResourceIterator<Node> iterator = getNodes();
 		while (iterator.hasNext()) {
-
 			Node node = iterator.next();
-
-			for (Relationship edge : node.getRelationships(edgeType)) {
-
-				if (edge.getOtherNode(node).getId() == incidentNode.getId()) {
-
+			for (Relationship edge : node.getRelationships(edgeType))
+				if (edge.getOtherNode(node).getId() == incidentNode.getId())
 					sum += (double) edge.getProperty("weights", 1.0);
-
-				}
-			}
 		}
-
 		return sum;
 	}
 

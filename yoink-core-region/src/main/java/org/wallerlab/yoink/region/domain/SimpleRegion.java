@@ -15,10 +15,12 @@
  */
 package org.wallerlab.yoink.region.domain;
 
-import org.wallerlab.yoink.api.model.region.Region;
-import org.wallerlab.yoink.api.model.molecule.*;
+import org.wallerlab.yoink.api.model.*;
+import org.wallerlab.yoink.api.model.adaptive.Region;
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
 import org.wallerlab.yoink.api.service.math.Vector;
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory;
+import org.wallerlab.yoink.molecule.domain.SimpleCoord;
 
 import java.util.*;
 import static java.util.stream.Collectors.toSet;
@@ -26,7 +28,7 @@ import static java.util.stream.Collectors.toSet;
 /**
  * A region is a named set of molecules.
  *
- * it has a size and a center of mass.
+ * it also has a size and a center of mass.
  * 
  * @author Min Zheng
  * 
@@ -38,15 +40,21 @@ public class SimpleRegion implements Region {
 
 	private final Region.Name name;
 
-	private final Set<Molecule> molecules;
+	private final Set<MolecularSystem.Molecule> molecules;
 
-	private Coord centerOfMass;
+	//Lazy eval, just in case it is not needed.
+	private Vector centerOfMass;
 
-	public SimpleRegion(final Region.Name name, final Set<Molecule> moleculesInRegion) {
+	public SimpleRegion(final Region.Name name, final Set<MolecularSystem.Molecule> moleculesInRegion) {
 		this.name = name;
 		this.molecules = moleculesInRegion;
 		this.size = molecules.size();
 	}
+
+	/**
+	 * get the name of the region
+	 */
+	public Region.Name getName() { return name;}
 
 	/**
 	 * get the number of molecules in the region
@@ -58,31 +66,19 @@ public class SimpleRegion implements Region {
 	/**
 	 * get molecules in the region
 	 */
-	public Set<Molecule> getMolecules() {return molecules;}
+	public Set<MolecularSystem.Molecule> getMolecules() {return molecules;}
 
-
-	// Do we really want to add molecules to a set???? this should be final?
-	@Override
-	public void addMolecule(Molecule molecule) {
-		this.molecules.add(molecule);
-	}
-
-	/**
-	 * get the name of the region
-	 */
-
-	public Region.Name getName() { return name;}
 
 	@Override
-	public boolean containsAll(Set<Molecule> molecules) {
+	public boolean containsAll(Set<MolecularSystem.Molecule> molecules) {
 		return molecules.containsAll(molecules);
 	}
 
 	/**
 	 * get all atoms in the region
 	 */
-	public Set<Atom> getAtoms() {
-		return  molecules.stream()
+	public Set<MolecularSystem.Molecule.Atom> getAtoms() {
+		return molecules.stream()
 				         .flatMap(molecule -> molecule.getAtoms().stream())
 						 .collect(toSet());
 	}
@@ -91,46 +87,19 @@ public class SimpleRegion implements Region {
 	 * get the center of mass of the region
 	 */
 	public Coord getCenterOfMass() {
-		if(centerOfMass !=null) return centerOfMass;
+		if(centerOfMass !=null) return new SimpleCoord(centerOfMass);
 		else {
 			double massOfMolecule = 0;
-			Vector massWeightedCoordinate = SimpleVector3DFactory.staticCreate(0, 0, 0);
-			for (Molecule molecule : molecules) {
-				for (Atom atom : molecule.getAtoms()) {
-					double atomMass = atom.getElementType().atomMass();
-					Vector matrix = atom.getCoordinate().getCoords();
-					matrix = matrix.scalarMultiply(atomMass);
-					massWeightedCoordinate = matrix.add(massWeightedCoordinate);
-					massOfMolecule = massOfMolecule + atomMass;
+			Vector massWeightedCoordinate  = SimpleVector3DFactory.staticCreate(0.0,0.0,0.0);
+			for (MolecularSystem.Molecule molecule : molecules) {
+				for (MolecularSystem.Molecule.Atom atom : molecule.getAtoms()) {
+					massWeightedCoordinate = atom.getCoordinate().scalarMultiply(atom.getElement().atomMass());
+					massOfMolecule = massOfMolecule + atom.getElement().atomMass();
 				}
 			}
-			Vector centerCoordinate = massWeightedCoordinate.scalarMultiply(1.0 / massOfMolecule);
+			centerOfMass = massWeightedCoordinate.scalarMultiply(1.0 / massOfMolecule);
 		}
-		return centerOfMass;
-	}
-
-	//TODO deprecate this
-	@Override
-	public Map<Molecule, Integer> getMolecularMap() {
-		return null;
-	}
-
-	/**
-	 * change the id of molecules with the name of region
-	 */
-	//TODO Deprecate  this
-	public void changeMolecularId() {
-		if (getSize() != 0)
-			for (Molecule molecule : molecules) molecule.setName(this.name);
-	}
-
-	/**
-	 * change the id of molecules with the given name
-	 */
-	//TODO Deprecate  this
-	public void changeMolecularId(org.wallerlab.yoink.api.model.region.Region.Name name) {
-		if (getSize() != 0)
-			for (Molecule molecule : molecules) molecule.setName(name);
+		return new SimpleCoord(centerOfMass);
 	}
 
 }

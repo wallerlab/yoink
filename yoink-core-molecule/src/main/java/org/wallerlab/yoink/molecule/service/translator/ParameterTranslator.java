@@ -21,9 +21,9 @@ import java.util.Map;
 import javax.xml.bind.JAXBElement;
 
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.api.model.batch.JobParameter;
-import org.wallerlab.yoink.api.model.region.Region;
-import org.wallerlab.yoink.api.service.adaptive.Smoothner;
+import org.wallerlab.yoink.api.model.Job;
+import org.wallerlab.yoink.api.model.adaptive.Region;
+import org.wallerlab.yoink.api.service.adaptive.Adaptive;
 import org.wallerlab.yoink.api.service.molecule.Translator;
 import org.wallerlab.yoink.api.service.molecule.Converter.UnitConverterType;
 import org.wallerlab.yoink.api.service.region.Regionizer;
@@ -32,39 +32,39 @@ import org.xml_cml.schema.Parameter;
 import org.xml_cml.schema.ParameterList;
 
 /**
- * this class is to get a Map(JobParameter - {@link JobParameter}, Object) by
+ * this class is to get a Map(JobParameter - {@link Job.JobParameter}, Object) by
  * parsing ParameterList in JAXBElement Cml.
  * 
  * @author Min Zheng
  *
  */
 @Service
-public class ParameterTranslator implements Translator<Map<JobParameter, Object>, JAXBElement<Cml>> {
+public class ParameterTranslator implements Translator<Map<Job.JobParameter, Object>, JAXBElement<Cml>> {
 
 	private UnitConverterType unitConverterType = UnitConverterType.AngstromToBohr;
 
 	/**
 	 * get parameters a Map(JobParameter -
-	 * {@link JobParameter}, Object)
+	 * {@link Job.JobParameter}, Object)
 	 * from JAXBElement ParameterList {@link org.xml_cml.schema.ParameterList}
 	 * in JAXBElement Cml {@link org.xml_cml.schema.Cml}.
 	 * 
 	 * @param cml
 	 *            {@link javax.xml.bind.JAXBElement}
 	 * @return parameters is a map, the key is a JobParameter -
-	 *         {@link JobParameter} and
+	 *         {@link Job.JobParameter} and
 	 *         the value is an Object -{@link java.lang.Object }
 	 */
 	@Override
-	public Map<JobParameter, Object> translate(JAXBElement<Cml> cml) {
-		Map<JobParameter, Object> parameters = new HashMap<JobParameter, Object>();
-		parameters.put(JobParameter.DGRID, false);
+	public Map<Job.JobParameter, Object> translate(JAXBElement<Cml> cml) {
+		Map<Job.JobParameter, Object> parameters = new HashMap<Job.JobParameter, Object>();
+		parameters.put(Job.JobParameter.DGRID, false);
 		Cml cmlMolecularSystem = cml.getValue();
 		parseParameterList(parameters, cmlMolecularSystem);
 		return parameters;
 	}
 
-	private void parseParameterList(Map<JobParameter, Object> parameters, Cml cmlMolecularSystem) {
+	private void parseParameterList(Map<Job.JobParameter, Object> parameters, Cml cmlMolecularSystem) {
 		for (Object elementList : cmlMolecularSystem.getAnyCmlOrAnyOrAny()) {
 			JAXBElement element = (JAXBElement) elementList;
 			if (element.getDeclaredType() == ParameterList.class)
@@ -72,7 +72,7 @@ public class ParameterTranslator implements Translator<Map<JobParameter, Object>
 		}
 	}
 
-	private void parseParameters(Map<JobParameter, Object> parameters, JAXBElement element) {
+	private void parseParameters(Map<Job.JobParameter, Object> parameters, JAXBElement element) {
 		ParameterList cmlParameterList = (ParameterList) element.getValue();
 		if (cmlParameterList.getTitle().equalsIgnoreCase("parameters")) {
 			for (Object elementParameter : cmlParameterList.getAnyCmlOrAnyOrAny()) {
@@ -84,10 +84,10 @@ public class ParameterTranslator implements Translator<Map<JobParameter, Object>
 	}
 
 
-	private void parseParameterValue(Map<JobParameter, Object> parameters, JAXBElement elementJAXB) {
+	private void parseParameterValue(Map<Job.JobParameter, Object> parameters, JAXBElement elementJAXB) {
 		Parameter cmlParameter = (Parameter) elementJAXB.getValue();
 		String name = cmlParameter.getName().toUpperCase();
-		JobParameter jobParameter = JobParameter.valueOf(name);
+		Job.JobParameter jobParameter = Job.JobParameter.valueOf(name);
 		String value = cmlParameter.getValue();
 		
 		switch (jobParameter) {
@@ -117,7 +117,7 @@ public class ParameterTranslator implements Translator<Map<JobParameter, Object>
 			parameters.put(jobParameter, seddCubeStepSize);
 			break;
 		case SMOOTHNER:
-			parameters.put(jobParameter, Smoothner.Type.valueOf(value));
+			parameters.put(jobParameter, Adaptive.Type.valueOf(value));
 			break;
 		case PARTITIONER:
 			parameters.put(jobParameter, Regionizer.Type.valueOf(value));

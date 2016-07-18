@@ -19,19 +19,19 @@ package org.wallerlab.yoink.adaptive.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.wallerlab.yoink.adaptive.services.Smoothner;
+import org.wallerlab.yoink.adaptive.services.Adaptive;
 import org.wallerlab.yoink.adaptive.services.AdaptiveProcessor;
 import org.wallerlab.yoink.adaptive.services.factors.Lambdas;
 import org.wallerlab.yoink.adaptive.services.SmoothFunctions;
-import org.wallerlab.yoink.adaptive.services.processors.Processor;
-import org.wallerlab.yoink.adaptive.services.processors.Processors;
+import org.wallerlab.yoink.adaptive.services.factors.Processor;
+import org.wallerlab.yoink.adaptive.services.factors.Processors;
 import org.wallerlab.yoink.adaptive.services.WeightFactors;
 import org.wallerlab.yoink.adaptive.services.functions.SmoothFunction;
 
 import java.util.EnumMap;
 import java.util.Map;
 
-import static org.wallerlab.yoink.adaptive.services.processors.Processor.NAME.*;
+import static org.wallerlab.yoink.adaptive.services.factors.Processor.NAME.*;
 import static org.wallerlab.yoink.adaptive.services.factors.Lambdas.NAME.*;
 import static org.wallerlab.yoink.adaptive.services.SmoothFunctions.NAME.*;
 import static org.wallerlab.yoink.adaptive.services.WeightFactors.NAME.*;
@@ -48,22 +48,22 @@ import static org.wallerlab.yoink.adaptive.services.WeightFactors.NAME.*;
 public class AdaptiveConfig {
 
     @Bean
-    Smoothner bf(){
-      return new Smoothner.Builder()
+    Adaptive bf(){
+      return new Adaptive.Builder()
                           .processor(use(BF))
                           .build();
     }
 
     @Bean
-    Smoothner fires(){
-        return new Smoothner.Builder()
+    Adaptive fires(){
+        return new Adaptive.Builder()
                             .processor(use(Processor.NAME.FIRES))
                             .build();
     }
 
     @Bean
-    Smoothner hotSpot(){
-        return new Smoothner.Builder()
+    Adaptive hotSpot(){
+        return new Adaptive.Builder()
                             .processor(use(HOT_SPOT))
                             .factors(use(DISTANCE_OR_DENSITY))
                             .functions(use(BROOKS))
@@ -71,8 +71,8 @@ public class AdaptiveConfig {
     }
 
     @Bean
-    Smoothner xs(){
-        return new Smoothner.Builder()
+    Adaptive xs(){
+        return new Adaptive.Builder()
                 .processor(use(CONFIG))
                 .factors(use(DISTANCE_OR_DENSITY))
                 .weights(use(XS))
@@ -81,8 +81,8 @@ public class AdaptiveConfig {
     }
 
     @Bean
-    Smoothner scmp(){
-        return new Smoothner.Builder()
+    Adaptive scmp(){
+        return new Adaptive.Builder()
                 .processor(use(CONFIG))
                 .factors(use(DISTANCE_OR_DENSITY))
                 .weights(use(WeightFactors.NAME.SCMP))
@@ -91,8 +91,8 @@ public class AdaptiveConfig {
     }
 
     @Bean
-    Smoothner das(){
-        return new Smoothner.Builder()
+    Adaptive das(){
+        return new Adaptive.Builder()
                 .processor(use(CONFIG))
                 .factors(use(DISTANCE_OR_DENSITY))
                 .weights(use(DAS))
@@ -101,8 +101,8 @@ public class AdaptiveConfig {
     }
 
     @Bean
-    Smoothner sap(){
-        return new Smoothner.Builder()
+    Adaptive sap(){
+        return new Adaptive.Builder()
                 .processor(use(CONFIG))
                 .factors(use(DISTANCE_OR_DENSITY))
                 .weights(use(SAP))
@@ -111,8 +111,8 @@ public class AdaptiveConfig {
     }
 
     @Bean
-    Smoothner pap(){
-        return new Smoothner.Builder()
+    Adaptive pap(){
+        return new Adaptive.Builder()
                 .processor(use(PAP))
                 .factors(use(DISTANCE_OR_DENSITY))
                 .weights(use(SAP))
@@ -123,21 +123,21 @@ public class AdaptiveConfig {
 
     @Bean
     AdaptiveProcessor smoothnerService(){
-        Map<Smoothner.NAME, Smoothner> smoothners = new EnumMap<>(Processor.NAME.class);
-        smoothners.put(Smoothner.NAME.BF, bf());
-        smoothners.put(Smoothner.NAME.FIRES,fires());
-        smoothners.put(Smoothner.NAME.HOT_SPOT,hotSpot());
-        smoothners.put(Smoothner.NAME.XS,xs());
-        smoothners.put(Smoothner.NAME.SCMP, scmp());
-        smoothners.put(Smoothner.NAME.PAP,pap());
-        smoothners.put(Smoothner.NAME.SAP,sap());
-        smoothners.put(Smoothner.NAME.DAS,das());
-        return new AdaptiveProcessor(smoothners);
+        Map<Adaptive.NAME, Adaptive> processors = new EnumMap<>(Processor.NAME.class);
+        processors.put(Adaptive.NAME.BF, bf());
+        processors.put(Adaptive.NAME.FIRES,fires());
+        processors.put(Adaptive.NAME.HOT_SPOT,hotSpot());
+        processors.put(Adaptive.NAME.XS,xs());
+        processors.put(Adaptive.NAME.SCMP, scmp());
+        processors.put(Adaptive.NAME.PAP,pap());
+        processors.put(Adaptive.NAME.SAP,sap());
+        processors.put(Adaptive.NAME.DAS,das());
+        return new AdaptiveProcessor(processors);
     }
 
 
-    @Autowired Processors processors;
-    private Processors use(Processor.NAME name){ return this.processors.use(name);}
+    @Autowired Processors factors;
+    private Processors use(Processor.NAME name){ return this.factors.use(name);}
 
     @Autowired
     Lambdas factors;

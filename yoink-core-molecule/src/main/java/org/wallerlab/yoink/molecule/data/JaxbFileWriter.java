@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * this class is to use jaxb to write an object into CML file.
- * 
+ *
  * @author Min Zheng
  *
  */
@@ -29,10 +29,10 @@ import org.springframework.stereotype.Service;
 public class JaxbFileWriter extends AbstractJaxbWriter {
 
 	private File output;
-	
+
 	/**
 	 * use JAXB writer to write out an instance to a file.
-	 * 
+	 *
 	 * @param nameOfFile
 	 *            - the name of out put file
 	 * @param jaxbObject
@@ -43,7 +43,7 @@ public class JaxbFileWriter extends AbstractJaxbWriter {
 		this.output = new File(nameOfFile);
 		marshall();
 	}
-	
+
 	protected void marshal() throws JAXBException {
 		jaxbMarshaller.marshal(jaxbObject, output);
 	}

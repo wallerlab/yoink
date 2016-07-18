@@ -18,10 +18,8 @@ package org.wallerlab.yoink.cube.domain;
 import java.util.List;
 import java.util.Set;
 
-import org.wallerlab.yoink.api.model.density.DensityPoint;
-import org.wallerlab.yoink.api.model.molecule.Atom;
-import org.wallerlab.yoink.api.model.molecule.Coord;
-import org.wallerlab.yoink.api.model.molecule.Molecule;
+import org.wallerlab.yoink.api.model.Coord;
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
 
 /**
  * this interface is for domain model cube
@@ -38,14 +36,12 @@ public interface Cube {
 	 */
 	Coord getGridOrigin();
 
-
 	/**
 	 * get the number of steps along xyz axes
 	 * 
 	 * @return an int array
 	 */
 	int[] getNumberOfXYZSteps();
-
 
 	/**
 	 * get the step size along xyz axes
@@ -58,27 +54,17 @@ public interface Cube {
 	 * get the molecules in the cube
 	 * 
 	 * @return a Set of molecules. -
-	 *         {@link Molecule}
+	 *         {@link MolecularSystem.Molecule}
 	 */
-	Set<Molecule> getMolecules();
+	Set<MolecularSystem.Molecule> getMolecules();
 
 	/**
 	 * get the atoms in the cube
 	 * 
 	 * @return a Set of atoms.-
-	 *         {@link Atom}
+	 *         {@link MolecularSystem.Molecule.Atom}
 	 */
-	 Set<Atom> getAtoms();
-
-
-	/**
-	 * get the name of the cube
-	 * 
-	 * @return name -{@link java.lang.String}
-	 */
-	String getName();
-
-
+	 Set<MolecularSystem.Molecule.Atom> getAtoms();
 
 	/**
 	 * get the number of grid points in the cube
@@ -87,16 +73,11 @@ public interface Cube {
 	 */
 	int getSize();
 
-
-
 	/**
 	 * get the coordinates of grid points in the cube
 	 * 
 	 * @return a {@link Coord} List
 	 */
 	List<Coord> getCoordinates();
-
-
-
 
 }

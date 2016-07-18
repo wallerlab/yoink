@@ -59,7 +59,7 @@ import org.w3c.dom.Element;
  *       &lt;attGroup ref="{http://www.xml-cml.org/schema}z3"/>
  *       &lt;attGroup ref="{http://www.xml-cml.org/schema}spinMultiplicity"/>
  *       &lt;attGroup ref="{http://www.xml-cml.org/schema}y3"/>
- *       &lt;attGroup ref="{http://www.xml-cml.org/schema}elementType"/>
+ *       &lt;attGroup ref="{http://www.xml-cml.org/schema}element"/>
  *       &lt;attGroup ref="{http://www.xml-cml.org/schema}x2"/>
  *       &lt;attGroup ref="{http://www.xml-cml.org/schema}zFract"/>
  *       &lt;attGroup ref="{http://www.xml-cml.org/schema}convention"/>
@@ -671,7 +671,7 @@ public class Atom {
 	}
 
 	/**
-	 * Gets the value of the elementType property.
+	 * Gets the value of the element property.
 	 * 
 	 * @return possible object is {@link String }
 	 * 
@@ -681,7 +681,7 @@ public class Atom {
 	}
 
 	/**
-	 * Sets the value of the elementType property.
+	 * Sets the value of the element property.
 	 * 
 	 * @param value
 	 *            allowed object is {@link String }

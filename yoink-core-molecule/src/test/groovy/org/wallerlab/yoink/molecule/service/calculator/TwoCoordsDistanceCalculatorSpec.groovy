@@ -15,9 +15,10 @@
  */
 package org.wallerlab.yoink.molecule.service.calculator
 
+import org.wallerlab.yoink.molecule.service.DistanceCalculator
 import spock.lang.Specification
 
-import org.wallerlab.yoink.api.model.molecule.Coord;
+import org.wallerlab.yoink.api.model.Coord;
 import org.wallerlab.yoink.math.linear.CommonsVector3D
 
 class TwoCoordsDistanceCalculatorSpec extends Specification{
@@ -28,7 +29,7 @@ class TwoCoordsDistanceCalculatorSpec extends Specification{
 		coordinate1.getCoords()>>new CommonsVector3D(0,0,0);
 		def coordinate2=Mock(Coord)
 		coordinate2.getCoords()>>new CommonsVector3D(1,2,2);
-		when:"calculate the distance between two coords"
+		when:"ratio the distance between two coords"
 		def calculator= new DistanceCalculator()
 		double distance=calculator.calculate(coordinate1, coordinate2)
 		then:"assert distance value"

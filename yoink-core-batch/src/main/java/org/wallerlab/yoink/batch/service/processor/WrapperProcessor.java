@@ -15,13 +15,13 @@
  */
 package org.wallerlab.yoink.batch.service.processor;
 
-import org.springframework.batch.item.ItemProcessor;
-import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.api.model.batch.Job;
-import org.wallerlab.yoink.batch.service.Wrapper;
+import org.wallerlab.yoink.api.model.Job;
+import org.wallerlab.yoink.batch.service.response.Wrapper;
 
 import javax.annotation.Resource;
 import javax.xml.bind.JAXBElement;
+import org.springframework.batch.item.ItemProcessor;
+import org.springframework.stereotype.Service;
 
 /**
  * This class is to set up and execute adaptive QM/MM partitioning.

@@ -17,12 +17,12 @@ class JaxbStringReaderSpec extends Specification{
     <moleculeList>
         <molecule id="QM_CORE_FIXED">
             <atomArray>
-                <atom id="a1" x3="-0.194175" z3="0.0" y3="1.280807" elementType="Li"/>
+                <atom id="a1" x3="-0.194175" z3="0.0" y3="1.280807" element="Li"/>
             </atomArray>
         </molecule>
         <molecule id="QM_CORE_FIXED">
             <atomArray>
-                <atom id="a2" x3="-1.724175" z3="0.0" y3="1.280807" elementType="H"/>
+                <atom id="a2" x3="-1.724175" z3="0.0" y3="1.280807" element="H"/>
             </atomArray>
         </molecule>
     </moleculeList>

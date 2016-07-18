@@ -15,21 +15,14 @@
  */
 package org.wallerlab.yoink.batch.service.processor;
 
-import java.util.List;
-import java.util.Map;
+import org.springframework.batch.item.ItemProcessor;
+import org.wallerlab.yoink.api.model.Job;
+import org.wallerlab.yoink.api.service.cluster.Clusterer;
+import org.wallerlab.yoink.cluster.service.interaction.InteractionSet;
 
 import javax.annotation.Resource;
 import javax.xml.bind.JAXBElement;
-
-import org.springframework.batch.item.ItemProcessor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.api.model.batch.Job;
-import org.wallerlab.yoink.api.model.molecule.MolecularSystem;
-import org.wallerlab.yoink.api.model.region.Region;
-import org.wallerlab.yoink.api.service.cluster.Clusterer;
-import org.wallerlab.yoink.api.service.region.Regionizer;
-import org.wallerlab.yoink.cluster.service.interaction.InteractionSet;
 
 /**
  * This class is to set up and execute region based on DORI analysis.
@@ -46,7 +39,6 @@ public class ClusteringProcessor implements ItemProcessor<Job<JAXBElement>, Job>
 	@Resource
 	private Clusterer doriClustering;
 
-
 	/**
 	 * read in a list of requests and execute them.
 	 *
@@ -60,8 +52,5 @@ public class ClusteringProcessor implements ItemProcessor<Job<JAXBElement>, Job>
 		doriClustering.cluster(job);
 		return job;
 	}
-
-
-	//Should also be responsible for getting params from XML
 
 }

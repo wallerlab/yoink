@@ -15,10 +15,10 @@
  */
 package org.wallerlab.yoink.molecule.domain
 
-import org.wallerlab.yoink.api.model.molecule.Coord;
-import org.wallerlab.yoink.api.model.molecule.Element;
+import org.wallerlab.yoink.api.model.Coord;
+import Element;
 import org.wallerlab.yoink.api.service.math.Vector;
-import org.wallerlab.yoink.api.model.molecule.RadialGrid;
+import RadialGrid;
 import spock.lang.Specification
 
 class SimpleAtomSpec extends Specification {
@@ -35,7 +35,7 @@ class SimpleAtomSpec extends Specification {
 		then:"assert the value of getters"
 		assert atom instanceof SimpleAtom
 		atom.getIndex()==1
-		atom.getElementType()==elementType
+		atom.getElement()==elementType
 		atom.getCoordinate()==coordinate
 		atom.getRadialGrid()==grid
 	}

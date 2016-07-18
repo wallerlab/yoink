@@ -16,16 +16,17 @@
  */
 package org.wallerlab.yoink.cube.service
 
-
+import org.wallerlab.yoink.api.model.Job
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem
 import spock.lang.Specification;
 
 import org.wallerlab.yoink.api.enums.*
-import org.wallerlab.yoink.api.model.batch.JobParameter;
+
 import org.wallerlab.yoink.cube.domain.Cube;
-import org.wallerlab.yoink.api.model.density.DensityPoint.DensityType;
-import org.wallerlab.yoink.api.model.molecule.Coord;
-import org.wallerlab.yoink.api.model.molecule.Molecule;
-import org.wallerlab.yoink.api.model.region.Region
+import org.wallerlab.yoink.api.model.DensityPoint.DensityType;
+import org.wallerlab.yoink.api.model.Coord;
+
+import org.wallerlab.yoink.api.model.adaptive.Region
 
 class CubePartitionerSpec extends Specification{
 
@@ -37,8 +38,8 @@ class CubePartitionerSpec extends Specification{
 		when:"set up sedd/dori stepsize"
 		double[] d1 =[0.1, 0.1, 0.1]
 		double[] d2 =[0.2, 0.2, 0.2]
-		parameters.get(JobParameter.SEDD_STEPSIZE)>>d1
-		parameters.get(JobParameter.DORI_STEPSIZE)>>d2
+		parameters.get(Job.JobParameter.SEDD_STEPSIZE)>>d1
+		parameters.get(Job.JobParameter.DORI_STEPSIZE)>>d2
 
 		then:"get right sedd/dori stepsize"
 		partitioner.getXyzStepSizeByDensityType(parameters,DensityType.DORI)==d2
@@ -55,13 +56,13 @@ class CubePartitionerSpec extends Specification{
 
 		def parameters=Mock(Map)
 		double[] d2 =[0.2, 0.2, 0.2]
-		parameters.get(JobParameter.DORI_STEPSIZE)>>d2
-		parameters.get(JobParameter.REGION_CUBE)>>Region.Name.ADAPTIVE_SEARCH
+		parameters.get(Job.JobParameter.DORI_STEPSIZE)>>d2
+		parameters.get(Job.JobParameter.REGION_CUBE)>>Region.Name.ADAPTIVE_SEARCH
 		def regions=Mock(Map)
 		def region=Mock(Region)
 		region.getMolecules()>>[
-				Mock(Molecule),
-				Mock(Molecule)
+				Mock(MolecularSystem.Molecule),
+				Mock(MolecularSystem.Molecule)
 		]
 		regions.get(_)>>region
 		def gridPointAssigner=Mock(Assigner)
@@ -83,13 +84,13 @@ class CubePartitionerSpec extends Specification{
 
 		def parameters=Mock(Map)
 		double[] d2 =[0.2, 0.2, 0.2]
-		parameters.get(JobParameter.DORI_STEPSIZE)>>d2
-		parameters.get(JobParameter.REGION_CUBE)>>Region.Name.ADAPTIVE_SEARCH
+		parameters.get(Job.JobParameter.DORI_STEPSIZE)>>d2
+		parameters.get(Job.JobParameter.REGION_CUBE)>>Region.Name.ADAPTIVE_SEARCH
 		def regions=Mock(Map)
 		def region=Mock(Region)
 		region.getMolecules()>>[
-			Mock(Molecule),
-			Mock(Molecule)
+				Mock(MolecularSystem.Molecule),
+				Mock(MolecularSystem.Molecule)
 		]
 		regions.get(_)>>region
 		def gridPointAssigner=Mock(Assigner)

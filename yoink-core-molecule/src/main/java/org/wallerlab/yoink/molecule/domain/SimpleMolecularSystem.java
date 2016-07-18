@@ -18,12 +18,11 @@ package org.wallerlab.yoink.molecule.domain;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.wallerlab.yoink.api.model.molecule.Atom;
-import org.wallerlab.yoink.api.model.molecule.MolecularSystem;
-import org.wallerlab.yoink.api.model.molecule.Molecule;
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
+
 import static java.util.stream.Collectors.toSet;
 /**
- * the domain model for molecule system.
+ * the domain model for molecular system.
  * 
  * @author Min Zheng
  *
@@ -40,7 +39,7 @@ public class SimpleMolecularSystem implements MolecularSystem {
 	 * get all atoms in the molecule system.
 	 */
 	@Override
-	public Set<Atom> getAtoms() {
+	public Set<Molecule.Atom> getAtoms() {
 		return molecules.stream()
 						.flatMap(molecule ->
 										molecule.getAtoms()
@@ -48,21 +47,22 @@ public class SimpleMolecularSystem implements MolecularSystem {
 												.collect(toSet());
 	}
 
+	public Set<Molecule> getMolecules(String query){
+		return molecules.stream()
+						.filter(molecule ->
+						           molecule.getName()
+								           .toString()
+								           .equals(query))
+						.collect(toSet());
+	}
+
 	/**
-	 * get all molecules in molecular system.
+	 * All molecules in molecular system.
 	 */
 	@Override
 	public Set<Molecule> getMolecules() {
 		return new HashSet<>(this.molecules);
 	}
 
-	public Set<Molecule> getMolecules(String query){
-		return molecules.stream()
-				 		.filter(molecule ->
-										molecule.getName()
-												.toString()
-												.equals(query))
-				  		.collect(toSet());
-	}
 
 }

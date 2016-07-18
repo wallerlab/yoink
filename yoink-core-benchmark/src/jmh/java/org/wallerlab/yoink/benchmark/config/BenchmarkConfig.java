@@ -28,6 +28,4 @@ import org.springframework.context.annotation.PropertySource;
 @ComponentScan("org.wallerlab.yoink.bechmark")
 @PropertySource("classpath:benchmark.properties")
 public class BenchmarkConfig {
-
-
 }

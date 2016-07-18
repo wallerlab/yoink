@@ -15,12 +15,13 @@
  */
 package org.wallerlab.yoink.density.service.densityProperties
 
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem
 import org.wallerlab.yoink.density.service.SimpleDensityCalculator
 import spock.lang.Specification;
 
-import org.wallerlab.yoink.api.model.density.DensityPoint;
-import org.wallerlab.yoink.api.model.molecule.Atom;
-import org.wallerlab.yoink.api.model.molecule.Coord
+import org.wallerlab.yoink.api.model.DensityPoint;
+
+import org.wallerlab.yoink.api.model.Coord
 import org.wallerlab.yoink.api.service.molecule.Calculator;
 import org.wallerlab.yoink.api.service.Factory;
 import org.wallerlab.yoink.api.service.math.Matrix;
@@ -34,10 +35,10 @@ class DensityPropertiesCalculatorSpec extends Specification{
 
 		given:
 		def currentCoord=Mock(Coord)
-		def a1 = Mock(Atom)
-		def a2 = Mock(Atom)
-		Set<Atom> atoms=[a1, a2]
-		Calculator<DensityPoint, DensityPoint, Atom> atomicDensityPropertiesCalculator=Mock(Calculator)
+		def a1 = Mock(MolecularSystem.Molecule.Atom)
+		def a2 = Mock(MolecularSystem.Molecule.Atom)
+		Set<MolecularSystem.Molecule.Atom> atoms=[a1, a2]
+		Calculator<DensityPoint, DensityPoint, MolecularSystem.Molecule.Atom> atomicDensityPropertiesCalculator=Mock(Calculator)
 		def densityPoint=Mock(DensityPoint)
 		atomicDensityPropertiesCalculator.calculate(_,_)>>densityPoint
 		densityPoint.getDensity()>>(double)1.0

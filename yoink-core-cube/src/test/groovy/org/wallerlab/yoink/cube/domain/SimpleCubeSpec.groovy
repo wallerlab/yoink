@@ -15,10 +15,11 @@
  */
 package org.wallerlab.yoink.cube.domain
 
-import org.wallerlab.yoink.api.model.density.DensityPoint.DensityType;
-import org.wallerlab.yoink.api.model.molecule.Atom;
-import org.wallerlab.yoink.api.model.molecule.Coord
-import org.wallerlab.yoink.api.model.molecule.Molecule;
+import org.wallerlab.yoink.api.model.DensityPoint.DensityType;
+
+import org.wallerlab.yoink.api.model.Coord
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem
+
 import spock.lang.Specification;
 
 class SimpleCubeSpec extends Specification{
@@ -53,17 +54,17 @@ class SimpleCubeSpec extends Specification{
 	def "cube moleucles"(){
 		when:
 		def cube = new SimpleCube()
-		def m1=Mock(Molecule)
-		def a1=Mock(Atom)
+		def m1=Mock(MolecularSystem.Molecule)
+		def a1=Mock(MolecularSystem.Molecule.Atom)
 		m1.getAtoms()>>[a1]
-		def m2=Mock(Molecule)
-		def a2=Mock(Atom)
+		def m2=Mock(MolecularSystem.Molecule)
+		def a2=Mock(MolecularSystem.Molecule.Atom)
 		m2.getAtoms()>>[a2]
-		Set<Molecule> mSet=[m1, m2]
+		Set<MolecularSystem.Molecule> mSet=[m1, m2]
 		then:
 		cube.setMolecules(mSet)
-		cube.getMolecules().equals((Set<Molecule>)[m1, m2])
-		cube.getAtoms().equals((Set<Atom>)[a1, a2])
+		cube.getMolecules().equals((Set<MolecularSystem.Molecule>)[m1, m2])
+		cube.getAtoms().equals((Set<MolecularSystem.Molecule.Atom>)[a1, a2])
 	}
 
 	def "cube size"(){

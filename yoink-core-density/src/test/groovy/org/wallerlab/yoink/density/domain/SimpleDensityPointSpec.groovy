@@ -16,7 +16,7 @@
 package org.wallerlab.yoink.density.domain
 
 import org.wallerlab.yoink.api.service.math.Vector
-import org.wallerlab.yoink.api.model.molecule.Coord
+import org.wallerlab.yoink.api.model.Coord
 import org.wallerlab.yoink.api.service.math.Matrix;
 import spock.lang.Specification
 

@@ -42,7 +42,7 @@ import org.w3c.dom.Element;
  *       &lt;/choice>
  *       &lt;attGroup ref="{http://www.xml-cml.org/schema}ref"/>
  *       &lt;attGroup ref="{http://www.xml-cml.org/schema}dictRef"/>
- *       &lt;attGroup ref="{http://www.xml-cml.org/schema}elementType"/>
+ *       &lt;attGroup ref="{http://www.xml-cml.org/schema}element"/>
  *       &lt;attGroup ref="{http://www.xml-cml.org/schema}title"/>
  *       &lt;attGroup ref="{http://www.xml-cml.org/schema}convention"/>
  *       &lt;attGroup ref="{http://www.xml-cml.org/schema}id"/>
@@ -67,7 +67,7 @@ public class Isotope {
 	protected String ref;
 	@XmlAttribute(name = "dictRef")
 	protected String dictRef;
-	@XmlAttribute(name = "elementType")
+	@XmlAttribute(name = "element")
 	protected String elementType;
 	@XmlAttribute(name = "title")
 	protected String title;
@@ -259,7 +259,7 @@ public class Isotope {
 	}
 
 	/**
-	 * Gets the value of the elementType property.
+	 * Gets the value of the element property.
 	 * 
 	 * @return possible object is {@link String }
 	 * 
@@ -269,7 +269,7 @@ public class Isotope {
 	}
 
 	/**
-	 * Sets the value of the elementType property.
+	 * Sets the value of the element property.
 	 * 
 	 * @param value
 	 *            allowed object is {@link String }

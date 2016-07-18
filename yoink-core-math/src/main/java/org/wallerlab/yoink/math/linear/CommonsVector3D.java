@@ -31,7 +31,7 @@ public class CommonsVector3D implements Vector<Vector3D> {
 
 	private Vector3D internalVector;
 
-	// this vextor is used as intermediate vector in internalVector operation.
+	// this vector is used as intermediate vector in internalVector operation.
 	private Vector3D tempVector;
 
 	public CommonsVector3D(double x, double y, double z) {
@@ -48,6 +48,10 @@ public class CommonsVector3D implements Vector<Vector3D> {
 	@Override
 	public double dotProduct() {
 		return this.internalVector.dotProduct(this.internalVector);
+	}
+
+	public double dotProduct(Vector vector) {
+		return this.internalVector.dotProduct((Vector3D)vector.getInternalVector());
 	}
 
 	@Override

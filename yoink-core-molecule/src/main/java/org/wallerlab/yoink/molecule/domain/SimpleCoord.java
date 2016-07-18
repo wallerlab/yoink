@@ -15,18 +15,19 @@
  */
 package org.wallerlab.yoink.molecule.domain;
 
-import org.wallerlab.yoink.api.model.molecule.Coord;
+import org.wallerlab.yoink.api.model.Coord;
 import org.wallerlab.yoink.api.service.math.Vector;
 
 /**
  * this domain model of coordinate stores the information of coordinate in the
- * format of 3D vector. The unit of Coord is Bohr.
+ * format of 3D vector.
  *
  * 
  */
+//TODO deprecate this.
 public class SimpleCoord implements Coord {
 
-	private Vector coords;
+	private final Vector coords;
 
 	/**
 	 * construct a new simple coord with its coordinate vector
@@ -36,9 +37,6 @@ public class SimpleCoord implements Coord {
 	 */
 	public SimpleCoord(Vector coordVector) {
 		this.coords = coordVector;
-	}
-
-	public SimpleCoord() {
 	}
 
 	/**
@@ -51,15 +49,8 @@ public class SimpleCoord implements Coord {
 		return coords;
 	}
 
-	/**
-	 * set the value of the coordinates
-	 * 
-	 * @param coords
-	 *            {@link Vector}
-	 */
 	@Override
-	public void setCoords(Vector coords) {
-		this.coords = coords;
+	public String toString() {
+		return "Coords=" + coords.getX() + " " + coords.getY() + " " + coords.getZ() + " " + '}';
 	}
-
 }

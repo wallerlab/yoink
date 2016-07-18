@@ -15,15 +15,16 @@
  */
 package org.wallerlab.yoink.region.service.partitioners
 
+import org.wallerlab.yoink.api.model.Job
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem
 import org.wallerlab.yoink.api.service.region.Regionizer
 import spock.lang.Specification;
 
-import org.wallerlab.yoink.api.model.batch.JobParameter;
-import org.wallerlab.yoink.api.model.cube.VoronoiPoint;
-import org.wallerlab.yoink.api.model.density.DensityPoint;
-import org.wallerlab.yoink.api.model.molecule.Atom;
-import org.wallerlab.yoink.api.model.molecule.Molecule;
-import org.wallerlab.yoink.api.model.region.Region;
+
+import org.wallerlab.yoink.api.model.VoronoiPoint;
+import org.wallerlab.yoink.api.model.DensityPoint;
+
+import org.wallerlab.yoink.api.model.adaptive.Region;
 import org.wallerlab.yoink.api.service.molecule.Calculator;
 import org.wallerlab.yoink.molecule.service.Computer
 
@@ -32,20 +33,20 @@ class SeddPartitionerSpec extends Specification{
 
 		def regions=Mock(Map)
 		def parameters=Mock(Map)
-		def m1=Mock(Molecule)
-		def m2=Mock(Molecule)
+		def m1=Mock(MolecularSystem.Molecule)
+		def m2=Mock(MolecularSystem.Molecule)
 		def grid1=Mock(VoronoiPoint)
 		def grid2=Mock(VoronoiPoint)
 		grid1.getTwoClosestMolecules()>>[m1]
 		grid2.getTwoClosestMolecules()>>[m2]
-		grid1.getTwoClosestAtoms()>>[Mock(Atom)]
-		grid2.getTwoClosestAtoms()>>[Mock(Atom)]
+		grid1.getTwoClosestAtoms()>>[Mock(MolecularSystem.Molecule.Atom)]
+		grid2.getTwoClosestAtoms()>>[Mock(MolecularSystem.Molecule.Atom)]
 		def gridPoints=[grid1, grid2]
 
 		def region=Mock(Region)
 		region.getName()>>Region.Name.QM_ADAPTIVE
 		region.getMolecularMap()>>Mock(Map)
-		region.getAtoms()>>[Mock(Atom)]
+		region.getAtoms()>>[Mock(MolecularSystem.Molecule.Atom)]
 		regions.get(_)>>region
 
 		def singleRegionizerService=Mock(Regionizer)
@@ -63,11 +64,11 @@ class SeddPartitionerSpec extends Specification{
 		def atomicDensityRatioCalculator=Mock(Calculator)
 		atomicDensityRatioCalculator.calculate(_,_)>>(double)1
 
-		parameters.get(JobParameter.SEDD)>>(double)4
-		parameters.get(JobParameter.DENSITY_SEDD)>>(double)1.0E-4
-		parameters.get(JobParameter.DENSITY_RATIO_MIN)>>(double)0.2
-		parameters.get(JobParameter.DENSITY_RATIO_MAX)>>(double)5
-		parameters.get(JobParameter.REGION_CUBE)>>Region.Name.ADAPTIVE_SEARCH
+		parameters.get(Job.JobParameter.SEDD)>>(double)4
+		parameters.get(Job.JobParameter.DENSITY_SEDD)>>(double)1.0E-4
+		parameters.get(Job.JobParameter.DENSITY_RATIO_MIN)>>(double)0.2
+		parameters.get(Job.JobParameter.DENSITY_RATIO_MAX)>>(double)5
+		parameters.get(Job.JobParameter.REGION_CUBE)>>Region.Name.ADAPTIVE_SEARCH
 
 		when:"set up a new sedd partitioner"
 		def partitioner=new DensityPartitioner()

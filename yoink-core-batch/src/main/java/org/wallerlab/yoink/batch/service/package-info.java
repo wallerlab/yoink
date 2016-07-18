@@ -1,4 +1,4 @@
-/**this package contains service classes to execute batch adaptive partitioning processors 
+/**this package contains service classes to execute batch adaptive partitioning factors
  * @author Min Zheng
  *
  */

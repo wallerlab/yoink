@@ -18,12 +18,9 @@ package org.wallerlab.yoink.region.service.partitioners;
 import java.util.Map;
 import java.util.Set;
 
-import org.wallerlab.yoink.api.model.batch.Job;
-import org.wallerlab.yoink.api.model.batch.JobParameter;
-import org.wallerlab.yoink.api.model.cube.VoronoiPoint;
-import org.wallerlab.yoink.api.model.molecule.Molecule;
-import org.wallerlab.yoink.api.model.region.Region;
-import org.wallerlab.yoink.api.model.density.DensityPoint;
+import org.wallerlab.yoink.api.model.*;
+import org.wallerlab.yoink.api.model.adaptive.Region;
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
 
 /**
  * this interface contains method partition() and enum Partitioner.Type. When
@@ -56,12 +53,12 @@ public interface Partitioner {
 	 *            Value
 	 * @param parameters
 	 *            , a Map,
-	 *            {@link JobParameter}
+	 *            {@link Job.JobParameter}
 	 *            as Key, {@link java.lang.Object} as Value
 	 * @param v
 	 *            -the specified argument
 	 * @return return type is K
 	 */
-	Map<Region.Name,Set<Molecule>> partition(Job job);
+	Map<Region.Name,Set<MolecularSystem.Molecule>> partition(Job job);
 
 }

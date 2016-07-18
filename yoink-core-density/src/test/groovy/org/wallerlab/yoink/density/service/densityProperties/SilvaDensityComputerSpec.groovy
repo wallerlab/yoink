@@ -15,7 +15,7 @@
  */
 package org.wallerlab.yoink.density.service.densityProperties
 
-import org.wallerlab.yoink.api.model.density.DensityPoint
+import org.wallerlab.yoink.api.model.DensityPoint
 import org.wallerlab.yoink.api.service.math.Vector
 import org.wallerlab.yoink.api.service.math.Matrix
 import org.wallerlab.yoink.density.service.SimpleDensityCalculator

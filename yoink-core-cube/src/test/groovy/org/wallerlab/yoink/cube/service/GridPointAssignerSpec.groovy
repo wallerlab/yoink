@@ -15,30 +15,30 @@
  */
 package org.wallerlab.yoink.cube.service
 
-
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem
 import spock.lang.Specification;
 
 import org.wallerlab.yoink.api.enums.*
-import org.wallerlab.yoink.api.model.molecule.Coord;
-import org.wallerlab.yoink.api.model.molecule.Molecule;
-import org.wallerlab.yoink.api.model.region.Region;
+import org.wallerlab.yoink.api.model.Coord;
+
+import org.wallerlab.yoink.api.model.adaptive.Region;
 import org.wallerlab.yoink.api.service.molecule.Calculator
 
 class GridPointAssignerSpec extends Specification{
 
 	def "for neighbour pair test method  assign(Coord tempCoord, Map<Region.Name, Region> regions,Region.Name cubeRegionName)"(){
 		def partitioner=new  GridPointAssigner()
-		def m1=Mock(Molecule)
-		def m2=Mock(Molecule)
+		def m1=Mock(MolecularSystem.Molecule)
+		def m2=Mock(MolecularSystem.Molecule)
 		def tempCoord=Mock(Coord)
 		def regions=Mock(Map)
 		def region=Mock(Region)
 		def cubeRegionName
 		region.containsall(_)>>(boolean)false
-		region.getMolecules()>>(Set<Molecule>)[m1, m2]
+		region.getMolecules()>>(Set<MolecularSystem.Molecule>)[m1, m2]
 		regions.get(_)>>region
 		def properties =new HashMap<String, Object>()
-		properties.put("twoClosestMolecules", (Set<Molecule>)[m1, m2])
+		properties.put("twoClosestMolecules", (Set<MolecularSystem.Molecule>)[m1, m2])
 		def voronoiCalculator=Mock(Calculator)
 		voronoiCalculator.calculate(_,_)>>properties
 		partitioner.voronoiCalculator=voronoiCalculator
@@ -57,16 +57,16 @@ class GridPointAssignerSpec extends Specification{
 
 	def "when not neighbour pair,test method  assign(),cube region name not system"(){
 		def partitioner=new  GridPointAssigner()
-		def m1=Mock(Molecule)
+		def m1=Mock(MolecularSystem.Molecule)
 		def tempCoord=Mock(Coord)
 		def regions=Mock(Map)
 		def region=Mock(Region)
 		def cubeRegionName
 		region.containsall(_)>>(boolean)false
-		region.getMolecules()>>(Set<Molecule>)[m1]
+		region.getMolecules()>>(Set<MolecularSystem.Molecule>)[m1]
 		regions.get(_)>>region
 		def properties =new HashMap<String, Object>()
-		properties.put("twoClosestMolecules", (Set<Molecule>)[m1])
+		properties.put("twoClosestMolecules", (Set<MolecularSystem.Molecule>)[m1])
 		def voronoiCalculator=Mock(Calculator)
 		voronoiCalculator.calculate(_,_)>>properties
 		partitioner.voronoiCalculator=voronoiCalculator
@@ -81,16 +81,16 @@ class GridPointAssignerSpec extends Specification{
 
 	def "when not neighbour pair,test method  assign(),cube region name is system"(){
 		def partitioner=new  GridPointAssigner()
-		def m1=Mock(Molecule)
+		def m1=Mock(MolecularSystem.Molecule)
 		def tempCoord=Mock(Coord)
 		def regions=Mock(Map)
 		def region=Mock(Region)
 		def cubeRegionName
 		region.containsall(_)>>(boolean)false
-		region.getMolecules()>>(Set<Molecule>)[m1]
+		region.getMolecules()>>(Set<MolecularSystem.Molecule>)[m1]
 		regions.get(_)>>region
 		def properties =new HashMap<String, Object>()
-		properties.put("twoClosestMolecules", (Set<Molecule>)[m1])
+		properties.put("twoClosestMolecules", (Set<MolecularSystem.Molecule>)[m1])
 		def voronoiCalculator=Mock(Calculator)
 		voronoiCalculator.calculate(_,_)>>properties
 		partitioner.voronoiCalculator=voronoiCalculator

@@ -15,18 +15,19 @@
  */
 package org.wallerlab.yoink.molecule.domain
 
-import org.wallerlab.yoink.api.model.molecule.Atom;
-import org.wallerlab.yoink.api.model.molecule.Coord;
-import org.wallerlab.yoink.api.model.region.Region;
+
+import org.wallerlab.yoink.api.model.Coord
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
+import org.wallerlab.yoink.api.model.adaptive.Region;
 
 import spock.lang.Specification
 
 class SimpleMoleculeSpec extends Specification{
 
 	def "test constructor SimpleMolecule(int index, List<Atom> atoms) "(){
-		def atom=Mock(Atom)
+		def atom=Mock(MolecularSystem.Molecule.Atom)
 		def index=1
-		List<Atom> atoms=[atom, atom]
+		List<MolecularSystem.Molecule.Atom> atoms=[atom, atom]
 		atoms
 		when:"make a new SimpleMolecule using constructor and setters"
 		def m=new SimpleMolecule( index,atoms)

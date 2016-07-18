@@ -15,8 +15,8 @@
  */
 package org.wallerlab.yoink.molecule.domain
 
-import org.wallerlab.yoink.api.model.molecule.Atom;
-import org.wallerlab.yoink.api.model.molecule.Molecule;
+
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
 
 import spock.lang.Specification
 
@@ -25,11 +25,11 @@ class SimpleMolecularSystemSpec extends Specification{
 
 	def "test constructor SimpleMolecularSystem(List<Molecule> molecules)"(){
 
-		def a=Mock(Atom)
-		List<Atom> atoms=[a, a]
-		def m=Mock(Molecule)
+		def a=Mock(MolecularSystem.Molecule.Atom)
+		List<MolecularSystem.Molecule.Atom> atoms=[a, a]
+		def m=Mock(MolecularSystem.Molecule)
 		m.getAtoms()>>atoms
-		List<Molecule> molecules=[m, m]
+		List<MolecularSystem.Molecule> molecules=[m, m]
 
 		when:"make a  SimpleMolecularSystem using constructor"
 		def ms=new SimpleMolecularSystem( molecules)

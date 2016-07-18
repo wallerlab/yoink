@@ -25,24 +25,16 @@ import java.util.Set;
 
 import javax.annotation.Resource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.api.model.batch.Job;
-import org.wallerlab.yoink.api.model.batch.JobParameter;
-import org.wallerlab.yoink.api.model.cube.VoronoiPoint;
-import org.wallerlab.yoink.api.model.density.DensityPoint;
-import org.wallerlab.yoink.api.model.density.DensityPoint.DensityType;
-import org.wallerlab.yoink.api.model.molecule.Atom;
-import org.wallerlab.yoink.api.model.molecule.Coord;
-import org.wallerlab.yoink.api.model.molecule.Molecule;
-import org.wallerlab.yoink.api.model.molecule.RadialGrid;
-import org.wallerlab.yoink.api.model.region.Region;
+import org.wallerlab.yoink.api.model.*;
+import org.wallerlab.yoink.api.model.DensityPoint.DensityType;
+import org.wallerlab.yoink.api.model.adaptive.Region;
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
+import org.wallerlab.yoink.api.service.density.DensityCalculator;
+import org.wallerlab.yoink.api.service.region.Regionizer;
+import org.wallerlab.yoink.density.domain.RadialGrid;
 import org.wallerlab.yoink.api.service.cube.Voronoizer;
-import org.wallerlab.yoink.api.service.molecule.Calculator;
-import org.wallerlab.yoink.molecule.service.Computer;
-import org.wallerlab.yoink.api.service.Factory;
 import org.wallerlab.yoink.api.service.molecule.FilesReader;
-import org.wallerlab.yoink.region.service.partitioners.Partitioner;
 import org.wallerlab.yoink.region.service.partitioners.DensityPartitioner;
 
 /**
@@ -59,19 +51,11 @@ public class InteractionSet {
 	@Resource
 	private Voronoizer voronoizer;
 
-	@Resource
-	protected Calculator<DensityPoint, Set<Atom>, Coord> densityPropertiesCalculator;
 
 	@Resource
-	private Calculator<Double, Coord, Set<Molecule>> densityCalculator;
+	private DensityCalculator densityCalculator;
 
-	@Resource
-	private Factory<Region, Region.Name> simpleRegionFactory;
 
-	@Autowired
-	private Computer<Double, DensityPoint> doriComputer;
-
-	@Resource
 	protected FilesReader<RadialGrid, String> radialGridReader;
 
 	@Resource
@@ -81,27 +65,25 @@ public class InteractionSet {
 	}
 
 	public void getDoriInteractionSet(Job job) {
-		Map<JobParameter, Object> parameters = job.getParameters();
+		Map<Job.JobParameter, Object> parameters = job.getParameters();
 		Map<Region.Name, Region> regions = job.getRegions();
 
 		List<List> interactionAndWeightLists = new ArrayList<List>();
-		Partitioner.Type partitionType = (Partitioner.Type) parameters
-				.get(JobParameter.PARTITIONER);
-		if (partitionType == Partitioner.Type.CLUSTER) {
+		Regionizer.Type partitionType = (Regionizer.Type) parameters
+				.get(Job.JobParameter.PARTITIONER);
+		if (partitionType == Regionizer.Type.CLUSTER) {
 			Region.Name cubeRegionName = (Region.Name) parameters
-					.get(JobParameter.REGION_CUBE);
+					.get(Job.JobParameter.REGION_CUBE);
 
 			//densityPartitioner.readWFC(parameters, regions.get((Region.Name) parameters
 			//				.get(JobParameter.REGION_CUBE)));
-			List<VoronoiPoint> gridPoints = voronoizer.voronoize(regions,
-					parameters, DensityType.DORI);
-			interactionAndWeightLists = calculateInteractionPairList(regions,
-					parameters, gridPoints);
+			List<VoronoiPoint> gridPoints = voronoizer.voronoize(DensityType.DORI, job.getRegion(cubeRegionName).getMolecules(), job.getMolecularSystem());
+			interactionAndWeightLists = calculateInteractionPairList(regions, parameters, gridPoints);
 
 		
 
 		List<Double> weightList = new ArrayList<Double>();
-		if ((Boolean) parameters.get(JobParameter.INTERACTION_WEIGHT)) {
+		if ((Boolean) parameters.get(Job.JobParameter.INTERACTION_WEIGHT)) {
 			weightList = interactionAndWeightLists.get(1);
 			double weightMin = Collections.min(weightList);
 			double weightMax = Collections.max(weightList);
@@ -127,7 +109,7 @@ public class InteractionSet {
 
 	private List<List> calculateInteractionPairList(
 			Map<Region.Name, Region> regions,
-			Map<JobParameter, Object> parameters, List<VoronoiPoint> gridPoints) {
+			Map<Job.JobParameter, Object> parameters, List<VoronoiPoint> gridPoints) {
 		List<List<Integer>> interactionListTemp = new ArrayList<List<Integer>>();
 		Set<Set<Integer>> interactionSetTemp = new HashSet<Set<Integer>>();
 		List<Double> weightListTemp = new ArrayList<Double>();
@@ -140,11 +122,11 @@ public class InteractionSet {
 				.synchronizedSet(interactionSetTemp);
 		gridPoints.parallelStream().forEach(
 				gridPoint -> {
-					Set<Molecule> neighbours = gridPoint
+					Set<MolecularSystem.Molecule> neighbours = gridPoint
 							.getNearestMolecules();
 
 					List<Integer> pair = new ArrayList<Integer>();
-					for (Molecule m : neighbours) {
+					for (MolecularSystem.Molecule m : neighbours) {
 						pair.add(m.getIndex());
 
 					}
@@ -152,7 +134,7 @@ public class InteractionSet {
 					Set<Integer> pairTemp = new HashSet<Integer>(pair);
 
 					if ((Boolean) parameters
-							.get(JobParameter.INTERACTION_WEIGHT)) {
+							.get(Job.JobParameter.INTERACTION_WEIGHT)) {
 						checkCriteria(regions, interactionList, gridPoint,
 								neighbours, pair, parameters, weightList,
 								interactionSet);
@@ -172,80 +154,72 @@ public class InteractionSet {
 	}
 
 	protected void checkCriteria(Map<Region.Name, Region> regions,
-			List<List<Integer>> pairList, VoronoiPoint gridPoint,
-			Set<Molecule> neighbours, List<Integer> pair,
-			Map<JobParameter, Object> parameters, List<Double> weightList,
-			Set<Set<Integer>> interactionSet) {
+								 List<List<Integer>> pairList, VoronoiPoint gridPoint,
+								 Set<MolecularSystem.Molecule> neighbours, List<Integer> pair,
+								 Map<Job.JobParameter, Object> parameters, List<Double> weightList,
+								 Set<Set<Integer>> interactionSet) {
 		Region.Name cubeRegionName = (Region.Name) parameters
-				.get(JobParameter.REGION_CUBE);
+				.get(Job.JobParameter.REGION_CUBE);
 
-		Set<Atom> atomsInCube = (new HashSet<Atom>(regions.get(cubeRegionName)
+		Set<MolecularSystem.Molecule.Atom> atomsInCube = (new HashSet<MolecularSystem.Molecule.Atom>(regions.get(cubeRegionName)
 				.getAtoms()));
-		Set<Molecule> moleculesInCube = (Set<Molecule>) regions.get(
+		Set<MolecularSystem.Molecule> moleculesInCube = (Set<MolecularSystem.Molecule>) regions.get(
 				cubeRegionName).getMolecules();
 		calculateAndCheckDensity(atomsInCube, pairList, gridPoint, neighbours,
 				pair, parameters, moleculesInCube, weightList, interactionSet);
 
 	}
 
-	private void calculateAndCheckDensity(Set<Atom> atomsInCube,
-			List<List<Integer>> pairList, VoronoiPoint gridPoint,
-			Set<Molecule> neighbours, List<Integer> pair,
-			Map<JobParameter, Object> parameters,
-			Set<Molecule> moleculesInCube, List<Double> weightList,
-			Set<Set<Integer>> interactionSet) {
+	private void calculateAndCheckDensity(Set<MolecularSystem.Molecule.Atom> atomsInCube,
+										  List<List<Integer>> pairList, VoronoiPoint gridPoint,
+										  Set<MolecularSystem.Molecule> neighbours, List<Integer> pair,
+										  Map<Job.JobParameter, Object> parameters,
+										  Set<MolecularSystem.Molecule> moleculesInCube, List<Double> weightList,
+										  Set<Set<Integer>> interactionSet) {
 		double density = getDensity(moleculesInCube, gridPoint);
 		checkDensity(atomsInCube, pairList, gridPoint, neighbours, pair,
 				parameters, density, weightList, interactionSet);
 	}
 
-	private double getDensity(Set<Molecule> moleculesInCube, VoronoiPoint gridPoint) {
-		// molecular density
-		double density = densityCalculator.calculate(gridPoint.getCoordinate(),
-				moleculesInCube);
-		return density;
+	private double getDensity(Set<MolecularSystem.Molecule> moleculesInCube, VoronoiPoint gridPoint) {
+		return  densityCalculator.electronic(gridPoint.getCoordinate(), moleculesInCube);
 	}
 
-	private void checkDensity(Set<Atom> atomsInCube,
-			List<List<Integer>> pairList, VoronoiPoint gridPoint,
-			Set<Molecule> neighbours, List<Integer> pair,
-			Map<JobParameter, Object> parameters, double density,
-			List<Double> weightList, Set<Set<Integer>> interactionSet) {
+	private void checkDensity(Set<MolecularSystem.Molecule.Atom> atomsInCube,
+							  List<List<Integer>> pairList, VoronoiPoint gridPoint,
+							  Set<MolecularSystem.Molecule> neighbours, List<Integer> pair,
+							  Map<Job.JobParameter, Object> parameters, double density,
+							  List<Double> weightList, Set<Set<Integer>> interactionSet) {
 		// check density
-		if (density >= (double) parameters.get(JobParameter.DENSITY_DORI)) {
+		if (density >= (double) parameters.get(Job.JobParameter.DENSITY_DORI)) {
 			calculateAndCheckDori(atomsInCube, pairList, gridPoint, neighbours,
 					pair, parameters, density, weightList, interactionSet);
 		}
 	}
 
-	private void calculateAndCheckDori(Set<Atom> atomsInCube,
-			List<List<Integer>> pairList, VoronoiPoint gridPoint,
-			Set<Molecule> neighbours, List<Integer> pair,
-			Map<JobParameter, Object> parameters, double density,
-			List<Double> weightList, Set<Set<Integer>> interactionSet) {
+	private void calculateAndCheckDori(Set<MolecularSystem.Molecule.Atom> atomsInCube,
+									   List<List<Integer>> pairList, VoronoiPoint gridPoint,
+									   Set<MolecularSystem.Molecule> neighbours, List<Integer> pair,
+									   Map<Job.JobParameter, Object> parameters, double density,
+									   List<Double> weightList, Set<Set<Integer>> interactionSet) {
 		double doriTemp = getDoriValue(atomsInCube, gridPoint);
 		checkDoriValue(pairList, neighbours, pair, parameters, doriTemp,
 				density, weightList, interactionSet);
 	}
 
-	private double getDoriValue(Set<Atom> atomsInCube, VoronoiPoint gridPoint) {
-		// molecular dori
-		DensityPoint densityPoint = densityPropertiesCalculator.calculate(
-				atomsInCube, gridPoint.getCoordinate());
-		double doriTemp = doriComputer
-				.calculate(densityPoint);
-		return doriTemp;
+	private double getDoriValue(Set<MolecularSystem.Molecule.Atom> atomsInCube, VoronoiPoint gridPoint) {
+		return densityCalculator.dori(gridPoint.getCoordinate(), atomsInCube );
 	}
 
 	private void checkDoriValue(List<List<Integer>> pairList,
-			Set<Molecule> neighbours, List<Integer> pair,
-			Map<JobParameter, Object> parameters, double doriTemp,
-			double density, List<Double> weightList,
-			Set<Set<Integer>> interactionSet) {
+								Set<MolecularSystem.Molecule> neighbours, List<Integer> pair,
+								Map<Job.JobParameter, Object> parameters, double doriTemp,
+								double density, List<Double> weightList,
+								Set<Set<Integer>> interactionSet) {
 
 		// check dori
 		if (1 >= doriTemp
-				&& doriTemp >= (double) parameters.get(JobParameter.DORI)) {
+				&& doriTemp >= (double) parameters.get(Job.JobParameter.DORI)) {
 			// Boolean itemInList = checkItemInList(pairList, pair);
 			Set<Integer> pairTemp = new HashSet<Integer>(pair);
 			if (!interactionSet.contains(pairTemp)) {
@@ -253,7 +227,6 @@ public class InteractionSet {
 				pairList.add(pair);
 				weightList.add(density);
 			} else {
-
 				int index = pairList.indexOf(pair);
 				weightList.set(index, weightList.get(index) + density);
 			}

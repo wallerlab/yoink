@@ -15,11 +15,12 @@
  */
 package org.wallerlab.yoink.molecule.service.translator
 
+import org.wallerlab.yoink.api.model.Job
 import org.wallerlab.yoink.api.service.molecule.Converter
 import org.wallerlab.yoink.molecule.data.JaxbFileReader
 import org.xml_cml.schema.Cml
 import spock.lang.Specification;
-import org.wallerlab.yoink.api.model.batch.JobParameter;
+
 class ParameterTranslatorSpec extends Specification {
 
 	def "test method translate(JAXBElement<Cml> cml)"(){
@@ -30,6 +31,6 @@ class ParameterTranslatorSpec extends Specification {
 		then:"tranlate all parameters in given file"
 		parameterTranslator.translate(cml)
 		parameterTranslator.translate(cml).size()==23
-		parameterTranslator.translate(cml).get(JobParameter.DGRID)==true
+		parameterTranslator.translate(cml).get(Job.JobParameter.DGRID)==true
 	}
 }

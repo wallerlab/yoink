@@ -178,7 +178,7 @@ public interface Matrix<T> {
 	 * 
 	 * @return a matrix in the matrix type of the library
 	 */
-	public T getInternalMatrix();
+	T getInternalMatrix();
 
 	/**
 	 * set the value of internal matrix of this matrix
@@ -186,7 +186,7 @@ public interface Matrix<T> {
 	 * @param internalMatrix
 	 *            , a matrix of the library
 	 */
-	public void setInternalMatrix(T internalMatrix);
+	void setInternalMatrix(T internalMatrix);
 
 	/**
 	 * matrix type is named after the library it is in.
@@ -194,7 +194,7 @@ public interface Matrix<T> {
 	 * @author Min Zheng
 	 *
 	 */
-	public enum Type {
+	 enum Type {
 
 		COMMONS, COMMONS_VECTOR3D
 	}

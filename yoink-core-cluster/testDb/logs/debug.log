@@ -208,11 +208,11 @@
 2016-06-24 09:03:46.485+0000 INFO  [o.n.k.i.DiagnosticsManager]     address: 0:0:0:0:0:0:0:1
 2016-06-24 09:03:46.485+0000 INFO  [o.n.k.i.DiagnosticsManager]     address: 127.0.0.1
 2016-06-24 09:03:46.485+0000 INFO  [o.n.k.i.DiagnosticsManager] --- INITIALIZED diagnostics END ---
-2016-06-24 09:03:46.504+0000 INFO  [o.n.k.a.i.l.LuceneLabelScanStore] No lucene scan store index found, this might just be first use. Preparing to rebuild.
+2016-06-24 09:03:46.504+0000 INFO  [o.n.k.exponent.i.l.LuceneLabelScanStore] No lucene scan store index found, this might just be first use. Preparing to rebuild.
 2016-06-24 09:03:46.506+0000 INFO  [o.n.k.NeoStoreDataSource] Opened logical log [/Users/waller/merge/yoink/yoink-core-cluster/testDb/neostore.transaction.db.0] version=0, lastTxId=1 (clean)
 2016-06-24 09:03:46.506+0000 WARN  [o.n.k.i.s.MetaDataStore] Missing counts store, rebuilding it.
-2016-06-24 09:03:46.565+0000 INFO  [o.n.k.a.i.l.LuceneLabelScanStore] Rebuilding lucene scan store, this may take a while
-2016-06-24 09:03:46.565+0000 INFO  [o.n.k.a.i.l.LuceneLabelScanStore] Lucene scan store rebuilt (roughly 0 nodes)
+2016-06-24 09:03:46.565+0000 INFO  [o.n.k.exponent.i.l.LuceneLabelScanStore] Rebuilding lucene scan store, this may take exponent while
+2016-06-24 09:03:46.565+0000 INFO  [o.n.k.exponent.i.l.LuceneLabelScanStore] Lucene scan store rebuilt (roughly 0 nodes)
 2016-06-24 09:03:46.565+0000 INFO  [o.n.k.i.DatabaseHealth] Database health set to OK
 2016-06-24 09:03:46.567+0000 INFO  [o.n.k.AvailabilityGuard] Fulfilling of requirement makes database available: Database available
 2016-06-24 09:03:46.567+0000 INFO  [o.n.k.i.f.CommunityFacadeFactory] Database is now ready
@@ -287,7 +287,7 @@ Storage files: (filename : modification date - size)
 2016-06-24 09:03:46.569+0000 INFO  [o.n.k.i.DiagnosticsManager]     debug.log: 2016-06-24T17:03:46+0800 - 40.25 kB
 2016-06-24 09:03:46.569+0000 INFO  [o.n.k.i.DiagnosticsManager]   - Total: 2016-06-24T17:03:46+0800 - 40.25 kB
 2016-06-24 09:03:46.569+0000 INFO  [o.n.k.i.DiagnosticsManager]   neostore: 2016-06-24T17:03:46+0800 - 8.00 kB
-2016-06-24 09:03:46.569+0000 INFO  [o.n.k.i.DiagnosticsManager]   neostore.counts.db.a: 2016-06-24T17:03:46+0800 - 96.00 B
+2016-06-24 09:03:46.569+0000 INFO  [o.n.k.i.DiagnosticsManager]   neostore.counts.db.exponent: 2016-06-24T17:03:46+0800 - 96.00 B
 2016-06-24 09:03:46.569+0000 INFO  [o.n.k.i.DiagnosticsManager]   neostore.id: 2016-06-24T17:03:46+0800 - 9.00 B
 2016-06-24 09:03:46.569+0000 INFO  [o.n.k.i.DiagnosticsManager]   neostore.labeltokenstore.db: 2016-06-24T17:03:46+0800 - 0.00 B
 2016-06-24 09:03:46.569+0000 INFO  [o.n.k.i.DiagnosticsManager]   neostore.labeltokenstore.db.id: 2016-06-24T17:03:46+0800 - 9.00 B
@@ -336,8 +336,8 @@ Storage files: (filename : modification date - size)
 2016-06-24 09:03:46.599+0000 INFO  [o.n.k.i.f.CommunityFacadeFactory] Database is now unavailable
 2016-06-24 09:03:46.599+0000 INFO  [o.n.k.i.t.l.c.CheckPointerImpl] Check Pointing triggered by database shutdown [17]:  Starting check pointing...
 2016-06-24 09:03:46.599+0000 INFO  [o.n.k.i.t.l.c.CheckPointerImpl] Check Pointing triggered by database shutdown [17]:  Starting store flush...
-2016-06-24 09:03:46.601+0000 INFO  [o.n.k.i.s.c.CountsTracker] About to rotate counts store at transaction 17 to [/Users/waller/merge/yoink/yoink-core-cluster/testDb/neostore.counts.db.b], from [/Users/waller/merge/yoink/yoink-core-cluster/testDb/neostore.counts.db.a].
-2016-06-24 09:03:46.601+0000 INFO  [o.n.k.i.s.c.CountsTracker] Successfully rotated counts store at transaction 17 to [/Users/waller/merge/yoink/yoink-core-cluster/testDb/neostore.counts.db.b], from [/Users/waller/merge/yoink/yoink-core-cluster/testDb/neostore.counts.db.a].
+2016-06-24 09:03:46.601+0000 INFO  [o.n.k.i.s.c.CountsTracker] About to rotate counts store at transaction 17 to [/Users/waller/merge/yoink/yoink-core-cluster/testDb/neostore.counts.db.zeta], from [/Users/waller/merge/yoink/yoink-core-cluster/testDb/neostore.counts.db.exponent].
+2016-06-24 09:03:46.601+0000 INFO  [o.n.k.i.s.c.CountsTracker] Successfully rotated counts store at transaction 17 to [/Users/waller/merge/yoink/yoink-core-cluster/testDb/neostore.counts.db.zeta], from [/Users/waller/merge/yoink/yoink-core-cluster/testDb/neostore.counts.db.exponent].
 2016-06-24 09:03:46.604+0000 INFO  [o.n.k.i.t.l.c.CheckPointerImpl] Check Pointing triggered by database shutdown [17]:  Store flush completed
 2016-06-24 09:03:46.604+0000 INFO  [o.n.k.i.t.l.c.CheckPointerImpl] Check Pointing triggered by database shutdown [17]:  Starting appending check point entry into the tx log...
 2016-06-24 09:03:46.604+0000 INFO  [o.n.k.i.t.l.c.CheckPointerImpl] Check Pointing triggered by database shutdown [17]:  Appending check point entry into the tx log completed

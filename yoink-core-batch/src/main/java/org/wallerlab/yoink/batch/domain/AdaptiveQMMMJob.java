@@ -15,16 +15,14 @@
  */
 package org.wallerlab.yoink.batch.domain;
 
+import org.wallerlab.yoink.api.model.Job;
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
+import org.wallerlab.yoink.api.model.adaptive.Region;
+import org.wallerlab.yoink.api.model.adaptive.AdaptiveMolecularSystem;
+
 import java.util.*;
-
-import javax.xml.bind.JAXBElement;
-
-import org.wallerlab.yoink.api.model.batch.JobParameter;
-import org.wallerlab.yoink.api.model.batch.Job;
-import org.wallerlab.yoink.api.model.molecule.MolecularSystem;
-import org.wallerlab.yoink.api.model.molecule.Molecule;
-import org.wallerlab.yoink.api.model.region.Region;
 import org.xml_cml.schema.Cml;
+import javax.xml.bind.JAXBElement;
 
 /**
  * The domain model for job in adaptive qm/mm partitioning
@@ -34,18 +32,24 @@ import org.xml_cml.schema.Cml;
  */
 public class AdaptiveQMMMJob implements Job<JAXBElement> {
 
-	// keep original cml in order to wrap results back to properties in the JAXB
-	private JAXBElement<Cml> input;
+	// keep original cml in order to insert results back into properties in the JAXB
+	private final JAXBElement<Cml> input;
 
-	// Internal domain model
-	private MolecularSystem molecularSystem;
+	private final MolecularSystem molecularSystem;
 
-	// Results from RegionizerService
-	private Map<Region.Name,Region> regions;
-	//
-	private Map<JobParameter, Object> parameters = new HashMap<JobParameter, Object>();
+	private final Map<JobParameter, Object> parameters;
+
+	private AdaptiveMolecularSystem adaptiveMolecularSystem;
+
+	public AdaptiveQMMMJob(final JAXBElement<Cml> input, final MolecularSystem molecularSystem, final Map<JobParameter, Object> parameters) {
+		this.input = input;
+		this.molecularSystem = molecularSystem;
+		this.parameters = parameters;
+	}
 
 	private Map<String, Object> properties = new HashMap<String, Object>();
+
+	private Map<Region.Name,Region> regions;
 
 	// Results from Clusterer
 	private List<List<Integer>> interactionList;
@@ -58,18 +62,8 @@ public class AdaptiveQMMMJob implements Job<JAXBElement> {
 	}
 
 	@Override
-	public void setMolecularSystem(MolecularSystem molecularSystem) {
-		this.molecularSystem = molecularSystem;
-	}
-
-	@Override
 	public Map<JobParameter, Object> getParameters() {
 		return parameters;
-	}
-
-	@Override
-	public void setParameters(Map<JobParameter, Object> parameters) {
-		this.parameters = parameters;
 	}
 
 	@Override
@@ -77,22 +71,13 @@ public class AdaptiveQMMMJob implements Job<JAXBElement> {
 		return regions;
 	}
 
-	@Override
-	public void addRegion(Region region) {
-	}
-
-	@Override
 	public void setRegions(Map<Region.Name, Region> regions) {
+		this.regions = regions;
 	}
 
 	@Override
 	public JAXBElement<Cml> getInput() {
 		return this.input;
-	}
-
-	@Override
-	public void setInput(JAXBElement input) {
-		this.input = input;
 	}
 
 	@Override
@@ -131,7 +116,7 @@ public class AdaptiveQMMMJob implements Job<JAXBElement> {
 	}
 
 	@Override
-	public Set<Molecule> getMoleculesInRegion(Region.Name regionName) {
+	public Set<MolecularSystem.Molecule> getMoleculesInRegion(Region.Name regionName) {
 		return null;
 	}
 
@@ -141,8 +126,13 @@ public class AdaptiveQMMMJob implements Job<JAXBElement> {
 	}
 
 	@Override
-	public JobParameter getParameter(JobParameter jobParameter) {
-		return null;
+	public Object getParameter(JobParameter jobParameter) {
+		return parameters.get(jobParameter);
+	}
+
+	@Override
+	public void setAdaptiveMolecularSystem(AdaptiveMolecularSystem adaptiveMolecularSystem) {
+		this.adaptiveMolecularSystem = adaptiveMolecularSystem;
 	}
 
 	@Override

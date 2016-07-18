@@ -15,16 +15,16 @@
  */
 package org.wallerlab.yoink.region.service.partitioners
 
-import org.wallerlab.yoink.api.model.batch.JobParameter
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem
 import org.wallerlab.yoink.api.service.region.Regionizer
 
 import spock.lang.Ignore
 import spock.lang.Specification;
 
 import org.wallerlab.yoink.api.enums.*
-import org.wallerlab.yoink.api.model.cube.VoronoiPoint;
-import org.wallerlab.yoink.api.model.molecule.Molecule;
-import org.wallerlab.yoink.api.model.region.Region
+import org.wallerlab.yoink.api.model.VoronoiPoint;
+
+import org.wallerlab.yoink.api.model.adaptive.Region
 
 class InteractionPartitionerSpec extends Specification{
 	@Ignore // why test abstract method?
@@ -34,17 +34,16 @@ class InteractionPartitionerSpec extends Specification{
 		def parameters=Mock(Map)
 		def grid1=Mock(VoronoiPoint)
 		def grid2=Mock(VoronoiPoint)
-		grid1.getTwoClosestMolecules()>>[Mock(Molecule)]
-		grid2.getTwoClosestMolecules()>>[Mock(Molecule)]
+		grid1.getTwoClosestMolecules()>>[Mock(MolecularSystem.Molecule)]
+		grid2.getTwoClosestMolecules()>>[Mock(MolecularSystem.Molecule)]
 		def gridPoints=[grid1, grid2]
 		def singleRegionizerService=Mock(Regionizer)
 		def region=Mock(Region)
 		region.getName()>>Region.Name.QM_ADAPTIVE
 		singleRegionizerService.regionize(_,_)>>region
-		def simpleRegionFactory=new SimpleRegionFactory()
 
 		when:"set up a new InteractionPartitioner"
-		def partitioner=new InteractionPartitioner(Region){
+		/*def partitioner=new InteractionPartitioner(Region){
 			@Override
 			public Region checkCriteria(Map<Region.Name, Region> regionsNames,
 										Region regionForSpec, VoronoiPoint gridPoint,
@@ -52,7 +51,7 @@ class InteractionPartitionerSpec extends Specification{
 										Map<JobParameter, Object> parametersForSpec){
 				return;
 			}
-		}
+		}*/
 		partitioner.singleRegionizerService=singleRegionizerService
 		partitioner.simpleRegionFactory=simpleRegionFactory
 

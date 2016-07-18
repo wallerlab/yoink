@@ -15,18 +15,21 @@
  */
 package org.wallerlab.yoink.batch.service
 
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem
 import org.wallerlab.yoink.batch.service.response.PropertyWrapper
 import org.xml_cml.schema.ObjectFactory
 
 import spock.lang.Specification
-import org.wallerlab.yoink.api.model.molecule.Molecule;
-import org.wallerlab.yoink.api.model.region.Region;
-import org.wallerlab.yoink.api.model.batch.Job
+
+import org.wallerlab.yoink.api.model.adaptive.Region;
+import org.wallerlab.yoink.api.model.Job
 import org.wallerlab.yoink.api.service.math.Vector;
 import org.wallerlab.yoink.api.service.math.Vector.Vector3DType;
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
 class PropertyWrapperSpec extends Specification{
+
 	def "test method wrap(YoinkJob<JAXBElement> job) when no weightfactors and smoothfactors"(){
+
 		given:"make up a job without weightfactors and smoothfactors"
 		def job=Mock(Job)
 		def factory=new ObjectFactory()
@@ -41,7 +44,7 @@ class PropertyWrapperSpec extends Specification{
 		job.getProperties()>>properties
 		def regions=Mock(Map)
 		def region=Mock(Region)
-		region.getMolecules()>>[Mock(Molecule)]
+		region.getMolecules()>>[Mock(MolecularSystem.Molecule)]
 		regions.get(_)>>region
 		job.getRegions()>>regions
 		when:"make a new PropertyWrapper"
@@ -71,7 +74,7 @@ class PropertyWrapperSpec extends Specification{
 		job.getProperties()>>properties
 		def regions=Mock(Map)
 		def region=Mock(Region)
-		region.getMolecules()>>[Mock(Molecule)]
+		region.getMolecules()>>[Mock(MolecularSystem.Molecule)]
 		regions.get(_)>>region
 		job.getRegions()>>regions
 
@@ -114,7 +117,7 @@ class PropertyWrapperSpec extends Specification{
 		job.getProperties()>>properties
 		def regions=Mock(Map)
 		def region=Mock(Region)
-		region.getMolecules()>>[Mock(Molecule)]
+		region.getMolecules()>>[Mock(MolecularSystem.Molecule)]
 		regions.get(_)>>region
 		job.getRegions()>>regions
 

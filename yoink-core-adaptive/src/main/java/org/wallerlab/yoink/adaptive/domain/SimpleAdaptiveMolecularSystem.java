@@ -1,24 +1,18 @@
 package org.wallerlab.yoink.adaptive.domain;
 
 import org.wallerlab.yoink.api.model.adaptive.AdaptiveMolecularSystem;
-import org.wallerlab.yoink.api.model.molecule.MolecularSystem;
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
 import org.wallerlab.yoink.api.service.math.Vector;
 
 import java.util.List;
 
-public class SimpleAdaptiveMolecularSystem implements AdaptiveMolecularSystem{
+public class SimpleAdaptiveMolecularSystem implements AdaptiveMolecularSystem {
 
-    private Double qmWeight;
+    final Double energy;
 
-    private Double bufferWeight;
+    final List<Vector> forces;
 
-    private Double mmWeight;
-
-    private final Double energy;
-
-    private final List<Vector> forces;
-
-    private final MolecularSystem molecularSystem;
+    final MolecularSystem molecularSystem;
 
     public SimpleAdaptiveMolecularSystem(Double energy, List<Vector> forces, MolecularSystem molecularSystem) {
         this.energy = energy;
@@ -26,42 +20,18 @@ public class SimpleAdaptiveMolecularSystem implements AdaptiveMolecularSystem{
         this.molecularSystem = molecularSystem;
     }
 
+    @Override
     public Double getEnergy() {
         return energy;
     }
 
+    @Override
     public List<Vector> getForces() {
         return forces;
     }
 
+    @Override
     public MolecularSystem getMolecularSystem() {
         return molecularSystem;
     }
-
-
-    public Double getQmWeight() {
-        return qmWeight;
-    }
-
-    public void setQmWeight(Double qmWeight) {
-        this.qmWeight = qmWeight;
-    }
-
-
-    public Double getBufferWeight() {
-        return bufferWeight;
-    }
-
-    public void setBufferWeight(Double bufferWeight) {
-        this.bufferWeight = bufferWeight;
-    }
-
-    public Double getMmWeight() {
-        return mmWeight;
-    }
-
-    public void setMmWeight(Double mmWeight) {
-        this.mmWeight = mmWeight;
-    }
-
 }

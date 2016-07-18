@@ -15,15 +15,17 @@
  */
 package org.wallerlab.yoink.region.domain
 
-import org.wallerlab.yoink.api.model.molecule.Element
-import org.wallerlab.yoink.api.model.molecule.Atom
-import org.wallerlab.yoink.api.model.molecule.Coord
-import org.wallerlab.yoink.api.model.molecule.Molecule
+import org.wallerlab.yoink.api.model.molecular.Element
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem
+import org.wallerlab.yoink.density.domain.ExponentialFit
+
+import org.wallerlab.yoink.api.model.Coord
+
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
 import org.wallerlab.yoink.molecule.domain.SimpleCoordFactory
 import org.wallerlab.yoink.molecule.domain.SimpleMolecule
 import org.wallerlab.yoink.api.service.math.Vector;
-import static org.wallerlab.yoink.api.model.region.Region.Name.*;
+import static org.wallerlab.yoink.api.model.adaptive.Region.Name.*;
 
 import spock.lang.Specification
 
@@ -32,9 +34,9 @@ class SimpleRegionSpec extends Specification{
 
 	def"test constructor SimpleRegion(Name, Set<Molecule>)"(){
 
-		def molecule=Mock(Molecule)
-		def molecules = [molecule]
-		def atom = Mock(Atom)
+		def molecule=Mock(MolecularSystem.Molecule)
+		def molecules = [molecule] as Set
+		def atom = Mock(MolecularSystem.Molecule.Atom)
 		molecule.getAtoms()>>[atom]
 
 		when:"add a molecule"
@@ -43,26 +45,23 @@ class SimpleRegionSpec extends Specification{
 		then:"get right information about added molecule"
 		region.getName()==MM
 		region.getSize()==1
-		region.getAtoms()==[atom]
+		region.getAtoms()==[atom] as Set
 	}
 
 	def"test getCenterOfMass"(){
-		def myVector3D=new SimpleVector3DFactory()
-		myVector3D.myVectorType=Vector.Vector3DType.COMMONS
-		def simpleCoordFactory=new  SimpleCoordFactory()
-		simpleCoordFactory.myVector3D= myVector3D
-		def molecules = [Mock(Molecule)]
-		def region= new SimpleRegion(MM, molecules)
+
+		def a=Mock(MolecularSystem.Molecule.Atom)
 		def coordinate=Mock(Coord)
-		coordinate.getCoords()>>myVector3D.create(1,1,1);
-		def a=Mock(Atom)
+		coordinate.getCoords()>> SimpleVector3DFactory.staticCreate(1, 1, 1);
 		a.getCoordinate()>>coordinate
-		a.getElementType()>>Element.H
-		def m=new SimpleMolecule(1,[a])
+		a.getElement()>>Element.H
+		def m=new SimpleMolecule(1,[a,a] as Set)
+		m.getAtoms()>>a
+		def molecules = [Mock(MolecularSystem.Molecule)] as Set
+		molecules.add(m)
 
 		when:
-		region.addMolecule(m,1)
-
+		def region= new SimpleRegion(MM, molecules)
 		then:
 		Math.abs(region.getCenterOfMass().getCoords().getEntry(0)-1)<=1.0E-5
 	}

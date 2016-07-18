@@ -21,8 +21,7 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.api.model.batch.Job;
-import org.wallerlab.yoink.api.model.batch.JobParameter;
+import org.wallerlab.yoink.api.model.Job;
 import org.wallerlab.yoink.api.service.molecule.FilesWriter;
 
 import javax.xml.bind.JAXBElement;
@@ -53,9 +52,8 @@ public class CmlFileResponseWriter implements ItemWriter<Job<JAXBElement>> {
 	@Override
 	public void write(List<? extends Job<JAXBElement>> jobs) throws Exception {
 		for (Job<JAXBElement> job : jobs) {
-			String name = (String) job.getParameters().get(JobParameter.JOB_NAME);
-			String parentDirName = (String) job.getParameters().get(JobParameter.OUTPUT_FOLDER) + "/";
-			System.out.println("name " + parentDirName + " name file " + name );
+			String name = (String) job.getParameters().get(Job.JobParameter.JOB_NAME);
+			String parentDirName = (String) job.getParameters().get(Job.JobParameter.OUTPUT_FOLDER) + "/";
 			String outputFileName = parentDirName + name + "-out.xml";
 			jaxbWriter.write(outputFileName, job.getInput().getValue());
 			log.info("finish writing all output  for " + name);
