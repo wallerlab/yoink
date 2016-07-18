@@ -33,13 +33,13 @@ then use [gradle](https://gradle.org/) to run yoink
 
 #User Guide
 
-A short [tutorial](https://github.com/wallerlab/yoink/wiki) on how to get up and running with yoink in around 5 minutes.
+A short [tutorial](http://github.com/wallerlab/yoink/wiki) on how to get up and running with yoink in around 5 minutes.
 
 #Documentation
 
-A more detailed set of [documents](https://github.com/wallerlab/yoink/wiki) explaining how yoink works.
+A more detailed set of [documents](http://github.com/wallerlab/yoink/wiki) explaining how yoink works.
 
 
 #Contact us
 
-[Group page](https://wallerlab.org/)
+[Group page](http://wallerlab.org/)
