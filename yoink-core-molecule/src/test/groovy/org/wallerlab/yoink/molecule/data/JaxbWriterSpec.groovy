@@ -2,7 +2,7 @@ package org.wallerlab.yoink.molecule.data
 
 import javax.xml.bind.JAXBElement
 import org.apache.commons.io.FileUtils
-import org.xml_cml.schema.Cml
+import org.cml_v3.generated.Cml
 
 import spock.lang.Specification
 

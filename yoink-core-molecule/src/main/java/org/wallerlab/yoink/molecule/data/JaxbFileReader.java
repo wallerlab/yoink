@@ -21,7 +21,7 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 
 import org.springframework.stereotype.Service;
-import org.xml_cml.schema.Cml;
+import org.cml_v3.generated.Cml;
 
 /**
  * this class is to use JAXB to read a file.

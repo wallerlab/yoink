@@ -27,9 +27,9 @@ import org.wallerlab.yoink.api.service.adaptive.Adaptive;
 import org.wallerlab.yoink.api.service.molecule.Translator;
 import org.wallerlab.yoink.api.service.molecule.Converter.UnitConverterType;
 import org.wallerlab.yoink.api.service.region.Regionizer;
-import org.xml_cml.schema.Cml;
-import org.xml_cml.schema.Parameter;
-import org.xml_cml.schema.ParameterList;
+import org.cml_v3.generated.Cml;
+import org.cml_v3.generated.Parameter;
+import org.cml_v3.generated.ParameterList;
 
 /**
  * this class is to get a Map(JobParameter - {@link Job.JobParameter}, Object) by
@@ -46,8 +46,8 @@ public class ParameterTranslator implements Translator<Map<Job.JobParameter, Obj
 	/**
 	 * get parameters a Map(JobParameter -
 	 * {@link Job.JobParameter}, Object)
-	 * from JAXBElement ParameterList {@link org.xml_cml.schema.ParameterList}
-	 * in JAXBElement Cml {@link org.xml_cml.schema.Cml}.
+	 * from JAXBElement ParameterList {@link ParameterList}
+	 * in JAXBElement Cml {@link Cml}.
 	 * 
 	 * @param cml
 	 *            {@link javax.xml.bind.JAXBElement}

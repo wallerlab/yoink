@@ -16,7 +16,6 @@
 
 package org.wallerlab.yoink.density.domain;
 
-import org.wallerlab.yoink.api.model.molecular.Element;
 
 import java.io.Serializable;
 

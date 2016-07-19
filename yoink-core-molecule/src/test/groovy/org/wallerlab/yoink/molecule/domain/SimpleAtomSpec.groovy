@@ -16,9 +16,7 @@
 package org.wallerlab.yoink.molecule.domain
 
 import org.wallerlab.yoink.api.model.Coord;
-import Element;
 import org.wallerlab.yoink.api.service.math.Vector;
-import RadialGrid;
 import spock.lang.Specification
 
 class SimpleAtomSpec extends Specification {

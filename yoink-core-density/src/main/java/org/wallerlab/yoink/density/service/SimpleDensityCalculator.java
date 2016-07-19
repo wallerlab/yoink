@@ -30,9 +30,8 @@ import org.wallerlab.yoink.density.domain.SimpleDensityPoint;
 
 import java.io.IOException;
 import java.util.Map;
+
 import java.util.Set;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -60,7 +59,6 @@ import static java.util.stream.Collectors.toSet;
 @Service
 public class SimpleDensityCalculator implements DensityCalculator {
 
-	protected static final Log log = LogFactory.getLog(SimpleDensityCalculator.class);
 
 	public static final double DENSITY_DEFAULT = 1.0E-30;
 	public static final double DISTANCE_DEFAULT = 1.0E-10;

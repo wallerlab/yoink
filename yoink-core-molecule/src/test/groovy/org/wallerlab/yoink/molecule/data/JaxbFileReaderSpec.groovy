@@ -1,10 +1,10 @@
 package org.wallerlab.yoink.molecule.data
 
-import org.xml_cml.schema.Cml
+import org.cml_v3.generated.Cml
 import spock.lang.Specification
 
 import javax.xml.bind.JAXBElement;
-import org.xml_cml.schema.MoleculeList;
+import org.cml_v3.generated.MoleculeList;
 
 class JaxbFileReaderSpec extends Specification{
 

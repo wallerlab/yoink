@@ -15,7 +15,7 @@
  */
 package org.wallerlab.yoink.batch.domain
 
-import org.xml_cml.schema.ObjectFactory
+import org.cml_v3.generated.ObjectFactory
 
 import spock.lang.Specification;
 

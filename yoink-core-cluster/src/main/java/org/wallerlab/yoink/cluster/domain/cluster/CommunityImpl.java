@@ -12,63 +12,54 @@ import org.neo4j.graphdb.ResourceIterator;
 
 class CommunityImpl implements Community {
 
-	Label label;
-	GraphDatabaseService graph;
-	RelationshipType edgeType;
-	Set<Node> memberset;
-	double totalEdgeWeightSum;
-	double internalEdgeWeightSum;
-	long size;
 	String id;
-	
-	CommunityImpl(ResourceIterator<Node> members, Label label, String id,
-			RelationshipType edgeType, GraphDatabaseService graph) {
+	long size;
+	Label label;
+	RelationshipType edgeType;
+	Set<Node> memberSet;
+	double totalSumOfEdgeWeights;
+	double sumOfInternalEdgeWeights;
+
+	GraphDatabaseService graph;
+
+	CommunityImpl(ResourceIterator<Node> members,
+				  Label label,
+				  String id,
+				  RelationshipType edgeType,
+				  GraphDatabaseService graph) {
 		this.graph = graph;
 		this.label = label;
 		this.id = id;
 		this.edgeType = edgeType;
-		memberset = new HashSet<Node>();
-		members.forEachRemaining(b -> memberset.add(b));
+		memberSet = new HashSet<Node>();
+		members.forEachRemaining(b -> memberSet.add(b));
 		size = 0;
 		calculate();
 	}
 
 	private void calculate() {
-
-		double totalsum = 0.;
-		double internalsum = 0.;
-		
+		double totalSum = 0.;
+		double internalSum = 0.;
 		ResourceIterator<Node> iterator = getNodes();
 		while (iterator.hasNext()) {
-
 			Node node = iterator.next();
 			size++;
 			for (Relationship edge : node.getRelationships(edgeType)) {
-
 				double weight = (double) edge.getProperty("weights", 1.0);
-				totalsum += weight;
-
-				if (edge.getOtherNode(node).hasLabel(label)) {
-			
-					internalsum += weight;
-				//	System.out.println("internal sum: " + internalsum);
-					
-				}
+				totalSum += weight;
+				if (edge.getOtherNode(node).hasLabel(label)) internalSum += weight;
 			}
 		}
-
-		totalEdgeWeightSum = totalsum;
-		internalEdgeWeightSum = internalsum;
+		totalSumOfEdgeWeights = totalSum;
+		sumOfInternalEdgeWeights = internalSum;
 	}
 
-	@Override
-	public double getInternalEdgeWeightSum() {
-		return internalEdgeWeightSum;
+	public double getSumOfInternalEdgeWeights() {
+		return sumOfInternalEdgeWeights;
 	}
 
-	@Override
-	public double getTotalEdgeWeightSum() {
-		return totalEdgeWeightSum;
+	public double getTotalSumOfEdgeWeights() {
+		return totalSumOfEdgeWeights;
 	}
 
 	@Override
@@ -114,9 +105,9 @@ class CommunityImpl implements Community {
 		return "Community(Size: " + size +
 						  ", ID: " + id +
 					      ", Label: " +label +
-					      ", Sum_int: " + internalEdgeWeightSum +
-				          ", Sum_tot: " + totalEdgeWeightSum +
-				          ", members: " + memberset+
+					      ", Sum_int: " + sumOfInternalEdgeWeights +
+				          ", Sum_tot: " + totalSumOfEdgeWeights +
+				          ", members: " + memberSet +
 				          ")";
 	}
 	

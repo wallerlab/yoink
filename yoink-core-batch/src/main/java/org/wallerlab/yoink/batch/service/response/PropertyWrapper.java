@@ -20,19 +20,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.xml.bind.JAXBElement;
+
+import org.cml_v3.generated.Molecule;
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.Job;
 import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
 import org.wallerlab.yoink.api.service.math.Vector;
 import org.wallerlab.yoink.api.service.molecule.FilesWriter;
 import org.wallerlab.yoink.api.model.adaptive.Region;
-import org.xml_cml.schema.Cml;
-import org.xml_cml.schema.Gradient;
-import org.xml_cml.schema.MoleculeList;
-import org.xml_cml.schema.ObjectFactory;
-import org.xml_cml.schema.Property;
-import org.xml_cml.schema.PropertyList;
-import org.xml_cml.schema.Scalar;
+import org.cml_v3.generated.Cml;
+import org.cml_v3.generated.Gradient;
+import org.cml_v3.generated.MoleculeList;
+import org.cml_v3.generated.ObjectFactory;
+import org.cml_v3.generated.Property;
+import org.cml_v3.generated.PropertyList;
+import org.cml_v3.generated.Scalar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -87,8 +89,8 @@ public class PropertyWrapper implements Wrapper<Job<JAXBElement>> {
 		for (Object elementMolecule : cmlMoleculeList.getAnyCmlOrAnyOrAny()) {
 			JAXBElement element = (JAXBElement) elementMolecule;
 			// check molecule
-			if (element.getDeclaredType() == org.xml_cml.schema.Molecule.class) {
-				org.xml_cml.schema.Molecule cmlMolecule = ((JAXBElement<org.xml_cml.schema.Molecule>) element).getValue();
+			if (element.getDeclaredType() == Molecule.class) {
+				Molecule cmlMolecule = ((JAXBElement<Molecule>) element).getValue();
 				//cmlMolecule.setId(molecules.get(moleculeCounter).getName().toString());
 				cmlMolecule.setId("processed");
 				moleculeCounter++;

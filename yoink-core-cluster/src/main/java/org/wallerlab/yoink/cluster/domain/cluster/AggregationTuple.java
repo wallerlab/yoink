@@ -5,15 +5,14 @@ import org.neo4j.graphdb.Relationship;
 public class AggregationTuple {
 
 	String start;
+
 	String end;
 
 	String representation;
 
 	public AggregationTuple(Relationship edge) {
-
 		String one = String.valueOf(edge.getStartNode().getProperty("community"));
 		String two = String.valueOf(edge.getEndNode().getProperty("community"));
-
 		if (one.compareTo(two) >= 0) {
 			this.start = one;
 			this.end = two;
@@ -22,7 +21,6 @@ public class AggregationTuple {
 			this.end = one;
 		}
 		representation = start + "-" + end;
-
 	}
 
 	@Override

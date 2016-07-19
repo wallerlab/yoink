@@ -2,7 +2,7 @@ package org.wallerlab.yoink.molecule.data
 
 import javax.xml.bind.JAXBElement
 
-import org.xml_cml.schema.Cml
+import org.cml_v3.generated.Cml
 
 import spock.lang.Specification
 
@@ -12,7 +12,7 @@ class JaxbStringWriterSpec extends Specification {
 		when:"jaxb writer writes  an object from jaxb reader"
 			def reader= new JaxbStringReader()
 			def input = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<cml xmlns="http://www.xml-cml.org/schema">
+<cml xmlns="http://www.xml-cml.org/generated">
     <moleculeList>
         <molecule id="QM_CORE_FIXED">
             <atomArray>

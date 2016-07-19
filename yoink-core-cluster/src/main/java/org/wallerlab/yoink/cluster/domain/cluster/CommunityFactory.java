@@ -8,6 +8,10 @@ import org.neo4j.graphdb.RelationshipType;
 
 public class CommunityFactory {
 
+	GraphDatabaseService graph;
+
+	RelationshipType edgeType;
+
 	/**
 	 * @param graph
 	 * @param edgeType
@@ -17,18 +21,10 @@ public class CommunityFactory {
 		this.edgeType = edgeType;
 	}
 
-	GraphDatabaseService graph;
-
-	RelationshipType edgeType;
-
 	public Community of(Node node) {
-
 		String id = (String) node.getProperty("community");
-
 		Label label = DynamicLabel.label(String.valueOf(id));
-
 		return new CommunityImpl(graph.findNodes(label), label, id, edgeType, graph);
-
 	}
 	
 	public Community of(String id) {

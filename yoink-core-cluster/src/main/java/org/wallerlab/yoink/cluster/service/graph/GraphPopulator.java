@@ -14,14 +14,15 @@ import org.neo4j.graphdb.Relationship;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import org.wallerlab.yoink.cluster.service.interaction.InteractionTriple;
+import org.wallerlab.yoink.api.model.Interaction;
+import org.wallerlab.yoink.cluster.domain.interaction.SimpleInteraction;
 import org.wallerlab.yoink.cluster.domain.graph.NodeLabel;
 import org.wallerlab.yoink.cluster.domain.graph.Relations;
 
 /**
- *  Constructs the graph with objects<T>
+ * Constructs the graph with objects<T>
  *  
- *  Maintains BiMap {T:Node} to convert between mapped objects and network nodes.
+ * Maintains BiMap {T:Node} to convert between mapped objects and network nodes.
  * 
  * @author marwin
  *
@@ -36,66 +37,45 @@ public class GraphPopulator<T> {
 		this.graphDb = graphDb;
 	}
 
-	private void createNodes(List<InteractionTriple<T>> interactionSet)
-												throws NotInTransactionException {
+	private void createNodes(List<SimpleInteraction<T>> interactionSet) throws NotInTransactionException {
 		bimap = HashBiMap.create();
 		Set<T> molecules = new HashSet<>();
-		for (InteractionTriple<T> triple : interactionSet) {
+		for (SimpleInteraction<T> triple : interactionSet) {
 				molecules.add(triple.first);
 				molecules.add(triple.second);
 		}
-			
-		for (T mol : molecules) {
+		for (T molecule : molecules) {
 			Node node = graphDb.createNode(NodeLabel.MOLECULE);
-			bimap.put(mol, node);
+			bimap.put(molecule, node);
 		}
-
 	}
 	
-	
-	private void createNodes(Set<Set<T>> interactionSet)
-								throws NotInTransactionException {
+	private void createNodes(Set<Set<T>> interactionSet) throws NotInTransactionException {
 		bimap = HashBiMap.create();
 		for (T mol : getObjectSet(interactionSet)) {
 			Node node = graphDb.createNode(NodeLabel.MOLECULE);
 			bimap.put(mol, node);
 		}
 	}
-
-	public void createRelationships(List<InteractionTriple<T>> interactionSet)
-			throws NotInTransactionException {
-
+/*
+	public void createRelationships(Set<Interaction<T>> interactionSet) throws NotInTransactionException {
 		createNodes(interactionSet);
-		
-		for (InteractionTriple<T> triple : interactionSet) {
-
+		for (SimpleInteraction<T> triple : interactionSet) {
 			Node node = bimap.get(triple.first);
 			Node otherNode = bimap.get(triple.second);
 			Relationship edge = node.createRelationshipTo(otherNode, Relations.INTERACT);
-			
 			edge.setProperty("weights", triple.weight);
-			
-
 		}
-	}
+	}*/
 	
 	
-	public void createRelationships(Set<Set<T>> interactionSet)
-			throws NotInTransactionException {
-
+	public void createRelationships(Set<Set<T>> interactionSet) throws NotInTransactionException {
 		createNodes(interactionSet);
-
 		for (Set<T> pair : interactionSet) {
-
 			List<T> list = pair.stream().collect(Collectors.toList());
-
 			Node node = bimap.get(list.get(0));
 			Node otherNode = bimap.get(list.get(1));
 			Relationship edge = node.createRelationshipTo(otherNode, Relations.INTERACT);
-			
-		//	edge.setProperty("weights", 1.0);
-			;
-
 		}
 	}
 
@@ -112,9 +92,8 @@ public class GraphPopulator<T> {
 	private Set<T> getObjectSet(Set<Set<T>> interactionSet) {
 		Set<T> molecules = new HashSet<>();
 		for (Set<T> pair : interactionSet) {
-			for (T mol : pair) {
+			for (T mol : pair)
 				molecules.add(mol);
-			}
 		}
 		return molecules;
 	}

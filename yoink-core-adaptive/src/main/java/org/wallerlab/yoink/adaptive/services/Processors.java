@@ -245,8 +245,6 @@ public class Processors {
             weightFactors.put(qmSet, smoothFactor);
         }
 
-
-
         // use adaptive force and energy
         double adaptiveEnergy = 0;
         double qmEnergy = (double) energies.get(new ArrayList<>());

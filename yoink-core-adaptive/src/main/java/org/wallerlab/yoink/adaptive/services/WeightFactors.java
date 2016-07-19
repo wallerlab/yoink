@@ -99,7 +99,7 @@ public class WeightFactors {
     };
 
     /**
-     * this class is to use weights factor in SAP. for details please see: see:
+     * Weight factors in SAP. for details please see: see:
      * Heyden, Andreas, Hai Lin, and Donald G. Truhlar. "Adaptive partitioning in
      * combined quantum mechanical and molecule mechanical calculations of
      * potential energy functions for multiscale simulations." The Journal of

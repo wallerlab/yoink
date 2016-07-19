@@ -59,7 +59,6 @@ public class SimpleCubeBuilder implements CubeBuilder<Set<MolecularSystem.Molecu
 		List<Double> cubeMaxs = new ArrayList();
 
 		getMinMax(coords, cubeMins, cubeMaxs);
-		System.out.println("mins are " + cubeMins);
 		Coord origin = getOrigin(cubeMins);
 
 		int[] numberOfXYZSteps = getNumberOfSteps(cubeMins,cubeMaxs,xyzStepSizes);

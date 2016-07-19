@@ -26,7 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.wallerlab.yoink.api.model.Job;
 import org.wallerlab.yoink.molecule.data.JaxbStringWriter;
-import org.xml_cml.schema.Cml;
+import org.cml_v3.generated.Cml;
 
 /**
  * This class converts a job to a string using JAXB, and then 

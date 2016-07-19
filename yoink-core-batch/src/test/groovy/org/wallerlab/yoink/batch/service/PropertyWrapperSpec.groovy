@@ -17,7 +17,7 @@ package org.wallerlab.yoink.batch.service
 
 import org.wallerlab.yoink.api.model.molecular.MolecularSystem
 import org.wallerlab.yoink.batch.service.response.PropertyWrapper
-import org.xml_cml.schema.ObjectFactory
+import org.cml_v3.generated.ObjectFactory
 
 import spock.lang.Specification
 

@@ -16,7 +16,7 @@
  */
 package org.wallerlab.yoink.batch.service.processor
 
-import org.xml_cml.schema.ObjectFactory
+import org.cml_v3.generated.ObjectFactory
 
 import spock.lang.Specification
 import org.wallerlab.yoink.api.enums.*

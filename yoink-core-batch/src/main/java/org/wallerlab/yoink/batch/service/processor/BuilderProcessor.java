@@ -21,7 +21,7 @@ import org.springframework.batch.item.ItemProcessor;
 import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
 import org.wallerlab.yoink.api.service.molecule.Translator;
 import org.wallerlab.yoink.batch.domain.AdaptiveQMMMJob;
-import org.xml_cml.schema.Cml;
+import org.cml_v3.generated.Cml;
 
 import java.util.Map;
 import javax.xml.bind.JAXBElement;

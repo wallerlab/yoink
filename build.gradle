@@ -5,7 +5,7 @@ buildscript {
 	}
 	dependencies {
 		classpath "gradle.plugin.me.champeau.gradle:jmh-gradle-plugin:0.3.0"
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.7.RELEASE")
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:1.3.6.RELEASE")
 	}
 }
 allprojects {
@@ -20,8 +20,9 @@ allprojects {
 
 	repositories {
 		mavenCentral()
-		maven {
-			url "http://repo.spring.io/libs-release"
+		maven { url "https://repo.spring.io/libs-release" }
+		maven { url "https://m2.neo4j.org" }
+		maven { url "http://repo.spring.io/libs-release"
 			"https://plugins.gradle.org/m2/"
 		}
 	}
@@ -54,8 +55,10 @@ project(':yoink-core-cluster'){
 	dependencies{
 		compile project(':yoink-core-api')
 		compile project(':yoink-core-region')
-		compile 'log4j:log4j:1.2.16'
+//		compile 'log4j:log4j:1.2.16'
 		compile "org.neo4j:neo4j:3.0.1"
+		compile 'org.springframework.data:spring-data-neo4j:4.1.2.RELEASE'
+		compile("org.hibernate:hibernate-validator")
 	}
 }
 
@@ -90,7 +93,6 @@ project(':yoink-core-cube'){
 project(':yoink-core-benchmark'){
 
 	apply plugin: "me.champeau.gradle.jmh"
-
 
 	dependencies {
 		compile project(':yoink-core-api')
@@ -172,7 +174,7 @@ buildscript {
 		}
 	}
 	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.7.RELEASE")
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:1.3.6.RELEASE")
 		classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.6.3"
 	}
 }

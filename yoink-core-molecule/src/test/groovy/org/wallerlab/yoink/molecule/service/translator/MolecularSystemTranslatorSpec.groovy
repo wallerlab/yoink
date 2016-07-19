@@ -22,7 +22,7 @@ import javax.xml.bind.JAXBElement
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
 import org.wallerlab.yoink.molecule.data.JaxbFileReader
 import org.wallerlab.yoink.molecule.domain.SimpleCoordFactory
-import org.xml_cml.schema.Cml
+import org.cml_v3.generated.Cml
 import org.wallerlab.yoink.api.model.Coord
 import org.wallerlab.yoink.api.service.math.Vector;
 

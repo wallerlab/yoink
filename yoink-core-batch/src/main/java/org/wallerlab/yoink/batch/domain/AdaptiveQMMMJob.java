@@ -21,7 +21,7 @@ import org.wallerlab.yoink.api.model.adaptive.Region;
 import org.wallerlab.yoink.api.model.adaptive.AdaptiveMolecularSystem;
 
 import java.util.*;
-import org.xml_cml.schema.Cml;
+import org.cml_v3.generated.Cml;
 import javax.xml.bind.JAXBElement;
 
 /**

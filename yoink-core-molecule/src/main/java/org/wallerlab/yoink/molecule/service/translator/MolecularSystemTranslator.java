@@ -15,6 +15,8 @@
  */
 package org.wallerlab.yoink.molecule.service.translator;
 
+import org.cml_v3.generated.Atom;
+import org.cml_v3.generated.Molecule;
 import org.wallerlab.yoink.api.model.*;
 import org.wallerlab.yoink.api.model.molecular.Element;
 import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
@@ -27,9 +29,9 @@ import org.wallerlab.yoink.api.service.molecule.Converter;
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory;
 
 import org.wallerlab.yoink.molecule.service.DistanceCalculator;
-import org.xml_cml.schema.AtomArray;
-import org.xml_cml.schema.Cml;
-import org.xml_cml.schema.MoleculeList;
+import org.cml_v3.generated.AtomArray;
+import org.cml_v3.generated.Cml;
+import org.cml_v3.generated.MoleculeList;
 
 import java.util.*;
 import org.springframework.stereotype.Service;
@@ -76,7 +78,7 @@ public class MolecularSystemTranslator implements Translator<MolecularSystem, JA
 	 * translate JAXBElement Cml to MolecularSystem
 	 * 
 	 * @param cml
-	 *            -JAXBElement Cml {@link org.xml_cml.schema.Cml} contains all
+	 *            -JAXBElement Cml {@link Cml} contains all
 	 *            the information about moleuclar system.
 	 * @return molecularSystem
 	 *         {@link MolecularSystem }
@@ -117,16 +119,16 @@ public class MolecularSystemTranslator implements Translator<MolecularSystem, JA
 		// loopOverCMlMoleculelist
 		for (Object elementMolecule : cmlMoleculeList.getAnyCmlOrAnyOrAny()) {
 			@SuppressWarnings("unchecked")
-			JAXBElement<org.xml_cml.schema.Molecule> element = (JAXBElement<org.xml_cml.schema.Molecule>) elementMolecule;
+			JAXBElement<Molecule> element = (JAXBElement<Molecule>) elementMolecule;
 			// check molecule
-			if (element.getDeclaredType() == org.xml_cml.schema.Molecule.class) {
-				org.xml_cml.schema.Molecule cmlMolecule = ((JAXBElement<org.xml_cml.schema.Molecule>) element).getValue();
+			if (element.getDeclaredType() == Molecule.class) {
+				Molecule cmlMolecule = ((JAXBElement<Molecule>) element).getValue();
 				parseMolecule(cmlMolecule);
 			}
 		}
 	}
 
-	private void parseMolecule(org.xml_cml.schema.Molecule cmlMolecule) {
+	private void parseMolecule(Molecule cmlMolecule) {
 		moleculeIndexCounter++;
 		Set<MolecularSystem.Molecule.Atom> atoms = parseAtoms(cmlMolecule);
 		MolecularSystem.Molecule molecule = new SimpleMolecule(moleculeIndexCounter, (Set) atoms);
@@ -139,7 +141,7 @@ public class MolecularSystemTranslator implements Translator<MolecularSystem, JA
 		molecules.add(molecule);
 	}
 
-	private Set<MolecularSystem.Molecule.Atom> parseAtoms(org.xml_cml.schema.Molecule cmlMolecule) {
+	private Set<MolecularSystem.Molecule.Atom> parseAtoms(Molecule cmlMolecule) {
 		Set<MolecularSystem.Molecule.Atom> atoms = new HashSet<>();
 		for (Object elementAtomArray : cmlMolecule.getAnyCmlOrAnyOrAny()) {
 			@SuppressWarnings("unchecked")
@@ -156,15 +158,15 @@ public class MolecularSystemTranslator implements Translator<MolecularSystem, JA
 	private void loopOverAtoms(Set<MolecularSystem.Molecule.Atom> atoms, AtomArray cmlAtomArray) {
 		for (Object elementAtom : cmlAtomArray.getAnyCmlOrAnyOrAny()) {
 			@SuppressWarnings("unchecked")
-			JAXBElement<org.xml_cml.schema.Atom> element = (JAXBElement<org.xml_cml.schema.Atom>) elementAtom;
-			if (element.getDeclaredType() == org.xml_cml.schema.Atom.class) {
-				org.xml_cml.schema.Atom cmlAtom = (org.xml_cml.schema.Atom) element.getValue();
+			JAXBElement<Atom> element = (JAXBElement<Atom>) elementAtom;
+			if (element.getDeclaredType() == Atom.class) {
+				Atom cmlAtom = (Atom) element.getValue();
 				parseAtom(atoms, cmlAtom);
 			}
 		}
 	}
 
-	private void parseAtom(Set<MolecularSystem.Molecule.Atom> atoms, org.xml_cml.schema.Atom cmlAtom) {
+	private void parseAtom(Set<MolecularSystem.Molecule.Atom> atoms, Atom cmlAtom) {
 		atomIndexCounter++;
 		Element elementType = Element.valueOf(cmlAtom.getElementType());
 		Vector atomCoord = parseCoord(cmlAtom);
@@ -172,7 +174,7 @@ public class MolecularSystemTranslator implements Translator<MolecularSystem, JA
 		atoms.add(atom);
 	}
 
-	private Vector parseCoord(org.xml_cml.schema.Atom cmlAtom) {
+	private Vector parseCoord(Atom cmlAtom) {
 		@SuppressWarnings("rawtypes")
 		Vector coordVector = myVector3D.create(new double[] { cmlAtom.getX3(), cmlAtom.getY3(), cmlAtom.getZ3() });
 		// get from property file

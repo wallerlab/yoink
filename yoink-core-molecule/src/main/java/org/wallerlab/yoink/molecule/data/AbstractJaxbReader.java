@@ -22,7 +22,7 @@ import javax.xml.bind.Unmarshaller;
 
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.service.molecule.FilesReader;
-import org.xml_cml.schema.Cml;
+import org.cml_v3.generated.Cml;
 
 /**
  * this class is to use JAXB to read input.

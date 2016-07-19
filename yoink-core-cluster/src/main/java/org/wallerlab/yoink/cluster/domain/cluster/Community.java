@@ -6,18 +6,18 @@ import org.neo4j.graphdb.ResourceIterator;
 
 public interface Community {
 
-	double getInternalEdgeWeightSum();
+	long size();
+
+	String getId();
+
+	Label getLabel();
+
+	double getSumOfInternalEdgeWeights();
 	
-	double getTotalEdgeWeightSum();
+	double getTotalSumOfEdgeWeights();
 	
 	double getEdgeWeightSumTo(Node incidentNode);
 	
 	ResourceIterator<Node> getNodes();
-	
-	Label getLabel();
-	
-	String getId();
-	
-	long size();
 
 }

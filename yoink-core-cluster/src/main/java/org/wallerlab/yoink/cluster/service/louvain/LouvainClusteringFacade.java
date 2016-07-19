@@ -1,21 +1,21 @@
 package org.wallerlab.yoink.cluster.service.louvain;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.Transaction;
+import org.wallerlab.yoink.api.model.Interaction;
 import org.wallerlab.yoink.cluster.domain.graph.Relations;
 import org.wallerlab.yoink.cluster.service.graph.DatabaseService;
 import org.wallerlab.yoink.cluster.service.graph.GraphPopulator;
-import org.wallerlab.yoink.cluster.service.interaction.InteractionTriple;
 
+import java.util.*;
+import org.neo4j.graphdb.Transaction;
+import org.neo4j.graphdb.GraphDatabaseService;
 
 /**
  * 
- * Convenience class to start, populate, cluster and return the results.
+ * Convenience class to start,
+ * populate,
+ * cluster,
+ * and return the results.
+ *
  * @author marwin
  *
  * @param <T> Type of graph populator
@@ -26,22 +26,17 @@ public class LouvainClusteringFacade<T> {
 	private GraphPopulator<T> populator;
 	private DatabaseService service;
 	private GraphDatabaseService graphDb;
-	private LouvainAlgoImpl louvain;
+	private LouvainClusterer louvain;
 
-	public LouvainClusteringFacade(String databaseFile) {
-
+	public LouvainClusteringFacade(String databaseFile) {/**/
 		this.databaseLocation = databaseFile;
 		this.service = DatabaseService.createAt(databaseLocation);
-
-		service.clearDb().startDb();
-
+		this.service.clearDb().startDb();
 		this.graphDb = service.graphDb();
 		this.populator = new GraphPopulator<T>(graphDb);
-		this.louvain = new LouvainAlgoImpl(graphDb, Relations.INTERACT);
-
+		this.louvain = new LouvainClusterer(graphDb, Relations.INTERACT);
 	}
 
-	
 	/**
 	 * Creates the graph from the provided interacting pairs.
 	 * The set has to be in the format
@@ -50,25 +45,19 @@ public class LouvainClusteringFacade<T> {
 	 * @param interactions as defined by DORI
 	 */
 	public void populate(Set<Set<T>> interactions) {
-
 		try (Transaction tx = graphDb.beginTx()) {
-
 			populator.createRelationships(interactions);
 			tx.success();
 		}
 	}
 
-	
-	public void populate(List<InteractionTriple<T>> interactions) {
-
+	public void populate(Set<Interaction> interactions) {
 		try (Transaction tx = graphDb.beginTx()) {
-
 			populator.createRelationships(interactions);
 			tx.success();
 		}
 	}
-	
-	
+
 	/**
 	 * 
 	 * 
@@ -83,7 +72,6 @@ public class LouvainClusteringFacade<T> {
 			tx.success();
 		}
 		return louvain.communities();
-
 	}
 
 	
@@ -94,20 +82,14 @@ public class LouvainClusteringFacade<T> {
 	 * @return List of Communities
 	 */
 	public List<Set<T>> getResult(int level) {
-			
 		List<Set<T>> output = null;
 		try (Transaction tx = graphDb.beginTx()) {
-
 			output = populator.convertCommunities(louvain.gatherResult(level));
 			tx.success();
 		}
 		return output;
 	}
 	
-	public void shutdown(){
-		
-		service.shutdown();
-		
-	}
+	public void shutdown(){service.shutdown();}
 
 }

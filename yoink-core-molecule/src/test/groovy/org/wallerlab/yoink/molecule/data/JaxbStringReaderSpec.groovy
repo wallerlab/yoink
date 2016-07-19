@@ -1,10 +1,10 @@
 package org.wallerlab.yoink.molecule.data
 
-import org.xml_cml.schema.Cml
+import org.cml_v3.generated.Cml
 import spock.lang.Specification
 
 import javax.xml.bind.JAXBElement;
-import org.xml_cml.schema.MoleculeList;
+import org.cml_v3.generated.MoleculeList;
 
 class JaxbStringReaderSpec extends Specification{
 
@@ -13,7 +13,7 @@ class JaxbStringReaderSpec extends Specification{
 		when:"jaxb reader reads from a string"
 			def reader= new JaxbStringReader()
 			def input = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<cml xmlns="http://www.xml-cml.org/schema">
+<cml xmlns="http://www.xml-cml.org/generated">
     <moleculeList>
         <molecule id="QM_CORE_FIXED">
             <atomArray>

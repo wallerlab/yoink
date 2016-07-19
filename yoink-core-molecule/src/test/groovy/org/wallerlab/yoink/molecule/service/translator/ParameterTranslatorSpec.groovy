@@ -18,7 +18,7 @@ package org.wallerlab.yoink.molecule.service.translator
 import org.wallerlab.yoink.api.model.Job
 import org.wallerlab.yoink.api.service.molecule.Converter
 import org.wallerlab.yoink.molecule.data.JaxbFileReader
-import org.xml_cml.schema.Cml
+import org.cml_v3.generated.Cml
 import spock.lang.Specification;
 
 class ParameterTranslatorSpec extends Specification {

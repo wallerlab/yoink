@@ -612,16 +612,16 @@
         <parameter name="DISTANCE_BUFFER" value="0.9"/>
         <parameter name="DENSITY_BUFFER" value="1"/>
         <parameter name="DENSITY_QM" value="0.001"/>
- <parameter name="REGION_CUBE" value="SYSTEM"/>  
-      <parameter name="SEDD_STEPSIZE" value="0.3 0.3 0.3"/>
+        <parameter name="REGION_CUBE" value="SYSTEM"/>
+        <parameter name="SEDD_STEPSIZE" value="0.3 0.3 0.3"/>
         <parameter name="DORI_STEPSIZE" value="0.9 0.9 0.9"/>
-        <parameter name="PARTITIONER" value="DENSITY"/>
+        <parameter name="PARTITIONER" value="CLUSTER"/>
         <parameter name="SMOOTHNER" value="ABRUPT"/>
         <parameter name="JOB_NAME" value="dori_cluster"/>
         <parameter name="OUTPUT_FOLDER" value="./outputs"/>
         <parameter name="DGRID" value="true"/>
-	 <parameter name="INTERACTION_WEIGHT" value="false"/>
-	<parameter name="MAX_COMMS" value="2"/>
+	    <parameter name="INTERACTION_WEIGHT" value="false"/>
+	    <parameter name="MAX_COMMS" value="2"/>
         <parameter name="WFC_PATH" value="./yoink-core-molecule/dat"/>
     </parameterList>
 </cml>
