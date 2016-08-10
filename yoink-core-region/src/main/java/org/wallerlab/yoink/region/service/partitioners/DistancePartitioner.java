@@ -5,9 +5,9 @@ import org.wallerlab.yoink.api.model.adaptive.Region;
 import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
 import org.wallerlab.yoink.molecule.service.DistanceCalculator;
 
-import static org.wallerlab.yoink.api.model.Job.JobParameter.DISTANCE_BUFFER;
-import static org.wallerlab.yoink.api.model.Job.JobParameter.DISTANCE_QM;
 import static org.wallerlab.yoink.api.model.adaptive.Region.Name.*;
+import static org.wallerlab.yoink.api.model.Job.JobParameter.DISTANCE_QM;
+import static org.wallerlab.yoink.api.model.Job.JobParameter.DISTANCE_BUFFER;
 
 import java.util.*;
 import org.springframework.stereotype.Service;
