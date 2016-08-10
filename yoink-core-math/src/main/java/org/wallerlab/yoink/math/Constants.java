@@ -16,9 +16,8 @@
 package org.wallerlab.yoink.math;
 
 public class Constants {
-
-	public static final double ANGSTROM_TO_BOHR = 1.8897259885789;
-	public static final double BOHR_TO_ANGTROM = 0.529177249;
-	public static final double PI = 3.14159265359;
-	public static final int    COLUMN_NUMBER_IN_EACH_ROW = 6;
+    public static final double ANGSTROM_TO_BOHR          = 1.8897259885789;
+    public static final double BOHR_TO_ANGTROM           = 0.529177249;
+    public static final double PI                        = 3.14159265359;
+    public static final int    COLUMN_NUMBER_IN_EACH_ROW = 6;
 }
