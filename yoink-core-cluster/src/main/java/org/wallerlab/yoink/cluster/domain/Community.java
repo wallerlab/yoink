@@ -1,12 +1,11 @@
 package org.wallerlab.yoink.cluster.domain;
 
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
+
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import org.neo4j.ogm.annotation.Relationship;
-import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
-import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
 
 @NodeEntity
 public class Community {
@@ -43,7 +42,9 @@ public class Community {
 
 	public Set<MolecularSystem.Molecule> getMolecules() {
 		return interactions.stream().flatMap( (Interaction interaction) ->
-									interaction.getMolecules().stream()).collect(Collectors.toSet());
+									                         interaction.getMolecules()
+											                            .stream())
+				                    .collect(Collectors.toSet());
 	}
 
 	@Override

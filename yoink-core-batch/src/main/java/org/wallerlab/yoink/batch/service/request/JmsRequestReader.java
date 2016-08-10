@@ -16,17 +16,11 @@
 package org.wallerlab.yoink.batch.service.request;
 
 import java.util.Optional;
-
 import org.springframework.batch.item.ItemReader;
-import org.springframework.batch.item.NonTransientResourceException;
-import org.springframework.batch.item.ParseException;
-import org.springframework.batch.item.UnexpectedInputException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * this class is for job request, to use all xml files off JMS
- * 
- *
  */
 public class JmsRequestReader implements ItemReader<String> {
 

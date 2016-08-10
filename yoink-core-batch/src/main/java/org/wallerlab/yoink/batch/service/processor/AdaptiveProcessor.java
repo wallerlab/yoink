@@ -34,7 +34,6 @@ import javax.xml.bind.JAXBElement;
 @Service
 public class AdaptiveProcessor implements ItemProcessor<Job<JAXBElement>,Job> {
 
-
 	@Autowired
 	protected Adaptive adaptive;
 

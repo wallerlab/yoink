@@ -23,6 +23,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class AdaptiveService implements Adaptive {
 
+
+    //Need to wire together the set of processors.
+
     /**
      * @param job as input
      * @return Job completed job
