@@ -44,7 +44,9 @@ public class NumberPartitioner implements Partitioner{
 
 		Coord centerOfMass = distanceCalculator.centerOfMass(job.getMolecularSystem().getMolecules("QM_CORE_FIXED"));
 
-		Set<MolecularSystem.Molecule> moleculesInNonQmCore = new HashSet<MolecularSystem.Molecule>(job.getMolecularSystem().getMolecules());
+		Set<MolecularSystem.Molecule> moleculesInNonQmCore = 
+		      new HashSet<MolecularSystem.Molecule>(job.getMolecularSystem().getMolecules());
+		      
 		moleculesInNonQmCore.removeAll(job.getMolecularSystem().getMolecules("QM_CORE_FIXED"));
 
 		List<MolecularSystem.Molecule> sortedMolecules =
