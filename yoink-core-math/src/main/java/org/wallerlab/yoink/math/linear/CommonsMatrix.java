@@ -32,34 +32,30 @@ import org.wallerlab.yoink.api.service.math.Matrix;
  * @author Min Zheng
  *
  */
-
 public class CommonsMatrix implements Matrix<RealMatrix> {
 
-	private RealMatrix internalMatrix;
+    private RealMatrix internalMatrix;
 
-	// this matrix is used as intermediate matrix in internalMatrix operation.
-	private RealMatrix tempMatrix;
+    // this matrix is used as intermediate matrix in internalMatrix operation.
+    private RealMatrix tempMatrix;
 
-	public CommonsMatrix() {
-		this.internalMatrix = new Array2DRowRealMatrix();
-	}
+    public CommonsMatrix() {
+	this.internalMatrix = new Array2DRowRealMatrix();
+    }
 
-	public CommonsMatrix(int rowDimension, int columnDimension) {
-		this.internalMatrix = MatrixUtils.createRealMatrix(rowDimension,
-				columnDimension);
-	}
+    public CommonsMatrix(int rowDimension, int columnDimension) {
+        this.internalMatrix = MatrixUtils.createRealMatrix(rowDimension,columnDimension);	
+    }
 
-	@Override
-	public void array2DRowRealMatrix(double[][] d) {
-		this.internalMatrix = new Array2DRowRealMatrix(d);
+    @Override
+    public void array2DRowRealMatrix(double[][] d) {
+        this.internalMatrix = new Array2DRowRealMatrix(d);
+    }
 
-	}
-
-	@Override
-	public void setEntry(int row, int column, double value) {
-		this.internalMatrix.setEntry(row, column, value);
-
-	}
+    @Override
+    public void setEntry(int row, int column, double value) {
+        this.internalMatrix.setEntry(row, column, value);	
+    }
 
 	@Override
 	public void addToEntry(int row, int column, double value) {
