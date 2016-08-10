@@ -21,7 +21,7 @@ import java.util.Set;
 import static java.util.stream.Collectors.toSet;
 
 /**
- * the domain model for molecular system.
+ * Domain model for molecular system.
  * 
  * @author Min Zheng
  *
@@ -54,7 +54,7 @@ public class SimpleMolecularSystem implements MolecularSystem {
 	}
 
     /**
-     * All molecules in molecular system.
+     * All molecules in this molecular system.
      */
     @Override
     public Set<Molecule> getMolecules() {
