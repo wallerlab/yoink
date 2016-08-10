@@ -8,7 +8,7 @@ import java.util.Map.Entry;
 import java.util.stream.Stream;
 
 /**
- * This class is to sort a map
+ * Utility class to sort maps
  */
 public class MapOps {
 
@@ -45,7 +45,7 @@ public class MapOps {
      *            - {@link Map}
      * @return map -- {@link Map}
      */
-    public static <K, V> Map<K, V> diff(Map<? extends K, ? extends V> map1,	Map<? extends K, ? extends V> map2) {
+    public static <K, V> Map<K, V> diff(Map<? extends K, ? extends V> map1, Map<? extends K, ? extends V> map2) {
 	Map<K, V> result = new HashMap<>();
 	result.putAll(map1);
 	result.putAll(map2);
