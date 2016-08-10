@@ -71,7 +71,7 @@ class FIRESAdaptiveProcessorSpec  extends Specification{
 		properties.put("smoothfactors",smoothfactors)
 		job.getProperties()>>properties
 		when:
-		def bf=new FiresSmoothner();
+		def bf=new FIRESSmoothner();
 		bf.myVector3D=myVector3D
 		bf.qmmmProcessor=qmmmProcessor
 		bf.distanceCalculator=distanceCalculator
