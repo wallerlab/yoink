@@ -15,16 +15,17 @@
  */
 package org.wallerlab.yoink.math.linear;
 
-import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.service.math.Matrix;
+
+import org.springframework.stereotype.Service;
 
 @Service
 public class SimpleMatrixFactory {
 
-	private Matrix.Type matrixType = Matrix.Type.COMMONS;
+    private Matrix.Type matrixType = Matrix.Type.COMMONS;
 
-	public Matrix matrix() {
-		Matrix newMatrixInstance;
+    public Matrix matrix() {
+    Matrix newMatrixInstance;
 		switch (matrixType) {
 		case COMMONS:
 			newMatrixInstance = new CommonsMatrix();
