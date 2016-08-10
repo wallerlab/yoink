@@ -15,7 +15,7 @@
  */
 package org.wallerlab.yoink.adaptive.services.smoothners
 
-import org.wallerlab.yoink.adaptive.services.HotspotSmoothner
+import org.wallerlab.yoink.adaptive.services.HOTSPOTSmoothner
 import org.wallerlab.yoink.api.model.molecule.Coord
 import spock.lang.Specification
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
