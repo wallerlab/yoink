@@ -41,15 +41,15 @@ public class DistancePartitioner implements Partitioner{
 		Set<MolecularSystem.Molecule> bufferMolecules = new HashSet<>();
 		Set<MolecularSystem.Molecule> qmAdaptiveMolecules = new HashSet<>();
 
-		Set<MolecularSystem.Molecule> moleculesInNonQmCore = new HashSet<MolecularSystem.Molecule>(job.getMolecularSystem().getMolecules());
+		Set<MolecularSystem.Molecule> moleculesInNonQmCore = 
+		      new HashSet<MolecularSystem.Molecule>(job.getMolecularSystem().getMolecules());
+		      
 		moleculesInNonQmCore.removeAll(job.getMolecularSystem().getMolecules("QM_CORE_FIXED"));
 
 		moleculesInNonQmCore.stream()
-							.forEach(molecule -> {
-								Double distance = distanceCalculator.closest(centerOfMass, molecule);
-								if (distance < distanceQm) qmAdaptiveMolecules.add(molecule);
-								else if (distance < distanceBuffer) bufferMolecules.add(molecule);
-							});
+				    .forEach(molecule -> { Double distance = distanceCalculator.closest(centerOfMass, molecule);
+							   if (distance < distanceQm) qmAdaptiveMolecules.add(molecule);
+							   else if (distance < distanceBuffer) bufferMolecules.add(molecule);});
 
 		qmAdaptiveAndBuffer.put(QM_ADAPTIVE,qmAdaptiveMolecules);
 		qmAdaptiveAndBuffer.put(BUFFER, bufferMolecules);
