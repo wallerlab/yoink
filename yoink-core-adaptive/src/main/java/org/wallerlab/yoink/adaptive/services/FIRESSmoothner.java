@@ -25,7 +25,7 @@ import static org.wallerlab.yoink.api.model.region.Region.Name.*;
  *
  */
 @Service("fires")
-public class FiresSmoothner implements Smoothner {
+public class FIRESSmoothner implements Smoothner {
 
 	@Qualifier("qmmm")
 	private QmMmWrapper qmmmProcessor;
