@@ -14,6 +14,8 @@ public interface Clusterer<T> {
 	/**
 	 *
 	 * @param job to perform clustering on
-     */
+	 * @param interactions as a list of pairs
+	 * @return completed job
+	 */
 	Job<JAXBElement> cluster(Job<JAXBElement> job, Set<T> interactions);
 }

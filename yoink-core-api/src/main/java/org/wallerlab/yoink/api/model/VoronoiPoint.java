@@ -21,8 +21,7 @@ import java.util.Set;
 
 /**
  * this interface is for a grid point in the cube
- * {@link Cube}
- * 
+ *
  * @author Min Zheng
  *
  * @param <String>, the Key type of property Map of a grid point
@@ -33,7 +32,7 @@ public interface VoronoiPoint<String, V> {
 	/**
 	 * get the value of coordinate
 	 * 
-	 * @return Coord {@link Coord}
+	 * @return Coord 3D point in space
 	 */
 	Coord getCoordinate();
 

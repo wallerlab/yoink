@@ -196,7 +196,7 @@ public class SimpleDensityCalculator implements DensityCalculator {
 	 * <p>
 	 * molecular RDG of a density point
 	 *
-	 * @param coord
+	 * @param coord  the point needed  for computation
 	 * @return rdg value
 	 */
 	public Double rdg(Coord coord, Set<MolecularSystem.Molecule> molecules) {
@@ -212,8 +212,7 @@ public class SimpleDensityCalculator implements DensityCalculator {
 	 * Wesolowski. "Revealing the Bonding Pattern from the Molecular Electron
 	 * Density Using Single Exponential Decay Detector: An Orbital‐Free Alternative
 	 * to the Electron Localization Function." ChemPhysChem 13.15 (2012): 3462-3465.
-	 * <p>
-	 * <p>
+	 *
 	 * molecular SEDD of a density point
 	 *
 	 * @return seddValue final-calculated

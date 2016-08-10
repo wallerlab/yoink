@@ -90,6 +90,7 @@ public interface Job<T> {
 	/**
 	 * get the properties from the job.
 	 *
+	 * @param string key for map
 	 * @return a Map contains the result of job. - {@link java.lang.String} as
 	 *         key, {@link java.lang.Object} as value.
 	 */

@@ -50,7 +50,7 @@ public interface MolecularSystem {
 	 * get all molecules in the molecule system
 	 * with a string query
 	 *
-	 * @param String the id of the molecule that you
+	 * @param string the id of the molecule that you
 	 *               are interested in.
 	 * @return a list of molecules, -
 	 *         {@link Molecule}

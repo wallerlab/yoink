@@ -10,5 +10,5 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
     
-script: ./gradlew clean build jacocoRootReport coveralls  --continue
+script: ./gradlew clean build jacocoRootReport coveralls allJavadoc --continue
 

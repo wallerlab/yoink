@@ -28,11 +28,11 @@ import org.wallerlab.yoink.api.model.Job;
 @FunctionalInterface
 public interface Adaptive {
 
+
 	/**
-	 * ratio smoothing factors for buffer region
-	 * 
-	 * @param job
-	 *            {@link Job}
+	 *
+	 * @param job ratio smoothing factors for buffer region
+	 * @return job completed
 	 */
 	Job<JAXBElement> compute(Job<JAXBElement> job);
 

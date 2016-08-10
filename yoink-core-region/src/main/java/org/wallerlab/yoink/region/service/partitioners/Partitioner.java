@@ -36,28 +36,13 @@ import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
  *
  * @author Min Zheng
  *
- * @param <K>
- *            -the return type.
- * @param <V>
- *            -the specified type for argument.
  */
 public interface Partitioner {
 
 	/**
 	 *
-	 * @param regions
-	 *            , a Map,
-	 *            {@link Region.Name}
-	 *            as Key,
-	 *            {@link Region} as
-	 *            Value
-	 * @param parameters
-	 *            , a Map,
-	 *            {@link Job.JobParameter}
-	 *            as Key, {@link java.lang.Object} as Value
-	 * @param v
-	 *            -the specified argument
-	 * @return return type is K
+	 * @param job as input
+	 * @return map containing results
 	 */
 	Map<Region.Name,Set<MolecularSystem.Molecule>> partition(Job job);
 

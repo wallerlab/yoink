@@ -99,9 +99,10 @@ public interface Vector<T> {
 	 */
 	double dotProduct();
 
+
 	/**
 	 * get the dot product
-	 *
+	 * @param vector {@link org.wallerlab.yoink.api.service.math.Vector}
 	 * @return {@link java.lang.Double}
 	 */
 	double dotProduct(Vector vector);

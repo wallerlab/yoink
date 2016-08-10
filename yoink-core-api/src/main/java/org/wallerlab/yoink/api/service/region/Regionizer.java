@@ -16,8 +16,6 @@
 package org.wallerlab.yoink.api.service.region;
 
 import org.wallerlab.yoink.api.model.Job;
-import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
-import org.wallerlab.yoink.api.model.adaptive.Region;
 
 import javax.xml.bind.JAXBElement;
 
@@ -26,28 +24,14 @@ import javax.xml.bind.JAXBElement;
  * 
  * @author Min Zheng
  *
- * @param <T>
- *            -specified return type, can be
- *            {@link Region} or a
- *            {@link Region} List
- * @param <K>
- *            -specified argument, can be a
- *            {@link Region.Name} or
- *            {@link MolecularSystem}
- */
+*/
 @FunctionalInterface
 public interface Regionizer {
 
 	/**
-	 * 
-	 * @param regions
-	 *            , a Map,
-	 *            {@link Region.Name}
-	 *            as Key,
-	 *            {@link Region} as
-	 *            Value
 	 *
-	 * @return return type is specified T
+	 * @param job with inputs
+	 * @return job populated with results
 	 */
 	Job<JAXBElement> regionize(Job<JAXBElement> job);
 
