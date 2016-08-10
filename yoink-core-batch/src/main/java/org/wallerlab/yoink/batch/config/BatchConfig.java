@@ -96,7 +96,6 @@ public class BatchConfig  {
 	 * build a batch job using a batch based approach.
 	 *
 	 * @param step to be executed
-	 * @param name string to be used as job ID.
 	 * @return Job -{@link org.springframework.batch.core.Job}
 	 */
 	@Bean
