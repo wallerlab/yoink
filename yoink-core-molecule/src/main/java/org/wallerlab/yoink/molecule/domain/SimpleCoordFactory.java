@@ -43,9 +43,7 @@ public class SimpleCoordFactory implements Factory<Coord, double[]> {
      *         {@link Coord}
      */
     public Coord create() {
-        Vector coordVector = myVector3D.create(0, 0, 0);
-	Coord newCooord = new SimpleCoord(coordVector);
-	return newCooord;
+	return new SimpleCoord(myVector3D.create(0, 0, 0));
     }
 
     /**
@@ -55,9 +53,7 @@ public class SimpleCoordFactory implements Factory<Coord, double[]> {
      *         {@link Coord}
      */
     public static Coord createStatic() {
-        Vector coordVector = SimpleVector3DFactory.staticCreate(0, 0, 0);
-	Coord newCooord = new SimpleCoord(coordVector);
-	return newCooord;
+	return new SimpleCoord(SimpleVector3DFactory.staticCreate(0, 0, 0));;
     }
 
     /**
@@ -69,8 +65,6 @@ public class SimpleCoordFactory implements Factory<Coord, double[]> {
      *         {@link Coord}
      */
     public Coord create(double[] d) {
-	Vector coordVector = myVector3D.create(d);
-	Coord newCooord = new SimpleCoord(coordVector);
-        return newCooord;
+        return new SimpleCoord(myVector3D.create(d));
     }
 }
