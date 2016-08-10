@@ -1,3 +1,18 @@
+/*
+ * Copyright 2014-2015 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.wallerlab.yoink.adaptive.services;
 
 import org.wallerlab.yoink.math.MapOps;
@@ -18,11 +33,11 @@ import static org.wallerlab.yoink.adaptive.services.SmoothFunctions.SmoothFuncti
 
 import java.util.*;
 import java.util.stream.IntStream;
-import com.google.common.primitives.Ints;
+import com.google.common.primitives.Ints; //drop this dependency
+import javax.xml.bind.JAXBElement;
 import static java.util.stream.Collectors.toList;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-import javax.xml.bind.JAXBElement;
 
 @Service
 public class WeightFactors {
@@ -74,17 +89,17 @@ public class WeightFactors {
         Set<Configuration> configurations = new HashSet<>();
         // loop over all QM/MM sets in buffer region,
         SetOps.split(Ints.toArray(bufferIndices))
-               .forEach(qmSet -> {
-                    Set<Integer> mmSet = new HashSet<Integer>(bufferIndices);
-                    mmSet.removeAll(qmSet);
-                    Double lambdaQMMax = qmSet.stream()
-                                              .mapToDouble(index ->
-                                                      bufferMolecules.get(bufferIndices.indexOf(index)).getLambda())
-                                                                     .max()
-                                                                     .getAsDouble();
-                    Double lambdaMMMin = mmSet.stream()
-                                              .mapToDouble(index ->
-                                                      bufferMolecules.get(bufferIndices.indexOf(index)).getLambda())
+              .forEach(qmSet -> {
+                  Set<Integer> mmSet = new HashSet<Integer>(bufferIndices);
+                  mmSet.removeAll(qmSet);
+                  Double lambdaQMMax = qmSet.stream()
+                                            .mapToDouble(index ->
+                                                    bufferMolecules.get(bufferIndices.indexOf(index)).getLambda())
+                                                                   .max()
+                                                                   .getAsDouble();
+                  Double lambdaMMMin = mmSet.stream()
+                                            .mapToDouble(index ->
+                                                    bufferMolecules.get(bufferIndices.indexOf(index)).getLambda())
                                                                    .min()
                                                                    .getAsDouble();
                     if (lambdaQMMax < lambdaMMMin)
@@ -135,7 +150,6 @@ public class WeightFactors {
         }
         return configurations;
     };
-
 
     private Map<List<Integer>, Double> sigmas;
 

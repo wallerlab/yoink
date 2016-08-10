@@ -56,41 +56,45 @@ class WeightFactorsSpec extends Specification {
 	}
 
 	def " DAS weights"(){
+
 		when:"make DAS weights"
-		def weightFactors= new WeightFactors().dasWeights
+			def weightFactors= new WeightFactors().dasWeights
 
 		then:"call method compute, assert the size of calculated value"
-		weightFactors.compute(job)
-		//properties.get("weightfactors").size()==3
+			weightFactors.compute(job)
+			//properties.get("weightfactors").size()==3
 	}
 
 
 	def " FIRES weights"(){
+
 		when:"make a weightFactors"
-		def smoothner=new SmoothFactors()
-		smoothner.distanceCalculator=distanceCalculator
+			def smoothner=new SmoothFactors()
+			smoothner.distanceCalculator=distanceCalculator
 		then:"call method compute, assert the size fo calculated value"
-		smoothner.compute(job)
-		properties.get("smoothfactors").size()==1
+			smoothner.compute(job)
+			properties.get("smoothfactors").size()==1
+
 	}
 
 	def " SAP weights"() {
 
 		when: "make a weights"
-		def weightFactors = new WeightFactors().sapWeights
-		weightFactors.distanceCalculator = closestDistanceToMoleculeCalculator
+			def weightFactors = new WeightFactors().sapWeights
+			weightFactors.distanceCalculator = closestDistanceToMoleculeCalculator
 		then: "call method compute, assert the size fo calculated value"
-		weightFactors.compute(job)
-		properties.get("weightfactors").size() == 3
+			weightFactors.compute(job)
+			properties.get("weightfactors").size() == 3
 
 	}
 
 	def " XS weights"() {
+
 		when: "make a weights"
-		def weightFactors = new WeightFactors().xsWeights
+			def weightFactors = new WeightFactors().xsWeights
 
 		then: "call method compute, assert the size fo calculated value"
-		weightFactors.compute(job)
-		properties.get("weightfactors").size() == 2
+			weightFactors.compute(job)
+			properties.get("weightfactors").size() == 2
 	}
 }

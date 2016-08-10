@@ -1,31 +1,47 @@
+/*
+ * Copyright 2014-2015 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.wallerlab.yoink.adaptive.services;
 
-import com.google.common.primitives.Ints;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.adaptive.domain.BufferMolecule;
-import org.wallerlab.yoink.adaptive.domain.Configuration;
-import org.wallerlab.yoink.api.model.Coord;
 import org.wallerlab.yoink.api.model.Job;
-import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
+import org.wallerlab.yoink.api.model.Coord;
 import org.wallerlab.yoink.api.service.math.Vector;
 import org.wallerlab.yoink.api.service.plugin.QmMmWrapper;
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
 import org.wallerlab.yoink.math.SetOps;
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory;
 import org.wallerlab.yoink.molecule.service.DistanceCalculator;
+import org.wallerlab.yoink.adaptive.domain.Configuration;
+import org.wallerlab.yoink.adaptive.domain.BufferMolecule;
 
-import javax.annotation.Resource;
-import javax.xml.bind.JAXBElement;
-import java.util.*;
-import java.util.stream.IntStream;
-
-import static java.util.stream.Collectors.toList;
+import static org.wallerlab.yoink.api.model.adaptive.Region.Name.*;
 import static org.wallerlab.yoink.adaptive.services.Processors.Processor.NAME;
 import static org.wallerlab.yoink.adaptive.services.Processors.Processor.NAME.*;
-import static org.wallerlab.yoink.adaptive.services.SmoothFactors.SmoothFactor.NAME.DISTANCE_OR_DENSITY;
 import static org.wallerlab.yoink.adaptive.services.SmoothFunctions.SmoothFunction.NAME.*;
 import static org.wallerlab.yoink.adaptive.services.WeightFactors.WeightFactor.NAME.*;
-import static org.wallerlab.yoink.api.model.adaptive.Region.Name.*;
+import static org.wallerlab.yoink.adaptive.services.SmoothFactors.SmoothFactor.NAME.DISTANCE_OR_DENSITY;
+
+import java.util.*;
+import java.util.stream.IntStream;
+import javax.xml.bind.JAXBElement;
+import com.google.common.primitives.Ints; //lets drop this dependency
+import javax.annotation.Resource;
+import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Qualifier;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class Processors {
@@ -77,8 +93,7 @@ public class Processors {
         IntStream.range(0,job.getRegion(QM)
                  .getMolecules()
                  .size())
-                 .forEach(index ->
-                             forces_MM.set(index, forces_QMMM.get(index)));
+                 .forEach(index -> forces_MM.set(index, forces_QMMM.get(index)));
         //AdaptiveMolecularSystem ams =  new AdaptiveMolecularSystem(0.0,forces_MM);
         return job;
     };
@@ -89,14 +104,9 @@ public class Processors {
      *  FIRES adaptive energy and forces.
      */
     Processor fires = job -> {
-
-
-
         double energy = qmmmProcessor.getEnergy();
         List<Vector> forces = qmmmProcessor.getForces();
-
         Coord qmCenter = job.getRegion(QM_CORE).getCenterOfMass();
-
         double boundary = job.getRegion(BUFFER)
                              .getMolecules()
                              .stream()
