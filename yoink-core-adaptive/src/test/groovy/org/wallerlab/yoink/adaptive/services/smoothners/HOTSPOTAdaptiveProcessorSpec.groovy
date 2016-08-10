@@ -59,7 +59,7 @@ class HOTSPOTAdaptiveProcessorSpec  extends Specification{
 		properties.put("smoothfactors",smoothfactors)
 		job.getProperties()>>properties
 		when:
-		def bf=new HotspotSmoothner();
+		def bf=new HOTSPOTSmoothner();
 		bf.mmProcessor=mmProcessor
 		bf.qmmmProcessor=qmmmProcessor
 		then:
