@@ -37,30 +37,28 @@ import static org.wallerlab.yoink.api.service.region.Regionizer.Type.*;
  */
 public class SimpleRegionizer implements Regionizer{
 
-	private final Map<Regionizer.Type,Partitioner> partitioners;
+   private final Map<Regionizer.Type,Partitioner> partitioners;
 
-	public SimpleRegionizer(Map<Regionizer.Type, Partitioner> partitioners){
-		this.partitioners = partitioners;
-	}
+   public SimpleRegionizer(Map<Regionizer.Type, Partitioner> partitioners){
+       this.partitioners = partitioners;
+   }
 
-	public Job<JAXBElement> regionize(Job<JAXBElement> job) {
-
+   public Job<JAXBElement> regionize(Job<JAXBElement> job) {
         Set<MolecularSystem.Molecule> moleculesInSystem = job.getMolecularSystem().getMolecules();
         Set<MolecularSystem.Molecule> moleculesInQmCore = job.getMolecularSystem().getMolecules("QM_CORE");
-
-		//Real work is done here.
-		if (job.getParameter(PARTITIONER) == CLUSTER) return job;
-		Map<Region.Name,Set<MolecularSystem.Molecule>> partitionedSets = this.partitioners.get(job.getParameter(PARTITIONER)).partition(job);
-		Set<MolecularSystem.Molecule> moleculesInQmAdaptive = partitionedSets.get(QM_ADAPTIVE);
+	//Hack, because of the way the code is setup.
+	if (job.getParameter(PARTITIONER) == CLUSTER) return job;
+	//Real work is done here.
+	Map<Region.Name,Set<MolecularSystem.Molecule>> partitionedSets = this.partitioners.get(job.getParameter(PARTITIONER)).partition(job);
+	Set<MolecularSystem.Molecule> moleculesInQmAdaptive = partitionedSets.get(QM_ADAPTIVE);
         Set<MolecularSystem.Molecule> moleculesInBuffer = partitionedSets.get(BUFFER);
-
-		Map<Region.Name,Region> regions = new EnumMap<>(Region.Name.class);
-		regions.put(QM    , new SimpleRegion(QM,         union(moleculesInQmCore,moleculesInQmAdaptive)));
-		regions.put(BUFFER, new SimpleRegion(BUFFER,  equality(moleculesInBuffer)));
-		regions.put(MM    , new SimpleRegion(MM, 	  difference(moleculesInSystem,union(moleculesInQmCore,moleculesInQmAdaptive))));
-		job.setRegions(regions);
-
-		return job;
-	}
+	//Simple Set Operations
+	Map<Region.Name,Region> regions = new EnumMap<>(Region.Name.class);
+	regions.put(QM    , new SimpleRegion(QM,     union(moleculesInQmCore,moleculesInQmAdaptive)));
+	regions.put(BUFFER, new SimpleRegion(BUFFER, equality(moleculesInBuffer)));
+	regions.put(MM    , new SimpleRegion(MM,     difference(moleculesInSystem,union(moleculesInQmCore,moleculesInQmAdaptive))));
+	job.setRegions(regions);
+	return job;
+    }
 
 }
