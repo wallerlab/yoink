@@ -16,18 +16,15 @@
 package org.wallerlab.yoink.region.service.partitioners;
 
 import org.wallerlab.yoink.api.model.Job;
-
 import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
 import org.wallerlab.yoink.api.model.adaptive.Region;
-import static org.wallerlab.yoink.api.model.adaptive.Region.Name.*;
-
 import org.wallerlab.yoink.api.model.VoronoiPoint;
 import org.wallerlab.yoink.api.service.cube.Voronoizer;
-
 import org.wallerlab.yoink.api.service.density.DensityCalculator;
-import static org.wallerlab.yoink.api.model.DensityPoint.DensityType.*;
 
 import static org.wallerlab.yoink.math.SetOps.*;
+import static org.wallerlab.yoink.api.model.DensityPoint.DensityType.*;
+import static org.wallerlab.yoink.api.model.adaptive.Region.Name.*;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -102,16 +99,14 @@ public class DensityPartitioner implements Partitioner{
 	private static final double asrThreshold 	   = 0.000001d;
 
 	public List<Set<MolecularSystem.Molecule>> densityPartitioner(MolecularSystem molecularSystem) {
-
 		Set<MolecularSystem.Molecule> asrQmCore = new HashSet<>();
 		Set<MolecularSystem.Molecule> asrQm     = new HashSet<>();
 		Set<MolecularSystem.Molecule> buffer    = new HashSet<>();
-
 		//Careful I am assuming here that it is only the fixed. I think that is wrong.
 		Set<MolecularSystem.Molecule> moleculesInQmCoreFixed = molecularSystem.getMolecules("QM_CORE_FIXED");
-		Set<MolecularSystem.Molecule> moleculesInNonQmCore = new HashSet<MolecularSystem.Molecule>( molecularSystem.getMolecules());
-				      moleculesInNonQmCore.removeAll(moleculesInQmCoreFixed);
-
+		Set<MolecularSystem.Molecule> moleculesInNonQmCore =
+		    new HashSet<MolecularSystem.Molecule>( molecularSystem.getMolecules());
+	        moleculesInNonQmCore.removeAll(moleculesInQmCoreFixed);
 		//Molecular Density
 		for(MolecularSystem.Molecule molecule: moleculesInNonQmCore){
 			//Evaluate the density of the QM Core fixed at the center of mass for every other molecule.
@@ -120,7 +115,6 @@ public class DensityPartitioner implements Partitioner{
 			if (density >= asrQmThreshold) asrQm.add(molecule);
 			if (density >= asrThreshold) buffer.add(molecule);
 		}
-
 		List<Set<MolecularSystem.Molecule>> asrs = new ArrayList<>();
 		asrs.add(asrQmCore);
 		asrs.add(asrQm);
@@ -152,8 +146,8 @@ public class DensityPartitioner implements Partitioner{
 
 	@SuppressWarnings("unchecked")
 	public Set<MolecularSystem.Molecule> stronglyBound(Set<MolecularSystem.Molecule> qmFixedMolecules,
-													   Set<MolecularSystem.Molecule> searchMolecules,
-													   MolecularSystem molecularSystem) {
+							   Set<MolecularSystem.Molecule> searchMolecules,
+							   MolecularSystem molecularSystem) {
 
 		//This is ugly with all the predicates separate
 		Predicate<VoronoiPoint> bothNotInQmFixed = gridPoint -> qmFixedMolecules.containsAll(gridPoint.getNearestMolecules());
@@ -175,14 +169,13 @@ public class DensityPartitioner implements Partitioner{
 		List<VoronoiPoint> gridPoints = voronoizer.voronoize(SEDD, searchMolecules, molecularSystem);
 
 		return (Set<MolecularSystem.Molecule>) gridPoints.stream()
-									 					 .filter(bothNotInQmFixed)
-										 			     .filter(density)
-						 			    				 .filter(densityRatio)
-									     				 .filter(atomicSedd)
-				  			 		    				 .filter(molecularSedd)
-						 				 				 .flatMap(gridPoint ->
-																 	gridPoint.getNearestMolecules().stream())
-						 				 				 .collect(toSet());
+							         .filter(bothNotInQmFixed)
+								 .filter(density)
+						 		 .filter(densityRatio)
+								 .filter(atomicSedd)
+				  			 	 .filter(molecularSedd)
+						 		 .flatMap(gridPoint -> gridPoint.getNearestMolecules().stream())
+						 				 		      	              .collect(toSet());
 	}
 
 	/**
@@ -205,15 +198,13 @@ public class DensityPartitioner implements Partitioner{
 	 * @return set of molecules that are weakly bound
 	 */
 	private static final double doriDensityThreshold = 0.0001d;
-	private static final double doriThreshold 		 = 0.9d;
+	private static final double doriThreshold 	 = 0.9d;
 
 	@SuppressWarnings("unchecked")
 	public Set<MolecularSystem.Molecule> weaklyBound(Set<MolecularSystem.Molecule> qmCore,
-													 Set<MolecularSystem.Molecule> searchMolecules,
-													 MolecularSystem molecularSystem) {
-
+							 Set<MolecularSystem.Molecule> searchMolecules,
+							 MolecularSystem molecularSystem) {
 		List<VoronoiPoint> gridPoints = voronoizer.voronoize(DORI, searchMolecules, molecularSystem );
-
 		return (Set<MolecularSystem.Molecule>) gridPoints.stream()
 				.filter(gridPoint -> qmCore.containsAll(gridPoint.getNearestMolecules()))
 				.filter(gridPoint -> {
