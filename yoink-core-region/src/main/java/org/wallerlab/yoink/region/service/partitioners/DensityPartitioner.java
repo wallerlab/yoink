@@ -50,27 +50,21 @@ public class DensityPartitioner implements Partitioner{
 	@Autowired private DensityCalculator densityCalculator;
 
 	public Map<Region.Name,Set<MolecularSystem.Molecule>> partition(Job job) {
-
 		Map<Region.Name,Set<MolecularSystem.Molecule>> qmAdaptiveAndBuffer = new HashMap<>();
-
 		MolecularSystem molecularSystem = job.getMolecularSystem();
 		Set<MolecularSystem.Molecule> qmCoreFixed   = job.getMolecularSystem().getMolecules("QM_CORE");
-
 		List<Set<MolecularSystem.Molecule>> partitionedMolecules  = densityPartitioner(molecularSystem);
 		Set<MolecularSystem.Molecule> moleculesInCoreSearch 	  = partitionedMolecules.get(0);
 		Set<MolecularSystem.Molecule> moleculesInAdaptiveSearch   = partitionedMolecules.get(1);
-		Set<MolecularSystem.Molecule> buffer					  = partitionedMolecules.get(2);
-
+		Set<MolecularSystem.Molecule> buffer			  = partitionedMolecules.get(2);
 		Set<MolecularSystem.Molecule> stronglyBound = new HashSet<>();
 		if(moleculesInCoreSearch.size() > 0)
 			stronglyBound.addAll(stronglyBound(qmCoreFixed, moleculesInCoreSearch, molecularSystem));
 		Set<MolecularSystem.Molecule> qmCore = union(qmCoreFixed, stronglyBound);
-
 		Set<MolecularSystem.Molecule> weaklyBound = new HashSet<>();
 		if(moleculesInAdaptiveSearch.size() > 0)
 			weaklyBound.addAll(weaklyBound(qmCore, moleculesInAdaptiveSearch, molecularSystem));
 		Set<MolecularSystem.Molecule> qmAdaptive = union(qmCore, weaklyBound);
-
 		qmAdaptiveAndBuffer.put(QM_ADAPTIVE, qmAdaptive);
 		qmAdaptiveAndBuffer.put(BUFFER,buffer);
 		return qmAdaptiveAndBuffer;
@@ -221,7 +215,9 @@ public class DensityPartitioner implements Partitioner{
 
 	//convenience method
 	private Set<MolecularSystem.Molecule.Atom> mapToAtoms(Set<MolecularSystem.Molecule> molecules){
-		return molecules.stream().flatMap(molecule -> molecule.getAtoms().stream()).collect(Collectors.toSet());
+		return molecules.stream()
+		                .flatMap(molecule -> molecule.getAtoms().stream())
+		                .collect(Collectors.toSet());
 	}
 
 }
