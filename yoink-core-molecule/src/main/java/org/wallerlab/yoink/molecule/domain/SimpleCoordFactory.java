@@ -53,7 +53,7 @@ public class SimpleCoordFactory implements Factory<Coord, double[]> {
      *         {@link Coord}
      */
     public static Coord createStatic() {
-	return new SimpleCoord(SimpleVector3DFactory.staticCreate(0, 0, 0));;
+	return new SimpleCoord(SimpleVector3DFactory.staticCreate(0, 0, 0));
     }
 
     /**
