@@ -15,7 +15,7 @@
  */
 package org.wallerlab.yoink.adaptive.services.smoothners
 
-import org.wallerlab.yoink.adaptive.services.FiresSmoothner
+import org.wallerlab.yoink.adaptive.services.FIRESSmoothner
 import org.wallerlab.yoink.api.model.molecule.Atom
 import org.wallerlab.yoink.api.model.molecule.Coord
 import spock.lang.Specification
