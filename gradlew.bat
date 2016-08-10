@@ -8,13 +8,13 @@
 @rem Set local scope for the variables with windows NT shell
 if "%OS%"=="Windows_NT" setlocal
 
-@rem Add default JVM options here. You can also use JAVA_OPTS and GRADLE_OPTS to pass JVM options to this script.
-set DEFAULT_JVM_OPTS=
-
 set DIRNAME=%~dp0
 if "%DIRNAME%" == "" set DIRNAME=.
 set APP_BASE_NAME=%~n0
 set APP_HOME=%DIRNAME%
+
+@rem Add default JVM options here. You can also use JAVA_OPTS and GRADLE_OPTS to pass JVM options to this script.
+set DEFAULT_JVM_OPTS=
 
 @rem Find java.exe
 if defined JAVA_HOME goto findJavaFromJavaHome
@@ -46,7 +46,7 @@ echo location of your Java installation.
 goto fail
 
 :init
-@rem Get command-line arguments, handling Windowz variants
+@rem Get command-line arguments, handling Windows variants
 
 if not "%OS%" == "Windows_NT" goto win9xME_args
 if "%@eval[2+2]" == "4" goto 4NT_args
@@ -82,7 +82,7 @@ if "%ERRORLEVEL%"=="0" goto mainEnd
 rem Set variable GRADLE_EXIT_CONSOLE if you need the _script_ return code instead of
 rem the _cmd.exe /c_ return code!
 if  not "" == "%GRADLE_EXIT_CONSOLE%" exit 1
-exit /zeta 1
+exit /b 1
 
 :mainEnd
 if "%OS%"=="Windows_NT" endlocal

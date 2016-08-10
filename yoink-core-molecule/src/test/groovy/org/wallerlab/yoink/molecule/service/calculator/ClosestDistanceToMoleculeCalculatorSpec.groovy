@@ -20,9 +20,11 @@ import org.wallerlab.yoink.api.model.Coord
 import org.wallerlab.yoink.api.model.molecular.MolecularSystem
 
 import org.wallerlab.yoink.api.service.molecule.Calculator
-import org.wallerlab.yoink.molecule.service.DistanceCalculator;
+import org.wallerlab.yoink.molecule.service.DistanceCalculator
+import spock.lang.Ignore;
 import spock.lang.Specification
 
+@Ignore
 class ClosestDistanceToMoleculeCalculatorSpec extends Specification{
 
 	def "test method calculate(Coord gridCoord, Molecule molecule) "(){

@@ -27,8 +27,10 @@ import org.wallerlab.yoink.density.data.RadialGridReader
 import org.wallerlab.yoink.molecule.domain.SimpleCoordFactory
 import org.wallerlab.yoink.density.domain.SimpleRadialGrid
 import org.wallerlab.yoink.math.linear.SimpleMatrixFactory
+import spock.lang.Ignore
 import spock.lang.Specification
 
+@Ignore
 class AtomicDensityPropertiesCalculatorSpec extends Specification{
 
 	def"calculate(densityValues,atom), check result values: density,gradientVector,hessian"(){

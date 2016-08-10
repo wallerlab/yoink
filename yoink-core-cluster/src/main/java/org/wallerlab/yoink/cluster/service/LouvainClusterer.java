@@ -1,276 +1,147 @@
+/*
 package org.wallerlab.yoink.cluster.service;
 
-import org.wallerlab.yoink.api.model.Interaction;
 import org.wallerlab.yoink.api.model.Job;
-import org.wallerlab.yoink.cluster.domain.cluster.Community;
-import org.wallerlab.yoink.cluster.domain.cluster.CommunityFactory;
-import org.wallerlab.yoink.cluster.domain.graph.LouvainRelation;
-import org.wallerlab.yoink.cluster.service.graph.NodeAggregator;
+import org.wallerlab.yoink.cluster.data.CommunityRepo;
+import org.wallerlab.yoink.cluster.data.InteractionRepo;
+import org.wallerlab.yoink.cluster.domain.Community;
+import org.wallerlab.yoink.cluster.domain.Interaction;
 
-import org.neo4j.ogm.model.Node;
-import org.neo4j.graphdb.*;
-import org.neo4j.graphdb.traversal.Evaluators;
-import org.neo4j.graphdb.traversal.TraversalDescription;
-
-import javax.xml.bind.JAXBElement;
 import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
+import javax.xml.bind.JAXBElement;
 
+import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+
+
+*/
 /**
- *  notation follows "Fast unfolding of communities in large networks" by Blondel et al.
- *  arXiv:0803.0476v2
+ *  notation follows
+ *  "Fast unfolding of communities in large networks" by Blondel et al. arXiv:0803.0476v2
  * 
  * @author marwin
  *
- */
+ *//*
+
+@Service
 public class LouvainClusterer {
 
 	private Logger log = Logger.getLogger(LouvainClusterer.class.getName());
 
-	// sum over all edge weights in graph
-	private double m;
+	@Autowired
+	private CommunityService communityService;
 
-	private GraphDatabaseService graph;
+	@Autowired
+	private CommunityRepo communityRepo;
 
-	protected final String attributeName = "community";
+	@Autowired
+	private InteractionRepo interactionRepo;
 
-	private RelationshipType edgeType;
-
-	private long hierarchylevel;
-
-	private Map<Long, Integer> communities;
-
-	private List<List<Node>> nodesAtLevel;
-
-	public LouvainClusterer(GraphDatabaseService graph, RelationshipType relationshipType) {
-		this.graph = graph;
-		this.edgeType = relationshipType;
-		this.communities = new HashMap<>();
-		this.hierarchylevel = 0;
-		nodesAtLevel = new ArrayList<>();
-	}
-
-
+	public LouvainClusterer() {}
 
 	public Job<JAXBElement> cluster(Job<JAXBElement> job, Set<Interaction> interactions) {
 		int maximumNumberOfCommunities = (int) job.getParameter(Job.JobParameter.MAX_COMMS);
-		Map<Long, Integer> result = cluster(maximumNumberOfCommunities);
-		List<Set<Integer>> clusters = getResult(result.size() - 1);
-		louvain.shutdown();
-		job.setClusters(clusters);
+		Set<Community> communities = louvain(maximumNumberOfCommunities);
+		communityRepo.save(communities);
+		job.setClusters(communities);
 		return job;
 	}
 
 
-	/**
+	public Set<Community> louvain(int maxCommunities) {
+
+		int hierarchyLevel = 0;
+		List<Interaction> interactionsAtHierarchyLevel = new ArrayList<>();
+		double sumOfAllEdgeWeights =  Stream.of(interactionRepo.findAll()).mapToDouble(Interaction::getWeight).sum();  //sum over all edge weights in graph
+
+		Set<Interaction> interactions = new ArrayList<>(interactionRepo.findAll());
+		Integer currentNumberOfCommunities = interactions.size();
+		Set<Community> communities;
+		boolean converged = false;
+
+		while (currentNumberOfCommunities > maxCommunities & !converged) {
+			assignmentIterator(interactions);
+			hierarchyLevel++;
+			communities = aggregator.aggregateCommunities(interactions, hierarchyLevel);
+			converged = currentNumberOfCommunities == communities.size();
+			currentNumberOfCommunities = interactions.size();
+			log.info("Iterations: " + hierarchyLevel + ", Communities: " + interactions.size() + (converged ? ", converged!" : ""));
+		}
+		return communities;
+
+	}
+	*/
+/**
+	 * Iterates over all nodes until conversion
 	 *
-	 *
-	 * @param maxCommunities the max number of communities
-	 * @return map of hierarchy level and corresponding number of communities {hierarchylevel : number of communites}
-	 */
-	public Map<Long, Integer> cluster(int maxCommunities) {
-		System.out.println("in louvain region");
-		try (Transaction tx = graphDb.beginTx()) {
-			init();
-			louvain(maxCommunities);
-			tx.success();
-		}
-		return louvain.communities();
-	}
-
-
-	/**
-	 * Return the set of communities at a certain hierarchy/aggregation level.
-	 *
-	 * @param level for getting communities
-	 * @return List of Communities
-	 */
-	public List<Set<T>> getResult(int level) {
-		List<Set<T>> output = null;
-		try (Transaction tx = graphDb.beginTx()) {
-			output = populator.convertCommunities(louvain.gatherResult(level));
-			tx.success();
-		}
-		return output;
-	}
-
-	public void shutdown(){service.shutdown();}
-
-
-
-	// molecular modularity gain for community assignment
-	private double deltaQ(Community community, Node node) {
-
-		double sumIn = community.getSumOfInternalEdgeWeights();
-		double sumTot = community.getTotalSumOfEdgeWeights();
-		double nodeWeightedDegree = node.getDegree();
-		double divisor = 2.0 * m;
-
-		return (sumIn + community.getEdgeWeightSumTo(node))
-				/ divisor
-				- ((sumTot + nodeWeightedDegree) / divisor)
-				* ((sumTot + nodeWeightedDegree) / divisor)
-				- (sumIn / divisor - (sumTot / divisor) * (sumTot / divisor) - (nodeWeightedDegree / divisor)
-						* (nodeWeightedDegree / divisor));
-	}
-
-	private double deltaQ(Node node, Node neighbor) {
-		CommunityFactory factory = new CommunityFactory(graph, edgeType);
-		Community community = factory.of(neighbor);
-		return deltaQ(community, node);
-	}
-
-	/**
-	 * initialize the graph by assigning a community label = nodeId to all nodes.
-	 * 
-	 */
-	public void init() {
-		for (Node node : graph.getAllNodes())
-			init(node);
-		m = 0.;
-		for (Relationship edge : graph.getAllRelationships())
-			if (edge.isType(edgeType))  m += (double) edge.getProperty("weights", 1.0);
-	}
-
-	/**
-	 *  assign the initial community for each node, which is its id.
-	 * @param node
-	 */
-	private void init(Node node) {
-		long id = node.getId();
-		node.setProperty(attributeName, "0#" + String.valueOf(id));
-		node.addLabel(Label.label(String.valueOf("0#" + id)));
-	}
-
-	/**
-	 * 
-	 * 
-	 * @param node
-	 * @return modularity gain for the assignment
-	 */
-	private double communityAssignment(Node node) {
-		CommunityFactory factory = new CommunityFactory(graph, edgeType);
-		String currentCommunity = (String) node.getProperty(attributeName);
-		Label bestCommunity = Label.label(String.valueOf(currentCommunity));	
-		String bestCommunityId = currentCommunity;
-		node.removeLabel(Label.label(String.valueOf(currentCommunity)));
-		Community community = factory.of(currentCommunity);
-		double deltaQmax = deltaQ(community, node);
-		double deltaQold = deltaQmax;
-		
-		for (Relationship edge : node.getRelationships()) {
-			Node neighbor = edge.getOtherNode(node);
-			String communityId = (String) neighbor.getProperty(attributeName);
-				community = factory.of(neighbor);
-				double deltaQ = deltaQ(community, node);
-				if (deltaQ > deltaQmax) {
-					bestCommunity = community.getLabel();
-					bestCommunityId = communityId;
-					deltaQmax = deltaQ;
-
-				}
-		}
-		node.addLabel(bestCommunity);
-		node.setProperty(attributeName, bestCommunityId);
-		return deltaQmax - deltaQold;
-
-	}
-
-	/**
-	 * One iteration over all nodes to check whether by community assignment
-	 * modularity can be improved
-	 * 
-	 * @param nodes
-	 * @return modularity gain
-	 */
-	private double assignmentIterationStep(List<Node> nodes) {
-		double Q_tot = 0;
-		Collections.shuffle(nodes);
-		for (Node node : nodes) {
-			double ql = communityAssignment(node);
-			Q_tot += ql;
-		}
-		return Q_tot;
-	}
-
-	/**
-	 * Iterates all nodes until conversion
-	 * 
-	 * @param nodes
 	 * @return
-	 */
-	private double assignmentIterator(List<Node> nodes) {
-		int i = 0;
-		double Q_old = 1;
+	 *//*
+
+	private double assignmentIterator(List<Interaction> interactions) {
+		int cycle = 0;
+		double qOld = 1;
 		double precision = 0.00001;
 		boolean converged = false;
-		while (!converged & i < 1000) {
-			double Qnew = assignmentIterationStep(nodes);
-			double dQ = Math.abs(Qnew - Q_old);
-			if (dQ < precision) converged = true;
-			i++;
-			Q_old = Qnew;
+		while (!converged & cycle < 1000) {
+			double qNew = 0;
+			Collections.shuffle(interactions);
+			*/
+/*
+			 * One iteration over all nodes to check whether community assignment
+			 * modularity can be improved
+			 *//*
+
+			for (Interaction interaction : interactions)
+				qNew += communityAssignment(interaction);
+			double qDelta= Math.abs(qNew - qOld);
+			if (qDelta < precision) converged = true;
+			cycle++;
+			qOld = qNew;
 		}
 		return 0;
 	}
 
-	public void louvain(int maxCommunities) {
+	*/
+/**
+	 * @return modularity gain for the assignment
+	 *//*
 
-		hierarchylevel = 0;
-		List<Node> nodes = new ArrayList<>();
+	private double communityAssignment(Interaction interaction) {
+		Community community = new Community();
+		Community bestCommunity = new Community();
 
-		for (Node a : graph.getAllNodes())
-		    	nodes.add(a);
+		double deltaQmax = deltaQ(community, interaction);
+		double deltaQold = deltaQmax;
 
-		Integer currentCommunities = nodes.size();
-
-		communities.put(hierarchylevel, currentCommunities);
-		nodesAtLevel.add(nodes);
-		NodeAggregator aggregator = new NodeAggregator(graph, edgeType);
-
-		boolean converged = false;
-
-		while (currentCommunities > maxCommunities & !converged) {
-			assignmentIterator(nodes);
-			hierarchylevel++;
-			nodes = aggregator.aggregateCommunities(nodes, hierarchylevel);
-			converged = currentCommunities == nodes.size();
-			currentCommunities = nodes.size();
-			nodesAtLevel.add(nodes);
-			communities.put(hierarchylevel, currentCommunities);
-			log.info("Iterations: " + hierarchylevel + ", Communities: "
-					+ nodes.size() + (converged ? ", converged!" : ""));
-		}
-
-	}
-
-	public Map<String, Set<Node>> gatherResult(int level) {
-
-		Map<String, Set<Node>> communities = new HashMap<>();
-		List<Node> nodes = nodesAtLevel.get(level);
-
-		TraversalDescription traversal = graph
-				.traversalDescription()
-				.breadthFirst()
-				.relationships(LouvainRelation.LOUVAIN_ACCUMULATED_BY, Direction.INCOMING)
-				.evaluator(Evaluators.atDepth(level));
-
-		for (Path path : traversal.traverse(nodes)) {
-			String key = (String) path.startNode().getProperty("community");
-			Node member = path.endNode();
-			if (communities.containsKey(key)) {
-				communities.get(key).add(member);
-			} else {
-				Set<Node> set = new HashSet<Node>();
-				set.add(member);
-				communities.put(key, set);
+		for (Interaction interaction: interactions) {
+			double deltaQ = deltaQ(community, interaction, sumOfAllEdgeWeights);
+			if (deltaQ > deltaQmax) {
+				bestCommunity = community;
+				deltaQmax = deltaQ;
 			}
 		}
-		return communities;
+		community = bestCommunity ;
+		return deltaQmax - deltaQold;
 	}
 
-	public Map<Long, Integer> communities() {
-		return communities;
+
+	// molecular modularity gain for community assignment
+	private double deltaQ(Community community, Interaction interaction, double sumOfAllEdgeWeights) {
+
+		double sumOfInternalEdgeWeights = community.getSumOfInternalEdgeWeights();
+		double totalSumOfEdgeWeights = community.getTotalSumOfEdgeWeights();
+		double nodeWeightedDegree = interaction.getDegree();
+		double divisor = 2.0 * sumOfAllEdgeWeights;
+
+		return (sumOfInternalEdgeWeights + communityService.getEdgeWeightSumTo(community,interaction)) / divisor
+				- ((totalSumOfEdgeWeights + nodeWeightedDegree) / divisor)
+				* ((totalSumOfEdgeWeights + nodeWeightedDegree) / divisor)
+				- (sumOfInternalEdgeWeights / divisor - (totalSumOfEdgeWeights / divisor)
+				* (totalSumOfEdgeWeights    / divisor) - (nodeWeightedDegree / divisor)
+				* (nodeWeightedDegree       / divisor));
 	}
 
 }
+*/

@@ -29,7 +29,7 @@ public class XmlConfig {
     MultiResourceItemReader itemReader() {
         MultiResourceItemReader multiResourceItemReader = new MultiResourceItemReader();
         try {
-            multiResourceItemReader.setResources(resolver.getResources("classpath:inputs/*.xml"));
+            multiResourceItemReader.setResources(resolver.getResources("classpath:inputsw/*.xml"));
         } catch (IOException e) {
             e.printStackTrace();
         }

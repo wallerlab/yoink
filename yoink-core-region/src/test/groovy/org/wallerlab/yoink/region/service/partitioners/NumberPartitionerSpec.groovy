@@ -16,6 +16,7 @@
 package org.wallerlab.yoink.region.service.partitioners
 
 import org.wallerlab.yoink.api.model.molecular.MolecularSystem
+import spock.lang.Ignore
 import spock.lang.Specification;
 
 
@@ -24,9 +25,9 @@ import org.wallerlab.yoink.api.model.Coord;
 import org.wallerlab.yoink.api.model.adaptive.Region;
 import org.wallerlab.yoink.api.service.molecule.Calculator
 
-import static Region.Name.*;
 import static org.wallerlab.yoink.api.service.region.Regionizer.Type.*;
 
+@Ignore
 class  NumberPartitionerSpec extends Specification{
 
 	def "test method regionize(Map<Region.Name, Region> regions,Map<JobParameter, Object> parameters)"(){

@@ -24,8 +24,9 @@ import org.wallerlab.yoink.api.model.Coord;
 import org.wallerlab.yoink.api.model.adaptive.Region;
 import org.wallerlab.yoink.api.service.molecule.Calculator
 
+//deprecated
 class GridPointAssignerSpec extends Specification{
-
+/*
 	def "for neighbour pair test method  assign(Coord tempCoord, Map<Region.Name, Region> regions,Region.Name cubeRegionName)"(){
 		def partitioner=new  GridPointAssigner()
 		def m1=Mock(MolecularSystem.Molecule)
@@ -99,6 +100,6 @@ class GridPointAssignerSpec extends Specification{
 		cubeRegionName=Region.Name.SYSTEM
 		then:"method assign returs empty properties"
 		partitioner.assign(tempCoord, regions,cubeRegionName).isEmpty()==true
-	}
+	}*/
 }
 

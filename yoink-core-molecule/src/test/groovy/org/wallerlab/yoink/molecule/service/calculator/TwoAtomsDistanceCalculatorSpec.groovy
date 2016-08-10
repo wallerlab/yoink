@@ -18,10 +18,13 @@ package org.wallerlab.yoink.molecule.service.calculator
 import org.wallerlab.yoink.api.model.molecular.MolecularSystem
 import org.wallerlab.yoink.math.linear.CommonsVector3D
 import org.wallerlab.yoink.molecule.service.DistanceCalculator
+import spock.lang.Ignore
 import spock.lang.Specification
 
 
 import org.wallerlab.yoink.api.model.Coord;
+
+@Ignore
 class TwoAtomsDistanceCalculatorSpec extends Specification {
 
 	def "test method calculate(Atom atom1, Atom atom2) "(){

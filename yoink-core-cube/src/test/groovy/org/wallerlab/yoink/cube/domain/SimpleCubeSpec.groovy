@@ -19,9 +19,10 @@ import org.wallerlab.yoink.api.model.DensityPoint.DensityType;
 
 import org.wallerlab.yoink.api.model.Coord
 import org.wallerlab.yoink.api.model.molecular.MolecularSystem
-
+import spock.lang.Ignore
 import spock.lang.Specification;
 
+@Ignore
 class SimpleCubeSpec extends Specification{
 
 	def "cube origin"(){

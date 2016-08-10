@@ -23,6 +23,8 @@ import org.wallerlab.yoink.math.linear.SimpleMatrixFactory
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
 
 import spock.lang.Specification
+
+@spock.lang.Ignore
 class SilvaDensityComputerSpec extends Specification{
 
 	def "test method calculate(DensityPoint densityPoint) "(){

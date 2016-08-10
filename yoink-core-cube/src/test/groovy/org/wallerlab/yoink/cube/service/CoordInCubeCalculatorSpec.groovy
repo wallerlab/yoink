@@ -18,12 +18,13 @@ package org.wallerlab.yoink.cube.service
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
 import org.wallerlab.yoink.molecule.domain.SimpleCoordFactory
 import org.wallerlab.yoink.cube.domain.Cube;
-import org.wallerlab.yoink.api.service.math.Vector;
-
+import org.wallerlab.yoink.api.service.math.Vector
+import spock.lang.Ignore;
 import spock.lang.Specification;
 
+@Ignore // deprecated
 class CoordInCubeCalculatorSpec extends Specification{
-
+/*
 	def "calculate()"(){
 
 		def myVector3D=new SimpleVector3DFactory()
@@ -46,6 +47,6 @@ class CoordInCubeCalculatorSpec extends Specification{
 		c.getCoords().getX()==0.1
 		c.getCoords().getY()==0.1
 		c.getCoords().getZ()==0.1
-	}
+	}*/
 }
 

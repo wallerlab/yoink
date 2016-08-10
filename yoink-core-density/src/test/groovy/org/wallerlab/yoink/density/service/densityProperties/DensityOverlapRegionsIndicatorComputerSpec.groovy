@@ -16,6 +16,7 @@
 package org.wallerlab.yoink.density.service.densityProperties
 
 import org.wallerlab.yoink.density.service.SimpleDensityCalculator
+import spock.lang.Ignore
 import spock.lang.Specification;
 
 import org.wallerlab.yoink.math.linear.SimpleMatrixFactory
@@ -23,6 +24,8 @@ import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
 import org.wallerlab.yoink.api.model.DensityPoint
 import org.wallerlab.yoink.api.service.math.Matrix;
 import org.wallerlab.yoink.api.service.math.Vector;
+
+@Ignore
 class DensityOverlapRegionsIndicatorComputerSpec extends  Specification{
 
 	def "test method calculate(DensityPoint densityPoint), calculate dori value"(){

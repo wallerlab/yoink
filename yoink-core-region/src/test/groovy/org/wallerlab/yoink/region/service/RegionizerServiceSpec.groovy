@@ -12,9 +12,7 @@ import spock.lang.Specification
 class RegionizerServiceSpec extends Specification{
 
 
-
     def " test the service has all the beans needed"(){
-
 
         when:
         def partitioners = [:]

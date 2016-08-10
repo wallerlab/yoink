@@ -16,6 +16,7 @@
 package org.wallerlab.yoink.density.service.densityProperties
 
 import org.wallerlab.yoink.density.service.SimpleDensityCalculator
+import spock.lang.Ignore
 import spock.lang.Specification;
 
 import org.wallerlab.yoink.math.linear.SimpleMatrixFactory
@@ -25,6 +26,7 @@ import org.wallerlab.yoink.api.service.math.Matrix;
 import org.wallerlab.yoink.api.service.math.Vector;
 import org.wallerlab.yoink.api.service.math.Vector.Vector3DType
 
+@Ignore
 class SingleExponentialDecayDetectorComputerSpec extends Specification{
 
 	def "test method calculate(DensityPoint densityPoint), calculate sedd value"(){

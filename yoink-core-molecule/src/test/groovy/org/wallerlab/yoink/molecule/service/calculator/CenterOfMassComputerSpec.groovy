@@ -24,9 +24,11 @@ import org.wallerlab.yoink.api.service.math.Vector
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
 import org.wallerlab.yoink.molecule.domain.SimpleCoordFactory
 import org.wallerlab.yoink.molecule.service.DistanceCalculator
+import spock.lang.Ignore
 import spock.lang.Specification
 
 class CenterOfMassComputerSpec extends Specification {
+	@Ignore
 	def "test method  calculate(Set<Molecule> molecules)"(){
 
 		def molecules= new HashSet<MolecularSystem.Molecule>()

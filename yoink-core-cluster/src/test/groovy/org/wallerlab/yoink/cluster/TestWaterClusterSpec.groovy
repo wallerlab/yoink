@@ -2,16 +2,12 @@ package org.wallerlab.yoink.cluster
 
 import spock.lang.*
 
-import org.wallerlab.yoink.cluster.domain.graph.Relations
-import org.wallerlab.yoink.cluster.service.graph.DatabaseService
-import org.wallerlab.yoink.cluster.service.graph.GraphPopulator
-import org.wallerlab.yoink.cluster.service.louvain.LouvainAlgoImpl
-import org.wallerlab.yoink.cluster.utils.Timer;
 
 
+@Ignore
 class TestWaterClusterSpec extends Specification {
 
-	def "water cluster"(){
+	/*def "water cluster"(){
 
 		setup:
 
@@ -90,5 +86,5 @@ class TestWaterClusterSpec extends Specification {
 		service.graphDb().shutdown()
 
 	}
-
+*/
 }

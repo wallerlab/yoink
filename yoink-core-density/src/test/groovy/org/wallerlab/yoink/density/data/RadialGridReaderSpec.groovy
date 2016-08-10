@@ -18,10 +18,11 @@ package org.wallerlab.yoink.density.data
 import org.wallerlab.yoink.density.domain.SimpleRadialGrid
 import org.wallerlab.yoink.math.linear.SimpleMatrixFactory
 import org.wallerlab.yoink.api.service.math.Matrix
-
+import spock.lang.Ignore
 import spock.lang.Specification
 
 class RadialGridReaderSpec extends Specification {
+	@Ignore
 	def "test read(String wfc_file, RadialGrid radial_grid)"(){
 		when:
 		def grid= new SimpleRadialGrid()

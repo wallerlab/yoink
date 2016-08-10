@@ -1,13 +1,13 @@
 package org.wallerlab.yoink.cluster.service.louvain
 
-import org.wallerlab.yoink.cluster.domain.cluster.Community
+
 import spock.lang.Specification
 
 class CommuntyInterfaceSpec extends Specification {
 
-	def testmethods(){
+	/*def testmethods(){
 		setup:
-		Community c = Mock()
+		def c = Mock()
 
 		c.getInternalEdgeWeightSum();
 		c.getId()
@@ -15,7 +15,7 @@ class CommuntyInterfaceSpec extends Specification {
 		c.getNodes()
 		c.size()
 		
-	}
+	}*/
 	
 	
 }

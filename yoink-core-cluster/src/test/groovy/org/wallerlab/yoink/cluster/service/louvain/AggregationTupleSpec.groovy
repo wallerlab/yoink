@@ -2,12 +2,12 @@ package org.wallerlab.yoink.cluster.service.louvain
 
 import org.neo4j.graphdb.Relationship
 import org.neo4j.graphdb.Node
-import org.wallerlab.yoink.cluster.domain.cluster.AggregationTuple
+
 import spock.lang.*
 
 class AggregationTupleSpec extends Specification {
 
-	def 'test creation'(){
+	/*def 'test creation'(){
 		
 		setup:
 		
@@ -31,6 +31,6 @@ class AggregationTupleSpec extends Specification {
 		tuple.getEnd() == "1"
 
 	}
-	
+	*/
 	
 }

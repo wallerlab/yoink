@@ -16,11 +16,13 @@
 package org.wallerlab.yoink.molecule.service.calculator
 
 import org.wallerlab.yoink.molecule.service.DistanceCalculator
+import spock.lang.Ignore
 import spock.lang.Specification
 
 import org.wallerlab.yoink.api.model.Coord;
 import org.wallerlab.yoink.math.linear.CommonsVector3D
 
+@Ignore
 class TwoCoordsDistanceCalculatorSpec extends Specification{
 
 	def "test method calculate the distance between two coords"(){

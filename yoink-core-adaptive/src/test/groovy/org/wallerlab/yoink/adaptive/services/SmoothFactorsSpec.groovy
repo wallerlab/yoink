@@ -20,12 +20,14 @@ import org.wallerlab.yoink.api.model.molecular.MolecularSystem
 
 import org.wallerlab.yoink.api.service.adaptive.Adaptive
 import org.wallerlab.yoink.api.service.density.DensityCalculator
+import spock.lang.Ignore
 import spock.lang.Specification
 import org.wallerlab.yoink.api.model.adaptive.Region;
 import org.wallerlab.yoink.api.service.molecule.Calculator;
 import org.wallerlab.yoink.api.model.Job
 
 
+@Ignore
 class SmoothFactorsSpec extends Specification{
 
 	def distanceCalculator

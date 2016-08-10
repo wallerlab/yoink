@@ -15,9 +15,11 @@
  */
 package org.wallerlab.yoink.molecule.domain
 
+import spock.lang.Ignore
 import spock.lang.Specification
 import org.wallerlab.yoink.api.service.math.Vector;
 
+@Ignore
 class SimpleCoordSpec extends Specification{
 
 	def "test constructor   SimpleCoord(Vector coordVector) "(){

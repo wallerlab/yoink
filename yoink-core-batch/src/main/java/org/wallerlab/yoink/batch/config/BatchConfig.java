@@ -67,9 +67,9 @@ public class BatchConfig  {
 	@Qualifier("adaptiveProcessor")
 	public ItemProcessor<Job<JAXBElement>, Job> smoothnerProcessor;
 
-	@Autowired
-	@Qualifier("clusteringProcessor")
-	public ItemProcessor<Job<JAXBElement>, Job> clusterProcessor;
+	//@Autowired
+	//@Qualifier("clusteringProcessor")
+	//public ItemProcessor<Job<JAXBElement>, Job> clusterProcessor;
 
 	@Autowired
 	@Qualifier("wrapperProcessor")
@@ -82,7 +82,7 @@ public class BatchConfig  {
 		processors.add(builderProcessor);
 		processors.add(regionizerProcessor);
 		processors.add(smoothnerProcessor);
-		processors.add(clusterProcessor);
+		//processors.add(clusterProcessor);
 		processors.add(wrapperProcessor);
 		compositeProcessor.setDelegates(processors);
 		return compositeProcessor;

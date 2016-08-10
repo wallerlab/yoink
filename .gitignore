@@ -1,6 +1,7 @@
 
 .gradle
 build/
+outputs/
 
 # Ignore Gradle GUI config
 gradle-app.setting
@@ -14,8 +15,13 @@ gradle-app.setting
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
 
-.idea/workspace.xml
-.idea/libraries
 .DS_Store
 .classpath
 .project
+
+.idea/libraries
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/datasources.xml
+.idea/dataSources.ids
+.idea

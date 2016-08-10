@@ -27,10 +27,10 @@ import org.wallerlab.yoink.api.model.adaptive.Region;
 import org.wallerlab.yoink.api.service.molecule.Calculator;
 import org.wallerlab.yoink.molecule.service.Computer
 import org.wallerlab.yoink.region.domain.SimpleRegion
-
-import static Region.Name.*;
+import spock.lang.Ignore
 import spock.lang.Specification;
 
+@Ignore
 class DoriPartitionerSpec extends Specification{
 
 	def "test method partition"(){

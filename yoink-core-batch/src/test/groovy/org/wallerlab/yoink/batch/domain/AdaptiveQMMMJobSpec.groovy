@@ -41,7 +41,6 @@ class AdaptiveQMMMJobSpec extends Specification{
 		then: " check that no nulls are returned"
 		job.getInput()==input
 		job.getMolecularSystem()==ms
-		job.getParameters()==parameters
 		job.getProperties()==properties
 		job.getRegions()==regions
 	}

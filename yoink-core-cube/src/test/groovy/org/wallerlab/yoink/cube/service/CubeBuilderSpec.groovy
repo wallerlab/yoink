@@ -27,8 +27,10 @@ import org.wallerlab.yoink.cube.domain.SimpleCube
 
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
 import org.wallerlab.yoink.molecule.domain.SimpleCoordFactory
-
+import spock.lang.Ignore
 import spock.lang.Specification;
+
+@Ignore
 class CubeBuilderSpec extends Specification{
 
 

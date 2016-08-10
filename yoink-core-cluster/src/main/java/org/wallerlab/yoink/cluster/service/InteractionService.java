@@ -19,7 +19,8 @@ import org.wallerlab.yoink.api.model.*;
 import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
 import org.wallerlab.yoink.api.service.density.DensityCalculator;
 import org.wallerlab.yoink.api.service.cube.Voronoizer;
-import org.wallerlab.yoink.cluster.domain.interaction.SimpleInteraction;
+import org.wallerlab.yoink.cluster.data.InteractionRepo;
+import org.wallerlab.yoink.cluster.domain.Interaction;
 import static org.wallerlab.yoink.api.model.Job.JobParameter.*;
 import static org.wallerlab.yoink.api.model.DensityPoint.DensityType.DORI;
 
@@ -27,16 +28,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 import static java.util.stream.Collectors.toSet;
-
 
 /**
  * This class is to get all pairs having interaction
  * (yes or no) base on DORI analysis.
  * 
- * 
- * @author Min Zheng
- *
  */
 @Service
 public class InteractionService {
@@ -49,6 +47,8 @@ public class InteractionService {
 
 	private static final double doriDensityThreshold = 0.0001d;
 	private static final double doriThreshold 		 = 0.9d;
+
+    private InteractionRepo interactionRepo;
 
 	//This is performed before the clustering
 	public Set<Interaction> getDoriInteractionSet(Job job) {
@@ -74,9 +74,8 @@ public class InteractionService {
                             .map((VoronoiPoint gridPoint) -> {
                                 List<MolecularSystem.Molecule> nearestMolecules =
                                         new ArrayList<MolecularSystem.Molecule>(gridPoint.getNearestMolecules());
-                                return new SimpleInteraction(nearestMolecules.get(0),
-                                                       nearestMolecules.get(1),
-                                                        densityCalculator.electronic(gridPoint.getCoordinate(), moleculesInCube));
+                                return new Interaction((Set<MolecularSystem.Molecule>)gridPoint.getNearestMolecules(),
+                                                        densityCalculator.electronic(gridPoint.getCoordinate(), moleculesInCube),0.0);
                             })
                             .collect(toSet());
 
@@ -85,17 +84,16 @@ public class InteractionService {
                 double weightMax = interactions.stream().mapToDouble(Interaction::getWeight).max().getAsDouble();
                 double normal = 1.0 / (weightMax - weightMin);
                 interactions = interactions.stream().map(interaction ->
-                        new SimpleInteraction(interaction.getFirst(),
-                                interaction.getSecond(),
-                                interaction.getWeight() * normal))
+                        new Interaction((Set<MolecularSystem.Molecule>)interaction.getMolecules(),interaction.getWeight() * normal,0.0))
                         .collect(toSet());
             } else {
                 interactions = interactions.stream().map(interaction ->
-                        new SimpleInteraction(interaction.getFirst(),
-                                interaction.getSecond(),
-                                1.0))
+                        new Interaction((Set<MolecularSystem.Molecule>)interaction.getMolecules(),1.0,0.0))
                         .collect(toSet());
             }
+
+        interactionRepo.save(interactions);
+
         return interactions;
     }
 

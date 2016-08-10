@@ -23,10 +23,12 @@ import org.wallerlab.yoink.density.data.RadialGridReader
 import org.wallerlab.yoink.density.domain.ExponentialFit
 import org.wallerlab.yoink.density.domain.SimpleRadialGrid
 import org.wallerlab.yoink.math.linear.SimpleMatrixFactory
-
+import spock.lang.Ignore
 import spock.lang.Specification
 
+@Ignore
 class DensityCalculatorSpec extends Specification {
+
 
 	def"test method calculate(currentCoord,molecules), density is not close zero"(){
 

@@ -10,6 +10,7 @@ import org.wallerlab.yoink.molecule.service.DistanceCalculator
 import spock.lang.Ignore
 import spock.lang.Specification
 
+@Ignore
 class SortedDistancesCalculatorSpec extends Specification{
 
 	@Ignore

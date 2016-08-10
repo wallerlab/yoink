@@ -25,10 +25,12 @@ import spock.lang.Specification
 class SimpleMoleculeSpec extends Specification{
 
 	def "test constructor SimpleMolecule(int index, List<Atom> atoms) "(){
-		def atom=Mock(MolecularSystem.Molecule.Atom)
+		def atom1=Mock(MolecularSystem.Molecule.Atom)
+		def atom2=Mock(MolecularSystem.Molecule.Atom)
+
 		def index=1
-		List<MolecularSystem.Molecule.Atom> atoms=[atom, atom]
-		atoms
+		Set<MolecularSystem.Molecule.Atom> atoms=[atom1, atom2] as Set
+
 		when:"make a new SimpleMolecule using constructor and setters"
 		def m=new SimpleMolecule( index,atoms)
 		m.setName(Region.Name.QM)

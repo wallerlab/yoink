@@ -2,13 +2,12 @@ package org.wallerlab.yoink.cluster
 
 import org.neo4j.graphdb.DynamicLabel
 import org.neo4j.graphdb.Node
-import org.wallerlab.yoink.cluster.domain.graph.Relations
-import org.wallerlab.yoink.cluster.service.graph.DatabaseService;
+
 import spock.lang.*;
 
 class DatabaseInteractionSpec extends Specification{
 
-	def "test run"(){
+/*	def "test run"(){
 
 		setup:
 
@@ -77,6 +76,6 @@ class DatabaseInteractionSpec extends Specification{
 		j == 9
 		cleanup:
 		service.graphDb().shutdown()
-	}
+	}*/
 
 }

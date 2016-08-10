@@ -1,10 +1,6 @@
 package org.wallerlab.yoink.cluster.service.louvain
 
-import org.wallerlab.yoink.cluster.domain.cluster.Community
-import org.wallerlab.yoink.cluster.service.graph.DatabaseService
-import org.wallerlab.yoink.cluster.domain.graph.Relations
-import org.wallerlab.yoink.cluster.utils.Timer
-import org.wallerlab.yoink.cluster.service.graph.GraphPopulator;
+
 import spock.lang.*
 
 import org.neo4j.graphdb.GraphDatabaseService
@@ -13,7 +9,7 @@ import org.neo4j.graphdb.Relationship
 
 class LouvainSpec extends Specification {
 
-
+/*
 		def "test deltaQ"(){
 
 		given:
@@ -245,5 +241,5 @@ class LouvainSpec extends Specification {
 
 
 		populator.createRelationships(interactionSet)
-	}
+	}*/
 }

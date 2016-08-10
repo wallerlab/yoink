@@ -27,10 +27,10 @@ import org.wallerlab.yoink.api.model.DensityPoint.DensityType;
 import org.wallerlab.yoink.api.model.Coord;
 
 import org.wallerlab.yoink.api.model.adaptive.Region
-
+//deprecated
 class CubePartitionerSpec extends Specification{
 
-
+/*
 	def"test method getXyzStepSizeByDensityType(Map<JobParameter, Object> parameters, DensityType densityType)"(){
 		def partitioner= new  CubePartitioner()
 		def parameters=Mock(Map)
@@ -106,5 +106,5 @@ class CubePartitionerSpec extends Specification{
 		partitioner.gridPointAssigner=gridPointAssigner
 		then:"method partition is executable and returns right result"
 		partitioner.partition(regions,parameters, DensityType.DORI).size()==1
-	}
+	}*/
 }

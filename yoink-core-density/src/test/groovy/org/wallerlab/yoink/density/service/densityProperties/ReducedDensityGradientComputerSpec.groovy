@@ -16,8 +16,10 @@
 package org.wallerlab.yoink.density.service.densityProperties
 import org.wallerlab.yoink.api.model.DensityPoint
 import org.wallerlab.yoink.density.service.SimpleDensityCalculator
+import spock.lang.Ignore
 import spock.lang.Specification;
 
+@Ignore
 class ReducedDensityGradientComputerSpec  extends Specification {
 
 	def "test method calculate(DensityPoint densityPoint) "(){

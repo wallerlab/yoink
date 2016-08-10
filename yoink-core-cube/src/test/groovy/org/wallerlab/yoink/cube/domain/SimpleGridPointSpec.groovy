@@ -18,9 +18,10 @@ package org.wallerlab.yoink.cube.domain
 
 import org.wallerlab.yoink.api.model.Coord
 import org.wallerlab.yoink.api.model.molecular.MolecularSystem
-
+import spock.lang.Ignore
 import spock.lang.Specification;
 
+@Ignore
 class SimpleGridPointSpec extends Specification{
 	def "coordinate,densityValues,indexInCube"(){
 		when:"make a new new SimpleVoronoiPoint()"

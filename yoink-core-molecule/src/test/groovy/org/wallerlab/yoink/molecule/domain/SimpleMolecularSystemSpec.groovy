@@ -16,10 +16,11 @@
 package org.wallerlab.yoink.molecule.domain
 
 
-import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
-
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem
+import spock.lang.Ignore;
 import spock.lang.Specification
 
+@Ignore
 class SimpleMolecularSystemSpec extends Specification{
 
 

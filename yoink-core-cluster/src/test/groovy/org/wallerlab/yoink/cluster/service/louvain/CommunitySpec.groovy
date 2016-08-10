@@ -4,10 +4,6 @@ package org.wallerlab.yoink.cluster.service.louvain
 import org.neo4j.graphdb.DynamicLabel;
 import org.neo4j.graphdb.GraphDatabaseService
 import org.neo4j.graphdb.Node
-import org.wallerlab.yoink.cluster.service.graph.GraphPopulator
-import org.wallerlab.yoink.cluster.domain.cluster.CommunityFactory
-import org.wallerlab.yoink.cluster.service.graph.DatabaseService
-import org.wallerlab.yoink.cluster.domain.graph.Relations;
 
 
 import spock.lang.*
@@ -15,8 +11,8 @@ import spock.lang.*
 class CommunitySpec extends Specification {
 
 
-	def "complete 1st assignment run"(){
-
+//	def "complete 1st assignment run"(){
+/*
 		setup:
 
 		def service = new DatabaseService("testDb")
@@ -186,5 +182,5 @@ class CommunitySpec extends Specification {
 
 		def populator = new GraphPopulator<String>(graph)
 		populator.createRelationships(interactionSet)
-	}
+	}*/
 }

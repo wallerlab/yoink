@@ -28,8 +28,10 @@ import org.wallerlab.yoink.api.service.molecule.Calculator
 import org.wallerlab.yoink.api.service.region.Regionizer
 import org.wallerlab.yoink.api.service.molecule.FilesReader
 import org.wallerlab.yoink.region.domain.SimpleRegion
+import spock.lang.Ignore
 import spock.lang.Specification
 
+@Ignore
 class DensityPartitionerSpec extends Specification{
 
 	def "test method getDensityThreshold"(){

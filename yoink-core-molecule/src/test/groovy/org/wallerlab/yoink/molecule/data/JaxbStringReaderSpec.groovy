@@ -1,6 +1,7 @@
 package org.wallerlab.yoink.molecule.data
 
 import org.cml_v3.generated.Cml
+import spock.lang.Ignore
 import spock.lang.Specification
 
 import javax.xml.bind.JAXBElement;
@@ -8,6 +9,7 @@ import org.cml_v3.generated.MoleculeList;
 
 class JaxbStringReaderSpec extends Specification{
 
+	@Ignore
 	def "test method read()"(){
 
 		when:"jaxb reader reads from a string"

@@ -24,7 +24,9 @@ import org.wallerlab.yoink.api.model.Coord
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
 import org.wallerlab.yoink.molecule.domain.SimpleCoordFactory
 import org.wallerlab.yoink.molecule.domain.SimpleMolecule
-import org.wallerlab.yoink.api.service.math.Vector;
+import org.wallerlab.yoink.api.service.math.Vector
+import spock.lang.Ignore;
+
 import static org.wallerlab.yoink.api.model.adaptive.Region.Name.*;
 
 import spock.lang.Specification
@@ -48,6 +50,7 @@ class SimpleRegionSpec extends Specification{
 		region.getAtoms()==[atom] as Set
 	}
 
+	@Ignore
 	def"test getCenterOfMass"(){
 
 		def a=Mock(MolecularSystem.Molecule.Atom)

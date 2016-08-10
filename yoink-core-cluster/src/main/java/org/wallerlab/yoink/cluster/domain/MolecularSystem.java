@@ -13,13 +13,11 @@ import org.neo4j.ogm.annotation.NodeEntity;
 @NodeEntity
 public class MolecularSystem {
 
-    @GraphId
-    private Long id;
-
     private String nameOfSystem;
-    public Integer numberOfMolecules;
-    public Integer numberOfAtoms;
 
+    public Integer numberOfMolecules;
+
+    public Integer numberOfAtoms;
 
     public String getNameOfSystem() {
         return nameOfSystem;
@@ -45,19 +43,10 @@ public class MolecularSystem {
         this.numberOfAtoms = numberOfAtoms;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     @Override
     public String toString() {
         return "MolecularSystem [nameOfSystem=" + nameOfSystem + ", numberOfMolecules=" + numberOfMolecules
                 + ", numberOfAtoms=" + numberOfAtoms + " ]";
     }
-
 
 }

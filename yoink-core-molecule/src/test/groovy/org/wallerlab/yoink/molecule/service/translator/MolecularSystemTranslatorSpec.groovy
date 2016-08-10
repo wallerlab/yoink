@@ -16,6 +16,7 @@
 package org.wallerlab.yoink.molecule.service.translator
 
 import org.wallerlab.yoink.api.service.molecule.Converter
+import spock.lang.Ignore
 
 import javax.xml.bind.JAXBElement
 
@@ -28,6 +29,7 @@ import org.wallerlab.yoink.api.service.math.Vector;
 
 import spock.lang.Specification
 
+@Ignore
 class MolecularSystemTranslatorSpec extends Specification {
 
 	def "test method translate(JAXBElement<Cml> cml)"(){

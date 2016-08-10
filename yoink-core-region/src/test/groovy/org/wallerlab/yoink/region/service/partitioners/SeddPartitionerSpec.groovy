@@ -18,6 +18,7 @@ package org.wallerlab.yoink.region.service.partitioners
 import org.wallerlab.yoink.api.model.Job
 import org.wallerlab.yoink.api.model.molecular.MolecularSystem
 import org.wallerlab.yoink.api.service.region.Regionizer
+import spock.lang.Ignore
 import spock.lang.Specification;
 
 
@@ -28,6 +29,7 @@ import org.wallerlab.yoink.api.model.adaptive.Region;
 import org.wallerlab.yoink.api.service.molecule.Calculator;
 import org.wallerlab.yoink.molecule.service.Computer
 
+@Ignore
 class SeddPartitionerSpec extends Specification{
 	def "test method partition"(){
 
