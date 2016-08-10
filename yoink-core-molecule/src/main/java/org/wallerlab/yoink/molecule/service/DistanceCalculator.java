@@ -64,9 +64,9 @@ public class DistanceCalculator  {
 				       .mapToDouble(atom ->coord.getCoords().distance(atom.getCoordinate()))
 				 	   .min()
 				       .getAsDouble();
-	};
+	}
 
-	/**
+    /**
 	 * Calculate the coordinates of mass of molecules.
 	 *
 	 * @param molecules

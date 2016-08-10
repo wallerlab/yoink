@@ -84,11 +84,11 @@ public class InteractionService {
                 double weightMax = interactions.stream().mapToDouble(Interaction::getWeight).max().getAsDouble();
                 double normal = 1.0 / (weightMax - weightMin);
                 interactions = interactions.stream().map(interaction ->
-                        new Interaction((Set<MolecularSystem.Molecule>)interaction.getMolecules(),interaction.getWeight() * normal,0.0))
+                        new Interaction(interaction.getMolecules(),interaction.getWeight() * normal,0.0))
                         .collect(toSet());
             } else {
                 interactions = interactions.stream().map(interaction ->
-                        new Interaction((Set<MolecularSystem.Molecule>)interaction.getMolecules(),1.0,0.0))
+                        new Interaction(interaction.getMolecules(),1.0,0.0))
                         .collect(toSet());
             }
 

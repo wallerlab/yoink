@@ -250,7 +250,7 @@ public class WeightFactors {
             XS,
             DAS,
             SAP,
-            SCMP;
+            SCMP
         }
     }
 

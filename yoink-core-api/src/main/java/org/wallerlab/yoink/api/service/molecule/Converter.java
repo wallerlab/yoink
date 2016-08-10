@@ -29,7 +29,7 @@ public interface Converter {
 	 * @author Min Zheng
 	 *
 	 */
-	public enum UnitConverterType {
+    enum UnitConverterType {
 
 		AngstromToBohr(1.8897259885789), BohrToAngstrom(0.529177249);
 

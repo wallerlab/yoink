@@ -247,9 +247,9 @@ public class Processors {
 
         // use adaptive force and energy
         double adaptiveEnergy = 0;
-        double qmEnergy = (double) energies.get(new ArrayList<>());
+        double qmEnergy = energies.get(new ArrayList<>());
 
-        List<Vector> qmForces = (List<Vector>) forces.get(new ArrayList<>());
+        List<Vector> qmForces = forces.get(new ArrayList<>());
         List<Vector> adaptiveForce = new ArrayList<Vector>();
 
         Map<Integer, Double> allTempEnergies = new HashMap<Integer, Double>();
@@ -395,7 +395,7 @@ public class Processors {
             FIRES,
             HOT_SPOT,
             CONFIG,
-            PAP;
+            PAP
         }
     }
 

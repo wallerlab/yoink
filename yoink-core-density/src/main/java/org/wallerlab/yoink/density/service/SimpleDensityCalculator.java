@@ -28,11 +28,9 @@ import org.wallerlab.yoink.math.linear.SimpleMatrixFactory;
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory;
 import org.wallerlab.yoink.density.domain.SimpleDensityPoint;
 
-import java.io.IOException;
-import java.util.Map;
-
 import java.util.Set;
-
+import java.util.Map;
+import java.io.IOException;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
@@ -77,10 +75,8 @@ public class SimpleDensityCalculator implements DensityCalculator {
 
 	public Double electronic(Coord coord, Set<MolecularSystem.Molecule> molecules) {
 		Double density = molecules.stream()
-								  .flatMap(molecule ->
-													molecule.getAtoms().stream())
-								  .mapToDouble(atom ->
-												  atomic(coord, atom))
+								  .flatMap(molecule -> molecule.getAtoms().stream())
+								  .mapToDouble(atom -> atomic(coord, atom))
 								  .sum();
 		return Math.max(density, DENSITY_DEFAULT);
 	}
@@ -302,11 +298,9 @@ public class SimpleDensityCalculator implements DensityCalculator {
 			}
 		}
 		// Copy to the lower left part of hessian
-		for (int j = 0; j < 3; j++) {
-			for (int k = j + 1; k < 3; k++) {
+		for (int j = 0; j < 3; j++)
+			for (int k = j + 1; k < 3; k++)
 				hessian.setEntry(k, j, hessian.getEntry(j, k));
-			}
-		}
 		return hessian;
 	}
 
@@ -330,9 +324,8 @@ public class SimpleDensityCalculator implements DensityCalculator {
 	//Convienence method
 	public Set<MolecularSystem.Molecule.Atom> getAtomsInMolecule(Set<MolecularSystem.Molecule> molecules){
 		return molecules.stream()
-						.flatMap(molecule ->
-									molecule.getAtoms()
-											.stream())
+						.flatMap(molecule -> molecule.getAtoms()
+											         .stream())
 				        .collect(toSet());
 	}
 

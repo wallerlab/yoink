@@ -236,7 +236,7 @@ public interface Job<T> {
         MAX_COMMS,
         INTERACTION_WEIGHT,
         DGRID,
-        SMOOTH_FUNCTION;
+        SMOOTH_FUNCTION
 
     }
 }

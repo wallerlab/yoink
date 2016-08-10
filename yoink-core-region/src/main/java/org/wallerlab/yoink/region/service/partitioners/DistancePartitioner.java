@@ -32,7 +32,7 @@ public class DistancePartitioner implements Partitioner{
 	public Map<Region.Name,Set<MolecularSystem.Molecule>> partition(Job job) {
 
 		//Fix this up with domain model
-		double distanceQm = (double) Double.parseDouble(job.getParameter(DISTANCE_QM).toString());
+		double distanceQm = Double.parseDouble(job.getParameter(DISTANCE_QM).toString());
 		double distanceBuffer = distanceQm + Double.parseDouble(job.getParameter(DISTANCE_BUFFER).toString());
 
 		Coord centerOfMass =  distanceCalculator.centerOfMass(job.getMolecularSystem().getMolecules("QM_CORE_FIXED"));

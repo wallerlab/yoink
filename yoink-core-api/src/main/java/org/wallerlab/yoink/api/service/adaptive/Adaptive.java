@@ -46,6 +46,6 @@ public interface Adaptive {
 		PAP,
 		SAP,
 		SCMP,
-		FIRES;
-	}
+		FIRES
+    }
 }

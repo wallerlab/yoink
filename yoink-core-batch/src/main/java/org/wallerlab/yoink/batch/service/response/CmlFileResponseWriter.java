@@ -53,7 +53,7 @@ public class CmlFileResponseWriter implements ItemWriter<Job<JAXBElement>> {
 	public void write(List<? extends Job<JAXBElement>> jobs) throws Exception {
 		for (Job<JAXBElement> job : jobs) {
 			String name = (String) job.getParameters().get(Job.JobParameter.JOB_NAME);
-			String parentDirName = (String) job.getParameters().get(Job.JobParameter.OUTPUT_FOLDER) + "/";
+			String parentDirName = job.getParameters().get(Job.JobParameter.OUTPUT_FOLDER) + "/";
 			String outputFileName = parentDirName + name + "-out.xml";
 			jaxbWriter.write(outputFileName, job.getInput().getValue());
 			log.info("finish writing all output  for " + name);

@@ -110,7 +110,7 @@ public class MolecularSystemTranslator implements Translator<MolecularSystem, JA
 		@SuppressWarnings("unchecked")
 		JAXBElement<MoleculeList> element = (JAXBElement<MoleculeList>) elementMoleculeList;
 		if (element.getDeclaredType() == MoleculeList.class) {
-			MoleculeList moleculeList = (MoleculeList) element.getValue();
+			MoleculeList moleculeList = element.getValue();
 			loopOverElementsInCmlMoleculeList(moleculeList);
 		}
 	}
@@ -122,7 +122,7 @@ public class MolecularSystemTranslator implements Translator<MolecularSystem, JA
 			JAXBElement<Molecule> element = (JAXBElement<Molecule>) elementMolecule;
 			// check molecule
 			if (element.getDeclaredType() == Molecule.class) {
-				Molecule cmlMolecule = ((JAXBElement<Molecule>) element).getValue();
+				Molecule cmlMolecule = element.getValue();
 				parseMolecule(cmlMolecule);
 			}
 		}
@@ -160,7 +160,7 @@ public class MolecularSystemTranslator implements Translator<MolecularSystem, JA
 			@SuppressWarnings("unchecked")
 			JAXBElement<Atom> element = (JAXBElement<Atom>) elementAtom;
 			if (element.getDeclaredType() == Atom.class) {
-				Atom cmlAtom = (Atom) element.getValue();
+				Atom cmlAtom = element.getValue();
 				parseAtom(atoms, cmlAtom);
 			}
 		}

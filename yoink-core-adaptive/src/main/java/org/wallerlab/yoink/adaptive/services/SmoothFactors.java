@@ -88,8 +88,8 @@ public class SmoothFactors {
 		enum NAME{
 			DISTANCE,
 			DENSITY,
-			DISTANCE_OR_DENSITY;
-		}
+			DISTANCE_OR_DENSITY
+        }
 	}
 
 }

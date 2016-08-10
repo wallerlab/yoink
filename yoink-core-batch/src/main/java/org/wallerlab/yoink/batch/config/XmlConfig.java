@@ -59,7 +59,7 @@ public class XmlConfig {
     org.springframework.oxm.Unmarshaller unmarshaller() {
         Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
         marshaller.setClassesToBeBound(Cml.class);
-        return (Unmarshaller) marshaller;
+        return marshaller;
     }
 
 }

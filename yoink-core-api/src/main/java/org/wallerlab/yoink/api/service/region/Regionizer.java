@@ -44,6 +44,6 @@ public interface Regionizer {
 		DORI,
 		SEDD,
 		FIRES,
-		CLUSTER;
-	}
+		CLUSTER
+    }
 }

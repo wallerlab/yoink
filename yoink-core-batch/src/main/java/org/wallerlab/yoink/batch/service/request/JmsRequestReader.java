@@ -38,7 +38,7 @@ public class JmsRequestReader implements ItemReader<String> {
 	private Optional<String> item;
 	
 	@Override
-	public String read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
+	public String read() throws Exception {
 		while (jmsResquestReaderServiceRunning) {
 			item = Optional.ofNullable(jmsItemReader.read());		
 			if (!item.isPresent()) {

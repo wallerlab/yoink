@@ -65,7 +65,7 @@ public interface DensityPoint {
 	 Coord getCoord();
 
 	enum DensityType {
-		DORI, RDG, DENSITY, SEDD, ELECTRONIC;
-	}
+		DORI, RDG, DENSITY, SEDD, ELECTRONIC
+    }
 
 }

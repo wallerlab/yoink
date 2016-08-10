@@ -175,7 +175,7 @@ public class SmoothFunctions {
             BULO,
             MOROKUMA,
             PERMUTED,
-            SCMP;
+            SCMP
         }
 
     }

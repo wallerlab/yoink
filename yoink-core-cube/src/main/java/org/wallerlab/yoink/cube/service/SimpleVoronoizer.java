@@ -144,7 +144,7 @@ public class SimpleVoronoizer implements Voronoizer {
 						.stream()
 						.min((atomOne,atomTwo) ->
 								((Double)distanceCalculator.distance(coord,atomOne))
-										        .compareTo((Double) distanceCalculator.distance(coord,atomTwo)))
+										        .compareTo(distanceCalculator.distance(coord,atomTwo)))
 						.get();
 	}
 
