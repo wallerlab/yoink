@@ -101,7 +101,7 @@ public class SetOps {
 		for (ArrayList<Integer> a : temp) a.add(S[i]);
 		List<Integer> single = new ArrayList<Integer>();
 		single.add(S[i]);
-		temp.add(single);
+		temp.add((ArrayList<Integer>) single);
 		result.addAll(temp);
 		}
 		List<ArrayList<Integer>> sizeResult = new ArrayList<ArrayList<Integer>>();
@@ -116,20 +116,20 @@ public class SetOps {
      * @return  return an list of  Double lists
      */
     public static List<ArrayList<Double>> splitDoubleArray(double[] S) {
-	if (S == null) return null;
-	Arrays.sort(S);
-	List<ArrayList<Double>> result = new ArrayList<ArrayList<Double>>();
-	for (int i = 0; i < S.length; i++) {
+		if (S == null) return null;
+		Arrays.sort(S);
+	    List<ArrayList<Double>> result = new ArrayList<ArrayList<Double>>();
+		for (int i = 0; i < S.length; i++) {
     	    List<ArrayList<Double>> temp = new ArrayList<ArrayList<Double>>();
-	    for (ArrayList<Double> a : result)  temp.add(new ArrayList<Double>(a));
-	        for (ArrayList<Double> a : temp) a.add(S[i]);
-	        ArrayList<Double> single = new ArrayList<Double>();
+	    	for (List<Double> a : result)  temp.add(new ArrayList<Double>(a));
+	        for (List<Double> a : temp) a.add(S[i]);
+			List<Double> single = new ArrayList<Double>();
 	        single.add(S[i]);
-                temp.add(single);
+            temp.add((ArrayList<Double>) single);
 	        result.addAll(temp);
-	}
-	result.add(new ArrayList<Double>());
-	return result;
+		}
+		result.add(new ArrayList<Double>());
+		return result;
     }
     
 }
