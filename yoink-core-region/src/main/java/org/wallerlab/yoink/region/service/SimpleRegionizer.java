@@ -19,20 +19,19 @@ import org.wallerlab.yoink.api.model.Job;
 import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
 import org.wallerlab.yoink.api.model.adaptive.Region;
 import org.wallerlab.yoink.region.service.partitioners.Partitioner;
-
-import org.wallerlab.yoink.api.service.region.Regionizer;
 import org.wallerlab.yoink.region.domain.SimpleRegion;
+import org.wallerlab.yoink.api.service.region.Regionizer;
 
-import javax.xml.bind.JAXBElement;
-import java.util.*;
-
+import static org.wallerlab.yoink.math.SetOps.*;
 import static org.wallerlab.yoink.api.model.adaptive.Region.Name.*;
 import static org.wallerlab.yoink.api.model.Job.JobParameter.*;
-import static org.wallerlab.yoink.math.SetOps.*;
 import static org.wallerlab.yoink.api.service.region.Regionizer.Type.*;
 
+import java.util.*;
+import javax.xml.bind.JAXBElement;
 /**
- * A regionizer is to take a molecular system and partition it into QM, (Buffer) and MM regions.
+ * A regionizer is to take a molecular system and partition it
+ * into QM, (Buffer) and MM regions.
  *
  */
 public class SimpleRegionizer implements Regionizer{
@@ -49,7 +48,8 @@ public class SimpleRegionizer implements Regionizer{
 	//Hack, because of the way the code is setup.
 	if (job.getParameter(PARTITIONER) == CLUSTER) return job;
 	//Real work is done here.
-	Map<Region.Name,Set<MolecularSystem.Molecule>> partitionedSets = this.partitioners.get(job.getParameter(PARTITIONER)).partition(job);
+	Map<Region.Name,Set<MolecularSystem.Molecule>> partitionedSets = 
+	     this.partitioners.get(job.getParameter(PARTITIONER)).partition(job);
 	Set<MolecularSystem.Molecule> moleculesInQmAdaptive = partitionedSets.get(QM_ADAPTIVE);
         Set<MolecularSystem.Molecule> moleculesInBuffer = partitionedSets.get(BUFFER);
 	//Simple Set Operations
