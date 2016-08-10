@@ -1,12 +1,13 @@
 package org.wallerlab.yoink.adaptive.services;
 
 
+import org.springframework.stereotype.Service;
+
+import java.util.EnumMap;
+import java.util.Map;
+
 import static org.wallerlab.yoink.adaptive.services.SmoothFunctions.SmoothFunction.NAME;
 import static org.wallerlab.yoink.adaptive.services.SmoothFunctions.SmoothFunction.NAME.*;
-
-import java.util.Map;
-import java.util.EnumMap;
-import org.springframework.stereotype.Service;
 
 @Service
 public class SmoothFunctions {

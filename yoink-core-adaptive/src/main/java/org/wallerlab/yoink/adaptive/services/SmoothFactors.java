@@ -1,22 +1,25 @@
 package org.wallerlab.yoink.adaptive.services;
 
+import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.adaptive.domain.BufferMolecule;
+import org.wallerlab.yoink.adaptive.services.SmoothFunctions.SmoothFunction;
 import org.wallerlab.yoink.api.model.Coord;
 import org.wallerlab.yoink.api.model.Job;
 import org.wallerlab.yoink.api.service.density.DensityCalculator;
-import org.wallerlab.yoink.adaptive.services.SmoothFunctions.SmoothFunction;
+import org.wallerlab.yoink.molecule.service.DistanceCalculator;
+
+import javax.annotation.Resource;
+import javax.xml.bind.JAXBElement;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import static java.util.stream.Collectors.toSet;
-import static org.wallerlab.yoink.api.model.Job.JobParameter.*;
-import static org.wallerlab.yoink.api.model.adaptive.Region.Name.*;
 import static org.wallerlab.yoink.adaptive.services.SmoothFactors.SmoothFactor.NAME;
 import static org.wallerlab.yoink.adaptive.services.SmoothFactors.SmoothFactor.NAME.*;
-
-import java.util.*;
-import javax.xml.bind.JAXBElement;
-import javax.annotation.Resource;
-import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.molecule.service.DistanceCalculator;
+import static org.wallerlab.yoink.api.model.Job.JobParameter.*;
+import static org.wallerlab.yoink.api.model.adaptive.Region.Name.BUFFER;
+import static org.wallerlab.yoink.api.model.adaptive.Region.Name.QM_CORE;
 
 @Service
 public class SmoothFactors {

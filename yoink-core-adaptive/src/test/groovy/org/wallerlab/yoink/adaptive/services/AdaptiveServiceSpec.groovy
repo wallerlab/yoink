@@ -15,11 +15,10 @@
  */
 package org.wallerlab.yoink.adaptive.services
 
+import org.wallerlab.yoink.api.model.Job
+import org.wallerlab.yoink.api.service.adaptive.Adaptive
 import spock.lang.Ignore
 import spock.lang.Specification
-
-import org.wallerlab.yoink.api.service.adaptive.Adaptive;
-import org.wallerlab.yoink.api.model.Job
 
 class AdaptiveServiceSpec extends Specification{
 

@@ -15,9 +15,9 @@
  */
 package org.wallerlab.yoink.adaptive.services
 
-import org.wallerlab.yoink.api.model.molecular.MolecularSystem
-import org.wallerlab.yoink.api.model.adaptive.Region
 import org.wallerlab.yoink.api.model.Job
+import org.wallerlab.yoink.api.model.adaptive.Region
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem
 import org.wallerlab.yoink.api.service.molecule.Calculator
 import spock.lang.Ignore
 import spock.lang.Specification

@@ -1,12 +1,12 @@
 package org.wallerlab.yoink.adaptive.services;
 
-import org.wallerlab.yoink.adaptive.domain.BufferMolecule;
-import org.wallerlab.yoink.adaptive.domain.Configuration;
-import org.wallerlab.yoink.api.model.Job;
-import org.wallerlab.yoink.api.model.Coord;
-import org.wallerlab.yoink.api.model.adaptive.Region;
 import org.wallerlab.yoink.math.MapOps;
 import org.wallerlab.yoink.math.SetOps;
+import org.wallerlab.yoink.api.model.Coord;
+import org.wallerlab.yoink.api.model.Job;
+import org.wallerlab.yoink.api.model.adaptive.Region;
+import org.wallerlab.yoink.adaptive.domain.Configuration;
+import org.wallerlab.yoink.adaptive.domain.BufferMolecule;
 import org.wallerlab.yoink.molecule.service.DistanceCalculator;
 
 import static org.wallerlab.yoink.api.model.Job.JobParameter.*;
@@ -53,14 +53,11 @@ public class WeightFactors {
      * Chemical Physics Letters, Volume 355, Number 3, 2 April 2002, pp. 257-262(6).
      */
     public WeightFactor xsWeights = (job, lambdaFunction, smoothFunction) -> {
-
         Set<BufferMolecule> moleculesInBuffer = lambdaFunction.compute(job,smoothFunction);
-
         double averageLambda = moleculesInBuffer.stream()
                                                 .mapToDouble(BufferMolecule::getLambda)
                                                 .average()
                                                 .getAsDouble();
-
         Set<Configuration> configurations = new HashSet<>();
         configurations.add(new Configuration(averageLambda, 1-averageLambda, moleculesInBuffer));
         return configurations;
@@ -72,11 +69,9 @@ public class WeightFactors {
      * Chemical Theory and Computation 5.9 (2009): 2212-2221.
      */
     public WeightFactor dasWeights = ( job, LambdaFunction, smoothFunction) -> {
-
         List<BufferMolecule> bufferMolecules = new ArrayList<>(LambdaFunction.compute(job,smoothFunction));
         List<Integer> bufferIndices = new ArrayList<Integer>();
         Set<Configuration> configurations = new HashSet<>();
-
         // loop over all QM/MM sets in buffer region,
         SetOps.split(Ints.toArray(bufferIndices))
                .forEach(qmSet -> {
@@ -84,16 +79,17 @@ public class WeightFactors {
                     mmSet.removeAll(qmSet);
                     Double lambdaQMMax = qmSet.stream()
                                               .mapToDouble(index ->
-                                                             bufferMolecules.get(bufferIndices.indexOf(index)).getLambda())
-                                                                   .max()
-                                                                   .getAsDouble();
+                                                      bufferMolecules.get(bufferIndices.indexOf(index)).getLambda())
+                                                                     .max()
+                                                                     .getAsDouble();
                     Double lambdaMMMin = mmSet.stream()
                                               .mapToDouble(index ->
-                                                             bufferMolecules.get(bufferIndices.indexOf(index)).getLambda())
+                                                      bufferMolecules.get(bufferIndices.indexOf(index)).getLambda())
                                                                    .min()
                                                                    .getAsDouble();
                     if (lambdaQMMax < lambdaMMMin)
-                        configurations.add(new Configuration(lambdaMMMin - lambdaQMMax, 0.0, new HashSet<BufferMolecule>(bufferMolecules)));
+                        configurations.add(new Configuration(lambdaMMMin - lambdaQMMax, 0.0,
+                                               new HashSet<BufferMolecule>(bufferMolecules)));
                 });
         return configurations;
     };
@@ -244,8 +240,9 @@ public class WeightFactors {
     @FunctionalInterface
     public interface WeightFactor {
 
-        Set<Configuration> compute(Job<JAXBElement> job , SmoothFactors.SmoothFactor smoothFactor, SmoothFunctions.SmoothFunction smoothFunction);
-
+        Set<Configuration> compute(Job<JAXBElement> job ,
+                                   SmoothFactors.SmoothFactor smoothFactor,
+                                   SmoothFunctions.SmoothFunction smoothFunction);
         enum NAME{
             XS,
             DAS,

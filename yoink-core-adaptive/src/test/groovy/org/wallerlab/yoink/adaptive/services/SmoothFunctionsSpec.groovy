@@ -15,10 +15,8 @@
  */
 package org.wallerlab.yoink.adaptive.services
 
-import org.wallerlab.yoink.adaptive.services.SmoothFactors
-import org.wallerlab.yoink.adaptive.services.SmoothFunctions
 import spock.lang.Ignore
-import spock.lang.Specification;
+import spock.lang.Specification
 
 @Ignore
 class SmoothFunctionsSpec extends Specification{

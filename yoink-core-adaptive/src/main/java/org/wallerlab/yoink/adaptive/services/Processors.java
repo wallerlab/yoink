@@ -1,33 +1,31 @@
 package org.wallerlab.yoink.adaptive.services;
 
-import org.wallerlab.yoink.api.model.Coord;
-import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
-import org.wallerlab.yoink.math.SetOps;
-import org.wallerlab.yoink.molecule.service.DistanceCalculator;
-import org.wallerlab.yoink.adaptive.domain.Configuration;
+import com.google.common.primitives.Ints;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.adaptive.domain.BufferMolecule;
+import org.wallerlab.yoink.adaptive.domain.Configuration;
+import org.wallerlab.yoink.api.model.Coord;
 import org.wallerlab.yoink.api.model.Job;
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
 import org.wallerlab.yoink.api.service.math.Vector;
 import org.wallerlab.yoink.api.service.plugin.QmMmWrapper;
+import org.wallerlab.yoink.math.SetOps;
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory;
+import org.wallerlab.yoink.molecule.service.DistanceCalculator;
 
-import static org.wallerlab.yoink.adaptive.services.WeightFactors.WeightFactor.NAME.DAS;
-import static org.wallerlab.yoink.adaptive.services.WeightFactors.WeightFactor.NAME.XS;
-import static org.wallerlab.yoink.api.model.adaptive.Region.Name.*;
-import static org.wallerlab.yoink.adaptive.services.Processors.Processor.NAME;
-import static org.wallerlab.yoink.adaptive.services.Processors.Processor.NAME.*;
-import static org.wallerlab.yoink.adaptive.services.SmoothFactors.SmoothFactor.NAME.*;
-import static org.wallerlab.yoink.adaptive.services.SmoothFunctions.SmoothFunction.NAME.*;
-import static org.wallerlab.yoink.adaptive.services.WeightFactors.WeightFactor.NAME.*;
-
+import javax.annotation.Resource;
 import javax.xml.bind.JAXBElement;
 import java.util.*;
 import java.util.stream.IntStream;
-import javax.annotation.Resource;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Qualifier;
-import com.google.common.primitives.Ints;
+
 import static java.util.stream.Collectors.toList;
+import static org.wallerlab.yoink.adaptive.services.Processors.Processor.NAME;
+import static org.wallerlab.yoink.adaptive.services.Processors.Processor.NAME.*;
+import static org.wallerlab.yoink.adaptive.services.SmoothFactors.SmoothFactor.NAME.DISTANCE_OR_DENSITY;
+import static org.wallerlab.yoink.adaptive.services.SmoothFunctions.SmoothFunction.NAME.*;
+import static org.wallerlab.yoink.adaptive.services.WeightFactors.WeightFactor.NAME.*;
+import static org.wallerlab.yoink.api.model.adaptive.Region.Name.*;
 
 @Service
 public class Processors {

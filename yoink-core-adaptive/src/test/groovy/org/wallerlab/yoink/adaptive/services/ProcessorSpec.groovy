@@ -15,18 +15,16 @@
  */
 package org.wallerlab.yoink.adaptive.services
 
-import org.wallerlab.yoink.adaptive.services.Processors
 import org.wallerlab.yoink.api.model.Coord
+import org.wallerlab.yoink.api.model.Job
+import org.wallerlab.yoink.api.model.adaptive.Region
 import org.wallerlab.yoink.api.model.molecular.MolecularSystem
+import org.wallerlab.yoink.api.service.math.Vector.Vector3DType
+import org.wallerlab.yoink.api.service.molecule.Calculator
+import org.wallerlab.yoink.api.service.plugin.QmMmWrapper
+import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
 import spock.lang.Ignore
 import spock.lang.Specification
-import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
-import org.wallerlab.yoink.api.model.Job;
-
-import org.wallerlab.yoink.api.model.adaptive.Region
-import org.wallerlab.yoink.api.service.plugin.QmMmWrapper
-import org.wallerlab.yoink.api.service.math.Vector.Vector3DType;
-import org.wallerlab.yoink.api.service.molecule.Calculator;
 
 @Ignore
 class ProcessorSpec extends Specification {
