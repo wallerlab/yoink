@@ -29,69 +29,68 @@ import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
  */
 public class SimpleMolecule implements MolecularSystem.Molecule {
 
-	private final int index;
+    private final int index;
 
-	private final Set<Atom> atoms;
+    private final Set<Atom> atoms;
 
-	protected Region.Name name;
+    protected Region.Name name;
 
-	private Coord centerOfMass;
+    private Coord centerOfMass;
 
-	public SimpleMolecule(final int index, final Set<Atom> atoms) {
-		this.index = index;
-		this.atoms = atoms;
-	}
+    public SimpleMolecule(final int index, final Set<Atom> atoms) {
+    	this.index = index;
+	this.atoms = atoms;
+    }
 
-	/**
-	 * get the molecule name
-	 */
-	@Override
-	public Region.Name getName() {
-		return name;
-	}
+    /**
+     * get the molecule name
+     */
+    @Override
+    public Region.Name getName() {
+    	return name;
+    }
 
-	/**
-	 * set the molecule name
-	 */
-	@Override
-	public void setName(Region.Name value) {
-		this.name = value;
-	}
+    /**
+     * set the molecule name
+     */
+    @Override
+    public void setName(Region.Name value) {
+        this.name = value;
+    }
 
-	/**
-	 * get atoms in molecule
-	 */
-	@Override
-	public Set<Atom> getAtoms() {
-		return this.atoms;
-	}
+    /**
+     * get atoms in molecule
+     */
+    @Override
+    public Set<Atom> getAtoms() {
+    	return this.atoms;
+    }
 
-	/**
-	 * get molecule index in molecule system
-	 */
-	@Override
-	public int getIndex() {
-		return index;
-	}
+    /**
+     * get molecule index in molecule system
+     */
+    @Override
+    public int getIndex() {
+    	return index;
+    }
 
-	@Override
-	public Coord getCenterOfMass() {
-		return this.centerOfMass;
-	}
+    @Override
+    public Coord getCenterOfMass() {
+    	return this.centerOfMass;
+    }
 
-	@Override
-	public void setCenterOfMass(Coord centerOfMass) {
-		this.centerOfMass = centerOfMass;
-	}
+    @Override
+    public void setCenterOfMass(Coord centerOfMass) {
+    	this.centerOfMass = centerOfMass;
+    }
 
-	@Override
-	public String toString() {
-		return "Molecule{" +
-				"index=" + index +
-				", atoms=" + atoms +
-				", name=" + name +
-				", ratio=" + centerOfMass +
-				'}';
+    @Override
+    public String toString() {
+    	return "Molecule{" +
+		"index=" + index +
+		", atoms=" + atoms +
+		", name=" + name +
+		", ratio=" + centerOfMass +'}';
 	}
 
 }

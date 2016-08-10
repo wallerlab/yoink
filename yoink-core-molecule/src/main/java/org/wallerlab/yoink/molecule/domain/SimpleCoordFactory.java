@@ -33,45 +33,38 @@ import org.springframework.stereotype.Service;
 @Service
 public class SimpleCoordFactory implements Factory<Coord, double[]> {
 
-	@Resource
-	private SimpleVector3DFactory myVector3D;
+    @Resource
+    private SimpleVector3DFactory myVector3D;
 
-	/**
-	 * make a new Coord. x/y/z values are zero.
-	 * 
-	 * @return newCooord -Coord
-	 *         {@link Coord}
-	 */
-	public Coord create() {
-		Vector coordVector = myVector3D.create(0, 0, 0);
-		Coord newCooord = new SimpleCoord(coordVector);
-		return newCooord;
-	}
+    /**
+     * make a new Coord. x/y/z values are zero.
+     * 
+     * @return newCooord -Coord
+     *         {@link Coord}
+     */
+    public Coord create() {
+	return new SimpleCoord(myVector3D.create(0, 0, 0));
+    }
 
-	/**
-	 * make a new Coord. x/y/z values are zero.
-	 *
-	 * @return newCooord -Coord
-	 *         {@link Coord}
-	 */
-	public static Coord createStatic() {
-		Vector coordVector = SimpleVector3DFactory.staticCreate(0, 0, 0);
-		Coord newCooord = new SimpleCoord(coordVector);
-		return newCooord;
-	}
+    /**
+     * make a new Coord. x/y/z values are zero.
+     *
+     * @return newCooord -Coord
+     *         {@link Coord}
+     */
+    public static Coord createStatic() {
+	return new SimpleCoord(SimpleVector3DFactory.staticCreate(0, 0, 0));
+    }
 
-
-	/**
-	 * use an array with 3 elements to make a new Coord
-	 * 
-	 * @param d
-	 *            array double[3]
-	 * @return newCooord -Coord
-	 *         {@link Coord}
-	 */
-	public Coord create(double[] d) {
-		Vector coordVector = myVector3D.create(d);
-		Coord newCooord = new SimpleCoord(coordVector);
-		return newCooord;
-	}
+    /**
+     * use an array with 3 elements to make a new Coord
+     * 
+     * @param d
+     *            array double[3]
+     * @return newCooord -Coord
+     *         {@link Coord}
+     */
+    public Coord create(double[] d) {
+        return new SimpleCoord(myVector3D.create(d));
+    }
 }

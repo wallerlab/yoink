@@ -20,54 +20,45 @@ import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
 import org.wallerlab.yoink.api.service.math.Vector;
 
 /**
- * the domain model of atom
+ * Domain model of an atom
+ * 
+ * It is immutable
  * 
  * @author Min Zheng
  *
  */
 public class SimpleAtom implements MolecularSystem.Molecule.Atom {
 
-	protected final int index;
+    protected final int index;
 
-	protected final Element element;
+    protected final Element element;
 
-	//The unit is Bohr.
-	private final Vector coordinate;
+    //The unit is Bohr.
+    private final Vector coordinate;
 
-	public SimpleAtom(int index, Element elementType, Vector coordinate) {
-		this.index = index;
-		this.element = elementType;
-		this.coordinate = coordinate;
-	}
+    public SimpleAtom(int index, Element elementType, Vector coordinate) {
+        this.index = index;
+	this.element = elementType;
+	this.coordinate = coordinate;
+    }
 
-	/**
-	 * get the element type of the atom
-	 */
-	@Override
-	public Element getElement() {
-		return element;
-	}
+    /** get the element type of the atom */
+    @Override
+    public Element getElement() {return element;}
 
-	/**
-	 * get the atomic index in molecule system
-	 */
-	@Override
-	public int getIndex() {
-		return index;
-	}
+    /** get the atomic index in molecule system*/
+    @Override
+    public int getIndex() {return index;}
 
-	/**
-	 * get the coordinate of the atom
-	 */
-	public Vector getCoordinate() {return coordinate;}
+    /** get the coordinate of the atom */
+    public Vector getCoordinate() {return coordinate;}
 
-
-	@Override
-	public String toString() {
-		return "Atom{" +
-				"index=" + index +
-				", element=" + element +
-				", coordinate=" + coordinate +
-				'}';
+    @Override
+    public String toString() {
+        return "Atom{" +
+		"index=" + index +
+		", element=" + element +
+		", coordinate=" + coordinate +
+		'}';
 	}
 }

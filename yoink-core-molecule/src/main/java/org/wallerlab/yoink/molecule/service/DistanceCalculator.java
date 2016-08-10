@@ -16,17 +16,17 @@
 package org.wallerlab.yoink.molecule.service;
 
 import org.wallerlab.yoink.api.model.Coord;
-import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
 import org.wallerlab.yoink.api.service.math.Vector;
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
 import org.wallerlab.yoink.math.MapOps;
-import org.wallerlab.yoink.math.linear.SimpleVector3DFactory;
 import org.wallerlab.yoink.molecule.domain.SimpleCoord;
+import org.wallerlab.yoink.math.linear.SimpleVector3DFactory;
 
 import java.util.*;
 import org.springframework.stereotype.Service;
 
 /**
- * This class is to ratio the various distances for a molecular system.
+ * This class is to calculate various distances for a molecular system.
  * 
  * @author Min Zheng
  *
@@ -34,19 +34,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class DistanceCalculator  {
 
-	/**
-	 * distance between a coordinate and an atom.
-	 *
-	 * @param gridCoord
-	 *            -{@link Coord}
-	 * @param atom
-	 *            -{@link MolecularSystem.Molecule.Atom}
-	 * @return density -{@link java.lang.Double}
-	 *
-	 */
-	public double distance(Coord gridCoord, MolecularSystem.Molecule.Atom atom) {
-		return atom.getCoordinate().distance(gridCoord.getCoords());
-	}
+    /**
+     * distance between a coordinate and an atom.
+     *
+     * @param gridCoord
+     *            -{@link Coord}
+     * @param atom
+     *            -{@link MolecularSystem.Molecule.Atom}
+     * @return density -{@link java.lang.Double}
+     *
+     */
+    public double distance(Coord gridCoord, MolecularSystem.Molecule.Atom atom) {
+        return atom.getCoordinate().distance(gridCoord.getCoords());
+    }
 
 	/**
 	 * minimum distance between a coordinate and a molecule.
@@ -89,43 +89,39 @@ public class DistanceCalculator  {
 		return new SimpleCoord(com);
 	}
 
-	//Re-write this to return a sorted set
 
-	/**
-	 * This method to compute distances between molecules and a point,
-	 * make a map(sortedDistances) for molecule(as key) and corresponding
-	 * distance(as value), and sort the map by distance.
-	 *
-	 * @param centerCoord
-	 *            -{@link Coord}
-	 * @param molecules
-	 *            - a Set of molecules
-	 * @return sortedDistance - a Map, molecule as key and distance as value
-	 */
-	public Map<MolecularSystem.Molecule, Double> sortByDistance(Coord centerCoord, Set<MolecularSystem.Molecule> molecules) {
-		Map<MolecularSystem.Molecule, Double> distances = new HashMap<MolecularSystem.Molecule, Double>();
-		for (MolecularSystem.Molecule molecule : molecules) {
-			List<Double> atomDistances = new ArrayList<Double>();
-			for (MolecularSystem.Molecule.Atom atom : molecule.getAtoms())
-				atomDistances.add(distance(centerCoord, atom));
-			// sort the distances for given atoms in a molecule
-			double distanceMin = Collections.min(atomDistances);
-			// store the molecule with its closest atom
-			distances.put(molecule, distanceMin);
-		}
-		// now sort the list of molecules based on their closest atoms
-		Map<MolecularSystem.Molecule, Double> sortedDistances = MapOps.sortByValue(distances);
-
-
-		//ALTERNATIVE
-		/*Comparator<Molecule> distance = (Molecule m1, Molecule m2) -> m1.getDistanceToPoint().compareTo(m2.getDistanceToPoint())
-
-		molecules.stream()
-				 .map(molecule -> molecule.setDistanceToPoint(closest(centerCoord, molecule)))
-				 .sorted(distance)
-				 .collect(toSet());*/
-
-		return sortedDistances;
+    //Re-write this to return a sorted set
+    /**
+     * This method to compute distances between molecules and a point,
+     * make a map(sortedDistances) for molecule(as key) and corresponding
+     * distance(as value), and sort the map by distance.
+     *
+     * @param centerCoord
+     *            -{@link Coord}
+     * @param molecules
+     *            - a Set of molecules
+     * @return sortedDistance - a Map, molecule as key and distance as value
+     */
+    public Map<MolecularSystem.Molecule, Double> sortByDistance(Coord centerCoord, Set<MolecularSystem.Molecule> molecules) {
+	Map<MolecularSystem.Molecule, Double> distances = new HashMap<MolecularSystem.Molecule, Double>();
+	for (MolecularSystem.Molecule molecule : molecules) {
+		List<Double> atomDistances = new ArrayList<Double>();
+		for (MolecularSystem.Molecule.Atom atom : molecule.getAtoms())
+			atomDistances.add(distance(centerCoord, atom));
+		// sort the distances for given atoms in a molecule
+		double distanceMin = Collections.min(atomDistances);
+		// store the molecule with its closest atom
+		distances.put(molecule, distanceMin);
 	}
+	// now sort the list of molecules based on their closest atoms
+	Map<MolecularSystem.Molecule, Double> sortedDistances = MapOps.sortByValue(distances);
+	//ALTERNATIVE
+	/*Comparator<Molecule> distance = (Molecule m1, Molecule m2) -> m1.getDistanceToPoint().compareTo(m2.getDistanceToPoint())
+	molecules.stream()
+		 .map(molecule -> molecule.setDistanceToPoint(closest(centerCoord, molecule)))
+		 .sorted(distance)
+			 .collect(toSet());*/
+	return sortedDistances;
+    }
 
 }

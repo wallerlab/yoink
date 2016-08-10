@@ -14,55 +14,51 @@
  * limitations under the License.
  */
 package org.wallerlab.yoink.molecule.domain;
+import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
 
 import java.util.HashSet;
 import java.util.Set;
-
-import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
-
 import static java.util.stream.Collectors.toSet;
+
 /**
- * the domain model for molecular system.
+ * Domain model for molecular system.
  * 
  * @author Min Zheng
  *
  */
 public class SimpleMolecularSystem implements MolecularSystem {
 
-	private final Set<Molecule> molecules;
+    private final Set<Molecule> molecules;
 
-	public SimpleMolecularSystem(Set<Molecule> molecules) {
-		this.molecules = molecules;
+    public SimpleMolecularSystem(Set<Molecule> molecules) {
+        this.molecules = molecules;
+    }
+
+    /**
+     * get all atoms in the molecule system.
+     */
+    @Override
+    public Set<Molecule.Atom> getAtoms() {
+        return molecules.stream()
+			.flatMap(molecule -> molecule.getAtoms()
+					   	     .stream())
+			.collect(toSet());
 	}
 
-	/**
-	 * get all atoms in the molecule system.
-	 */
-	@Override
-	public Set<Molecule.Atom> getAtoms() {
-		return molecules.stream()
-						.flatMap(molecule ->
-										molecule.getAtoms()
-												.stream())
-												.collect(toSet());
+    public Set<Molecule> getMolecules(String query){
+	return molecules.stream()
+			.filter(molecule -> molecule.getName()
+					            .toString()
+					           .equals(query))
+                        .collect(toSet());
 	}
 
-	public Set<Molecule> getMolecules(String query){
-		return molecules.stream()
-						.filter(molecule ->
-						           molecule.getName()
-								           .toString()
-								           .equals(query))
-						.collect(toSet());
-	}
-
-	/**
-	 * All molecules in molecular system.
-	 */
-	@Override
-	public Set<Molecule> getMolecules() {
-		return new HashSet<>(this.molecules);
-	}
-
+    /**
+     * All molecules in this molecular system.
+     */
+    @Override
+    public Set<Molecule> getMolecules() {
+        return new HashSet<>(this.molecules);
+    }
 
 }

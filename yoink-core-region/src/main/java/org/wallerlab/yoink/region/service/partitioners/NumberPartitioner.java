@@ -16,7 +16,10 @@ import static java.util.stream.Collectors.toList;
 
 /**
  * this class is for parameter based adaptive qm/mm partitioning
- * 			(Distance, Number and Size).
+ * 
+ *    -Distance
+ *    -Number
+ *    -Size
  *
  * it is to get QM_ADAPTIVE region , QM region, and the BUFFER region
  * 
@@ -41,10 +44,13 @@ public class NumberPartitioner implements Partitioner{
 
 		Coord centerOfMass = distanceCalculator.centerOfMass(job.getMolecularSystem().getMolecules("QM_CORE_FIXED"));
 
-		Set<MolecularSystem.Molecule> moleculesInNonQmCore = new HashSet<MolecularSystem.Molecule>(job.getMolecularSystem().getMolecules());
+		Set<MolecularSystem.Molecule> moleculesInNonQmCore = 
+		      new HashSet<MolecularSystem.Molecule>(job.getMolecularSystem().getMolecules());
+		      
 		moleculesInNonQmCore.removeAll(job.getMolecularSystem().getMolecules("QM_CORE_FIXED"));
 
-		List<MolecularSystem.Molecule> sortedMolecules = moleculesInNonQmCore.stream()
+		List<MolecularSystem.Molecule> sortedMolecules =
+		            moleculesInNonQmCore.stream()
 						.sorted((molecule1, molecule2) -> {
 							Double distance1 = distanceCalculator.closest(centerOfMass, molecule1);
 							Double distance2 = distanceCalculator.closest(centerOfMass, molecule2);
@@ -63,17 +69,17 @@ public class NumberPartitioner implements Partitioner{
 			double distance_t_qm_out =  Double.parseDouble(job.getParameter(DISTANCE_T_QM_OUT).toString());
 
 			//find first molecule that is outside of limit.
-			MolecularSystem.Molecule moleculeAtT_Qm_Out = sortedMolecules.stream()
-														 .filter(molecule ->
-																 distanceCalculator.closest(centerOfMass, molecule)
-																		 > distance_t_qm_out)
-								   				 	     .findFirst().get();
-
+		  MolecularSystem.Molecule moleculeAtT_Qm_Out =
+		  
+		     sortedMolecules.stream()
+		                    .filter(molecule ->	
+		                               distanceCalculator.closest(centerOfMass, molecule) > distance_t_qm_out)
+				    .findFirst()
+				    .get();
 			qmAdaptiveMolecules = new HashSet<>(sortedMolecules.subList(0, qmNumberSize));
 			bufferMolecules = new HashSet<>(sortedMolecules.subList(qmNumber,
-																sortedMolecules.indexOf(moleculeAtT_Qm_Out) + 1));
+								    	  	  sortedMolecules.indexOf(moleculeAtT_Qm_Out) + 1));
 		}
-
 		qmAdaptiveAndBuffer.put(QM_ADAPTIVE,qmAdaptiveMolecules);
 		qmAdaptiveAndBuffer.put(BUFFER,bufferMolecules);
 		return qmAdaptiveAndBuffer;

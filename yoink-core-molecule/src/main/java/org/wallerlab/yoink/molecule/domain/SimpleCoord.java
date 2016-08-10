@@ -19,38 +19,34 @@ import org.wallerlab.yoink.api.model.Coord;
 import org.wallerlab.yoink.api.service.math.Vector;
 
 /**
- * this domain model of coordinate stores the information of coordinate in the
- * format of 3D vector.
- *
- * 
+ * Domain model of coordinate stores the information of coordinate
+ * in the format of 3D vector.
  */
-//TODO deprecate this.
+//TODO deprecate this?
 public class SimpleCoord implements Coord {
 
-	private final Vector coords;
+    private final Vector coords;
 
-	/**
-	 * construct a new simple coord with its coordinate vector
-	 * 
-	 * @param coordVector
-	 *            {@link Vector}
-	 */
-	public SimpleCoord(Vector coordVector) {
-		this.coords = coordVector;
-	}
+    /**
+     * construct a new simple coord with its coordinate vector
+     * 
+     * @param coordVector
+     *            {@link Vector}
+     */
+    public SimpleCoord(Vector coordVector) {
+    	this.coords = coordVector;
+    }
 
-	/**
-	 * get the value of coordinates
-	 * 
-	 * @return coords {@link Vector}
-	 */
-	@Override
-	public Vector getCoords() {
-		return coords;
-	}
+    /**
+     * get the value of coordinates
+     * 
+     * @return coords {@link Vector}
+     */
+    @Override
+    public Vector getCoords() {	return coords;}
 
-	@Override
-	public String toString() {
-		return "Coords=" + coords.getX() + " " + coords.getY() + " " + coords.getZ() + " " + '}';
-	}
+    @Override
+    public String toString() {
+        return "Coords=" + coords.getX() + " " + coords.getY() + " " + coords.getZ() + " " + '}';
+    }
 }
