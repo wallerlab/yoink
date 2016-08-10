@@ -24,7 +24,7 @@ import org.wallerlab.yoink.api.service.math.Vector;
  *
  */
 @Service("hotspot")
-public class HotspotSmoothner implements Smoothner {
+public class HOTSPOTSmoothner implements Smoothner {
 
 	@Resource
 	@Qualifier("qmmm")
