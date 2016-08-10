@@ -59,27 +59,25 @@ public class SetOps {
      *         integer lists
      */
     public static List<ArrayList<Integer>> split(int[] S) {
-	if (S == null) return null;
+        if (S == null) return null;
 	Arrays.sort(S);
-	ArrayList<ArrayList<Integer>> result = new ArrayList<ArrayList<Integer>>();
+	List<ArrayList<Integer>> result = new ArrayList<ArrayList<Integer>>();
 	for (int i = 0; i < S.length; i++) {
-	ArrayList<ArrayList<Integer>> temp = new ArrayList<ArrayList<Integer>>();
-	// get sets that are already in result
-	for (ArrayList<Integer> a : result)
-		temp.add(new ArrayList<Integer>(a));
-		// add S[i] to existing sets
- 	for (ArrayList<Integer> a : temp)
-				a.add(S[i]);
-			// add S[i] only as a set
-			ArrayList<Integer> single = new ArrayList<Integer>();
-			single.add(S[i]);
-			temp.add(single);
-			result.addAll(temp);
-		}
-		// add empty set
-		result.add(new ArrayList<Integer>());
-		return result;
-	}
+	    List<ArrayList<Integer>> temp = new ArrayList<ArrayList<Integer>>();
+	    // get sets that are already in result
+	    for (ArrayList<Integer> a : result) temp.add(new ArrayList<Integer>(a));
+	    // add S[i] to existing sets
+ 	    for (ArrayList<Integer> a : temp) a.add(S[i]);
+	    // add S[i] only as a set
+	    ArrayList<Integer> single = new ArrayList<Integer>();
+	    single.add(S[i]);
+	    temp.add(single);
+	    result.addAll(temp);
+        }
+        // add empty set
+        result.add(new ArrayList<Integer>());
+        return result;
+    }
 
 	/**
 	 * this method is to get all subsets with the same size of an integer array.
@@ -94,32 +92,25 @@ public class SetOps {
 	 *         integer lists
 	 */
 	public static List<ArrayList<Integer>> split(int[] S, int size) {
-		if (S == null)
-			return null;
+		if (S == null) return null;
 		Arrays.sort(S);
 		ArrayList<ArrayList<Integer>> result = new ArrayList<ArrayList<Integer>>();
 		for (int i = 0; i < S.length; i++) {
-			ArrayList<ArrayList<Integer>> temp = new ArrayList<ArrayList<Integer>>();
+			List<ArrayList<Integer>> temp = new ArrayList<ArrayList<Integer>>();
 			// get sets that are already in result
-			for (ArrayList<Integer> a : result) {
-				temp.add(new ArrayList<Integer>(a));
-			}
+			for (ArrayList<Integer> a : result) temp.add(new ArrayList<Integer>(a));
 			// add S[i] to existing sets
-			for (ArrayList<Integer> a : temp) {
-				a.add(S[i]);
-			}
+			for (ArrayList<Integer> a : temp) a.add(S[i]);
 			// add S[i] only as a set
 			ArrayList<Integer> single = new ArrayList<Integer>();
 			single.add(S[i]);
 			temp.add(single);
 			result.addAll(temp);
 		}
-		ArrayList<ArrayList<Integer>> sizeResult = new ArrayList<ArrayList<Integer>>();
-		for(int i=0;i<result.size();i++){
-			if(result.get(i).size()==size){
-				sizeResult.add(result.get(i));
-			}
-		}
+		List<ArrayList<Integer>> sizeResult = new ArrayList<ArrayList<Integer>>();
+		for(int i=0;i<result.size();i++)
+			if(result.get(i).size()==size)
+			    sizeResult.add(result.get(i));
 		return sizeResult;
 	}
 
@@ -133,9 +124,9 @@ public class SetOps {
     public static List<ArrayList<Double>> splitDoubleArray(double[] S) {
 	if (S == null) return null;
 	Arrays.sort(S);
-	ArrayList<ArrayList<Double>> result = new ArrayList<ArrayList<Double>>();
+	List<ArrayList<Double>> result = new ArrayList<ArrayList<Double>>();
 	for (int i = 0; i < S.length; i++) {
-    	    ArrayList<ArrayList<Double>> temp = new ArrayList<ArrayList<Double>>();
+    	    List<ArrayList<Double>> temp = new ArrayList<ArrayList<Double>>();
 	    // get sets that are already in result
 	    for (ArrayList<Double> a : result)
 	        temp.add(new ArrayList<Double>(a));
