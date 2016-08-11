@@ -23,8 +23,9 @@ import org.wallerlab.yoink.api.model.adaptive.Region;
 import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
 
 /**
- * this interface contains method partition() and enum Partitioner.Type. When
- * V is {@link DensityPoint.DensityType }
+ * this interface contains method partition() and enum Partitioner.Type.
+
+ * When V is {@link DensityPoint.DensityType }
  * , the return type K is a List of grid points or a Map,
  * {@link Region.Name} as Key,
  * {@link Region} as Value.

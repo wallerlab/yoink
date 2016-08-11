@@ -50,17 +50,16 @@ class SimpleRegionSpec extends Specification{
 		region.getAtoms()==[atom] as Set
 	}
 
-	@Ignore
 	def"test getCenterOfMass"(){
 
 		def a=Mock(MolecularSystem.Molecule.Atom)
 		def coordinate=Mock(Coord)
-		coordinate.getCoords()>> SimpleVector3DFactory.staticCreate(1, 1, 1);
-		a.getCoordinate()>>coordinate
+		a.getCoordinate() >> SimpleVector3DFactory.staticCreate(1, 1, 1);
 		a.getElement()>>Element.H
+
 		def m=new SimpleMolecule(1,[a,a] as Set)
 		m.getAtoms()>>a
-		def molecules = [Mock(MolecularSystem.Molecule)] as Set
+		def molecules = [] as Set
 		molecules.add(m)
 
 		when:

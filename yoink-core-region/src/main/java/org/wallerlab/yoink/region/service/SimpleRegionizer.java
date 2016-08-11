@@ -46,7 +46,7 @@ public class SimpleRegionizer implements Regionizer{
    public Job<JAXBElement> regionize(Job<JAXBElement> job) {
         Set<MolecularSystem.Molecule> moleculesInSystem = job.getMolecularSystem().getMolecules();
         Set<MolecularSystem.Molecule> moleculesInQmCore = job.getMolecularSystem().getMolecules("QM_CORE");
-	//Hack, because of the way the code is setup.
+	//Hack, because of the way the code is setup. -  clean this up.
 	if (job.getParameter(PARTITIONER) == CLUSTER) return job;
 	//Real work is done here.
 	Map<Region.Name,Set<MolecularSystem.Molecule>> partitionedSets = 
