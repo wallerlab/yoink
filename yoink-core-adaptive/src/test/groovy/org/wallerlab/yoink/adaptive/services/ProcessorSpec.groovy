@@ -79,44 +79,34 @@ class ProcessorSpec extends Specification {
 
 	}
 
-
 	def " PAP Adaptive Processor " (){
-
 		when:
-		def bf=new Processors().pap;
-
+			def bf=new Processors().pap;
 		then:
-		bf.smooth(job)
+			bf.smooth(job)
 	}
-
 
 	def "Hotspot Adaptive Processor" (){
 		when:
-		def bf=new Processors().hotspot;
-
-
+			def bf=new Processors().hotspot;
 		then:
-		bf.smooth(job)
+			bf.smooth(job)
 	}
-
 
 	def "Bufferef Force Adaptive Processor" (){
 		when:
-		def bf=new Processors().bufferedForce;
-
+			def bf=new Processors().bufferedForce;
 
 		then:
-		bf.smooth(job)
+			bf.smooth(job)
 	}
 
 	def "Config Adaptive Processor" (){
 		when:
-		def bf=new Processors().config;
-
+			def bf=new Processors().config;
 
 		then:
-		bf.smooth(job)
-
+			bf.smooth(job)
 	}
 
 }

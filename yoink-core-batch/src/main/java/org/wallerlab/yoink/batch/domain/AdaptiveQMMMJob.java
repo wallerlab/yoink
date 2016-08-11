@@ -33,6 +33,8 @@ import javax.xml.bind.JAXBElement;
 public class AdaptiveQMMMJob implements Job<JAXBElement> {
 
 	// keep original cml in order to insert results back into properties in the JAXB
+	//TODO how about an input that gets modified to be output. That way always know if they are consistent,
+	// putting it back through the code produces same result. Just an idea.
 	private final JAXBElement<Cml> input;
 
 	private final MolecularSystem molecularSystem;

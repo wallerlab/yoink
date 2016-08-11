@@ -25,11 +25,13 @@ class ConfigurationSpec extends Specification{
         when: " we construct a configuration"
           def molecule = Mock(MolecularSystem.Molecule)
           def molecules = [molecule, molecule] as Set
-          def configuration = new Configuration(0.01,0.2,molecules)
+          def qmWeight = 0.01
+          def bufferWeight = 0.2
+          def configuration = new Configuration(qmWeight,bufferWeight,molecules)
 
         then: " its properties stay fixed, and are available."
-           configuration.bufferWeight
-           configuration.qmWeight
+           configuration.bufferWeight == 0.2
+           configuration.qmWeight == 0.01
            configuration.getBufferMolecules().size() == 1
     }
 

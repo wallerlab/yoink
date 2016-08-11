@@ -15,23 +15,23 @@
  */
 package org.wallerlab.yoink.batch.config;
 
-import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
-import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.core.launch.support.RunIdIncrementer;
-import org.springframework.batch.item.ItemProcessor;
-import org.springframework.batch.item.ItemReader;
-import org.springframework.batch.item.ItemWriter;
-import org.springframework.batch.item.support.CompositeItemProcessor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.*;
 import org.wallerlab.yoink.api.model.Job;
 
 import javax.xml.bind.JAXBElement;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.batch.item.ItemProcessor;
+import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.item.ItemWriter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.*;
+import org.springframework.batch.core.Step;
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
+import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.batch.item.support.CompositeItemProcessor;
 
 /**
  * This class is configuration for spring batch
@@ -67,6 +67,7 @@ public class BatchConfig  {
 	@Qualifier("adaptiveProcessor")
 	public ItemProcessor<Job<JAXBElement>, Job> smoothnerProcessor;
 
+	//TODO this is a  just a regionizer.
 	//@Autowired
 	//@Qualifier("clusteringProcessor")
 	//public ItemProcessor<Job<JAXBElement>, Job> clusterProcessor;

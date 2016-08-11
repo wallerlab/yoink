@@ -41,16 +41,16 @@ public class SimpleMolecularSystem implements MolecularSystem {
     public Set<Molecule.Atom> getAtoms() {
         return molecules.stream()
 			.flatMap(molecule -> molecule.getAtoms()
-					   	     .stream())
+					   	                 .stream())
 			.collect(toSet());
 	}
 
     public Set<Molecule> getMolecules(String query){
 	return molecules.stream()
 			.filter(molecule -> molecule.getName()
-					            .toString()
-					           .equals(query))
-                        .collect(toSet());
+					                    .toString()
+					                    .equals(query))
+            .collect(toSet());
 	}
 
     /**

@@ -36,13 +36,13 @@ class AdaptiveServiceSpec extends Specification{
 	@Ignore
 	def "test method getSmoothers(YoinkJob job)"(){
 
-		def router=new SmoothFactors()
+		def smoothFactors=new SmoothFactors()
 
-		router.distanceSmoothnerBF=Mock(Adaptive)
+		smoothFactors.distanceSmoothnerBF=Mock(Adaptive)
 		
-		router.distanceSmoothnerDAS=Mock(Adaptive)
+		smoothFactors.distanceSmoothnerDAS=Mock(Adaptive)
 		
-		router.dasWeightFactors=Mock(Adaptive)
+		smoothFactors.dasWeightFactors=Mock(Adaptive)
 
 		when:"smoothner is BUFFERED_FORCE"
 
@@ -50,17 +50,17 @@ class AdaptiveServiceSpec extends Specification{
 		def parameters=Mock(Map)
 		parameters.get(Job.JobParameter.SMOOTHNER)>>Adaptive.Type.BUFFERED_FORCE
 		job.getParameters()>>parameters
-		then:"assert the size of calculators in router"
-		router.getSmoothers(job).size()==0
-		router.getSmoothers(job) instanceof List<Adaptive>
+		then:"assert the size of calculators in smoothFactors"
+		smoothFactors.getSmoothers(job).size()==0
+		smoothFactors.getSmoothers(job) instanceof List<Adaptive>
 
 		when:"smoothner is DISTANCE_DAS"
 		def job2=Mock(Job)
 		def parameters2=Mock(Map)
 		parameters2.get(Job.JobParameter.SMOOTHNER)>>Adaptive.Type.DISTANCE_DAS
 		job2.getParameters()>>parameters2
-		then:" the size of calculators in router is 2"
-		router.getSmoothers(job2).size()==2
+		then:" the size of calculators in smoothFactors is 2"
+		smoothFactors.getSmoothers(job2).size()==2
 
 		when:"smoothner is DISTANCE_XS"
 		def job3=Mock(Job)
@@ -68,14 +68,14 @@ class AdaptiveServiceSpec extends Specification{
 		parameters3.get(Job.JobParameter.SMOOTHNER)>>Adaptive.Type.DISTANCE_XS
 		job3.getParameters()>>parameters3
 		then:
-		router.getSmoothers(job3).size()==2
+		smoothFactors.getSmoothers(job3).size()==2
 
 		when:"smoothner is DISTANCE_SAP"
 		def job4=Mock(Job)
 		def parameters4=Mock(Map)
 		parameters4.get(Job.JobParameter.SMOOTHNER)>>Adaptive.Type.DISTANCE_SAP
 		job4.getParameters()>>parameters4
-		then:" the size of calculators in router is 2"
-		router.getSmoothers(job4).size()==2
+		then:" the size of calculators in smoothFactors is 2"
+		smoothFactors.getSmoothers(job4).size()==2
 	}
 }

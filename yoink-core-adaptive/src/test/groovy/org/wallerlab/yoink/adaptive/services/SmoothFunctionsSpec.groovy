@@ -18,7 +18,6 @@ package org.wallerlab.yoink.adaptive.services
 import spock.lang.Ignore
 import spock.lang.Specification
 
-@Ignore
 class SmoothFunctionsSpec extends Specification{
 
 	def min=2.0d
@@ -62,6 +61,7 @@ class SmoothFunctionsSpec extends Specification{
 	}
 
 
+	@Ignore
 	def "test morokuma smooth(double currentValue, double min, double max)"(){
 		when:"current value is max"
 		currentValue=3.1
@@ -80,6 +80,7 @@ class SmoothFunctionsSpec extends Specification{
 	}
 
 
+	@Ignore
 	def "test permuted smooth(double currentValue, double min, double max)"(){
 
 		when:"current value is max"
@@ -115,4 +116,5 @@ class SmoothFunctionsSpec extends Specification{
 		then:"assert reult value"
 		Math.abs(sf.scmp.evaluate(currentValue, min, max)-0.5)<=1.0E-5
 	}
+
 }
