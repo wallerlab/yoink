@@ -31,7 +31,6 @@ import static org.wallerlab.yoink.api.service.region.Regionizer.Type.*;
 import static org.wallerlab.yoink.api.model.Job.JobParameter.*;
 import static org.wallerlab.yoink.api.model.adaptive.Region.Name.*;
 
-@Ignore
 class DistancePartitionerSpec extends Specification{
 
 	//This class really has only a few features.
@@ -60,17 +59,24 @@ class DistancePartitionerSpec extends Specification{
 		def m3=Mock(MolecularSystem.Molecule)
 		m3.getAtoms()>>[a3]
 
+
 		region2.getMolecules()>>[m1, m2, m3]
 
 		def distanceCalculator=Mock(IDistanceCalculator)
-		distanceCalculator.calculate(_,m1)>> 1.0d
-		distanceCalculator.calculate(_,m2)>> 2.0d
-		distanceCalculator.calculate(_,m3)>> 3.0d
+
+		distanceCalculator.closest(_,m1) >> 1.0d
+		distanceCalculator.closest(_,m2) >> 2.0d
+		distanceCalculator.closest(_,m3) >> 3.0d
 
 		job.getParameter(DISTANCE_QM)>> 2.5d
 		job.getParameter(DISTANCE_BUFFER)>> 1.0d
 		job.getParameter(PARTITIONER)>> DISTANCE
 
+		def ms = Mock(MolecularSystem)
+		job.getMolecularSystem() >> ms
+		ms.getMolecules() >>(Set<MolecularSystem.Molecule>)[m1, m2, m3]
+
+		ms.getMolecules("QM_CORE_FIXED") >> [m1]
 
 		when:"set up a new DistanceRegionizer"
 		def regionizer = new DistancePartitioner()
@@ -78,7 +84,7 @@ class DistancePartitionerSpec extends Specification{
 
 		then:"the new distanceRegionizer is executable and gets right results"
 		def results = regionizer.partition(job)
-		results.get(QM_ADAPTIVE).size()==2
+		results.get(QM_ADAPTIVE).size()==1
 		results.get(BUFFER).size()==1
 	}
 }
