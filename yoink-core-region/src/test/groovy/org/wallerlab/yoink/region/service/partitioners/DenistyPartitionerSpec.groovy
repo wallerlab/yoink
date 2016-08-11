@@ -1,13 +1,10 @@
 package org.wallerlab.yoink.region.service.partitioners
 
 import org.wallerlab.yoink.api.model.Coord
-import org.wallerlab.yoink.api.model.DensityPoint
 import org.wallerlab.yoink.api.model.VoronoiPoint
 import org.wallerlab.yoink.api.model.molecular.MolecularSystem
-import org.wallerlab.yoink.api.model.molecular.MolecularSystem.Molecule.Atom
 import org.wallerlab.yoink.api.service.cube.Voronoizer
 import org.wallerlab.yoink.api.service.density.DensityCalculator
-import org.wallerlab.yoink.region.service.partitioners.DensityPartitioner
 
 import spock.lang.Specification
 
@@ -62,6 +59,53 @@ class DenistyPartitionerSpec extends Specification{
         voronoizer.voronoize(_, searchMolecules, molecularSystem) >> gridPoints
     }
 
+   // private static final double asrQmCoreThreshold = 0.1d;
+   // private static final double asrQmThreshold	   = 0.0001d;
+    //private static final double asrThreshold 	   = 0.000001d;
+
+    def "test the density partitioner with low"(){
+        when:
+        densityCalculator.electronic(_,_) >> 0.0000001d;
+
+        molecularSystem.getMolecules("QM_CORE_FIXED") >> qmCore
+
+        then:
+        def result = [[] as Set,[] as Set,[] as Set]
+        densityPartitioner.densityPartitioner(molecularSystem) == result
+    }
+
+    def "test the density partitioner with small"(){
+        when:
+        densityCalculator.electronic(_,_) >> 0.000002d;
+
+        molecularSystem.getMolecules("QM_CORE_FIXED") >> qmCore
+
+        then:
+        def result = [[] as Set,[] as Set,[m2,m3] as Set]
+        densityPartitioner.densityPartitioner(molecularSystem) == result
+    }
+
+    def "test the density partitioner with medium"(){
+        when:
+        densityCalculator.electronic(_,_) >> 0.0002d;
+
+        molecularSystem.getMolecules("QM_CORE_FIXED") >> qmCore
+
+        then:
+        def result = [[] as Set,[m2,m3] as Set,[m2,m3] as Set]
+        densityPartitioner.densityPartitioner(molecularSystem) == result
+    }
+
+    def "test the density partitioner with high"(){
+        when:
+        densityCalculator.electronic(_,_) >> 0.2d;;
+
+        molecularSystem.getMolecules("QM_CORE_FIXED") >> qmCore
+
+        then:
+        def result = [[m2,m3] as Set,[m2,m3] as Set,[m2,m3] as Set]
+        densityPartitioner.densityPartitioner(molecularSystem) == result
+    }
 
     def "test strongly bound is working with all in QM core "() {
 

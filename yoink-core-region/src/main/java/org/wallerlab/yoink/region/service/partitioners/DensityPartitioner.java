@@ -99,12 +99,13 @@ public class DensityPartitioner implements Partitioner{
 		Set<MolecularSystem.Molecule> asrQmCore = new HashSet<>();
 		Set<MolecularSystem.Molecule> asrQm     = new HashSet<>();
 		Set<MolecularSystem.Molecule> buffer    = new HashSet<>();
-		//Careful I am assuming here that it is only the fixed. I think that is wrong.
+
+        //Careful I am assuming here that it is only the fixed. I think that is wrong.
 		Set<MolecularSystem.Molecule> moleculesInQmCoreFixed = molecularSystem.getMolecules("QM_CORE_FIXED");
-		Set<MolecularSystem.Molecule> moleculesInNonQmCore =
-		    new HashSet<MolecularSystem.Molecule>( molecularSystem.getMolecules());
-	        moleculesInNonQmCore.removeAll(moleculesInQmCoreFixed);
-		//Molecular Density
+		Set<MolecularSystem.Molecule> moleculesInNonQmCore =new HashSet<MolecularSystem.Molecule>( molecularSystem.getMolecules());
+        moleculesInNonQmCore.removeAll(moleculesInQmCoreFixed);
+
+        //Molecular Density
 		for(MolecularSystem.Molecule molecule: moleculesInNonQmCore){
 			//Evaluate the density of the QM Core fixed at the center of mass for every other molecule.
 			double density = densityCalculator.electronic(molecule.getCenterOfMass(), moleculesInQmCoreFixed);
@@ -169,13 +170,13 @@ public class DensityPartitioner implements Partitioner{
         List<VoronoiPoint> gridPoints = voronoizer.voronoize(SEDD, searchMolecules, molecularSystem);
 
         return (Set<MolecularSystem.Molecule>) gridPoints.stream()
-                .filter(bothNotInQmFixed)
-                .filter(density)
-                .filter(densityRatio)
-                .filter(atomicSedd)
-                .filter(molecularSedd)
-                .flatMap(gridPoint -> gridPoint.getNearestMolecules().stream())
-                .collect(toSet());
+                                                         .filter(bothNotInQmFixed)
+                                                         .filter(density)
+                                                         .filter(densityRatio)
+                                                         .filter(atomicSedd)
+                                                         .filter(molecularSedd)
+                                                         .flatMap(gridPoint -> gridPoint.getNearestMolecules().stream())
+                                                         .collect(toSet());
     }
 
 
