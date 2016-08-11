@@ -51,32 +51,26 @@ public enum ExponentialFit {
 	private final Vector c;
 	private final Vector cz;
 	private final Vector czz;
-
 	private final Vector z;
 	private final Vector invZ;
 
 	ExponentialFit(final double c1,
                    final double c2,
-                   final  double c3,
+                   final double c3,
                    final double z1,
                    final double z2,
                    final double z3) {
-		this.c      = SimpleVector3DFactory.staticCreate(c1,c2,c3);
-  		this.cz     = SimpleVector3DFactory.staticCreate( c1/z1    ,  c2/z2    ,  c3/z3);
+		this.c      = SimpleVector3DFactory.staticCreate(        c1,         c2,         c3);
+  		this.cz     = SimpleVector3DFactory.staticCreate(     c1/z1,      c2/z2,      c3/z3);
 		this.czz    = SimpleVector3DFactory.staticCreate((c1/z1)/z1, (c2/z2)/z2, (c3/z3)/z3);
-
-		this.z      = SimpleVector3DFactory.staticCreate(z1,z2,z3);
-		this.invZ   = SimpleVector3DFactory.staticCreate(1/z1,1/z2,1/z3);
+		this.z      = SimpleVector3DFactory.staticCreate(        z1,         z2,         z3);
+		this.invZ   = SimpleVector3DFactory.staticCreate(      1/z1,       1/z2,       1/z3);
 	}
 
-	public Vector C() {return c;}
-
-	public Vector Cz() {return cz;}
-
-	public Vector Czz() {return czz;}
-
-	public Vector Z() {return z;}
-
+	public Vector C()    {return c;}
+	public Vector Cz()   {return cz;}
+	public Vector Czz()  {return czz;}
+	public Vector Z()    {return z;}
 	public Vector invZ() {return invZ;}
 
 }

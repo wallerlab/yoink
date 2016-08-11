@@ -18,9 +18,9 @@ class InteractionSpec extends Specification{
         def interaction= new Interaction(molecules,weight,degree)
 
         then:
-        interaction.degree     == 4
+        interaction.degree     ==  4
+        interaction.weight     ==  0.01
         interaction.molecules  ==  molecules
-        interaction.weight     ==0.01
 
     }
 

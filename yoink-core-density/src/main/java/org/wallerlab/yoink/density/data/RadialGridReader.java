@@ -47,9 +47,9 @@ public class RadialGridReader {
     @Resource
     private SimpleMatrixFactory myMatrix;
 
-    private static final double prefactorFirstDerivative = 1.0 / 120.0; // fac1
+    private static final double prefactorFirstDerivative = 1.0 / 120.0;   // fac1
 
-    private static final double prefactorSecondDerivative = 2.0 / 120.0;// fac2
+    private static final double prefactorSecondDerivative = 2.0 / 120.0;  // fac2
 
     private static final double coreCutoff = 1E-12; // Cutoff contribution for core radial grids
 
@@ -161,10 +161,8 @@ public class RadialGridReader {
 
         for (int i = 0; i < numberOfGridPoints; i++) {
             int ic = 1;
-            if (i <= 1)
-                ic = 0;
-            else if (i >= numberOfGridPoints - 3)
-                ic = 2;
+            if (i <= 1) ic = 0;
+            else if (i >= numberOfGridPoints - 3) ic = 2;
             for (int j = 0; j < 6; j++) {
                 firstDerivativeOfGridValues[i] += coefficientsFirstDerivative[j][ic] * gridValues[i + nodeOffsets[j][ic]];
                 secondDerivativeOfGridValues[i] += coefficientsSecondDerivative[j][ic] * gridValues[i + nodeOffsets[j][ic]];

@@ -1,7 +1,6 @@
 package org.wallerlab.yoink.cluster.config
 
 import org.neo4j.ogm.session.SessionFactory
-import org.neo4j.ogm.transaction.TransactionManager
 import org.springframework.data.neo4j.transaction.Neo4jTransactionManager
 import org.wallerlab.yoink.cluster.GraphConfig
 import spock.lang.Specification
