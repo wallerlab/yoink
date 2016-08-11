@@ -146,34 +146,38 @@ public class DensityPartitioner implements Partitioner{
 							   Set<MolecularSystem.Molecule> searchMolecules,
 							   MolecularSystem molecularSystem) {
 
-		//This is ugly with all the predicates separate
-		Predicate<VoronoiPoint> bothNotInQmFixed = gridPoint -> qmFixedMolecules.containsAll(gridPoint.getNearestMolecules());
 
-		Predicate<VoronoiPoint> density = gridPoint ->
-			 densityCalculator.atomic(gridPoint.getCoordinate(), gridPoint.getNearestAtoms()) > densitySedd;
+        //This is ugly with all the predicates separate
+        Predicate<VoronoiPoint> bothNotInQmFixed = gridPoint ->
+                !qmFixedMolecules.containsAll(gridPoint.getNearestMolecules());
 
-		Predicate<VoronoiPoint> densityRatio = gridPoint -> {
-			double atomPairDensityRatio = densityCalculator.electronic(gridPoint.getCoordinate(), gridPoint.getNearestAtoms());
-			return ((atomPairDensityRatio >= densityRationMin && atomPairDensityRatio <= densityRatioMax));
-		};
+        Predicate<VoronoiPoint> density = gridPoint ->
+                densityCalculator.atomic(gridPoint.getCoordinate(), gridPoint.getNearestAtoms()) > densitySedd;
 
-		Predicate<VoronoiPoint> atomicSedd = gridPoint ->
-			densityCalculator.sedd(gridPoint.getCoordinate(),gridPoint.getNearestAtoms()) <= seddThreshold;
+        Predicate<VoronoiPoint> densityRatio = gridPoint -> {
+            double atomPairDensityRatio = densityCalculator.electronic(gridPoint.getCoordinate(),
+                                                                       gridPoint.getNearestAtoms());
+            return ((atomPairDensityRatio >= densityRationMin && atomPairDensityRatio <= densityRatioMax));
+        };
 
-		Predicate<VoronoiPoint> molecularSedd = gridPoint ->
-			densityCalculator.sedd(gridPoint.getCoordinate(),mapToAtoms(searchMolecules)) <= seddThreshold;
+        Predicate<VoronoiPoint> atomicSedd = gridPoint ->
+                densityCalculator.sedd(gridPoint.getCoordinate(),gridPoint.getNearestAtoms()) <= seddThreshold;
 
-		List<VoronoiPoint> gridPoints = voronoizer.voronoize(SEDD, searchMolecules, molecularSystem);
+        Predicate<VoronoiPoint> molecularSedd = gridPoint ->
+                densityCalculator.sedd(gridPoint.getCoordinate(),mapToAtoms(searchMolecules)) <= seddThreshold;
 
-		return (Set<MolecularSystem.Molecule>) gridPoints.stream()
-							         .filter(bothNotInQmFixed)
-								 .filter(density)
-						 		 .filter(densityRatio)
-								 .filter(atomicSedd)
-				  			 	 .filter(molecularSedd)
-						 		 .flatMap(gridPoint -> gridPoint.getNearestMolecules().stream())
-						 				 		      	              .collect(toSet());
-	}
+        List<VoronoiPoint> gridPoints = voronoizer.voronoize(SEDD, searchMolecules, molecularSystem);
+
+        return (Set<MolecularSystem.Molecule>) gridPoints.stream()
+                .filter(bothNotInQmFixed)
+                .filter(density)
+                .filter(densityRatio)
+                .filter(atomicSedd)
+                .filter(molecularSedd)
+                .flatMap(gridPoint -> gridPoint.getNearestMolecules().stream())
+                .collect(toSet());
+    }
+
 
 	/**
 	 * This class is to analyze Density Overlap RegionEnum Indicator(DORI) for those

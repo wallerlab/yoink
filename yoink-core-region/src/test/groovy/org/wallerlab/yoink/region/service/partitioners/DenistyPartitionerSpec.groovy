@@ -59,24 +59,46 @@ class DenistyPartitionerSpec extends Specification{
 
         def gridPoints = [g1,g2]
 
-        voronoizer.voronoize(DensityPoint.DensityType.DORI, searchMolecules, molecularSystem) >> gridPoints
+        voronoizer.voronoize(_, searchMolecules, molecularSystem) >> gridPoints
     }
 
 
+    def "test strongly bound is working with all in QM core "() {
 
-
-    def "test strongly bound is working in high density and correct SEDD"() {
-
-
+        when:"low density limit "
+        def fullQmCore = [m1,m2,m3] as Set
+        then:" no molecules are in set "
+        densityPartitioner.stronglyBound( fullQmCore, searchMolecules,molecularSystem) == [] as Set
     }
 
+    def "test strongly bound is working in low atomic density "() {
 
+        when:"low density limit "
+        densityCalculator.atomic(_, _)  >> 0.09
+        then:" no molecules are in set "
+        densityPartitioner.stronglyBound( qmCore, searchMolecules,molecularSystem) == [] as Set
+    }
 
+    def "test strongly bound is working in correct atomic density "() {
 
+        when:"low density limit "
+        densityCalculator.atomic(_, _)  >> 0.11
+        densityCalculator.electronic(_,_) >> 0.01d
+        then:" no molecules are in set "
+        densityPartitioner.stronglyBound( qmCore, searchMolecules,molecularSystem) == [] as Set
+    }
 
+    def "test strongly bound is working in correct atomic density , correct density Ratio"() {
 
+        when:"low density limit "
+        densityCalculator.atomic(_, _)  >> 0.11
+        densityCalculator.electronic(_,_) >> 0.07d
+        densityCalculator.sedd(_,_) >> 2
+        then:" no molecules are in set "
+        densityPartitioner.stronglyBound( qmCore, searchMolecules,molecularSystem) == [m2,m3] as Set
+    }
 
-        def "test weakly bound is working in high density and correct dori"() {
+    def "test weakly bound is working in high density and correct dori"() {
 
         when:
         densityCalculator.electronic(_,_) >> 0.1d
@@ -117,8 +139,6 @@ class DenistyPartitionerSpec extends Specification{
         then:
         densityPartitioner.weaklyBound( fullQmCore, searchMolecules,molecularSystem) == [] as Set
     }
-
-
 
 
     private MolecularSystem.Molecule createMolecule(int i) {
