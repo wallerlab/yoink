@@ -6,14 +6,13 @@ import org.wallerlab.yoink.api.model.VoronoiPoint
 import org.wallerlab.yoink.api.model.molecular.MolecularSystem
 import org.wallerlab.yoink.api.service.cube.Voronoizer
 import org.wallerlab.yoink.api.service.density.DensityCalculator
-import spock.lang.Ignore
-import spock.lang.Shared
-import spock.lang.Specification
-import spock.lang.Unroll
 
 import static org.wallerlab.yoink.api.model.adaptive.Region.Name.BUFFER
 import static org.wallerlab.yoink.api.model.adaptive.Region.Name.QM_ADAPTIVE
 
+import spock.lang.Shared
+import spock.lang.Specification
+import spock.lang.Unroll
 
 class DenistyPartitionerSpec extends Specification{
 
@@ -23,7 +22,6 @@ class DenistyPartitionerSpec extends Specification{
     def voronoizer
     def molecularSystem
     def densityPartitioner
-
 
     @Shared def m1 = createMolecule(1)
     @Shared def m2 = createMolecule(2)
@@ -162,7 +160,7 @@ class DenistyPartitionerSpec extends Specification{
         return Mock(MolecularSystem.Molecule.Atom)
     }
 
-    // This is to avoid us setting up a big test.
+    //helper - this is to avoid us setting up a big test.
    class DummyDensityPartitioner extends DensityPartitioner{
 
            @Override
