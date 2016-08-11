@@ -25,7 +25,9 @@ public class Configuration {
 
     private final Set<BufferMolecule> bufferMolecules;
 
-    public Configuration(final Double qmWeight, final  Double bufferWeight, final Set<BufferMolecule> bufferMolecules) {
+    public Configuration(final Double qmWeight,
+                         final  Double bufferWeight,
+                         final Set<BufferMolecule> bufferMolecules) {
         this.qmWeight = qmWeight;
         this.bufferWeight = bufferWeight;
         this.bufferMolecules = bufferMolecules;

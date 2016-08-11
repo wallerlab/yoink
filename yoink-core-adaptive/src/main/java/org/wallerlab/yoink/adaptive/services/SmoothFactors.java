@@ -83,11 +83,9 @@ public class SmoothFactors {
 				  .get(BUFFER)
 				  .getMolecules()
 				  .stream()
-				  .map(molecule -> {
-							Coord  com = molecule.getCenterOfMass();
-							double current = Math.abs(Math.log10(densityCalculator.electronic(com, qmCoreMolecules)));
-							return new BufferMolecule( molecule, smoothFunction.evaluate(current, densityMin, densityMax));
-				  })
+				  .map(molecule -> { Coord com = molecule.getCenterOfMass();
+					  double current = Math.abs(Math.log10(densityCalculator.electronic(com, qmCoreMolecules)));
+					  return new BufferMolecule( molecule, smoothFunction.evaluate(current, densityMin, densityMax));})
 				 .collect(toSet());
 	};
 
@@ -104,11 +102,7 @@ public class SmoothFactors {
 
 		Set<BufferMolecule> compute(Job<JAXBElement> job , SmoothFunction smoothFunction);
 
-		enum NAME{
-			DISTANCE,
-			DENSITY,
-			DISTANCE_OR_DENSITY
-        }
+		enum NAME{ DISTANCE, DENSITY, DISTANCE_OR_DENSITY }
 	}
 
 }

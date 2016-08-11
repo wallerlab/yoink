@@ -185,18 +185,21 @@ public class WeightFactors {
         Coord centerCoord = job.getRegions().get(Region.Name.QM_CORE).getCenterOfMass();
 
         SetOps.split(Ints.toArray(bufferIndices), numberQmInBuffer)
-                .parallelStream()
-                .forEach(
-                        qmSet -> {
-                            Set<Integer> mmSet = new HashSet<Integer>(bufferIndices);
-                            mmSet.removeAll(qmSet);
-                            double fadeOutQM =      fade(centerCoord, bufferMolecules, bufferIndices, s_qm_out, t_qm_out, qmSet,smoothFunctions.use(SCMP));
-                            double fadeInQM  = 1 -  fade(centerCoord, bufferMolecules, bufferIndices, s_qm_in, t_qm_in, qmSet,smoothFunctions.use(SCMP));
-                            double fadeOutMM =      fade(centerCoord, bufferMolecules, bufferIndices, s_mm_out, t_mm_out, (List<Integer>) mmSet,smoothFunctions.use(BULO));
-                            double fadeInMM  = 1 -  fade(centerCoord, bufferMolecules, bufferIndices, s_mm_in, t_mm_in, (List<Integer>) mmSet,smoothFunctions.use(BULO));
-                            double sigma = fadeOutQM * fadeOutMM * fadeInQM * fadeInMM;
-                            sigmas.put(qmSet, sigma);
-                        });
+              .parallelStream()
+              .forEach(qmSet -> {
+                  Set<Integer> mmSet = new HashSet<Integer>(bufferIndices);
+                  mmSet.removeAll(qmSet);
+                  double fadeOutQM =      fade(centerCoord, bufferMolecules, bufferIndices, s_qm_out,
+                                               t_qm_out, qmSet,smoothFunctions.use(SCMP));
+                  double fadeInQM  = 1 -  fade(centerCoord, bufferMolecules, bufferIndices, s_qm_in,
+                                               t_qm_in, qmSet,smoothFunctions.use(SCMP));
+                  double fadeOutMM =      fade(centerCoord, bufferMolecules, bufferIndices, s_mm_out,
+                                               t_mm_out, (List<Integer>) mmSet,smoothFunctions.use(BULO));
+                  double fadeInMM  = 1 -  fade(centerCoord, bufferMolecules, bufferIndices, s_mm_in,
+                                               t_mm_in, (List<Integer>) mmSet,smoothFunctions.use(BULO));
+                  double sigma = fadeOutQM * fadeOutMM * fadeInQM * fadeInMM;
+                  sigmas.put(qmSet, sigma);
+                  });
         return getLimitedWeights(job);
     };
 
@@ -237,7 +240,8 @@ public class WeightFactors {
         double fade = 1.0;
         for (Integer index : set)
             fade *= smoothFunction.evaluate(
-                    distanceCalculator.closest(centerCoord, molecules.get(indices.indexOf(index)).getMolecule()), s_qm_out, t_qm_out);
+                    distanceCalculator.closest(centerCoord, molecules.get(indices.indexOf(index))
+                                                                     .getMolecule()), s_qm_out, t_qm_out);
         return fade;
     }
 
@@ -257,12 +261,7 @@ public class WeightFactors {
         Set<Configuration> compute(Job<JAXBElement> job ,
                                    SmoothFactors.SmoothFactor smoothFactor,
                                    SmoothFunctions.SmoothFunction smoothFunction);
-        enum NAME{
-            XS,
-            DAS,
-            SAP,
-            SCMP
-        }
+        enum NAME{ XS, DAS, SAP, SCMP }
     }
 
 }

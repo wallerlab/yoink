@@ -29,7 +29,9 @@ public class SimpleAdaptiveMolecularSystem implements AdaptiveMolecularSystem {
 
     final MolecularSystem molecularSystem;
 
-    public SimpleAdaptiveMolecularSystem(Double energy, List<Vector> forces, MolecularSystem molecularSystem) {
+    public SimpleAdaptiveMolecularSystem(Double energy,
+                                         List<Vector> forces,
+                                         MolecularSystem molecularSystem) {
         this.energy = energy;
         this.forces = forces;
         this.molecularSystem = molecularSystem;

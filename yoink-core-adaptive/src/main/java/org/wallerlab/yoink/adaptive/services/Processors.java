@@ -17,6 +17,7 @@ package org.wallerlab.yoink.adaptive.services;
 
 import org.wallerlab.yoink.api.model.Job;
 import org.wallerlab.yoink.api.model.Coord;
+import org.wallerlab.yoink.api.service.adaptive.Adaptive;
 import org.wallerlab.yoink.api.service.math.Vector;
 import org.wallerlab.yoink.api.service.plugin.QmMmWrapper;
 import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
@@ -26,6 +27,7 @@ import org.wallerlab.yoink.molecule.service.DistanceCalculator;
 import org.wallerlab.yoink.adaptive.domain.Configuration;
 import org.wallerlab.yoink.adaptive.domain.BufferMolecule;
 
+import static org.wallerlab.yoink.api.model.Job.JobParameter.SMOOTHNER;
 import static org.wallerlab.yoink.api.model.adaptive.Region.Name.*;
 import static org.wallerlab.yoink.adaptive.services.Processors.Processor.NAME;
 import static org.wallerlab.yoink.adaptive.services.Processors.Processor.NAME.*;
@@ -43,8 +45,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 import static java.util.stream.Collectors.toList;
 
+/**
+ * TODO
+ */
 @Service
-public class Processors {
+public class Processors implements Adaptive{
 
     @Resource
     @Qualifier("qmmm")
@@ -68,6 +73,10 @@ public class Processors {
 
     private Map<Processor.NAME,Processor> processors;
 
+    public Processor use(Processor.NAME name ){
+        return this.processors.get(name);
+    }
+
     public Processors(){
         this.processors = new EnumMap<>(NAME.class);
         this.processors.put(BF, bufferedForce);
@@ -77,18 +86,20 @@ public class Processors {
         this.processors.put(PAP, pap);
     }
 
-    public Processor use(Processor.NAME name ){
-        return this.processors.get(name);
+    /**
+     * @param job as input
+     * @return Job completed job
+     */
+    public Job compute(Job job){
+        return this.processors.get(job.getParameter(SMOOTHNER)).process(job);
     }
 
     /**
      * Adaptive forces in buffered force method.
      */
     Processor bufferedForce = job -> {
-
         List<Vector> forces_QMMM = qmmmProcessor.getForces();
         List<Vector> forces_MM = mmProcessor.getForces();
-
         //Copy forces from QM/MM to the MM region to "buffer" the force
         IntStream.range(0,job.getRegion(QM)
                  .getMolecules()
@@ -127,6 +138,7 @@ public class Processors {
             correction += FORCE_CONSTANT * Math.pow(distance - boundary, 2);
             int index = atom.getIndex() - 1;
             Vector atomCoord = atom.getCoordinate();
+            //Clean this.
             double xForce = getForce(boundary, distance, atomCoord.getX());
             double yForce = getForce(boundary, distance, atomCoord.getY());
             double zForce = getForce(boundary, distance, atomCoord.getZ());
@@ -194,16 +206,21 @@ public class Processors {
      */
     Processor config = job -> {
 
-        Set<Configuration> xs = weightFactors.use(XS).compute(job, smoothFactors.use(DISTANCE_OR_DENSITY), smoothFunctions.use(MOROKUMA));
+        Set<Configuration> xs = weightFactors.use(XS)
+                                             .compute(job, smoothFactors.use(DISTANCE_OR_DENSITY),
+                                                           smoothFunctions.use(MOROKUMA));
 
         Set<Configuration> das = weightFactors.use(DAS)
-                                              .compute(job,smoothFactors.use(DISTANCE_OR_DENSITY),smoothFunctions.use(BULO));
+                                              .compute(job,smoothFactors.use(DISTANCE_OR_DENSITY),
+                                                           smoothFunctions.use(BULO));
 
-        Set<Configuration> sap = weightFactors.use(SAP).compute(job,smoothFactors
-                                        .use(DISTANCE_OR_DENSITY), smoothFunctions.use(PERMUTED));
+        Set<Configuration> sap = weightFactors.use(SAP)
+                                              .compute(job,smoothFactors.use(DISTANCE_OR_DENSITY),
+                                                           smoothFunctions.use(PERMUTED));
 
         Set<Configuration> scmp = weightFactors.use(WeightFactors.WeightFactor.NAME.SCMP)
-                                        .compute(job,smoothFactors.use(DISTANCE_OR_DENSITY), smoothFunctions.use(PERMUTED));
+                                               .compute(job,smoothFactors.use(DISTANCE_OR_DENSITY),
+                                                            smoothFunctions.use(PERMUTED));
 
         double adaptiveEnergy = 0;
         List<Vector> adaptiveForces = IntStream.range(0,job.getRegion(SYSTEM)
@@ -217,7 +234,8 @@ public class Processors {
             List<Vector> forces = qmmmProcessor.getForces();
             adaptiveEnergy += energy;
             for (int i = 0; i < forces.size(); i++)
-                adaptiveForces.set(i, adaptiveForces.get(i).add(forces.get(i).scalarMultiply(configuration.getQmWeight())));
+                adaptiveForces.set(i, adaptiveForces.get(i).add(
+                                      forces.get(i).scalarMultiply(configuration.getQmWeight())));
         }
 
         Map<List<Vector>, Double> forcesAndEnergy = new HashMap<List<Vector>, Double>();
@@ -235,19 +253,21 @@ public class Processors {
      */
     public Processor pap = job -> {
 
-        List<BufferMolecule> moleculesInBuffer = new ArrayList<>(smoothFactors.use(DISTANCE_OR_DENSITY).compute(job, smoothFunctions.use(PERMUTED)));
+        List<BufferMolecule> moleculesInBuffer =
+                new ArrayList<>(smoothFactors.use(DISTANCE_OR_DENSITY).compute(job, smoothFunctions.use(PERMUTED))); //??? what did i do here?
 
         List<Integer> bufferIndices = Arrays.asList(0,1,2); //MADE UP to allow compilation.
-        // run all qm/mm jobs
+
         Map<List<Integer>, Double>       energies = new HashMap<List<Integer>, Double>();
         Map<List<Integer>, List<Vector>> forces = new HashMap<List<Integer>, List<Vector>>();
 
         Map<List<Integer>, Double>       weightFactors = new HashMap<List<Integer>, Double>();
-        //This looks like a weigh factor calculator
+        //This looks like a weight factor calculator ??
         for (List<Integer> qmSet : SetOps.split(Ints.toArray(bufferIndices))) {
             double smoothFactor = 1.0;
             for (Integer qmIndex : qmSet)
                 smoothFactor *= moleculesInBuffer.get(bufferIndices.indexOf(qmIndex)).getLambda();
+            // run all qm/mm jobs
             energies.put(qmSet, qmmmProcessor.getEnergy());
             forces.put(qmSet, qmmmProcessor.getForces());
             weightFactors.put(qmSet, smoothFactor);
@@ -270,8 +290,13 @@ public class Processors {
                 double v_temp = 0;
                 List<Vector> tempForce = new ArrayList<Vector>();
                 initializeForce(tempForce, forceSize);
-                if (i == 1) adaptiveEnergy = getAdaptiveEnergy(bufferIndices, energies, forces, weightFactors, adaptiveEnergy, adaptiveForce, qmEnergy, qmForces, allTempEnergies, allTempForces, v_temp, tempForce);
-                else        adaptiveEnergy = getAdaptiveEnergy(bufferIndices, weightFactors, adaptiveEnergy, adaptiveForce, qmEnergy, qmForces, allTempEnergies, allTempForces, forceSize, j);
+                //Clean this.
+                if (i == 1) adaptiveEnergy = getAdaptiveEnergy(bufferIndices, energies, forces, weightFactors,
+                                                               adaptiveEnergy, adaptiveForce, qmEnergy, qmForces,
+                                                               allTempEnergies, allTempForces, v_temp, tempForce);
+                else        adaptiveEnergy = getAdaptiveEnergy(bufferIndices, weightFactors, adaptiveEnergy,
+                                                               adaptiveForce, qmEnergy, qmForces, allTempEnergies,
+                                                               allTempForces, forceSize, j);
             }
         }
         // put adaptive force and energy into job.properties
@@ -328,30 +353,25 @@ public class Processors {
                                      Map<Integer, Double> v_temp_all,
                                      Map<Integer, List<Vector>> f_temp_all,
                                      int forceSize, int j) {
-
         List<ArrayList<Integer>> combinations = SetOps.split(Ints.toArray(bufferIndices), j);
-
         for (List<Integer> buffer : combinations) {
             double mE = 0;
             double singleE = v_qm;
             List<Vector> mF = new ArrayList<Vector>();
             initializeForce(mF, forceSize);
             List<Vector> singleF = f_qm;
-
             for (int item : buffer) {
                 singleE += v_temp_all.get(item);
                 for (Vector f : singleF)
                     f = f.add(f_temp_all.get(item).get(singleF.indexOf(f)));
             }
             mE = v_temp_all.get(buffer) - singleE;
-
             for (int n = 0; n < f_qm.size(); n++)
                 mF.add(n, f_temp_all.get(buffer).get(n).subtract(singleF.get(n)));
 
             mE = getmE(v_qm, f_qm, v_temp_all, f_temp_all, buffer, mE, singleE, mF);
             double current_factor = factor_all.get(buffer);
             v_adaptive = mE * current_factor;
-
             for (int n = 0; n < f_qm.size(); n++)
                 f_adaptive.add(n,mF.get(n).scalarMultiply(current_factor));
         }
@@ -398,13 +418,7 @@ public class Processors {
 
         Job<JAXBElement> process(Job<JAXBElement> job);
 
-        enum NAME{
-            BF,
-            FIRES,
-            HOT_SPOT,
-            CONFIG,
-            PAP
-        }
+        enum NAME{ BF, FIRES, HOT_SPOT, CONFIG, PAP }
     }
 
 }

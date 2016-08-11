@@ -50,7 +50,7 @@ class AdaptiveServiceSpec extends Specification{
 		def parameters=Mock(Map)
 		parameters.get(Job.JobParameter.SMOOTHNER)>>Adaptive.Type.BUFFERED_FORCE
 		job.getParameters()>>parameters
-		then:"assert the size of processors in router"
+		then:"assert the size of calculators in router"
 		router.getSmoothers(job).size()==0
 		router.getSmoothers(job) instanceof List<Adaptive>
 
@@ -59,7 +59,7 @@ class AdaptiveServiceSpec extends Specification{
 		def parameters2=Mock(Map)
 		parameters2.get(Job.JobParameter.SMOOTHNER)>>Adaptive.Type.DISTANCE_DAS
 		job2.getParameters()>>parameters2
-		then:" the size of processors in router is 2"
+		then:" the size of calculators in router is 2"
 		router.getSmoothers(job2).size()==2
 
 		when:"smoothner is DISTANCE_XS"
@@ -75,7 +75,7 @@ class AdaptiveServiceSpec extends Specification{
 		def parameters4=Mock(Map)
 		parameters4.get(Job.JobParameter.SMOOTHNER)>>Adaptive.Type.DISTANCE_SAP
 		job4.getParameters()>>parameters4
-		then:" the size of processors in router is 2"
+		then:" the size of calculators in router is 2"
 		router.getSmoothers(job4).size()==2
 	}
 }

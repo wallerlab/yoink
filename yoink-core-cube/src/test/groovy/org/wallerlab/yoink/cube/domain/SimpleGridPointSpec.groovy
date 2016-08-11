@@ -23,6 +23,7 @@ import spock.lang.Specification;
 
 @Ignore
 class SimpleGridPointSpec extends Specification{
+
 	def "coordinate,densityValues,indexInCube"(){
 		when:"make a new new SimpleVoronoiPoint()"
 		def gp=new SimpleVoronoiPoint()
