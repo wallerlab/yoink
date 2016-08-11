@@ -62,7 +62,21 @@ class DenistyPartitionerSpec extends Specification{
         voronoizer.voronoize(DensityPoint.DensityType.DORI, searchMolecules, molecularSystem) >> gridPoints
     }
 
-    def "test weakly bound is working in high density and correct dori"() {
+
+
+
+    def "test strongly bound is working in high density and correct SEDD"() {
+
+
+    }
+
+
+
+
+
+
+
+        def "test weakly bound is working in high density and correct dori"() {
 
         when:
         densityCalculator.electronic(_,_) >> 0.1d
@@ -91,6 +105,21 @@ class DenistyPartitionerSpec extends Specification{
         then:
         densityPartitioner.weaklyBound( qmCore, searchMolecules,molecularSystem) == [] as Set
     }
+
+
+    def "test weakly bound is with both molecules already in qm region"() {
+
+        when:
+        densityCalculator.electronic(_,_) >> 0.1d
+        densityCalculator.dori(_,_) >> 0.95d
+
+        def fullQmCore = [m1,m2,m3] as Set
+        then:
+        densityPartitioner.weaklyBound( fullQmCore, searchMolecules,molecularSystem) == [] as Set
+    }
+
+
+
 
     private MolecularSystem.Molecule createMolecule(int i) {
         def a1 = Mock(MolecularSystem.Molecule.Atom)
