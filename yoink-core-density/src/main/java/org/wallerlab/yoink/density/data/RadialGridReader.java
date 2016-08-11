@@ -78,15 +78,19 @@ public class RadialGridReader {
             {-50, 0, 225}};
 
 
-    private final String FILEPATH = "yoink-core-density/src/main/java/org/wallerlab/yoink/density/data/dat";
+    private final String FILEPATH = "./src/main/java/org/wallerlab/yoink/density/data/dat";
 
     public Map<Element,RadialGrid> read() throws IOException {
 
         //Save a lot of effort by reading in serialized version of the radial grids.
-        String serializedFilePath = "yoink-core-density/src/main/java/org/wallerlab/yoink/density/data/radialGrids.serialized";
+        String serializedFilePath = "./src/main/java/org/wallerlab/yoink/density/data/radialGrids.serialized";
         File file = new File(serializedFilePath);
+        String current = new java.io.File( "." ).getCanonicalPath();
+
+        System.out.println("current dir is " + current);
+        System.out.println("Deserializing radial grids" + file.exists());
         try{
-            if(file.exists() && !file.isDirectory()) {
+            if(!file.isDirectory()) {
                 System.out.println("Deserializing radial grids");
                 InputStream inputFile = new FileInputStream(serializedFilePath);
                 InputStream buffer = new BufferedInputStream(inputFile);
