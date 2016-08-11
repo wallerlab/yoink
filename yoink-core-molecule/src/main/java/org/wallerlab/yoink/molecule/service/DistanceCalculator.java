@@ -32,7 +32,7 @@ import org.springframework.stereotype.Service;
  *
  */
 @Service
-public class DistanceCalculator  {
+public class DistanceCalculator implements IDistanceCalculator {
 
     /**
      * distance between a coordinate and an atom.
@@ -44,7 +44,8 @@ public class DistanceCalculator  {
      * @return density -{@link java.lang.Double}
      *
      */
-    public double distance(Coord gridCoord, MolecularSystem.Molecule.Atom atom) {
+    @Override
+	public double distance(Coord gridCoord, MolecularSystem.Molecule.Atom atom) {
         return atom.getCoordinate().distance(gridCoord.getCoords());
     }
 
@@ -58,6 +59,7 @@ public class DistanceCalculator  {
 	 * @return density -{@link java.lang.Double}
 	 *
 	 */
+	@Override
 	public double closest(Coord coord, MolecularSystem.Molecule molecule){
 		return molecule.getAtoms()
 					   .stream()
@@ -74,6 +76,7 @@ public class DistanceCalculator  {
 	 * @return centerCoord {@link Coord}
 	 *
 	 */
+	@Override
 	public Coord centerOfMass(Set<MolecularSystem.Molecule> molecules) {
 		double massOfMolecule = 0;
 		Vector massWeightedCoordinate = SimpleVector3DFactory.staticCreate(0, 0, 0);
@@ -102,7 +105,8 @@ public class DistanceCalculator  {
      *            - a Set of molecules
      * @return sortedDistance - a Map, molecule as key and distance as value
      */
-    public Map<MolecularSystem.Molecule, Double> sortByDistance(Coord centerCoord, Set<MolecularSystem.Molecule> molecules) {
+    @Override
+	public Map<MolecularSystem.Molecule, Double> sortByDistance(Coord centerCoord, Set<MolecularSystem.Molecule> molecules) {
 	Map<MolecularSystem.Molecule, Double> distances = new HashMap<MolecularSystem.Molecule, Double>();
 	for (MolecularSystem.Molecule molecule : molecules) {
 		List<Double> atomDistances = new ArrayList<Double>();

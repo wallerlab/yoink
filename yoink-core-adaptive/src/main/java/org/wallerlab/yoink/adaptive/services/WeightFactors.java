@@ -22,7 +22,6 @@ import org.wallerlab.yoink.api.model.Job;
 import org.wallerlab.yoink.api.model.adaptive.Region;
 import org.wallerlab.yoink.adaptive.domain.Configuration;
 import org.wallerlab.yoink.adaptive.domain.BufferMolecule;
-import org.wallerlab.yoink.molecule.service.DistanceCalculator;
 
 import static org.wallerlab.yoink.api.model.Job.JobParameter.*;
 import static org.wallerlab.yoink.api.model.adaptive.Region.Name.QM_CORE;
@@ -38,6 +37,7 @@ import javax.xml.bind.JAXBElement;
 import static java.util.stream.Collectors.toList;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.wallerlab.yoink.molecule.service.IDistanceCalculator;
 
 @Service
 public class WeightFactors {
@@ -46,7 +46,7 @@ public class WeightFactors {
     SmoothFunctions smoothFunctions;
 
     @Autowired
-    DistanceCalculator distanceCalculator;
+    IDistanceCalculator distanceCalculator;
 
     private Map<NAME,WeightFactor> weightFactors;
 

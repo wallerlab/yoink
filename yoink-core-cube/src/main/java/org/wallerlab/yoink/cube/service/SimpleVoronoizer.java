@@ -23,12 +23,14 @@ import org.wallerlab.yoink.api.model.Coord;
 import org.wallerlab.yoink.api.service.cube.Voronoizer;
 import org.wallerlab.yoink.cube.domain.SimpleVoronoiPoint;
 import org.wallerlab.yoink.math.SetOps;
-import org.wallerlab.yoink.molecule.service.DistanceCalculator;
+
 import static org.wallerlab.yoink.api.model.Job.JobParameter.*;
 
 import java.util.*;
 import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
+import org.wallerlab.yoink.molecule.service.IDistanceCalculator;
+
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -47,7 +49,7 @@ public class SimpleVoronoizer implements Voronoizer {
 	private CubeBuilder<Set<MolecularSystem.Molecule>> cubeBuilder;
 
 	@Resource
-	private DistanceCalculator distanceCalculator;
+	private IDistanceCalculator distanceCalculator;
 
 	private static final double[] seddStepSize = {0.9d,0.9d,0.9d};
 	private static final double[] doriStepSize = {0.5d,0.5d,0.5d};

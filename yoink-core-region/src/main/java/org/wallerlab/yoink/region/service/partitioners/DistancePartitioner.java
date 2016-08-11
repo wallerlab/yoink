@@ -3,7 +3,6 @@ package org.wallerlab.yoink.region.service.partitioners;
 import org.wallerlab.yoink.api.model.*;
 import org.wallerlab.yoink.api.model.adaptive.Region;
 import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
-import org.wallerlab.yoink.molecule.service.DistanceCalculator;
 
 import static org.wallerlab.yoink.api.model.adaptive.Region.Name.*;
 import static org.wallerlab.yoink.api.model.Job.JobParameter.DISTANCE_QM;
@@ -12,6 +11,7 @@ import static org.wallerlab.yoink.api.model.Job.JobParameter.DISTANCE_BUFFER;
 import java.util.*;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.wallerlab.yoink.molecule.service.IDistanceCalculator;
 
 /**
  *
@@ -27,7 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class DistancePartitioner implements Partitioner{
 
 	@Autowired
-	DistanceCalculator distanceCalculator;
+    IDistanceCalculator distanceCalculator;
 
 	public Map<Region.Name,Set<MolecularSystem.Molecule>> partition(Job job) {
 

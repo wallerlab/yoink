@@ -28,13 +28,14 @@ import org.wallerlab.yoink.api.service.molecule.Translator;
 import org.wallerlab.yoink.api.service.molecule.Converter;
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory;
 
-import org.wallerlab.yoink.molecule.service.DistanceCalculator;
 import org.cml_v3.generated.AtomArray;
 import org.cml_v3.generated.Cml;
 import org.cml_v3.generated.MoleculeList;
 
 import java.util.*;
 import org.springframework.stereotype.Service;
+import org.wallerlab.yoink.molecule.service.IDistanceCalculator;
+
 import javax.annotation.Resource;
 import javax.xml.bind.JAXBElement;
 /**
@@ -72,7 +73,7 @@ public class MolecularSystemTranslator implements Translator<MolecularSystem, JA
 	private SimpleVector3DFactory myVector3D;
 
 	@Resource
-	private DistanceCalculator distanceCalculator;
+	private IDistanceCalculator distanceCalculator;
 
 	/**
 	 * translate JAXBElement Cml to MolecularSystem

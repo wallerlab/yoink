@@ -23,7 +23,6 @@ import org.wallerlab.yoink.api.service.plugin.QmMmWrapper;
 import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
 import org.wallerlab.yoink.math.SetOps;
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory;
-import org.wallerlab.yoink.molecule.service.DistanceCalculator;
 import org.wallerlab.yoink.adaptive.domain.Configuration;
 import org.wallerlab.yoink.adaptive.domain.BufferMolecule;
 
@@ -42,6 +41,7 @@ import com.google.common.primitives.Ints; //lets drop this dependency
 import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.wallerlab.yoink.molecule.service.IDistanceCalculator;
 
 import static java.util.stream.Collectors.toList;
 
@@ -60,7 +60,7 @@ public class Processors implements Adaptive{
     private QmMmWrapper mmProcessor;
 
     @Resource
-    private DistanceCalculator distanceCalculator;
+    private IDistanceCalculator distanceCalculator;
 
     @Resource
     private SimpleVector3DFactory vectorFactory;

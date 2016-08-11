@@ -3,7 +3,6 @@ package org.wallerlab.yoink.region.service.partitioners;
 import org.wallerlab.yoink.api.model.*;
 import org.wallerlab.yoink.api.model.adaptive.Region;
 import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
-import org.wallerlab.yoink.molecule.service.DistanceCalculator;
 
 import static org.wallerlab.yoink.api.service.region.Regionizer.Type.*;
 import static org.wallerlab.yoink.api.model.Job.JobParameter.*;
@@ -12,6 +11,8 @@ import static org.wallerlab.yoink.api.model.adaptive.Region.Name.*;
 import java.util.*;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.wallerlab.yoink.molecule.service.IDistanceCalculator;
+
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -30,7 +31,7 @@ import static java.util.stream.Collectors.toList;
 public class NumberPartitioner implements Partitioner{
 
 	@Autowired
-	DistanceCalculator distanceCalculator;
+	IDistanceCalculator distanceCalculator;
 
 	@Override
 	public Map<Region.Name,Set<MolecularSystem.Molecule>> partition(Job job){
@@ -39,14 +40,14 @@ public class NumberPartitioner implements Partitioner{
 		Set<MolecularSystem.Molecule> bufferMolecules = new HashSet<>();
 		Set<MolecularSystem.Molecule> qmAdaptiveMolecules = new HashSet<>();
 
-		int qmNumber = Integer.parseInt(job.getParameter(NUMBER_QM).toString());
-		int bufferNumber = qmNumber + Integer.parseInt(job.getParameter(NUMBER_BUFFER).toString());
+		final int numberOfQm = Integer.parseInt(job.getParameter(NUMBER_QM).toString());
+		final int numberOfBuffer = numberOfQm + Integer.parseInt(job.getParameter(NUMBER_BUFFER).toString());
 
 		Coord centerOfMass = distanceCalculator.centerOfMass(job.getMolecularSystem().getMolecules("QM_CORE_FIXED"));
 
 		Set<MolecularSystem.Molecule> moleculesInNonQmCore = 
 		      new HashSet<MolecularSystem.Molecule>(job.getMolecularSystem().getMolecules());
-		      
+
 		moleculesInNonQmCore.removeAll(job.getMolecularSystem().getMolecules("QM_CORE_FIXED"));
 
 		List<MolecularSystem.Molecule> sortedMolecules =
@@ -56,13 +57,16 @@ public class NumberPartitioner implements Partitioner{
 							Double distance2 = distanceCalculator.closest(centerOfMass, molecule2);
 							return distance1.compareTo(distance2);
 						})
-						.limit(bufferNumber)
+						.limit(numberOfBuffer)
 						.collect(toList());
 
-		if(job.getParameters().get(PARTITIONER).equals(NUMBER)){
-				qmAdaptiveMolecules = new HashSet<MolecularSystem.Molecule>(sortedMolecules.subList(0, qmNumber));
-				bufferMolecules = new HashSet<MolecularSystem.Molecule>(sortedMolecules.subList(qmNumber, bufferNumber));
-		}
+		if(job.getParameter(PARTITIONER).equals(NUMBER)){
+            qmAdaptiveMolecules = new HashSet<MolecularSystem.Molecule>(sortedMolecules
+                                                                          .subList(0, numberOfQm));
+            bufferMolecules     = new HashSet<MolecularSystem.Molecule>(sortedMolecules
+                                                                          .subList(numberOfQm, numberOfBuffer));
+
+        }
 		else if (job.getParameter(PARTITIONER).equals(SIZE)){
 			int    qmNumberSize 	 =  Integer.parseInt(  job.getParameter(NUMBER_QM).toString()) * 2 / 3;
 			double distance_s_qm_in  =  Double.parseDouble(job.getParameter(DISTANCE_S_QM_IN).toString());
@@ -77,7 +81,7 @@ public class NumberPartitioner implements Partitioner{
 				    .findFirst()
 				    .get();
 			qmAdaptiveMolecules = new HashSet<>(sortedMolecules.subList(0, qmNumberSize));
-			bufferMolecules = new HashSet<>(sortedMolecules.subList(qmNumber,
+			bufferMolecules = new HashSet<>(sortedMolecules.subList(numberOfQm,
 								    	  	  sortedMolecules.indexOf(moleculeAtT_Qm_Out) + 1));
 		}
 		qmAdaptiveAndBuffer.put(QM_ADAPTIVE,qmAdaptiveMolecules);

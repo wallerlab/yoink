@@ -19,7 +19,6 @@ import org.wallerlab.yoink.api.model.Job;
 import org.wallerlab.yoink.api.model.Coord;
 import org.wallerlab.yoink.adaptive.domain.BufferMolecule;
 import org.wallerlab.yoink.api.service.density.DensityCalculator;
-import org.wallerlab.yoink.molecule.service.DistanceCalculator;
 import org.wallerlab.yoink.adaptive.services.SmoothFunctions.SmoothFunction;
 
 import static org.wallerlab.yoink.api.model.Job.JobParameter.*;
@@ -34,13 +33,14 @@ import java.util.Set;
 import javax.annotation.Resource;
 import javax.xml.bind.JAXBElement;
 import org.springframework.stereotype.Service;
+import org.wallerlab.yoink.molecule.service.IDistanceCalculator;
 
 import static java.util.stream.Collectors.toSet;
 
 @Service
 public class SmoothFactors {
 
-	@Resource private DistanceCalculator distanceCalculator;
+	@Resource private IDistanceCalculator distanceCalculator;
 
 	@Resource private DensityCalculator densityCalculator;
 
