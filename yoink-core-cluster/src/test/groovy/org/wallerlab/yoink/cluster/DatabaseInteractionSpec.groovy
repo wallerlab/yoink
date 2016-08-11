@@ -1,7 +1,6 @@
 package org.wallerlab.yoink.cluster
 
-import org.neo4j.graphdb.DynamicLabel
-import org.neo4j.graphdb.Node
+
 
 import spock.lang.*;
 

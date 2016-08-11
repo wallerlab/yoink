@@ -3,7 +3,6 @@ package org.wallerlab.yoink.cluster.service.louvain
 
 import spock.lang.*
 
-import org.neo4j.graphdb.GraphDatabaseService
 
 
 class CommunityAssignmentSpec extends Specification {

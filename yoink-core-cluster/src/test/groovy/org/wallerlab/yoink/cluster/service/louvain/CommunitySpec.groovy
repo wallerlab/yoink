@@ -1,9 +1,6 @@
 package org.wallerlab.yoink.cluster.service.louvain
 
 
-import org.neo4j.graphdb.DynamicLabel;
-import org.neo4j.graphdb.GraphDatabaseService
-import org.neo4j.graphdb.Node
 
 
 import spock.lang.*

@@ -1,7 +1,6 @@
 package org.wallerlab.yoink.cluster.service.louvain
 
-import org.neo4j.graphdb.Relationship
-import org.neo4j.graphdb.Node
+
 
 import spock.lang.*
 

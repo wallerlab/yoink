@@ -19,8 +19,8 @@ import org.wallerlab.yoink.api.model.*;
 import org.wallerlab.yoink.api.model.adaptive.Region;
 import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
 import org.wallerlab.yoink.api.service.math.Vector;
-import org.wallerlab.yoink.math.linear.SimpleVector3DFactory;
 import org.wallerlab.yoink.molecule.domain.SimpleCoord;
+import org.wallerlab.yoink.math.linear.SimpleVector3DFactory;
 
 import java.util.*;
 import static java.util.stream.Collectors.toSet;
