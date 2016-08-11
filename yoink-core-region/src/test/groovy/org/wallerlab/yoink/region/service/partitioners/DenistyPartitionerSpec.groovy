@@ -5,8 +5,10 @@ import org.wallerlab.yoink.api.model.VoronoiPoint
 import org.wallerlab.yoink.api.model.molecular.MolecularSystem
 import org.wallerlab.yoink.api.service.cube.Voronoizer
 import org.wallerlab.yoink.api.service.density.DensityCalculator
-
+import spock.lang.Ignore
+import spock.lang.Shared
 import spock.lang.Specification
+import spock.lang.Unroll
 
 /**
  * Created by waller on 11/08/16.
@@ -20,15 +22,12 @@ class DenistyPartitionerSpec extends Specification{
     def molecularSystem
     def densityPartitioner
 
-    def m1
-    def m2
-    def m3
+
+    @Shared def m1 = createMolecule(1)
+    @Shared def m2 = createMolecule(2)
+    @Shared def m3 = createMolecule(3)
 
     def setup(){
-
-        m1 = createMolecule(1)
-        m2 = createMolecule(2)
-        m3 = createMolecule(3)
 
         qmCore = [m1] as Set
         searchMolecules = [m2,m3] as Set
@@ -59,132 +58,80 @@ class DenistyPartitionerSpec extends Specification{
         voronoizer.voronoize(_, searchMolecules, molecularSystem) >> gridPoints
     }
 
-   // private static final double asrQmCoreThreshold = 0.1d;
-   // private static final double asrQmThreshold	   = 0.0001d;
-    //private static final double asrThreshold 	   = 0.000001d;
-
-    def "test the density partitioner with low"(){
-        when:
-        densityCalculator.electronic(_,_) >> 0.0000001d;
+    @Unroll
+    def "density partitioner with '#electronic' density "(){
+        given:
+        densityCalculator.electronic(_,_) >> electronic;
 
         molecularSystem.getMolecules("QM_CORE_FIXED") >> qmCore
 
-        then:
-        def result = [[] as Set,[] as Set,[] as Set]
+        expect:
         densityPartitioner.densityPartitioner(molecularSystem) == result
+
+        where:
+            electronic        | result
+            0.0000001d        | [[]      as Set,[]      as Set,[]      as Set]
+            0.000002d         | [[]      as Set,[]      as Set,[m2,m3] as Set]
+            0.0002d           | [[]      as Set,[m2,m3] as Set,[m2,m3] as Set]
+            0.2d              | [[m2,m3] as Set,[m2,m3] as Set,[m2,m3] as Set]
     }
 
-    def "test the density partitioner with small"(){
-        when:
-        densityCalculator.electronic(_,_) >> 0.000002d;
-
-        molecularSystem.getMolecules("QM_CORE_FIXED") >> qmCore
-
-        then:
-        def result = [[] as Set,[] as Set,[m2,m3] as Set]
-        densityPartitioner.densityPartitioner(molecularSystem) == result
-    }
-
-    def "test the density partitioner with medium"(){
-        when:
-        densityCalculator.electronic(_,_) >> 0.0002d;
-
-        molecularSystem.getMolecules("QM_CORE_FIXED") >> qmCore
-
-        then:
-        def result = [[] as Set,[m2,m3] as Set,[m2,m3] as Set]
-        densityPartitioner.densityPartitioner(molecularSystem) == result
-    }
-
-    def "test the density partitioner with high"(){
-        when:
-        densityCalculator.electronic(_,_) >> 0.2d;;
-
-        molecularSystem.getMolecules("QM_CORE_FIXED") >> qmCore
-
-        then:
-        def result = [[m2,m3] as Set,[m2,m3] as Set,[m2,m3] as Set]
-        densityPartitioner.densityPartitioner(molecularSystem) == result
-    }
-
-    def "test strongly bound is working with all in QM core "() {
-
-        when:"low density limit "
+    def "test strongly bound is working  with full Qm "() {
+       when:"low density limit "
         def fullQmCore = [m1,m2,m3] as Set
-        then:" no molecules are in set "
+
+      then:" no molecules are in set "
         densityPartitioner.stronglyBound( fullQmCore, searchMolecules,molecularSystem) == [] as Set
+
     }
 
-    def "test strongly bound is working in low atomic density "() {
+    @Unroll
+    def "Strongly bound with atomic = '#atomic' electronic = '#electronic' and sedd = '#sedd' "() {
 
-        when:"low density limit "
-        densityCalculator.atomic(_, _)  >> 0.09
-        then:" no molecules are in set "
-        densityPartitioner.stronglyBound( qmCore, searchMolecules,molecularSystem) == [] as Set
+        given:
+          densityCalculator.atomic(_, _)    >> atomic
+          densityCalculator.electronic(_,_) >> electronic
+          densityCalculator.sedd(_,_)       >> sedd
+
+        expect:" no molecules are in set "
+           densityPartitioner.stronglyBound( qmCore, searchMolecules,molecularSystem) == result
+
+        where:
+             atomic  | electronic  |  sedd       |       result
+             0.09d   | null        |   null      |    []      as Set
+             0.011d  | 0.01d       |   null      |    []      as Set
+             0.2d    | 0.1d        |   1.5d     |     [m2,m3]      as Set
+             0.2d    | 0.1d        |   3.0d      |    [] as Set
     }
 
-    def "test strongly bound is working in correct atomic density "() {
-
-        when:"low density limit "
-        densityCalculator.atomic(_, _)  >> 0.11
-        densityCalculator.electronic(_,_) >> 0.01d
-        then:" no molecules are in set "
-        densityPartitioner.stronglyBound( qmCore, searchMolecules,molecularSystem) == [] as Set
-    }
-
-    def "test strongly bound is working in correct atomic density , correct density Ratio"() {
-
-        when:"low density limit "
-        densityCalculator.atomic(_, _)  >> 0.11
-        densityCalculator.electronic(_,_) >> 0.07d
-        densityCalculator.sedd(_,_) >> 2
-        then:" no molecules are in set "
-        densityPartitioner.stronglyBound( qmCore, searchMolecules,molecularSystem) == [m2,m3] as Set
-    }
-
-    def "test weakly bound is working in high density and correct dori"() {
+    def "test weakly bound with already in qm region"() {
 
         when:
-        densityCalculator.electronic(_,_) >> 0.1d
-        densityCalculator.dori(_,_) >> 0.95d
-
+          def fullQmCore = [m1,m2,m3] as Set
         then:
-        densityPartitioner.weaklyBound( qmCore, searchMolecules,molecularSystem) == [m2,m3] as Set
-    }
-
-    def "test weakly bound is working in low density and correct dori"() {
-
-        when:
-        densityCalculator.electronic(_,_) >> 0.000001d
-        densityCalculator.dori(_,_) >> 0.95d
-
-        then:
-        densityPartitioner.weaklyBound( qmCore, searchMolecules,molecularSystem) == [] as Set
-    }
-
-    def "test weakly bound is working in High density and low dori"() {
-
-        when:
-        densityCalculator.electronic(_,_) >> 0.1d
-        densityCalculator.dori(_,_) >> 0.85d
-
-        then:
-        densityPartitioner.weaklyBound( qmCore, searchMolecules,molecularSystem) == [] as Set
+          densityPartitioner.weaklyBound( fullQmCore, searchMolecules,molecularSystem) == [] as Set
     }
 
 
-    def "test weakly bound is with both molecules already in qm region"() {
+    @Unroll
+    def " weakly bound  with electronic =  '#electronic' and DORI = '#dori'  "() {
 
-        when:
-        densityCalculator.electronic(_,_) >> 0.1d
-        densityCalculator.dori(_,_) >> 0.95d
+        given:
+          densityCalculator.electronic(_, _)  >> electronic
+          densityCalculator.dori(_,_) >> dori
 
-        def fullQmCore = [m1,m2,m3] as Set
-        then:
-        densityPartitioner.weaklyBound( fullQmCore, searchMolecules,molecularSystem) == [] as Set
+        expect:" no molecules are in set "
+          densityPartitioner.weaklyBound( qmCore, searchMolecules, molecularSystem) == result
+
+        where:
+          electronic  |   dori            |     result
+          0.1d        |   0.95d           |     [m2,m3]    as Set
+          0.1d        |   0.85d           |     []         as Set
+          0.000001d   |   0.95d           |     []         as Set
+          0.1d        |   0.95d           |     [m2,m3]    as Set
     }
 
-
+    //helper
     private MolecularSystem.Molecule createMolecule(int i) {
         def a1 = Mock(MolecularSystem.Molecule.Atom)
         def a2 = Mock(MolecularSystem.Molecule.Atom)
@@ -193,7 +140,7 @@ class DenistyPartitionerSpec extends Specification{
         molecule.getAtoms() >>  atoms
         molecule
     }
-
+    //helper
     private MolecularSystem.Molecule.Atom createAtom(int i){
         return Mock(MolecularSystem.Molecule.Atom)
     }
