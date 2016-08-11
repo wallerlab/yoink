@@ -5,6 +5,7 @@ import spock.lang.Specification
 /**
  * Created by waller on 11/08/16.
  */
+//TODO integration test
 class RegionConfigSpec extends Specification{
 
     def "Name"() {

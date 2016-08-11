@@ -258,7 +258,7 @@ task jacocoRootReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
 
   afterEvaluate {
        classDirectories = files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: ['**/xml_cml/**'])
+            fileTree(dir: it, exclude: ['**/cml_v3/**'])
             })
     }
 }
