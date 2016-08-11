@@ -51,7 +51,8 @@ public class DensityPartitioner implements Partitioner{
 
 	public Map<Region.Name,Set<MolecularSystem.Molecule>> partition(Job job) {
 		Map<Region.Name,Set<MolecularSystem.Molecule>> qmAdaptiveAndBuffer = new HashMap<>();
-		MolecularSystem molecularSystem = job.getMolecularSystem();
+
+		MolecularSystem molecularSystem             = job.getMolecularSystem();
 		Set<MolecularSystem.Molecule> qmCoreFixed   = job.getMolecularSystem().getMolecules("QM_CORE");
 
 		List<Set<MolecularSystem.Molecule>> partitionedMolecules  = densityPartitioner(molecularSystem);
@@ -63,7 +64,7 @@ public class DensityPartitioner implements Partitioner{
 		if(moleculesInCoreSearch.size() > 0)
 			stronglyBound.addAll(stronglyBound(qmCoreFixed, moleculesInCoreSearch, molecularSystem));
 
-		Set<MolecularSystem.Molecule> qmCore = union(qmCoreFixed, stronglyBound);
+        Set<MolecularSystem.Molecule> qmCore = union(qmCoreFixed, stronglyBound);
 		Set<MolecularSystem.Molecule> weaklyBound = new HashSet<>();
 		if(moleculesInAdaptiveSearch.size() > 0)
 			weaklyBound.addAll(weaklyBound(qmCore, moleculesInAdaptiveSearch, molecularSystem));
@@ -95,7 +96,7 @@ public class DensityPartitioner implements Partitioner{
 	private static final double asrQmThreshold	   = 0.0001d;
 	private static final double asrThreshold 	   = 0.000001d;
 
-	public List<Set<MolecularSystem.Molecule>> densityPartitioner(MolecularSystem molecularSystem) {
+    protected List<Set<MolecularSystem.Molecule>> densityPartitioner(MolecularSystem molecularSystem) {
 		Set<MolecularSystem.Molecule> asrQmCore = new HashSet<>();
 		Set<MolecularSystem.Molecule> asrQm     = new HashSet<>();
 		Set<MolecularSystem.Molecule> buffer    = new HashSet<>();
@@ -143,10 +144,11 @@ public class DensityPartitioner implements Partitioner{
 	private static final double seddThreshold  	 = 2;
 
 	@SuppressWarnings("unchecked")
-	private Set<MolecularSystem.Molecule> stronglyBound(Set<MolecularSystem.Molecule> qmFixedMolecules,
+    protected Set<MolecularSystem.Molecule> stronglyBound(Set<MolecularSystem.Molecule> qmFixedMolecules,
 							   Set<MolecularSystem.Molecule> searchMolecules,
 							   MolecularSystem molecularSystem) {
 
+        System.out.println("in here?");
 
         //This is ugly with all the predicates separate
         Predicate<VoronoiPoint> bothNotInQmFixed = gridPoint ->
@@ -203,7 +205,7 @@ public class DensityPartitioner implements Partitioner{
 	private static final double doriThreshold 	 = 0.9d;
 
 	@SuppressWarnings("unchecked")
-	private Set<MolecularSystem.Molecule> weaklyBound(Set<MolecularSystem.Molecule> qmCore,
+	protected Set<MolecularSystem.Molecule> weaklyBound(Set<MolecularSystem.Molecule> qmCore,
 							 Set<MolecularSystem.Molecule> searchMolecules,
 							 MolecularSystem molecularSystem) {
 		List<VoronoiPoint> gridPoints = voronoizer.voronoize(DORI, searchMolecules, molecularSystem );

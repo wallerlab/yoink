@@ -1,6 +1,7 @@
 package org.wallerlab.yoink.region.service.partitioners
 
 import org.wallerlab.yoink.api.model.Coord
+import org.wallerlab.yoink.api.model.Job
 import org.wallerlab.yoink.api.model.VoronoiPoint
 import org.wallerlab.yoink.api.model.molecular.MolecularSystem
 import org.wallerlab.yoink.api.service.cube.Voronoizer
@@ -10,9 +11,10 @@ import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 
-/**
- * Created by waller on 11/08/16.
- */
+import static org.wallerlab.yoink.api.model.adaptive.Region.Name.BUFFER
+import static org.wallerlab.yoink.api.model.adaptive.Region.Name.QM_ADAPTIVE
+
+
 class DenistyPartitionerSpec extends Specification{
 
     def qmCore
@@ -58,6 +60,21 @@ class DenistyPartitionerSpec extends Specification{
         voronoizer.voronoize(_, searchMolecules, molecularSystem) >> gridPoints
     }
 
+    def "test the overall partitioner"() {
+
+        given:
+        def dp = new DummyDensityPartitioner()
+
+        def job = Mock(Job)
+        def ms = Mock(MolecularSystem)
+        ms.getMolecules("QM_CORE") >> qmCore
+        job.getMolecularSystem() >> ms
+
+        expect:
+        dp.partition(job).get(QM_ADAPTIVE).size() == 3
+        dp.partition(job).get(BUFFER).size() == 2
+    }
+
     @Unroll
     def "density partitioner with '#electronic' density "(){
         given:
@@ -100,8 +117,8 @@ class DenistyPartitionerSpec extends Specification{
              atomic  | electronic  |  sedd       |       result
              0.09d   | null        |   null      |    []      as Set
              0.011d  | 0.01d       |   null      |    []      as Set
-             0.2d    | 0.1d        |   1.5d     |     [m2,m3]      as Set
-             0.2d    | 0.1d        |   3.0d      |    [] as Set
+             0.2d    | 0.1d        |   1.5d      |    [m2,m3] as Set
+             0.2d    | 0.1d        |   3.0d      |    []      as Set
     }
 
     def "test weakly bound with already in qm region"() {
@@ -144,4 +161,28 @@ class DenistyPartitionerSpec extends Specification{
     private MolecularSystem.Molecule.Atom createAtom(int i){
         return Mock(MolecularSystem.Molecule.Atom)
     }
+
+    // This is to avoid us setting up a big test.
+   class DummyDensityPartitioner extends DensityPartitioner{
+
+           @Override
+           protected List<Set<MolecularSystem.Molecule>> densityPartitioner(MolecularSystem molecularSystem){
+               return [[m2,m3] as Set,[m2,m3] as Set,[m2,m3] as Set]
+           }
+
+           @Override
+           protected  Set<MolecularSystem.Molecule> stronglyBound(Set<MolecularSystem.Molecule> qmFixedMolecules,
+                                                               Set<MolecularSystem.Molecule> searchMolecules,
+                                                               MolecularSystem molecularSystem) {
+               return [m2,m3] as Set
+           }
+
+           @Override
+           protected Set<MolecularSystem.Molecule> weaklyBound(Set<MolecularSystem.Molecule> qmCore,
+                                                               Set<MolecularSystem.Molecule> searchMolecules,
+                                                               MolecularSystem molecularSystem){
+               return [m2,m3] as Set
+           }
+    }
+
 }
