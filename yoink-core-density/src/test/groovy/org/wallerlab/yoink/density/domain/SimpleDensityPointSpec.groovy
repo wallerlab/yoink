@@ -18,30 +18,38 @@ package org.wallerlab.yoink.density.domain
 import org.wallerlab.yoink.api.service.math.Vector
 import org.wallerlab.yoink.api.model.Coord
 import org.wallerlab.yoink.api.service.math.Matrix
-import spock.lang.Ignore;
+import spock.lang.Ignore
+import spock.lang.Shared;
 import spock.lang.Specification
+import spock.lang.Unroll
 
-@Ignore
 class SimpleDensityPointSpec extends Specification{
 
-	def "test constructor SimpleDensityPoint(Coord currentCoord)"(){
+	@Shared def point
+	def gradientVector = Mock(Vector)
+	def hessian = Mock(Matrix)
+
+	def setup(){
 		def coord=Mock(Coord);
-		when:"make a new SimpleDensityPoint with mocked coord"
-		def point=new SimpleDensityPoint(coord)
-		then:"assert the type of point.coord"
-		assert	point.coord instanceof Coord
+		def density = 0.01
+		def gradient = 0.0001
+		point =new SimpleDensityPoint( coord, density, gradient, gradientVector, hessian)
 	}
 
+	def "test constructor SimpleDensityPoint(Coord currentCoord)"(){
+
+		expect:"assert the type of point.coord"
+			assert point.coord          instanceof Coord
+			assert point.hessian        instanceof Matrix
+			assert point.gradientVector instanceof Vector
+	}
 
 	def "test getters and setters"(){
-		def hessian=Mock(Matrix);
-		def gradientVector=Mock(Vector);
-		def point=new SimpleDensityPoint()
-		when:"set gradient vector and hessian"
-		point.setGradientVector(gradientVector)
-		point.setHessian(hessian)
-		then:"assert getters for gradient vector and hessian"
-		point.getHessian()==hessian
-		point.getGradientVector()==gradientVector
+
+		expect:"assert getters for gradient vector and hessian"
+			point.getDensity()        == 0.01
+			point.getGradient()        == 0.0001
+			point.getHessian()        == hessian
+			point.getGradientVector() == gradientVector
 	}
 }
