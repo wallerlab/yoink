@@ -54,58 +54,35 @@ public class SimpleRadialGrid implements RadialGrid, Serializable {
 		this.maxGridDistance = maxGridDistance;
 	}
 
-	/* (non-Javadoc)
-         * @see org.wallerlab.yoink.molecule.domain.RadialGrid#getMaxGridDistance()
-         */
+
 	public double getMaxGridDistance() {
 		return maxGridDistance;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.wallerlab.yoink.molecule.domain.RadialGrid#getExponent()
-	 */
 	public double getExponent() {
 		return exponent;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.wallerlab.yoink.molecule.domain.RadialGrid#getZeta()
-	 */
 	public double getZeta() {
 		return zeta;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.wallerlab.yoink.molecule.domain.RadialGrid#getNumberOfGrids()
-	 */
 	public int getNumberOfGrids() {
 		return numberOfGrids;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.wallerlab.yoink.molecule.domain.RadialGrid#getGridPositions()
-	 */
 	public double[] getGridPositions() {
 		return gridPositions;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.wallerlab.yoink.molecule.domain.RadialGrid#getGridValues()
-	 */
 	public double[] getGridValues() {
 		return gridValues;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.wallerlab.yoink.molecule.domain.RadialGrid#getFirstDerivativeOfGridValues()
-	 */
 	public double[] getFirstDerivativeOfGridValues() {
 		return firstDerivativeOfGridValues;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.wallerlab.yoink.molecule.domain.RadialGrid#getSecondDerivativeOfGridValues()
-	 */
 	public double[] getSecondDerivativeOfGridValues() {
 		return secondDerivativeOfGridValues;
 	}
