@@ -47,20 +47,11 @@ class DistancePartitionerSpec extends Specification{
 		region.getCenterOfMass()>>Mock(Coord)
 		def region2=Mock(Region)
 
-		def a1=Mock(MolecularSystem.Molecule.Atom)
-		def m1=Mock(MolecularSystem.Molecule)
-		m1.getAtoms()>>[a1]
+		def m1 = createMolecule()
+		def m2 = createMolecule()
+		def m3 = createMolecule()
 
-		def a2=Mock(MolecularSystem.Molecule.Atom)
-		def m2=Mock(MolecularSystem.Molecule)
-
-		m2.getAtoms()>>[a2]
-		def a3=Mock(MolecularSystem.Molecule.Atom)
-		def m3=Mock(MolecularSystem.Molecule)
-		m3.getAtoms()>>[a3]
-
-
-		region2.getMolecules()>>[m1, m2, m3]
+		region2.getMolecules()>>[m1,m2, m3]
 
 		def distanceCalculator=Mock(IDistanceCalculator)
 
@@ -86,5 +77,12 @@ class DistancePartitionerSpec extends Specification{
 		def results = regionizer.partition(job)
 		results.get(QM_ADAPTIVE).size()==1
 		results.get(BUFFER).size()==1
+	}
+
+	private MolecularSystem.Molecule createMolecule() {
+		def atom = Mock(MolecularSystem.Molecule.Atom)
+		def molecule = Mock(MolecularSystem.Molecule)
+		molecule.getAtoms() >> [atom]
+		molecule
 	}
 }

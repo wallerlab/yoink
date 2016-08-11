@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wallerlab.yoink.region.service.partitioners
+package org.wallerlab.yoink.region.service.partitioners.old
 
 import org.wallerlab.yoink.api.model.Job
 
@@ -28,6 +28,7 @@ import org.wallerlab.yoink.api.service.molecule.Calculator
 import org.wallerlab.yoink.api.service.region.Regionizer
 import org.wallerlab.yoink.api.service.molecule.FilesReader
 import org.wallerlab.yoink.region.domain.SimpleRegion
+import org.wallerlab.yoink.region.service.partitioners.DensityPartitioner
 import spock.lang.Ignore
 import spock.lang.Specification
 

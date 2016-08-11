@@ -53,13 +53,16 @@ public class DensityPartitioner implements Partitioner{
 		Map<Region.Name,Set<MolecularSystem.Molecule>> qmAdaptiveAndBuffer = new HashMap<>();
 		MolecularSystem molecularSystem = job.getMolecularSystem();
 		Set<MolecularSystem.Molecule> qmCoreFixed   = job.getMolecularSystem().getMolecules("QM_CORE");
+
 		List<Set<MolecularSystem.Molecule>> partitionedMolecules  = densityPartitioner(molecularSystem);
 		Set<MolecularSystem.Molecule> moleculesInCoreSearch 	  = partitionedMolecules.get(0);
 		Set<MolecularSystem.Molecule> moleculesInAdaptiveSearch   = partitionedMolecules.get(1);
-		Set<MolecularSystem.Molecule> buffer			  = partitionedMolecules.get(2);
+		Set<MolecularSystem.Molecule> buffer			          = partitionedMolecules.get(2);
 		Set<MolecularSystem.Molecule> stronglyBound = new HashSet<>();
+
 		if(moleculesInCoreSearch.size() > 0)
 			stronglyBound.addAll(stronglyBound(qmCoreFixed, moleculesInCoreSearch, molecularSystem));
+
 		Set<MolecularSystem.Molecule> qmCore = union(qmCoreFixed, stronglyBound);
 		Set<MolecularSystem.Molecule> weaklyBound = new HashSet<>();
 		if(moleculesInAdaptiveSearch.size() > 0)
@@ -139,7 +142,7 @@ public class DensityPartitioner implements Partitioner{
 	private static final double seddThreshold  	 = 2;
 
 	@SuppressWarnings("unchecked")
-	public Set<MolecularSystem.Molecule> stronglyBound(Set<MolecularSystem.Molecule> qmFixedMolecules,
+	private Set<MolecularSystem.Molecule> stronglyBound(Set<MolecularSystem.Molecule> qmFixedMolecules,
 							   Set<MolecularSystem.Molecule> searchMolecules,
 							   MolecularSystem molecularSystem) {
 
@@ -195,19 +198,19 @@ public class DensityPartitioner implements Partitioner{
 	private static final double doriThreshold 	 = 0.9d;
 
 	@SuppressWarnings("unchecked")
-	public Set<MolecularSystem.Molecule> weaklyBound(Set<MolecularSystem.Molecule> qmCore,
+	private Set<MolecularSystem.Molecule> weaklyBound(Set<MolecularSystem.Molecule> qmCore,
 							 Set<MolecularSystem.Molecule> searchMolecules,
 							 MolecularSystem molecularSystem) {
 		List<VoronoiPoint> gridPoints = voronoizer.voronoize(DORI, searchMolecules, molecularSystem );
-		return (Set<MolecularSystem.Molecule>) gridPoints.stream()
-				.filter(gridPoint -> qmCore.containsAll(gridPoint.getNearestMolecules()))
+        return (Set<MolecularSystem.Molecule>) gridPoints.stream()
+				.filter(gridPoint -> !qmCore.containsAll(gridPoint.getNearestMolecules()))
 				.filter(gridPoint -> {
-					double density = this.densityCalculator.electronic(gridPoint.getCoordinate(), searchMolecules);
+                    double density = this.densityCalculator.electronic(gridPoint.getCoordinate(), searchMolecules);
 					return (density >= doriDensityThreshold);
 				})
 				.filter(gridPoint -> {
-					double dori = this.densityCalculator.dori(gridPoint.getCoordinate(),mapToAtoms(searchMolecules));
-					return (1 >= dori && dori >= doriThreshold);
+                    double dori = this.densityCalculator.dori(gridPoint.getCoordinate(),mapToAtoms(searchMolecules));
+					return (dori <= 1  && dori >= doriThreshold);
 				})
 				.flatMap(gridPoint -> gridPoint.getNearestMolecules().stream())
 				.collect(toSet());

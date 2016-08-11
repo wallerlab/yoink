@@ -39,7 +39,7 @@ public class SimpleMolecule implements MolecularSystem.Molecule {
 
     public SimpleMolecule(final int index, final Set<Atom> atoms) {
     	this.index = index;
-	this.atoms = atoms;
+	    this.atoms = atoms;
     }
 
     /**
