@@ -15,32 +15,29 @@
  */
 package org.wallerlab.yoink.molecule.service.calculator
 
-
 import org.wallerlab.yoink.api.model.Coord
 import org.wallerlab.yoink.api.model.molecular.MolecularSystem
-
-import org.wallerlab.yoink.api.service.molecule.Calculator
+import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
+import org.wallerlab.yoink.molecule.domain.SimpleCoord
 import org.wallerlab.yoink.molecule.service.DistanceCalculator
-import spock.lang.Ignore;
+
 import spock.lang.Specification
 
-@Ignore
 class ClosestDistanceToMoleculeCalculatorSpec extends Specification{
 
 	def "test method calculate(Coord gridCoord, Molecule molecule) "(){
-		def coordinate=Mock(Coord)
+		def coordinate=new SimpleCoord(SimpleVector3DFactory.staticCreate(0,0,0))
 		def atom1=Mock(MolecularSystem.Molecule.Atom)
 		def atom2=Mock(MolecularSystem.Molecule.Atom)
 		def m=Mock(MolecularSystem.Molecule)
 		m.getAtoms()>>[atom1,atom2]
-		def distanceCalculator=Mock(Calculator)
-		distanceCalculator.calculate(coordinate,atom1)>> 1.0d
-		distanceCalculator.calculate(coordinate,atom2)>> 2.0d
+		atom1.getCoordinate() >> SimpleVector3DFactory.staticCreate(0,0,1)
+		atom2.getCoordinate() >> SimpleVector3DFactory.staticCreate(10,10,10)
+
 		
 		when:"ratio distance between atom and coordinate"
-		def calculator=new DistanceCalculator()
-		calculator.distanceCalculator=distanceCalculator
-		double distance=calculator.calculate( coordinate,m)
+		def calculator = new DistanceCalculator()
+		double distance=calculator.closest( coordinate,m)
 		then:"assert the distance value"
 		assert distance==1.0
 	}

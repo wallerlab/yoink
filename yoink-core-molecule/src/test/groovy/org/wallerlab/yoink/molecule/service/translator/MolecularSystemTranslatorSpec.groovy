@@ -29,14 +29,15 @@ import org.wallerlab.yoink.api.service.math.Vector;
 
 import spock.lang.Specification
 
-@Ignore
 class MolecularSystemTranslatorSpec extends Specification {
 
+	@Ignore
 	def "test method translate(JAXBElement<Cml> cml)"(){
+
 		when:"make a new  MolecularSystemTranslator for a given file"
 		def cml=(JAXBElement<Cml>)new JaxbFileReader().read("./src/test/resources/aro.xml", new  Cml())
 		def molecularSystemTranslator= new MolecularSystemTranslator()
-		molecularSystemTranslator.unitConverterType=MolecularSystemTranslator.Converter.UnitConverterType.AngstromToBohr
+		molecularSystemTranslator.unitConverterType= Converter.UnitConverterType.AngstromToBohr
 		def myVector3D=new SimpleVector3DFactory()
 		myVector3D.myVectorType=Vector.Vector3DType.COMMONS
 		def simpleCoordFactory=new  SimpleCoordFactory()

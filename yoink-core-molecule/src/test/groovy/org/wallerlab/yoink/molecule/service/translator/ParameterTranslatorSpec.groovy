@@ -22,17 +22,17 @@ import org.cml_v3.generated.Cml
 import spock.lang.Ignore
 import spock.lang.Specification;
 
-@Ignore
 class ParameterTranslatorSpec extends Specification {
 
+	@Ignore
 	def "test method translate(JAXBElement<Cml> cml)"(){
 		when:"set up a new ParameterTranslator,read in a given file"
-		def parameterTranslator= new ParameterTranslator()
-		parameterTranslator.unitConverterType=MolecularSystemTranslator.Converter.UnitConverterType.AngstromToBohr
-		def cml=new JaxbFileReader().read("./src/test/resources/aro.xml", new  Cml())
+		   def parameterTranslator= new ParameterTranslator()
+		   parameterTranslator.unitConverterType= Converter.UnitConverterType.AngstromToBohr
+		   def cml = new JaxbFileReader().read("./src/test/resources/aro.xml", new  Cml())
 		then:"tranlate all parameters in given file"
-		parameterTranslator.translate(cml)
-		parameterTranslator.translate(cml).size()==23
-		parameterTranslator.translate(cml).get(Job.JobParameter.DGRID)==true
+		   parameterTranslator.translate(cml)
+	 	   parameterTranslator.translate(cml).size()==23
+		   parameterTranslator.translate(cml).get(Job.JobParameter.DGRID)==true
 	}
 }
