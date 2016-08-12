@@ -25,12 +25,18 @@ import spock.lang.Specification;
 @Ignore
 class SimpleCubeSpec extends Specification{
 
+	//int size,
+	//Coord origin,
+	//int[] numberOfXYZSteps,
+	//double[] xyzStepSize,
+	//List<Coord> coordinates,
+	//final Set<MolecularSystem.Molecule> molecules){
+
 	def "cube origin"(){
 		when:
 		def cube = new SimpleCube()
 		def coord = Mock(Coord)
 		then:
-		cube.setGridOrigin(coord)
 		cube.getGridOrigin()==coord
 	}
 

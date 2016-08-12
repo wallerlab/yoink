@@ -57,9 +57,9 @@ public class SimpleCube implements Cube {
 		this.coordinates = coordinates;
 		this.molecules = molecules;
 
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 3; i++)
 			this.xyzStepSize[i] = xyzStepSize[i] * Constants.ANGSTROM_TO_BOHR;
-		}
+
 	}
 
 	@Override
