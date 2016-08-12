@@ -134,4 +134,11 @@ class  NumberPartitionerSpec extends Specification{
 		qmAdaptiveAndBuffer.get(BUFFER).size()==1
 	}
 
+	private MolecularSystem.Molecule createMolecule() {
+		def atom = Mock(MolecularSystem.Molecule.Atom)
+		def molecule = Mock(MolecularSystem.Molecule)
+		molecule.getAtoms() >> [atom]
+		molecule
+	}
+
 }

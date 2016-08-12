@@ -45,11 +45,15 @@ public class JaxbFileReader extends AbstractJaxbReader {
 	 */
 	public JAXBElement<Cml> read(String input, Object jaxbObject) {
 		this.input = new File(input);
+		System.out.println("input is" + input);
 		JAXBElement<Cml> marshalled = init(jaxbObject);
+		System.out.println("Marshalled" + marshalled);
+
 		return marshalled;
 	}
 	
 	protected JAXBElement<Cml> unmarshal(Object jaxbObject) throws JAXBException{
+		System.out.println("input is " + input);
 		JAXBElement<Cml> marshalled = (JAXBElement<Cml>) jaxbUnmarshaller.unmarshal(input);
 		return marshalled;
 	}
