@@ -48,6 +48,8 @@ class SimpleRegionSpec extends Specification{
 		region.getName()==MM
 		region.getSize()==1
 		region.getAtoms()==[atom] as Set
+		region.getMolecules() ==[molecule] as Set
+
 	}
 
 	def"test getCenterOfMass"(){
