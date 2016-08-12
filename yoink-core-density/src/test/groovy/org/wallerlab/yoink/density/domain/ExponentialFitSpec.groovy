@@ -16,7 +16,7 @@ class ExponentialFitSpec extends Specification {
         ExponentialFit.Al.C().getEntry(0) == 1319.0
         ExponentialFit.H.C().getEntry(0) == 0.2815
         for(ExponentialFit e : ExponentialFit.values())
-          [e.C(),e.Cz(),e.Z(),e.Cz(),e.Czz()].each{ assert it !=null && it instanceof Vector }
+          [e.C(),e.Cz(),e.Czz(),e.Z(),e.invZ()].each{ assert it !=null && it instanceof Vector }
 
     }
 }
