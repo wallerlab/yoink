@@ -31,6 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Min Zheng
  *
  */
+//Deprecate this
 @Service
 public class RegionizerProcessor implements ItemProcessor<Job<JAXBElement>,Job>{
 

@@ -72,11 +72,12 @@ public class NumberPartitioner implements Partitioner{
 			double distance_s_qm_in  =  Double.parseDouble(job.getParameter(DISTANCE_S_QM_IN).toString());
 			double distance_t_qm_out =  Double.parseDouble(job.getParameter(DISTANCE_T_QM_OUT).toString());
 
+			System.out.println("com" + centerOfMass);
+			System.out.println("distance is " + distanceCalculator.closest(centerOfMass,sortedMolecules.get(0)) );
 			//find first molecule that is outside of limit.
 		  MolecularSystem.Molecule moleculeAtT_Qm_Out =
-		  
 		     sortedMolecules.stream()
-		                    .filter(molecule ->	
+		                    .filter(molecule ->
 		                               distanceCalculator.closest(centerOfMass, molecule) > distance_t_qm_out)
 				    .findFirst()
 				    .get();

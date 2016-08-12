@@ -36,6 +36,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
  * @author Min Zheng
  *
  */
+//Deprecate this
 @Service
 public class BuilderProcessor implements ItemProcessor<JAXBElement, Job<JAXBElement>> {
 
