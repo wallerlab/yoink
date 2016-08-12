@@ -37,6 +37,7 @@ class SimpleMoleculeSpec extends Specification{
 		def centerOfMass=Mock(Coord)
 		m.setCenterOfMass(centerOfMass)
 		then:"test ther return value of getters"
+		assert m.toString() instanceof  String
 		m.getIndex()==1
 		m.getAtoms()==atoms
 		m.getAtoms().size()==2

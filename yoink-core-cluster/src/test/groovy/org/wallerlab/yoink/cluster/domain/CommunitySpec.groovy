@@ -24,8 +24,8 @@ class CommunitySpec extends Specification{
         community.sumOfInternalEdgeWeights ==  5.0
         community.totalSumOfEdgeWeights    == 10.0
         community.getMolecules()    ==  [m2,m1] as Set
-
-
+        community.toString() instanceof String
+        community.size() == 2
 
     }
 }

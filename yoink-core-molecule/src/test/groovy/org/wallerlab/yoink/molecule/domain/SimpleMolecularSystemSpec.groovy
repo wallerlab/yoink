@@ -43,6 +43,7 @@ class SimpleMolecularSystemSpec extends Specification{
 		when:"make a  SimpleMolecularSystem using constructor"
 		def ms = new SimpleMolecularSystem( molecules)
 		then:"test the return value of getters"
+		assert ms.toString() instanceof  String
 		ms.getMolecules().size()==2
 		ms.getAtoms().size()==4
 	}
