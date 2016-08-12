@@ -33,6 +33,7 @@ class SimpleAtomSpec extends Specification {
 
 		then:"assert the value of getters"
 		assert atom instanceof SimpleAtom
+		assert atom.toString() instanceof String
 		atom.getIndex()==1
 		atom.getElement()==elementType
 		atom.getCoordinate()==coordinate

@@ -15,12 +15,17 @@
  */
 package org.wallerlab.yoink.batch.service.processor
 
+import org.wallerlab.yoink.api.service.plugin.QmMmWrapper
+import org.wallerlab.yoink.api.service.region.Regionizer
+import org.wallerlab.yoink.region.service.SimpleRegionizer
+import spock.lang.Ignore
 import spock.lang.Specification
 import org.wallerlab.yoink.api.enums.*
 
 class AdaptiveQMMMProcessorSpec extends Specification{
 
-	/*def "test method process(List<File> requests)"(){
+    @Ignore //not implemented yet
+	def "test method process(List<File> requests)"(){
 		def file=new File("./src/test/resources/AdaptiveQMMMProcessorSpec.xml")
 		def requests=[file]
 		def propertyWrapper=Mock(Wrapper)
@@ -29,13 +34,13 @@ class AdaptiveQMMMProcessorSpec extends Specification{
 		def preRegionizer=Mock(SimpleRegionizer)
 		def postRegionizer=Mock(SimpleRegionizer)
 		def adaptiveQMMMRegionizer=Mock(SimpleRegionizer)
-		List<SimpleRegionizer> regionizers=new ArrayList<SimpleRegionizer>();
+		List<Regionizer> regionizers=new ArrayList<SimpleRegionizer>();
 		regionizers.add(adaptiveQMMMRegionizer)
 		regionizers.add(adaptiveQMMMRegionizer)
 		jobBuilder.build(_)>>Mock(Job)
 
 		when:"set up a new QmMmWrapper"
-		def processor = new QmMmWrapper() {} {}
+		def processor = Mock(QmMmWrapper)
 		processor.preRegionizer=preRegionizer
 		processor.postRegionizer=postRegionizer
 		processor.regionizers=regionizers
@@ -44,5 +49,5 @@ class AdaptiveQMMMProcessorSpec extends Specification{
 
 		then:"nothing is asserted here, except that no error is not thrown"
 		processor.process(requests)
-	}*/
+	}
 }
