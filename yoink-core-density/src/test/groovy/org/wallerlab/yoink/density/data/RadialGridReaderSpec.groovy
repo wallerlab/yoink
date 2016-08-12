@@ -15,6 +15,8 @@
  */
 package org.wallerlab.yoink.density.data
 
+import org.wallerlab.yoink.api.model.molecular.Element
+import org.wallerlab.yoink.density.domain.RadialGrid
 import org.wallerlab.yoink.density.domain.SimpleRadialGrid
 import org.wallerlab.yoink.math.linear.SimpleMatrixFactory
 import org.wallerlab.yoink.api.service.math.Matrix
@@ -27,10 +29,11 @@ class RadialGridReaderSpec extends Specification {
 	def "test read(String wfc_file, RadialGrid radial_grid)"(){
 		when:
 			def reader= new RadialGridReader()
+			Map<Element,RadialGrid> radialgrids
+		   radialGrids = reader.read()
 
 		then:
-			reader.read()
-			//grid.numberOfGrids==5326
+			 grid.numberOfGrids==5326
 			//Math.abs(grid.exponent-4.1313E-04)<=1.0E-6
 			//Math.abs(grid.zeta-2.0000E-03)<=1.0E-5
 			//Math.abs(grid.maxGridDistance-17.4308)<=1.0E-1

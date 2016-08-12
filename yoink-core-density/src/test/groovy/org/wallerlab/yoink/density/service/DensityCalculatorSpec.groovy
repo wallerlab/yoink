@@ -16,6 +16,7 @@
 package org.wallerlab.yoink.density.service
 
 import org.wallerlab.yoink.api.model.Coord
+import org.wallerlab.yoink.api.model.molecular.Element
 import org.wallerlab.yoink.api.service.molecule.Calculator
 import org.wallerlab.yoink.api.model.molecular.MolecularSystem
 import org.wallerlab.yoink.api.service.math.Matrix
@@ -23,127 +24,138 @@ import org.wallerlab.yoink.density.data.RadialGridReader
 import org.wallerlab.yoink.density.domain.ExponentialFit
 import org.wallerlab.yoink.density.domain.SimpleRadialGrid
 import org.wallerlab.yoink.math.linear.SimpleMatrixFactory
+import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
+import org.wallerlab.yoink.molecule.domain.SimpleCoord
 import spock.lang.Ignore
 import spock.lang.Specification
 
-@Ignore
 class DensityCalculatorSpec extends Specification {
 
+	def calculator
+
+	def m1
+	def atoms1
+	def atom1
+	def e1
+	def coord1
+
+	def m2
+	def atoms2
+	def atom2
+	def e2
+	def coord2
+
+	def currentCoord
+
+	def setup(){
+
+		calculator= new SimpleDensityCalculator()
+
+		//Molecule 1
+		atom1=Mock(MolecularSystem.Molecule.Atom)
+		e1 = Element.C
+		atom1.getElement() >> e1
+		m1=Mock(MolecularSystem.Molecule)
+		atoms1 = [atom1] as Set
+		m1.getAtoms()>> atoms1
+
+		//Molecule 2
+		atom2=Mock(MolecularSystem.Molecule.Atom)
+		e2 = Element.C
+		atom2.getElement() >> e2
+		m2=Mock(MolecularSystem.Molecule)
+		atoms2 = [atom2] as Set
+		m2.getAtoms()>>atoms2
+
+		currentCoord = new SimpleCoord(SimpleVector3DFactory.staticCreate(0.0,0.0,0.0))
+
+	}
 
 	def"test method calculate(currentCoord,molecules), density is not close zero"(){
 
-		given:
-		def atom1=Mock(MolecularSystem.Molecule.Atom)
-		def m1=Mock(MolecularSystem.Molecule)
-		m1.getAtoms()>>[atom1]
+		given:"set up DensityCalculator"
+		    coord1 = SimpleVector3DFactory.staticCreate(x1,y1,z1)
+		    coord2 = SimpleVector3DFactory.staticCreate(x2,y2,z2)
+		    atom1.getCoordinate() >> coord1
+		    atom2.getCoordinate() >> coord2
+		    def molecules = [m1, m2] as Set
 
-		def atom2=Mock(MolecularSystem.Molecule.Atom)
-		def m2=Mock(MolecularSystem.Molecule)
-		m2.getAtoms()>>[atom2]
+		expect:"assert density value"
+		    calculator.electronic(currentCoord, molecules) >= expectedDensity
 
-		def currentCoord=Mock(Coord)
-		Calculator<Double, Coord, MolecularSystem.Molecule.Atom> atomDensityCalculator=Mock(Calculator)
-		atomDensityCalculator.calculate(currentCoord, atom1)>>(double)1.0
-		atomDensityCalculator.calculate(currentCoord, atom2)>>(double)2.0
+		where:
+		     x1 |  y1 | z1 |   x2 |   y2 | z2   | expectedDensity
+		    0.1 | 0.1 | 0.1| -0.1 | -0.1 | -0.1 | 1.0E-6
 
-		when:"set up DensityCalculator"
-		def calculator= new SimpleDensityCalculator()
-		calculator.atomDensityCalculator=atomDensityCalculator
-
-		then:"assert density value"
-		double density=calculator.calculate(currentCoord, ((Set<MolecularSystem.Molecule>)[m1, m2]))
-		assert Math.abs(density-3)<=1.0E-6
 	}
-
 
 	def"test method calculate(currentCoord,molecules), density is very close zero"(){
+
 		given:"atomic density is smaller than default density value"
-		def atom1=Mock(MolecularSystem.Molecule.Atom)
-		def m1=Mock(MolecularSystem.Molecule)
-		m1.getAtoms()>>[atom1]
+		coord1 = SimpleVector3DFactory.staticCreate(x1,y1,z1)
+		coord2 = SimpleVector3DFactory.staticCreate(x2,y2,z2)
+		atom1.getCoordinate() >> coord1
+		atom2.getCoordinate() >> coord2
+		def molecules = [m1, m2] as Set
 
-		def atom2=Mock(MolecularSystem.Molecule.Atom)
-		def m2=Mock(MolecularSystem.Molecule)
-		m2.getAtoms()>>[atom2]
+		expect:"assert density value"
+		Math.abs(calculator.electronic(currentCoord, molecules)-1.0E-30) <= expectedDensity
 
-		def currentCoord=Mock(Coord)
-		Calculator<Double, Coord, MolecularSystem.Molecule.Atom> atomDensityCalculator=Mock(Calculator)
-		atomDensityCalculator.calculate(currentCoord, atom1)>>(double)1.0E-31
-		atomDensityCalculator.calculate(currentCoord, atom2)>>(double)2.0E-31
+		where:
+		x1  |  y1 | z1 |   x2 |   y2 |  z2  | expectedDensity
+		100 | 100 | 100| -100 | -100 | -100 | 1.0E-40
 
-		when:"set up DensityCalculator"
-		def calculator= new SimpleDensityCalculator()
-		calculator.atomDensityCalculator=atomDensityCalculator
-
-		then:"assert density value"
-		double density=calculator.calculate(currentCoord, ((Set<MolecularSystem.Molecule>)[m1, m2]))
-		assert Math.abs(density-1.0E-30)<=1.0E-40
 	}
 
-	def"molecular density ratio"(){
-		given:
-		def m1=Mock(MolecularSystem.Molecule)
-		def m2=Mock(MolecularSystem.Molecule)
-		def a1=Mock(MolecularSystem.Molecule.Atom)
-		def a2=Mock(MolecularSystem.Molecule.Atom)
-		m1.getAtoms()>>[a1]
-		m2.getAtoms()>>[a2]
-		def currentCoord=Mock(Coord)
-		Calculator<Double, Coord, MolecularSystem.Molecule.Atom> atomDensityCalculator=Mock(Calculator)
-		atomDensityCalculator.calculate(currentCoord, a1)>>(double)1
-		atomDensityCalculator.calculate(currentCoord, a2)>>(double)2
-		MolecularSystem.Molecule[] neighbours=[m1, m2]
 
-		when:"make a  new MolecularDensityRatioCalculator"
-		def calculator= new SimpleDensityCalculator()
-		calculator.atomDensityCalculator=atomDensityCalculator
 
-		then :"assert calculated value"
-		double ratio=	calculator.ratio(currentCoord,
-				neighbours)
-		Math.abs(ratio)<=0.5
+	def"molecular ratio"(){
+		given:"set up AtomicDensityRatioCalculator for two known atoms"
+		coord1 = SimpleVector3DFactory.staticCreate(x1,y1,z1)
+		coord2 = SimpleVector3DFactory.staticCreate(x2,y2,z2)
+		atom1.getCoordinate() >> coord1
+		atom2.getCoordinate() >> coord2
+		MolecularSystem.Molecule[] molecules = new MolecularSystem.Molecule[2]
+		molecules[0] = m1
+		molecules[1] = m2
+
+
+		expect:"assert ratio value"
+		calculator.ratio(currentCoord,molecules) == expectedRatio
+
+		where:
+		x1  |  y1 | z1 |   x2   |   y2   |  z2    | expectedRatio
+		100 | 100 | 100| -100   | -100   | -100   | 1.0
+		100 | 100 | 100| -50    | -50    | -50    | 2.3269039548004824E-69
+		1   | 1   |   1| -100   | -100   | -100   | 7.830363182248395E135
+
 	}
+
 
 	def"atomic ratio"(){
-		given:
-		def atom1=Mock(MolecularSystem.Molecule.Atom)
-		def atom2=Mock(MolecularSystem.Molecule.Atom)
-		def currentCoord=Mock(Coord)
-		MolecularSystem.Molecule.Atom[] atoms=[atom1, atom2]
-		Calculator<Double, Coord, MolecularSystem.Molecule.Atom> atomDensityCalculator=Mock(Calculator)
-		atomDensityCalculator.calculate(currentCoord, atom1)>>(double)1.0
-		atomDensityCalculator.calculate(currentCoord, atom2)>>(double)2.0
+		given:"set up AtomicDensityRatioCalculator for two known atoms"
+		coord1 = SimpleVector3DFactory.staticCreate(x1,y1,z1)
+		coord2 = SimpleVector3DFactory.staticCreate(x2,y2,z2)
+		atom1.getCoordinate() >> coord1
+		atom2.getCoordinate() >> coord2
+		MolecularSystem.Molecule.Atom[] atoms = new MolecularSystem.Molecule.Atom[2]
+		atoms[0] = atom1
+		atoms[1] = atom2
 
-		when:"set up AtomicDensityRatioCalculator for two known atoms"
-		def calculator= new SimpleDensityCalculator()
-		calculator.atomDensityCalculator=atomDensityCalculator
 
-		then:"assert ratio value"
-		double ratio=calculator.ratio(currentCoord,atoms);
-		Math.abs(ratio-0.5)<=1.0E-6
+		expect:"assert ratio value"
+		   calculator.ratio(currentCoord,atoms) == expectedRatio
+
+		where:
+		    x1  |  y1 | z1 |   x2   |   y2   |  z2    | expectedRatio
+		    100 | 100 | 100| -100   | -100   | -100   | 1.0
+			100 | 100 | 100| -50    | -50    | -50    | 2.3269039548004824E-69
+		    1   | 1   |   1| -100   | -100   | -100   | 7.830363182248395E135
+
 	}
 
-	def "test density from radial grid"(){
-		given:
-		def grid= new SimpleRadialGrid()
-		def reader= new RadialGridReader()
-		def myMatrix= new SimpleMatrixFactory()
-		myMatrix.matrixType=Matrix.Type.COMMONS
-		reader.myMatrix=myMatrix
-		reader.read("./src/test/resources/c__lda.wfc",  grid)
-		def atom=Mock(MolecularSystem.Molecule.Atom)
-		atom.getElementType()>>ExponentialFit.C
-		atom.getRadialGrid()>>grid
-		def currentCoord=Mock(Coord)
-		Calculator<Double, Coord, MolecularSystem.Molecule.Atom> distanceCalculator=Mock(Calculator)
-		distanceCalculator.calculate(currentCoord, atom)>>(double)   3.4641016151377544
-		when:"make a new AtomDensityCalculator"
-		def calculator= new SimpleDensityCalculator()
-		calculator.distanceCalculator=distanceCalculator
-		then:
-		Math.abs(calculator.ratio(currentCoord, atom)-1.52625795738137279E-003)<=1.0E-5
-	}
 
+	@Ignore
 	def "test method  calculate(Coord currentCoord, Atom atom) "(){
 		given:
 		def atom=Mock(MolecularSystem.Molecule.Atom)
@@ -160,6 +172,7 @@ class DensityCalculatorSpec extends Specification {
 		Math.abs(calculator.ratio(currentCoord, atom)-0.40223E-3)<=1.0E-5
 	}
 
+	@Ignore
 	def "test method2  calculate(Coord currentCoord, Atom atom) "(){
 		def atom=Mock(MolecularSystem.Molecule.Atom)
 		atom.getElementType()>>ExponentialFit.H
@@ -174,4 +187,32 @@ class DensityCalculatorSpec extends Specification {
 		then:"assert density value"
 		Math.abs(calculator.ratio(currentCoord, atom)-0.04248)<=1.0E-5
 	}
+
+	@Ignore
+	def "test density from radial grid"(){
+		given:
+		def grid= new SimpleRadialGrid()
+		def reader= new RadialGridReader()
+		def myMatrix= new SimpleMatrixFactory()
+		myMatrix.matrixType=Matrix.Type.COMMONS
+		reader.myMatrix=myMatrix
+		reader.read("./src/test/resources/c__lda.wfc",  grid)
+		def atom=Mock(MolecularSystem.Molecule.Atom)
+		atom.getElementType()>>ExponentialFit.C
+		atom.getRadialGrid()>>grid
+		def currentCoord=Mock(Coord)
+		Calculator<Double, Coord, MolecularSystem.Molecule.Atom> distanceCalculator=Mock(Calculator)
+		distanceCalculator.calculate(currentCoord, atom)>>(double)   3.4641016151377544
+
+
+		expect:
+		Math.abs(calculator.ratio(currentCoord, atom)-1.52625795738137279E-003)<= expectedRatio
+
+		where:
+		x1  |  y1 | z1 |   x2   |   y2   |  z2    | expectedRatio
+		100 | 100 | 100| -100   | -100   | -100   | 1.0
+		100 | 100 | 100| -50    | -50    | -50    | 2.3269039548004824E-69
+		1   | 1   |   1| -100   | -100   | -100   | 7.830363182248395E135
+	}
+
 }

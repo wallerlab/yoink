@@ -102,6 +102,9 @@ public class SimpleDensityCalculator implements DensityCalculator {
 	}
 
 	private double exponentialFitDensity(Coord coord, MolecularSystem.Molecule.Atom atom) {
+		System.out.println("coord is " + coord);
+		System.out.println("atom is " + atom.getCoordinate());
+
 		double distance = coord.getCoords().distance(atom.getCoordinate());
 		ExponentialFit element = ExponentialFit.valueOf(atom.getElement().toString());
 		return element.C().dotProduct((element.invZ().scalarMultiply(-distance)).exp());
@@ -292,9 +295,9 @@ public class SimpleDensityCalculator implements DensityCalculator {
 					(firstDerivative * distanceReciprocal));
 			for (int k = j + 1; k < 3; k++) {
 				hessian.setEntry(j, k, distanceReciprocalSquared *
-						distanceVector.getEntry(j) *
-						distanceVector.getEntry(k) *
-						(secondDerivative + (firstDerivative * distanceReciprocal)));
+						               distanceVector.getEntry(j) *
+						               distanceVector.getEntry(k) *
+					                   (secondDerivative + (firstDerivative * distanceReciprocal)));
 			}
 		}
 		// Copy to the lower left part of hessian
