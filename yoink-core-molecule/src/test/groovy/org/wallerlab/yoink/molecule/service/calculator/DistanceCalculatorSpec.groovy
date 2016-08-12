@@ -15,14 +15,11 @@
  */
 package org.wallerlab.yoink.molecule.service.calculator
 
-import org.wallerlab.yoink.api.model.Coord
 import org.wallerlab.yoink.api.model.molecular.MolecularSystem
-import org.wallerlab.yoink.math.linear.CommonsVector3D
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
 import org.wallerlab.yoink.molecule.domain.SimpleCoord
 import org.wallerlab.yoink.molecule.service.DistanceCalculator
 
-import spock.lang.Ignore
 import spock.lang.Specification
 
 class DistanceCalculatorSpec extends Specification{
