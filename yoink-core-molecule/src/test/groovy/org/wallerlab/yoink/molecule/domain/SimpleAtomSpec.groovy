@@ -15,48 +15,47 @@
  */
 package org.wallerlab.yoink.molecule.domain
 
-import org.wallerlab.yoink.api.model.Coord;
+import org.wallerlab.yoink.api.model.Coord
+import org.wallerlab.yoink.api.model.molecular.Element;
 import org.wallerlab.yoink.api.service.math.Vector
 import spock.lang.Ignore;
 import spock.lang.Specification
 
 
-@Ignore
 class SimpleAtomSpec extends Specification {
 
 
 	def "test constructor SimpleAtom(int index, Element elementType, Coord coordinate)"(){
-		def coordinate=Mock(Coord)
+		def coordinate=Mock(Vector)
 		def elementType=Element.B
 		def index=1
-		def grid=Mock(RadialGrid)
+
 		when:"make a new atom using constructor"
 		def atom=new SimpleAtom(index,elementType,coordinate);
-		atom.setRadialGrid(grid)
+
 		then:"assert the value of getters"
 		assert atom instanceof SimpleAtom
 		atom.getIndex()==1
 		atom.getElement()==elementType
 		atom.getCoordinate()==coordinate
-		atom.getRadialGrid()==grid
 	}
 
 
 	def "test coordinate in simple atom "(){
-		def coordinate=Mock(Coord)
-		def coords=Mock(Vector)
-		coords.getX()>>1.0
-		coords.getY()>>2.0
-		coords.getZ()>>3.0
-		coordinate.getCoords()>>coords
+		def coordinate=Mock(Vector)
+		coordinate.getX()>>1.0
+		coordinate.getY()>>2.0
+		coordinate.getZ()>>3.0
 		def elementType=Element.B
 		def index=1
-		when:"make a new atom using constructor"
 		def atom=new SimpleAtom(index,elementType,coordinate);
+
+		atom.getCoordinate()>>coordinate
+
+		when:"make a new atom using constructor"
 		then:"assert the value of x/y/z coordinate getters"
-		atom.getX3()==1.0
-		atom.getY3()==2.0
-		atom.getZ3()==3.0
-		atom.getRadialGrid()==null
+		atom.getCoordinate().getX()==1.0
+		atom.getCoordinate().getY()==2.0
+		atom.getCoordinate().getZ()==3.0
 	}
 }

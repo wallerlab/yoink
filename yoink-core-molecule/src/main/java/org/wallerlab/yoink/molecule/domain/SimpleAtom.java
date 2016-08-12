@@ -38,8 +38,8 @@ public class SimpleAtom implements MolecularSystem.Molecule.Atom {
 
     public SimpleAtom(int index, Element elementType, Vector coordinate) {
         this.index = index;
-	this.element = elementType;
-	this.coordinate = coordinate;
+	    this.element = elementType;
+	    this.coordinate = coordinate;
     }
 
     /** get the element type of the atom */
