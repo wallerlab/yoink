@@ -40,6 +40,7 @@ class SimpleRadialGridSpec extends Specification{
            simpleRadialGrid.gridValues                   == [0.01,0.01,0.01]
            simpleRadialGrid.firstDerivativeOfGridValues  == [0.02,0.02,0.02]
            simpleRadialGrid.secondDerivativeOfGridValues == [0.03,0.03,0.03]
+           simpleRadialGrid.toString() instanceof String
 
     }
 }
