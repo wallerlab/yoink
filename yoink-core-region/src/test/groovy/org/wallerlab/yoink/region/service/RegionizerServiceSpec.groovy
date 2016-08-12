@@ -15,11 +15,15 @@
  */
 package org.wallerlab.yoink.region.service
 
+import org.wallerlab.yoink.api.model.Job
+import org.wallerlab.yoink.api.model.adaptive.Region
 import org.wallerlab.yoink.api.model.molecular.MolecularSystem
 import org.wallerlab.yoink.api.service.region.Regionizer
 import org.wallerlab.yoink.math.SetOps
 import org.wallerlab.yoink.region.service.partitioners.Partitioner
 import spock.lang.Specification
+
+import static org.wallerlab.yoink.api.model.adaptive.Region.Name.QM_ADAPTIVE
 
 class RegionizerServiceSpec extends Specification{
 
@@ -40,9 +44,27 @@ class RegionizerServiceSpec extends Specification{
             def qm = [m1] as Set
             def mm = [m1,m2,m3] as Set
 
+            def buffer = [m2,m3] as Set
+
+            def molecules = [m1,m2,m3] as Set
+             def ms = Mock(MolecularSystem)
+             ms.getMolecules() >> molecules
+             def job = Mock(Job)
+
+
+             job.getMolecularSystem() >> ms
+             job.getParameter( Job.JobParameter.PARTITIONER) >>  Regionizer.Type.DISTANCE
+             ms.getMolecules("QM_CORE") >> qm
+
+        Map<Region.Name,Set<MolecularSystem.Molecule>> results = new EnumMap<>(Region.Name.class)
+        results.put(Region.Name.QM_ADAPTIVE, qm)
+        results.put(Region.Name.BUFFER , buffer)
+        partitioner.partition(_) >> results
+
         then: "we can regionize properly for simple mocked systems"
             def non_qm = SetOps.diff(mm,qm)
             non_qm.size()== 2
+            regionizerService.regionize(job)
     }
 
     // TODO int test we need to assert that there are 3 beans made.

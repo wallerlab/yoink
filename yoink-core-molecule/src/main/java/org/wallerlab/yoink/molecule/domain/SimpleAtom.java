@@ -58,7 +58,7 @@ public class SimpleAtom implements MolecularSystem.Molecule.Atom {
         return "Atom{" +
 		"index=" + index +
 		", element=" + element +
-		", coordinate=" + coordinate +
+		", coordinate=" + coordinate.getX() + " "+coordinate.getY() + " "+coordinate.getZ() + " "+
 		'}';
 	}
 }

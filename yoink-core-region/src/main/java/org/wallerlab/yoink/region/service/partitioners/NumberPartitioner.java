@@ -50,6 +50,8 @@ public class NumberPartitioner implements Partitioner{
 
 		moleculesInNonQmCore.removeAll(job.getMolecularSystem().getMolecules("QM_CORE_FIXED"));
 
+		List<MolecularSystem.Molecule> moleculesInNonQmCoreList = new ArrayList<>(moleculesInNonQmCore);
+
 		List<MolecularSystem.Molecule> sortedMolecules =
 		            moleculesInNonQmCore.stream()
 						.sorted((molecule1, molecule2) -> {
@@ -73,15 +75,21 @@ public class NumberPartitioner implements Partitioner{
 			double distance_t_qm_out =  Double.parseDouble(job.getParameter(DISTANCE_T_QM_OUT).toString());
 
 			System.out.println("com" + centerOfMass);
+			System.out.println("com" + sortedMolecules.get(0).getAtoms());
 			System.out.println("distance is " + distanceCalculator.closest(centerOfMass,sortedMolecules.get(0)) );
+
 			//find first molecule that is outside of limit.
-		  MolecularSystem.Molecule moleculeAtT_Qm_Out =
-		     sortedMolecules.stream()
-		                    .filter(molecule ->
+		    MolecularSystem.Molecule moleculeAtT_Qm_Out =
+		       sortedMolecules.stream()
+		                      .filter(molecule ->
 		                               distanceCalculator.closest(centerOfMass, molecule) > distance_t_qm_out)
-				    .findFirst()
-				    .get();
+				              .findFirst()
+				              .get();
+			System.out.println("qmNumberSize is " + qmNumberSize);
 			qmAdaptiveMolecules = new HashSet<>(sortedMolecules.subList(0, qmNumberSize));
+
+			System.out.println("index " + sortedMolecules.indexOf(moleculeAtT_Qm_Out));
+
 			bufferMolecules = new HashSet<>(sortedMolecules.subList(numberOfQm,
 								    	  	  sortedMolecules.indexOf(moleculeAtT_Qm_Out) + 1));
 		}

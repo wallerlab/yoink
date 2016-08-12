@@ -147,9 +147,6 @@ public class DensityPartitioner implements Partitioner{
     protected Set<MolecularSystem.Molecule> stronglyBound(Set<MolecularSystem.Molecule> qmFixedMolecules,
 							   Set<MolecularSystem.Molecule> searchMolecules,
 							   MolecularSystem molecularSystem) {
-
-        System.out.println("in here?");
-
         //This is ugly with all the predicates separate
         Predicate<VoronoiPoint> bothNotInQmFixed = gridPoint ->
                 !qmFixedMolecules.containsAll(gridPoint.getNearestMolecules());

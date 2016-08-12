@@ -23,6 +23,7 @@ import org.wallerlab.yoink.api.model.molecular.MolecularSystem
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
 import org.wallerlab.yoink.molecule.domain.SimpleAtom
 import org.wallerlab.yoink.molecule.domain.SimpleCoord
+import org.wallerlab.yoink.molecule.service.DistanceCalculator
 import org.wallerlab.yoink.molecule.service.IDistanceCalculator
 
 import static org.wallerlab.yoink.api.model.Job.JobParameter.*
@@ -87,10 +88,10 @@ class  NumberPartitionerSpec extends Specification{
 
 		def m=Mock(MolecularSystem.Molecule)
 
-		def m1 = createMolecule()
-		def m2 = createMolecule()
-		def m3 = createMolecule()
-		def m4 = createMolecule()
+		def m1 = Mock(MolecularSystem.Molecule)
+		def m2 = Mock(MolecularSystem.Molecule)
+		def m3 = Mock(MolecularSystem.Molecule)
+		def m4 = Mock(MolecularSystem.Molecule)
 
 		def molecules = [m1, m2, m3, m4] as Set
 		region2.getMolecules() >>  molecules
@@ -102,8 +103,8 @@ class  NumberPartitionerSpec extends Specification{
 
 		def a1 = new SimpleAtom(1,Element.H,SimpleVector3DFactory.staticCreate(0,0,0))
 		def a2 = new SimpleAtom(1,Element.H,SimpleVector3DFactory.staticCreate(0,0,1))
-		def a3 = new SimpleAtom(1,Element.H,SimpleVector3DFactory.staticCreate(0,5,1))
-		def a4 =  new SimpleAtom(1,Element.H,SimpleVector3DFactory.staticCreate(5,5,5))
+		def a3 = new SimpleAtom(1,Element.H,SimpleVector3DFactory.staticCreate(0,0,1.2))
+		def a4 = new SimpleAtom(1,Element.H,SimpleVector3DFactory.staticCreate(0,0,3))
 
 		def as1 = [a1] as Set
 	    def	as2 = [a2] as Set
@@ -115,30 +116,22 @@ class  NumberPartitionerSpec extends Specification{
 		m3.getAtoms() >> as3
 		m4.getAtoms() >> as4
 
-
 		job.getParameter(NUMBER_QM) >> 2
-		job.getParameter(NUMBER_BUFFER) >> 10
+		job.getParameter(NUMBER_BUFFER) >> 1
 		job.getParameter(PARTITIONER) >> SIZE
-		job.getParameter(NUMBER_QM) >> 2
-		job.getParameter(DISTANCE_S_QM_IN) >> 2
-		job.getParameter(DISTANCE_T_QM_OUT) >> 4
-
+		job.getParameter(DISTANCE_S_QM_IN) >> 1.5
+		job.getParameter(DISTANCE_T_QM_OUT) >> 2
 
 		when:"start up a new NumberRegionizer"
 		def partitioner=new NumberPartitioner()
+		def distanceCalculator =  new DistanceCalculator()
+		distanceCalculator.centerOfMass(_) >> new SimpleCoord(SimpleVector3DFactory.staticCreate(0,0,0))
+		partitioner.distanceCalculator= distanceCalculator
 
 		then:"the new numberRegionizer is executable and gets right results"
 		def qmAdaptiveAndBuffer = partitioner.partition(job)
-		qmAdaptiveAndBuffer.get(QM_ADAPTIVE).size()==2
-		qmAdaptiveAndBuffer.get(BUFFER).size()==10
+		qmAdaptiveAndBuffer.get(QM_ADAPTIVE).size()==1
+		qmAdaptiveAndBuffer.get(BUFFER).size()==1
 	}
-
-
-	private MolecularSystem.Molecule createMolecule() {
-        def atom = Mock(MolecularSystem.Molecule.Atom)
-        def molecule = Mock(MolecularSystem.Molecule)
-        molecule.getAtoms() >> [atom]
-        molecule
-    }
 
 }

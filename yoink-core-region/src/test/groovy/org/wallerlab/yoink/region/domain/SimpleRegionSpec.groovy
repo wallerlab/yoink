@@ -49,6 +49,7 @@ class SimpleRegionSpec extends Specification{
 		region.getSize()==1
 		region.getAtoms()==[atom] as Set
 		region.getMolecules() ==[molecule] as Set
+		region.containsAll(molecules)  == true
 
 	}
 
