@@ -94,7 +94,7 @@ public class SimpleDensityCalculator implements DensityCalculator {
 				    .sum();
 	}
 
-    //Exponential Fit Density
+    //Select Density
 	private double atomic(Coord coord, MolecularSystem.Molecule.Atom atom) {
 		if (atom.getElement().atomNumber() <  18)
 			return  exponentialFitDensity(coord, atom);
@@ -102,9 +102,6 @@ public class SimpleDensityCalculator implements DensityCalculator {
 	}
 
 	private double exponentialFitDensity(Coord coord, MolecularSystem.Molecule.Atom atom) {
-		System.out.println("coord is " + coord);
-		System.out.println("atom is " + atom.getCoordinate());
-
 		double distance = coord.getCoords().distance(atom.getCoordinate());
 		ExponentialFit element = ExponentialFit.valueOf(atom.getElement().toString());
 		return element.C().dotProduct((element.invZ().scalarMultiply(-distance)).exp());
