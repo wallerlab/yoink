@@ -15,11 +15,9 @@
  */
 package org.wallerlab.yoink.molecule.domain
 
-import spock.lang.Ignore
 import spock.lang.Specification
 import org.wallerlab.yoink.api.service.math.Vector;
 
-@Ignore
 class SimpleCoordSpec extends Specification{
 
 	def "test constructor   SimpleCoord(Vector coordVector) "(){
@@ -28,5 +26,8 @@ class SimpleCoordSpec extends Specification{
 		def coord= new  SimpleCoord(coordVector)
 		then:"assert the return type of getCoords()"
 		coord.getCoords() instanceof Vector
+		coord.toString() instanceof String
+
 	}
+
 }
