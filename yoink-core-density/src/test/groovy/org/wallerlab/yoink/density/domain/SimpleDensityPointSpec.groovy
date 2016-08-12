@@ -47,9 +47,9 @@ class SimpleDensityPointSpec extends Specification{
 	def "test getters and setters"(){
 
 		expect:"assert getters for gradient vector and hessian"
-			point.getDensity()        == 0.01
+			point.getDensity()         == 0.01
 			point.getGradient()        == 0.0001
-			point.getHessian()        == hessian
-			point.getGradientVector() == gradientVector
+			point.getHessian()         == hessian
+			point.getGradientVector()  == gradientVector
 	}
 }
