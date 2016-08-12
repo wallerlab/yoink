@@ -27,9 +27,9 @@ import org.wallerlab.yoink.api.service.math.Vector;
 import org.wallerlab.yoink.api.service.molecule.Translator;
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory;
 
-import org.cml_v3.generated.AtomArray;
-import org.cml_v3.generated.Cml;
-import org.cml_v3.generated.MoleculeList;
+import org.xml_cml.schema.AtomArray;
+import org.xml_cml.schema.Cml;
+import org.xml_cml.schema.MoleculeList;
 
 import java.util.*;
 import org.springframework.stereotype.Service;

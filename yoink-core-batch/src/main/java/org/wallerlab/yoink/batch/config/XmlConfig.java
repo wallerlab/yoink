@@ -15,9 +15,11 @@
  */
 package org.wallerlab.yoink.batch.config;
 
-import org.cml_v3.generated.Cml;
 import javax.xml.bind.JAXBElement;
 import java.io.IOException;
+
+import org.cml_v3.generated.ObjectFactory;
+import org.xml_cml.schema.Cml;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
@@ -27,7 +29,7 @@ import org.springframework.batch.item.file.MultiResourceItemReader;
 import org.springframework.batch.item.file.ResourceAwareItemReaderItemStream;
 import org.springframework.batch.item.xml.StaxEventItemReader;
 
-@Profile("batch")
+//@Profile("batch")
 @Configuration
 public class XmlConfig {
 
@@ -43,7 +45,7 @@ public class XmlConfig {
     MultiResourceItemReader itemReader() {
         MultiResourceItemReader multiResourceItemReader = new MultiResourceItemReader();
         try {
-            multiResourceItemReader.setResources(resolver.getResources("classpath:inputsw/*.xml"));
+            multiResourceItemReader.setResources(resolver.getResources("file:/Users/waller/merge/yoink/inputs/*.xml"));
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -21,22 +21,16 @@ import org.wallerlab.yoink.api.service.math.Vector;
 import org.wallerlab.yoink.api.service.molecule.FilesWriter;
 import org.wallerlab.yoink.api.model.adaptive.Region;
 
+import java.lang.Object;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.xml.bind.JAXBElement;
-import org.cml_v3.generated.Molecule;
-import org.cml_v3.generated.Cml;
-import org.cml_v3.generated.Gradient;
-import org.cml_v3.generated.MoleculeList;
-import org.cml_v3.generated.ObjectFactory;
-import org.cml_v3.generated.Property;
-import org.cml_v3.generated.PropertyList;
-import org.cml_v3.generated.Scalar;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.xml_cml.schema.*;
 
 /**
  * this class is to wrap adaptive qmmm result to JAXB element PropertyList

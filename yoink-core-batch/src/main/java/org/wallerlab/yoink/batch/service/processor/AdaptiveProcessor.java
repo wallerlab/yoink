@@ -38,7 +38,7 @@ public class AdaptiveProcessor implements ItemProcessor<Job<JAXBElement>,Job> {
 	protected Adaptive adaptive;
 
 	public Job process(Job<JAXBElement> job) {
-		adaptive.compute(job);
+		//adaptive.compute(job);
 		return job;
 	}
 }

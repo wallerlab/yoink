@@ -3,7 +3,6 @@ package org.wallerlab.yoink.cluster;
 import org.neo4j.ogm.session.SessionFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.data.neo4j.transaction.Neo4jTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.data.neo4j.repository.config.EnableExperimentalNeo4jRepositories;
@@ -13,9 +12,9 @@ import org.springframework.data.neo4j.repository.config.EnableExperimentalNeo4jR
  *
  * @author Christian Ouali Turki
  */
-@Configuration
+//@Configuration
 @ComponentScan(basePackages = "org.wallerlab.yoink.cluster")
-@EnableExperimentalNeo4jRepositories(basePackages = "com.wallerlab.yoink.cluster.data")
+@EnableExperimentalNeo4jRepositories(basePackages = "org.wallerlab.yoink.cluster.data")
 @EnableTransactionManagement
 public class GraphConfig  {
 

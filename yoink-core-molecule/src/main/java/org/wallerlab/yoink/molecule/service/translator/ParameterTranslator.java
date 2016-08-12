@@ -26,9 +26,10 @@ import org.wallerlab.yoink.api.model.adaptive.Region;
 import org.wallerlab.yoink.api.service.adaptive.Adaptive;
 import org.wallerlab.yoink.api.service.molecule.Translator;
 import org.wallerlab.yoink.api.service.region.Regionizer;
-import org.cml_v3.generated.Cml;
-import org.cml_v3.generated.Parameter;
-import org.cml_v3.generated.ParameterList;
+
+import org.xml_cml.schema.Cml;
+import org.xml_cml.schema.Parameter;
+import org.xml_cml.schema.ParameterList;
 
 /**
  * this class is to get a Map(JobParameter - {@link Job.JobParameter}, Object) by
