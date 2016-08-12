@@ -1,6 +1,5 @@
 package org.wallerlab.yoink.cluster.domain;
 
-import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 
 /**
@@ -19,28 +18,24 @@ public class MolecularSystem {
 
     public Integer numberOfAtoms;
 
-    public String getNameOfSystem() {
-        return nameOfSystem;
+    //I think we need the interactions here.
+
+    public MolecularSystem(String nameOfSystem, Integer numberOfMolecules, Integer numberOfAtoms) {
+        this.nameOfSystem = nameOfSystem;
+        this.numberOfMolecules = numberOfMolecules;
+        this.numberOfAtoms = numberOfAtoms;
     }
 
-    public void setNameOfSystem(String nameOfSystem) {
-        this.nameOfSystem = nameOfSystem;
+    public String getNameOfSystem() {
+        return nameOfSystem;
     }
 
     public Integer getNumberOfMolecules() {
         return numberOfMolecules;
     }
 
-    public void setNumberOfMolecules(Integer numberOfMolecules) {
-        this.numberOfMolecules = numberOfMolecules;
-    }
-
     public Integer getNumberOfAtoms() {
         return numberOfAtoms;
-    }
-
-    public void setNumberOfAtoms(Integer numberOfAtoms) {
-        this.numberOfAtoms = numberOfAtoms;
     }
 
     @Override

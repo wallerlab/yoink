@@ -25,7 +25,6 @@ import org.wallerlab.yoink.api.model.adaptive.Region;
 import org.wallerlab.yoink.api.service.Factory;
 import org.wallerlab.yoink.api.service.math.Vector;
 import org.wallerlab.yoink.api.service.molecule.Translator;
-import org.wallerlab.yoink.api.service.molecule.Converter;
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory;
 
 import org.cml_v3.generated.AtomArray;
@@ -183,5 +182,6 @@ public class MolecularSystemTranslator implements Translator<MolecularSystem, JA
 		Vector bohrCoordVector = coordVector.scalarMultiply(unitConverterType.value());
 		return bohrCoordVector;
 	}
+
 
 }

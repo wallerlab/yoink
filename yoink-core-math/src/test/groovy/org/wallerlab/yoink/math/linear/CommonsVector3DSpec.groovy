@@ -36,7 +36,7 @@ class CommonsVector3DSpec extends Specification{
 		commonsVector.internalVector.equals(vectorFromLiarary);
 	}
 
-	def"test dot procut"(){
+	def"test dot product"(){
 		when:
 		def commonsVector= new CommonsVector3D(1,2,2);
 		then:

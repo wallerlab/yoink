@@ -25,7 +25,6 @@ import org.wallerlab.yoink.api.model.Job;
 import org.wallerlab.yoink.api.model.adaptive.Region;
 import org.wallerlab.yoink.api.service.adaptive.Adaptive;
 import org.wallerlab.yoink.api.service.molecule.Translator;
-import org.wallerlab.yoink.api.service.molecule.Converter.UnitConverterType;
 import org.wallerlab.yoink.api.service.region.Regionizer;
 import org.cml_v3.generated.Cml;
 import org.cml_v3.generated.Parameter;
@@ -41,7 +40,7 @@ import org.cml_v3.generated.ParameterList;
 @Service
 public class ParameterTranslator implements Translator<Map<Job.JobParameter, Object>, JAXBElement<Cml>> {
 
-	private UnitConverterType unitConverterType = UnitConverterType.AngstromToBohr;
+	private Converter.UnitConverterType unitConverterType = Converter.UnitConverterType.AngstromToBohr;
 
 	/**
 	 * get parameters a Map(JobParameter -

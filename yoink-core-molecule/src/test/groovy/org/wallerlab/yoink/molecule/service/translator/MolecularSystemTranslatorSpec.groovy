@@ -15,7 +15,7 @@
  */
 package org.wallerlab.yoink.molecule.service.translator
 
-import org.wallerlab.yoink.api.service.molecule.Converter
+
 import spock.lang.Ignore
 
 import javax.xml.bind.JAXBElement
@@ -36,7 +36,7 @@ class MolecularSystemTranslatorSpec extends Specification {
 		when:"make a new  MolecularSystemTranslator for a given file"
 		def cml=(JAXBElement<Cml>)new JaxbFileReader().read("./src/test/resources/aro.xml", new  Cml())
 		def molecularSystemTranslator= new MolecularSystemTranslator()
-		molecularSystemTranslator.unitConverterType=Converter.UnitConverterType.AngstromToBohr
+		molecularSystemTranslator.unitConverterType=MolecularSystemTranslator.Converter.UnitConverterType.AngstromToBohr
 		def myVector3D=new SimpleVector3DFactory()
 		myVector3D.myVectorType=Vector.Vector3DType.COMMONS
 		def simpleCoordFactory=new  SimpleCoordFactory()

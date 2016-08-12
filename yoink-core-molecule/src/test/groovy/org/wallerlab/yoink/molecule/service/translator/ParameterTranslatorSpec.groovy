@@ -16,7 +16,7 @@
 package org.wallerlab.yoink.molecule.service.translator
 
 import org.wallerlab.yoink.api.model.Job
-import org.wallerlab.yoink.api.service.molecule.Converter
+
 import org.wallerlab.yoink.molecule.data.JaxbFileReader
 import org.cml_v3.generated.Cml
 import spock.lang.Ignore
@@ -28,7 +28,7 @@ class ParameterTranslatorSpec extends Specification {
 	def "test method translate(JAXBElement<Cml> cml)"(){
 		when:"set up a new ParameterTranslator,read in a given file"
 		def parameterTranslator= new ParameterTranslator()
-		parameterTranslator.unitConverterType=Converter.UnitConverterType.AngstromToBohr
+		parameterTranslator.unitConverterType=MolecularSystemTranslator.Converter.UnitConverterType.AngstromToBohr
 		def cml=new JaxbFileReader().read("./src/test/resources/aro.xml", new  Cml())
 		then:"tranlate all parameters in given file"
 		parameterTranslator.translate(cml)

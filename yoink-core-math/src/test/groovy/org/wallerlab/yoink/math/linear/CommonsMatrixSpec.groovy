@@ -47,7 +47,7 @@ class CommonsMatrixSpec extends Specification{
 	}
 
 	/**
-	 * Creates the a matri(0x0).
+	 * Creates the a matrix(0x0).
 	 *
 	 * @return the object
 	 */
@@ -60,12 +60,12 @@ class CommonsMatrixSpec extends Specification{
 	}
 
 	/**
-	 * Creates the a matri when column is zero.
+	 * Creates the a matrix when column is zero.
 	 *
 	 * @return the object
 	 */
 	@Ignore
-	def"create a matri when column is zero"(){
+	def"create a matrix when column is zero"(){
 		when:
 		def matrix= new CommonsMatrix()
 
@@ -74,7 +74,7 @@ class CommonsMatrixSpec extends Specification{
 	}
 
 	/**
-	 * Creates the a matri(0x3).
+	 * Creates the a matrix(0x3).
 	 *
 	 * @return the object
 	 */
