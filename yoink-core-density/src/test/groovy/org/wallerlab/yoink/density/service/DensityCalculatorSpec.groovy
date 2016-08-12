@@ -92,18 +92,18 @@ class DensityCalculatorSpec extends Specification {
 	def"test method calculate(currentCoord,molecules), density is very close zero"(){
 
 		given:"atomic density is smaller than default density value"
-		coord1 = SimpleVector3DFactory.staticCreate(x1,y1,z1)
-		coord2 = SimpleVector3DFactory.staticCreate(x2,y2,z2)
-		atom1.getCoordinate() >> coord1
-		atom2.getCoordinate() >> coord2
-		def molecules = [m1, m2] as Set
+		    coord1 = SimpleVector3DFactory.staticCreate(x1,y1,z1)
+		    coord2 = SimpleVector3DFactory.staticCreate(x2,y2,z2)
+		    atom1.getCoordinate() >> coord1
+		    atom2.getCoordinate() >> coord2
+		    def molecules = [m1, m2] as Set
 
 		expect:"assert density value"
-		Math.abs(calculator.electronic(currentCoord, molecules)-1.0E-30) <= expectedDensity
+		   Math.abs(calculator.electronic(currentCoord, molecules)-1.0E-30) <= expectedDensity
 
 		where:
-		x1  |  y1 | z1 |   x2 |   y2 |  z2  | expectedDensity
-		100 | 100 | 100| -100 | -100 | -100 | 1.0E-40
+		    x1  |  y1 | z1 |   x2 |   y2 |  z2  | expectedDensity
+		   100 | 100 | 100| -100 | -100 | -100 | 1.0E-40
 
 	}
 
@@ -155,38 +155,6 @@ class DensityCalculatorSpec extends Specification {
 	}
 
 
-	@Ignore
-	def "test method  calculate(Coord currentCoord, Atom atom) "(){
-		given:
-		def atom=Mock(MolecularSystem.Molecule.Atom)
-		atom.getElementType()>>ExponentialFit.H
-		def currentCoord=Mock(Coord)
-		Calculator<Double, Coord, MolecularSystem.Molecule.Atom> distanceCalculator=Mock(Calculator)
-		distanceCalculator.calculate(currentCoord, atom)>>Math.sqrt(12)
-
-		when:"make a new AtomDensityCalculator"
-		def calculator= new SimpleDensityCalculator()
-		calculator.distanceCalculator=distanceCalculator
-
-		then:"assert density value"
-		Math.abs(calculator.ratio(currentCoord, atom)-0.40223E-3)<=1.0E-5
-	}
-
-	@Ignore
-	def "test method2  calculate(Coord currentCoord, Atom atom) "(){
-		def atom=Mock(MolecularSystem.Molecule.Atom)
-		atom.getElementType()>>ExponentialFit.H
-		def currentCoord=Mock(Coord)
-		Calculator<Double, Coord, MolecularSystem.Molecule.Atom> distanceCalculator=Mock(Calculator)
-		distanceCalculator.calculate(currentCoord, atom)>>(double)1.0
-
-		when:"make a new AtomDensityCalculator"
-		def calculator= new SimpleDensityCalculator()
-		calculator.distanceCalculator=distanceCalculator
-
-		then:"assert density value"
-		Math.abs(calculator.ratio(currentCoord, atom)-0.04248)<=1.0E-5
-	}
 
 	@Ignore
 	def "test density from radial grid"(){
