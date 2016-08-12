@@ -10,18 +10,13 @@ import spock.lang.Unroll
  */
 class ExponentialFitSpec extends Specification {
 
-    @Unroll
     def "test the density here"() {
 
         expect:
         ExponentialFit.Al.C().getEntry(0) == 1319.0
         ExponentialFit.H.C().getEntry(0) == 0.2815
-        for(ExponentialFit e : ExponentialFit.values()) {
-            e.C() != null
-            e.C() instanceof Vector
-            e.Z() != null
-            e.Z() instanceof Vector
-        }
+        for(ExponentialFit e : ExponentialFit.values())
+          [e.C(),e.Cz(),e.Z(),e.Cz(),e.Czz()].each{ assert it !=null && it instanceof Vector }
 
     }
 }

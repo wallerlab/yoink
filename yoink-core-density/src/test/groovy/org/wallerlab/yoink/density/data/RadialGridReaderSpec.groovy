@@ -17,30 +17,30 @@ package org.wallerlab.yoink.density.data
 
 import org.wallerlab.yoink.api.model.molecular.Element
 import org.wallerlab.yoink.density.domain.RadialGrid
-import org.wallerlab.yoink.density.domain.SimpleRadialGrid
-import org.wallerlab.yoink.math.linear.SimpleMatrixFactory
-import org.wallerlab.yoink.api.service.math.Matrix
+
 import spock.lang.Ignore
 import spock.lang.Specification
-import static org.wallerlab.yoink.api.service.math.Matrix.Type.*;
 
 class RadialGridReaderSpec extends Specification {
 
-	@Ignore
 	def "test read(String wfc_file, RadialGrid radial_grid)"(){
 		when:
 			def reader= new RadialGridReader()
-			Map<Element,RadialGrid> radialgrids
-		   radialGrids = reader.read()
+
+		Map<Element,RadialGrid> radialgrids = reader.read()
 
 		then:
-			 grid.numberOfGrids==5326
-			//Math.abs(grid.exponent-4.1313E-04)<=1.0E-6
-			//Math.abs(grid.zeta-2.0000E-03)<=1.0E-5
-			//Math.abs(grid.maxGridDistance-17.4308)<=1.0E-1
-			//Math.abs(grid.gridValues[0]-126.29792471)<=1.0E-1
-			//Math.abs(grid.firstDerivativeOfGridValues[0]+585.74940956)<=1.0E-1
-			//Math.abs(grid.secondDerivativeOfGridValues[0]+1178635.73819704)<=1.0E-1
+			def grid = radialgrids.get(Element.C)
+		    grid.numberOfGrids==5326
+
+		    Math.abs(grid.exponent-2.0000E-03)<=1.0E-5 //I mixed them up, exp -> zeta
+			Math.abs(grid.zeta-4.1313E-04)<=1.0E-6 //I  mixed them up zeta-> exp
+			Math.abs(grid.maxGridDistance-17.4308)<=1.0E-1
+
+			//	Math.abs(grid.gridValues[0]-126.29792471)<=1.0E-1
+
+		//	Math.abs(grid.firstDerivativeOfGridValues[0]+585.74940956)<=1.0E-1
+		//	Math.abs(grid.secondDerivativeOfGridValues[0]+1178635.73819704)<=1.0E-1
 
 	}
 

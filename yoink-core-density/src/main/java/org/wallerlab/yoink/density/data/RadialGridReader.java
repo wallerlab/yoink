@@ -83,7 +83,7 @@ public class RadialGridReader {
     public Map<Element,RadialGrid> read() throws IOException {
 
         //Save a lot of effort by reading in serialized version of the radial grids.
-        String serializedFilePath = "./src/main/java/org/wallerlab/yoink/density/data/radialGrids.serialized";
+        String serializedFilePath = "/Users/waller/merge/yoink/yoink-core-density/src/main/java/org/wallerlab/yoink/density/data/radialGrids.serialized";
         File file = new File(serializedFilePath);
         String current = new java.io.File( "." ).getCanonicalPath();
 
