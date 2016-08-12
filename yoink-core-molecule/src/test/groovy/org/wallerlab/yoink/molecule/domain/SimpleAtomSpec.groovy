@@ -15,12 +15,10 @@
  */
 package org.wallerlab.yoink.molecule.domain
 
-import org.wallerlab.yoink.api.model.Coord
 import org.wallerlab.yoink.api.model.molecular.Element;
 import org.wallerlab.yoink.api.service.math.Vector
-import spock.lang.Ignore;
-import spock.lang.Specification
 
+import spock.lang.Specification
 
 class SimpleAtomSpec extends Specification {
 

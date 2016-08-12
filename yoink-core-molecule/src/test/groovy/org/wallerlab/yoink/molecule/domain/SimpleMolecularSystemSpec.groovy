@@ -20,20 +20,28 @@ import org.wallerlab.yoink.api.model.molecular.MolecularSystem
 import spock.lang.Ignore;
 import spock.lang.Specification
 
-@Ignore
 class SimpleMolecularSystemSpec extends Specification{
 
 
 	def "test constructor SimpleMolecularSystem(List<Molecule> molecules)"(){
 
-		def a=Mock(MolecularSystem.Molecule.Atom)
-		List<MolecularSystem.Molecule.Atom> atoms=[a, a]
-		def m=Mock(MolecularSystem.Molecule)
-		m.getAtoms()>>atoms
-		List<MolecularSystem.Molecule> molecules=[m, m]
+		def a1=Mock(MolecularSystem.Molecule.Atom)
+		def a2=Mock(MolecularSystem.Molecule.Atom)
+		def atoms1=[a1, a2] as Set
+
+		def a3=Mock(MolecularSystem.Molecule.Atom)
+		def a4=Mock(MolecularSystem.Molecule.Atom)
+		def atoms2=[a3, a4] as Set
+
+		def m1=Mock(MolecularSystem.Molecule)
+		def m2=Mock(MolecularSystem.Molecule)
+		m1.getAtoms()>>atoms1
+		m2.getAtoms()>>atoms2
+
+		def  molecules=[m1, m2] as Set
 
 		when:"make a  SimpleMolecularSystem using constructor"
-		def ms=new SimpleMolecularSystem( molecules)
+		def ms = new SimpleMolecularSystem( molecules)
 		then:"test the return value of getters"
 		ms.getMolecules().size()==2
 		ms.getAtoms().size()==4

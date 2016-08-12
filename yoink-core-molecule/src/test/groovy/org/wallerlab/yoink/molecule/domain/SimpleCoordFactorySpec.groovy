@@ -20,7 +20,7 @@ import spock.lang.Specification
 
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory;
 import org.wallerlab.yoink.api.service.math.Vector;
-@Ignore
+
 class SimpleCoordFactorySpec extends Specification {
 
 	def "test method create"(){

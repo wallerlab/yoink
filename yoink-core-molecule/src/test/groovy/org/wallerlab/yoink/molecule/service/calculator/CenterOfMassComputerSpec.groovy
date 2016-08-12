@@ -29,7 +29,7 @@ import spock.lang.Specification
 
 class CenterOfMassComputerSpec extends Specification {
 	@Ignore
-	def "test method  calculate(Set<Molecule> molecules)"(){
+	def "test method calculate(Set<Molecule> molecules)"(){
 
 		def molecules= new HashSet<MolecularSystem.Molecule>()
 		def m=Mock(MolecularSystem.Molecule)
