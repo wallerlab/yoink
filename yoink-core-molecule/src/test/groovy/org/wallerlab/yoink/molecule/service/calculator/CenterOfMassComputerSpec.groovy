@@ -24,33 +24,35 @@ import org.wallerlab.yoink.api.service.math.Vector
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
 import org.wallerlab.yoink.molecule.domain.SimpleCoordFactory
 import org.wallerlab.yoink.molecule.service.DistanceCalculator
-import spock.lang.Ignore
 import spock.lang.Specification
 
 class CenterOfMassComputerSpec extends Specification {
-	@Ignore
+
 	def "test method calculate(Set<Molecule> molecules)"(){
 
+		when:"set up a new CenterOfMassComputer"
 		def molecules= new HashSet<MolecularSystem.Molecule>()
 		def m=Mock(MolecularSystem.Molecule)
-		def coordinate=Mock(Coord)
-		def myVector3D=new SimpleVector3DFactory()
-		myVector3D.myVectorType=Vector.Vector3DType.COMMONS
-		coordinate.getCoords()>>myVector3D.create(1,1,1);
-		def a=Mock(MolecularSystem.Molecule.Atom)
-		a.getCoordinate()>>coordinate
-		a.getElementType()>>Element.H
-		m.getAtoms()>>[a]
-		molecules.add(m)
-		def simpleCoordFactory=new SimpleCoordFactory()
-		simpleCoordFactory.myVector3D=myVector3D
+		def a1=Mock(MolecularSystem.Molecule.Atom)
+		def a2=Mock(MolecularSystem.Molecule.Atom)
 
-		when:"set up a new CenterOfMassComputer"
-		def COMcomputer= new DistanceCalculator()
-		COMcomputer.simpleCoordFactory=simpleCoordFactory
-		COMcomputer.vectorFactory=myVector3D
+		def coordinate1 = SimpleVector3DFactory.staticCreate(0.0,0.0,1.0)
+		def coordinate2 = SimpleVector3DFactory.staticCreate(0.0,0.0,-1.0)
+
+		a1.getCoordinate()>>coordinate1
+		a1.getElement()>>Element.H
+		a2.getCoordinate()>>coordinate2
+		a2.getElement()>>Element.H
+		m.getAtoms()>>[a1,a2]
+		molecules.add(m)
+
+        def calculator = new DistanceCalculator()
+
 		then:"get the center of mass of molecules"
-		def COM =  COMcomputer.calculate(molecules)
-		Math.abs((COM.getCoords().getEntry(0)-1))<=1.0E-5
+		  def COM =  calculator.centerOfMass(molecules)
+		  Math.abs((COM.getCoords().getEntry(0)))<=1.0E-5
+		  Math.abs((COM.getCoords().getEntry(1)))<=1.0E-5
+		  Math.abs((COM.getCoords().getEntry(2)))<=1.0E-5
 	}
+
 }
