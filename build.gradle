@@ -231,6 +231,7 @@ def exportedProjects= [
 
 task alljavadoc(type: Javadoc) {
 	exclude "**/generated/**"
+	exclude '**/xml_cml/**'
 	source exportedProjects.collect { project(it).sourceSets.main.allJava }
 	classpath = files(exportedProjects.collect { project(it).sourceSets.main.compileClasspath })
 	destinationDir = file("${buildDir}/docs/javadoc")
@@ -258,7 +259,7 @@ task jacocoRootReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
 
   afterEvaluate {
        classDirectories = files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: ['**/cml_v3/**'])
+            fileTree(dir: it, exclude: ['**/cml_v3/**','**/xml_cml/**'])
             })
     }
 }
