@@ -22,7 +22,6 @@ import spock.lang.Specification
 import org.wallerlab.yoink.api.model.Coord;
 import org.wallerlab.yoink.math.linear.CommonsVector3D
 
-@Ignore
 class TwoCoordsDistanceCalculatorSpec extends Specification{
 
 	def "test method calculate the distance between two coords"(){
@@ -31,9 +30,10 @@ class TwoCoordsDistanceCalculatorSpec extends Specification{
 		coordinate1.getCoords()>>new CommonsVector3D(0,0,0);
 		def coordinate2=Mock(Coord)
 		coordinate2.getCoords()>>new CommonsVector3D(1,2,2);
+
 		when:"ratio the distance between two coords"
-		def calculator= new DistanceCalculator()
-		double distance=calculator.calculate(coordinate1, coordinate2)
+		double distance=coordinate1.coords.distance(coordinate2.coords)
+
 		then:"assert distance value"
 		assert distance==3
 	}
