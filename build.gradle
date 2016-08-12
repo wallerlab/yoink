@@ -58,7 +58,6 @@ test { systemProperties 'property': 'value'  }
 project(':yoink-core-api'){
 	 dependencies{ }
 }
-/*
 
 project(':yoink-core-cluster'){
 	repositories {
@@ -79,7 +78,6 @@ project(':yoink-core-cluster'){
 		compile 'org.springframework.data:spring-data-neo4j:4.2.0.BUILD-SNAPSHOT'
 	}
 }
-*/
 
 project(':yoink-core-math'){
 	dependencies{
@@ -174,7 +172,7 @@ project(':yoink-core-batch'){
 		compile project(':yoink-core-density')
 		compile project(':yoink-core-adaptive')
 		compile project(':yoink-core-region')
-		//compile project(':yoink-core-cluster')
+		compile project(':yoink-core-cluster')
 		compile project(':yoink-core-plugin')
 		compile 'org.springframework:spring-jms'
 		compile 'org.apache.activemq:activemq-broker'

@@ -18,7 +18,7 @@ package org.wallerlab.yoink.batch.service
 import org.wallerlab.yoink.api.model.molecular.MolecularSystem
 import org.wallerlab.yoink.batch.service.response.PropertyWrapper
 import org.cml_v3.generated.ObjectFactory
-
+import spock.lang.Ignore
 import spock.lang.Specification
 
 import org.wallerlab.yoink.api.model.adaptive.Region;
@@ -28,6 +28,7 @@ import org.wallerlab.yoink.api.service.math.Vector.Vector3DType;
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
 class PropertyWrapperSpec extends Specification{
 
+	@Ignore
 	def "test method wrap(YoinkJob<JAXBElement> job) when no weightfactors and smoothfactors"(){
 
 		given:"make up a job without weightfactors and smoothfactors"
@@ -53,7 +54,7 @@ class PropertyWrapperSpec extends Specification{
 		wrapper.wrap(job)
 	}
 
-
+	@Ignore
 	def "test method wrap(YoinkJob<JAXBElement> job) with weightfactors and smoothfactors"(){
 		given:"make up a job"
 		def job=Mock(Job)
@@ -84,7 +85,7 @@ class PropertyWrapperSpec extends Specification{
 		wrapper.wrap(job)
 	}
 	
-	
+	@Ignore
 	def "test method wrap(YoinkJob<JAXBElement> job) with forces and energy"(){
 		given:"make up a job"
 		def job=Mock(Job)
