@@ -107,6 +107,23 @@ class DensityCalculatorSpec extends Specification {
 
 	}
 
+	def"test method calculate(coord, atoms), density is not close zero"(){
+
+		given:"set up DensityCalculator"
+		coord1 = SimpleVector3DFactory.staticCreate(x1,y1,z1)
+		coord2 = SimpleVector3DFactory.staticCreate(x2,y2,z2)
+		atom1.getCoordinate() >> coord1
+		atom2.getCoordinate() >> coord2
+		def atoms = [atom1, atom2] as Set
+
+		expect:"assert density value"
+		calculator.atomic(currentCoord, atoms) >= expectedDensity
+
+		where:
+		x1 |  y1 | z1 |   x2 |   y2 | z2   | expectedDensity
+		0.1 | 0.1 | 0.1| -0.1 | -0.1 | -0.1 | 1.0E-6
+
+	}
 
 
 	def"molecular ratio"(){

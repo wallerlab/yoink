@@ -23,7 +23,6 @@ import spock.lang.Specification
 
 class RadialGridReaderSpec extends Specification {
 
-	@Ignore
 	def "test read(String wfc_file, RadialGrid radial_grid)"(){
 		when:
 			def reader= new RadialGridReader()

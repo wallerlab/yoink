@@ -32,12 +32,12 @@ class SimpleRadialGridSpec extends Specification{
 
     def "assert radial grid is working "() {
         expect:
-           simpleRadialGrid.exponent        == 0.01
-           simpleRadialGrid.zeta            == 0.05
-           simpleRadialGrid.numberOfGrids   == 1000
-           simpleRadialGrid.maxGridDistance == 0.001
-           simpleRadialGrid.gridPositions   == [0.05,0.05,0.05]
-           simpleRadialGrid.gridValues      == [0.01,0.01,0.01]
+           simpleRadialGrid.exponent                     == 0.01
+           simpleRadialGrid.zeta                         == 0.05
+           simpleRadialGrid.numberOfGrids                == 1000
+           simpleRadialGrid.maxGridDistance              == 0.001
+           simpleRadialGrid.gridPositions                == [0.05,0.05,0.05]
+           simpleRadialGrid.gridValues                   == [0.01,0.01,0.01]
            simpleRadialGrid.firstDerivativeOfGridValues  == [0.02,0.02,0.02]
            simpleRadialGrid.secondDerivativeOfGridValues == [0.03,0.03,0.03]
 
