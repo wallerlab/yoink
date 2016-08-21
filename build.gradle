@@ -4,19 +4,19 @@ buildscript {
   }
   dependencies {
     classpath "gradle.plugin.me.champeau.gradle:jmh-gradle-plugin:0.3.0"
-
   }
 }
 allprojects {
+
 	apply plugin: 'java'
 	apply plugin: 'eclipse'
 	apply plugin: 'groovy'
-        apply plugin: 'jacoco'
-        apply plugin: 'com.github.kt3k.coveralls'
-        apply plugin: "me.champeau.gradle.jmh"
+    apply plugin: 'jacoco'
+    apply plugin: 'com.github.kt3k.coveralls'
+    apply plugin: "me.champeau.gradle.jmh"
 
+    sourceCompatibility = 1.8
 
-	sourceCompatibility = 1.8
 	version = '0.0.1'
 
 	jar {
@@ -33,7 +33,7 @@ allprojects {
 		mavenCentral()
 		maven {
 			url "http://repo.spring.io/libs-release"
-			"https://plugins.gradle.org/m2/"
+			    "https://plugins.gradle.org/m2/"
 		}
 	}
 
@@ -55,7 +55,7 @@ allprojects {
 		compile 'org.apache.activemq:activemq-broker:5.13.0'
 		compile 'org.apache.activemq:activemq-core:5.7.0'
 		
-		testCompile group: 'junit', name: 'junit', version: '4.+'		
+		testCompile group: 'junit', name: 'junit', version: '4.12'
 	}
 }
 
@@ -103,7 +103,6 @@ project(':yoink-core-adaptive'){
 }
 project(':yoink-core-clustering'){
 	dependencies{
-		
 	}
 }
 project(':yoink-core-regionizer'){
@@ -113,7 +112,6 @@ project(':yoink-core-regionizer'){
 		compile project(':yoink-core-molecular')
 		compile project(':yoink-core-density')
 		compile project(':yoink-core-cube')
-		
 	}
 }
 
@@ -157,9 +155,15 @@ project(':yoink-core-bootstrap'){
 	}
 }
 
-
 apply plugin: 'spring-boot'
 apply plugin: 'application'
+apply plugin: 'maven'
+apply plugin: 'signing'
+apply plugin: 'com.bmuschko.nexus'
+apply plugin: 'com.jfrog.bintray'
+
+group = "org.wallerlab"
+archivesBaseName = "yoink"
 mainClassName = "org.wallerlab.yoink.Yoink"
 
 buildscript {
@@ -168,19 +172,27 @@ buildscript {
 		mavenCentral()
 		 maven {
 			 url "https://plugins.gradle.org/m2/"
+
+             "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+             "https://oss.sonatype.org/content/repositories/snapshots/"
+             credentials {
+                 username = nexusUsername
+                 password = nexusPassword
+                }
 			 }
 	}
-	dependencies { 
-	
-	classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.7.RELEASE") 
-	classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.6.3"
-
-	}
+	dependencies {
+  	  classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.7.RELEASE")
+   	  classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.6.3"
+	  classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
+      classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7'
+    }
 }
 
 dependencies {
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter', version: '1.3.5.RELEASE'
-	compile("org.springframework.boot:spring-boot-starter-batch") }
+	compile("org.springframework.boot:spring-boot-starter-batch")
+     }
 
 configurations { all*.exclude module : 'spring-boot-starter-logging' }
 
@@ -227,16 +239,13 @@ def exportedProjects= [
 	":yoink-core-adaptiveProcessor",
 	":yoink-core-clustering"
 ]
+
 task alljavadoc(type: Javadoc) {
 	exclude "**/xml_cml/**"
 	source exportedProjects.collect { project(it).sourceSets.main.allJava }
 	classpath = files(exportedProjects.collect { project(it).sourceSets.main.compileClasspath })
 	destinationDir = file("${buildDir}/docs/javadoc")
-
 }
-
-
-
 
 task jacocoRootReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
     dependsOn = subprojects.test
@@ -269,3 +278,66 @@ coveralls {
   sourceDirs = subprojects.sourceSets.main.allSource.srcDirs.flatten()
   jacocoReportPath = "${buildDir}/reports/jacoco/jacocoRootReport/jacocoRootReport.xml"
 }
+
+modifyPom {
+	project {
+		name 'Yoink'
+		description 'Adaptive QM/MM Framework'
+		url 'https://github.com/wallerlab/yoink'
+		inceptionYear '2015'
+
+		scm {
+			url 'https://github.com/wallerlab/yoink'
+			connection 'https://wallerlab@github.com/wallerlab/yoink.git'
+			developerConnection 'scm:git://github.com/wallerlab/yoink.git'
+		}
+
+		licenses {
+			license {
+				name 'The Apache Software License, Version 2.0'
+				url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+				distribution 'repo'
+			}
+		}
+
+		developers {
+			developer {
+				id 'zhengmin317'
+				name 'Min Zheng'
+				email 'wallerlab@protonmail.com'
+			}
+		}
+	}
+}
+
+extraArchive {
+    sources = true
+    tests = true
+    javadoc = true
+}
+
+nexus {
+    sign = true
+    repositoryUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+    snapshotRepositoryUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
+}
+
+bintray {
+    user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
+    key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_KEY')
+    configurations = ['archives']
+    pkg {
+        repo = 'maven'
+        name = 'yoink'
+        userOrg = user
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/wallerlab/yoink.git'
+        version {
+            name = '0.0.1'
+            desc = 'Adaptive QM/MM Framework'
+            released  = new Date()
+            vcsTag = '0.0.1'
+        }
+    }
+}
+
