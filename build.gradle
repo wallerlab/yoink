@@ -4,6 +4,7 @@ buildscript {
   }
   dependencies {
     classpath "gradle.plugin.me.champeau.gradle:jmh-gradle-plugin:0.3.0"
+
   }
 }
 allprojects {
@@ -15,9 +16,10 @@ allprojects {
     apply plugin: 'com.github.kt3k.coveralls'
     apply plugin: "me.champeau.gradle.jmh"
 
+
     sourceCompatibility = 1.8
 
-	version = '0.0.2'
+	version = '0.0.3-SNAPSHOT'
 
 	jar {
 		manifest {
@@ -55,6 +57,7 @@ allprojects {
 		compile 'org.apache.activemq:activemq-broker:5.13.0'
 		compile 'org.apache.activemq:activemq-core:5.7.0'
 		
+
 		testCompile group: 'junit', name: 'junit', version: '4.12'
 	}
 }
