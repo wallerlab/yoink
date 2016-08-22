@@ -178,8 +178,8 @@ buildscript {
              "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
              "https://oss.sonatype.org/content/repositories/snapshots/"
              credentials {
-                 username = System.getenv('nexusUsername')
-                 password = System.getenv('nexusPassword')
+                 username = System.getenv('ossrhUsername')
+                 password = System.getenv('ossrhPassword')
                 }
 			 }
 	}
