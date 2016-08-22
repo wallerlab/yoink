@@ -12,6 +12,8 @@ install: echo "skip 'gradle assemble' step"
 script: ./gradlew clean build jacocoRootReport coveralls alljavadoc --continue
 after_success:
 - ./gradlew uploadArchives -PnexusUsername="${nexusUsername}" -PnexusPassword="${nexusPassword}"
+- .utility/publish-javadoc.sh
+
 env:
   global:
   - secure: aQ+nHMpQGTqkFEYMUK2ltfKlexhxPTGTOtd2+4jUoSk9eKwRE15Rhd43pLgcktkxZ/NAlS7MD5Oy4Q8ccS9atYaCg2E2WmBr9LZw01mdEv9NouCemQWTms3IdAZbA0rlKtQAiKVICJiyf2P+PkqyBnYhzuEoh67mjkEUXzJKFhrLDYLyQ5MKjmd2h1D8Kfbqy5RGcs7yFTe4VWKfIkeI8uddEx8IAhTBqX05qsBJ5Qf87WcZydYEtjgSym3f2Q9CmQ934b4zXnTNcM7HusWvhfgLqHmCbWWRsYqsdTTdZiXh5c0sc7yF/NTsNJCUam4uxPT+ol2lucUHMnzpGVNtEYaNEAJ3R1EAMxS+EsjarNT82oPMXADcNZMwzBv4YzG15xYfRvZB2V8kh3svIaZ5Rg79souOiwXwpP/OFB/Zwu2T9yen/Cw28EnyuqlgiIQfTHR95/AbAbfC/YtKlC5FT9TA1jEXxE3fCMjN9XOjARt0pIux3C4TWqTVu3nCBy+kExBHLx0mpLpNUKOmGMoOXL/qrQuhwuN9hdb9b0PNuPT3a3b7cK/baaik/Otu5cnpLeMdVujx6GEW7G7pK9RzzzZD29UtGD3B9J2zCvMDj6GZP70bY3FNyjrhE0nMxA2oDYjfYoUGWCNV6spfBqIOby4+KgeWb5xF7wZxQQFoPdU=
