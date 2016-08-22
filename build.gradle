@@ -17,7 +17,7 @@ allprojects {
 
     sourceCompatibility = 1.8
 
-	version = '0.0.1'
+	version = '0.0.1-SNAPSHOT'
 
 	jar {
 		manifest {
@@ -161,6 +161,8 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 apply plugin: 'com.bmuschko.nexus'
 apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven-publish'
+
 
 group = "org.wallerlab"
 archivesBaseName = "yoink"
@@ -326,11 +328,12 @@ bintray {
     user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
     key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_KEY')
     configurations = ['archives']
-    pkg {
-        repo = 'maven'
+	publications = ['MyPublication']
+	pkg {
+		repo = 'maven'
         name = 'yoink'
-        userOrg = user
-        licenses = ['Apache-2.0']
+        userOrg = 'wallerlab'
+		licenses = ['Apache-2.0']
         vcsUrl = 'https://github.com/wallerlab/yoink.git'
         version {
             name = '0.0.1'
@@ -340,4 +343,16 @@ bintray {
         }
     }
 }
+
+publishing {
+	publications {
+		MyPublication(MavenPublication) {
+			from components.java
+			groupId 'org.wallerlab'
+			artifactId 'yoink'
+			version '0.0.1'
+		}
+	}
+}
+
 
