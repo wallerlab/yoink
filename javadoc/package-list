@@ -15,6 +15,9 @@ org.wallerlab.yoink.api.service.cube
 org.wallerlab.yoink.api.service.math
 org.wallerlab.yoink.api.service.molecular
 org.wallerlab.yoink.api.service.regionizer
+org.wallerlab.yoink.clustering
+org.wallerlab.yoink.clustering.louvain
+org.wallerlab.yoink.clustering.utils
 org.wallerlab.yoink.config
 org.wallerlab.yoink.cube.domain
 org.wallerlab.yoink.cube.service
@@ -41,6 +44,7 @@ org.wallerlab.yoink.regionizer.domain
 org.wallerlab.yoink.regionizer.partitioner
 org.wallerlab.yoink.regionizer.service
 org.wallerlab.yoink.service
+org.wallerlab.yoink.service.clustering
 org.wallerlab.yoink.service.jobbuilder
 org.wallerlab.yoink.service.processor
 org.wallerlab.yoink.service.request
