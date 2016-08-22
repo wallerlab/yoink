@@ -11,7 +11,7 @@ if [ "$TRAVIS_REPO_SLUG" == "wallerlab/yoink" ] && [ "$TRAVIS_JDK_VERSION" == "o
   git config --global user.name "travis-ci"
   git clone --quiet --branch=gh-pages https://${GH_TOKEN}@github.com/wallerlab/yoink gh-pages > /dev/null
 
-  cd gh-pages§
+  cd gh-pages
   git rm -rf ./javadoc
   cp -Rf $HOME/javadoc-latest ./javadoc
   git add -f .
