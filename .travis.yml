@@ -9,12 +9,6 @@ cache:
   - $HOME/.gradle/caches/
   - $HOME/.gradle/wrapper/
 install: echo "skip 'gradle assemble' step"
-script: ./gradlew clean build jacocoRootReport coveralls alljavadoc --continue
-after_success:
-- ./gradlew uploadArchives -PnexusUsername="${nexusUsername}" -PnexusPassword="${nexusPassword}"
-- .utility/publish-javadoc.sh
-
-
 notifications:
   webhooks:
     urls:
@@ -23,8 +17,15 @@ notifications:
     on_failure: always  # options: [always|never|change] default: always
     on_start: never     # options: [always|never|change] default: always
 
+
+script: ./gradlew clean build jacocoRootReport coveralls alljavadoc --continue
+after_success:
+- ./gradlew uploadArchives -PnexusUsername="${nexusUsername}" -PnexusPassword="${nexusPassword}"
+- .utility/publish-javadoc.sh
+
 env:
   global:
   - secure: aQ+nHMpQGTqkFEYMUK2ltfKlexhxPTGTOtd2+4jUoSk9eKwRE15Rhd43pLgcktkxZ/NAlS7MD5Oy4Q8ccS9atYaCg2E2WmBr9LZw01mdEv9NouCemQWTms3IdAZbA0rlKtQAiKVICJiyf2P+PkqyBnYhzuEoh67mjkEUXzJKFhrLDYLyQ5MKjmd2h1D8Kfbqy5RGcs7yFTe4VWKfIkeI8uddEx8IAhTBqX05qsBJ5Qf87WcZydYEtjgSym3f2Q9CmQ934b4zXnTNcM7HusWvhfgLqHmCbWWRsYqsdTTdZiXh5c0sc7yF/NTsNJCUam4uxPT+ol2lucUHMnzpGVNtEYaNEAJ3R1EAMxS+EsjarNT82oPMXADcNZMwzBv4YzG15xYfRvZB2V8kh3svIaZ5Rg79souOiwXwpP/OFB/Zwu2T9yen/Cw28EnyuqlgiIQfTHR95/AbAbfC/YtKlC5FT9TA1jEXxE3fCMjN9XOjARt0pIux3C4TWqTVu3nCBy+kExBHLx0mpLpNUKOmGMoOXL/qrQuhwuN9hdb9b0PNuPT3a3b7cK/baaik/Otu5cnpLeMdVujx6GEW7G7pK9RzzzZD29UtGD3B9J2zCvMDj6GZP70bY3FNyjrhE0nMxA2oDYjfYoUGWCNV6spfBqIOby4+KgeWb5xF7wZxQQFoPdU=
   - secure: Y7T+z7tuptrgUas4OPGfg4ijYiFguya6Az/Igj3WizjCIG9LQiki9qOv4xkdaQEdwFwsiOuaYgpQQQgKbpsSjZ6PVDuzYZqXRadcRUgYiwBvTa5dzdWg8ux3mOZDdojBbDrSbVkODtl9Wttw2cm2jVrSgKzozAzybJb/i0cL1+XeLq3IGsKAWSxAEQ/mWfF57CCPydEIqQ290N0DAgzsO1QapYo/4LmXvsUssVM9DoiQfsxNgb/qJrzSqHwW+l+8jzVUM/bg+Cm11MYmHk+Kv6LXIO8raQMRrtRajez+vlJ0Ycm+47tFa/NFY8zsjwhprTZNrQC3R3ldH+zOTztP+ZchYzjPTXY7Pj+C4vSMtPVFhi0HGU+Lv8ptbsxmnnrbhnE6iK+xnPXQ60XxPagzV+oEl0P8HngT6S7cZSw/RLqbaL3V8nWL9USYfBYSdNg4DAmqlNFF+6XokGD/A8ctdm/8v4v6rQgeYfXioayY5alOVr5YiSb+aIIRHFXeeZUbez9oNn5YTjPAVe5xg2VvlSv9I2R9PO7N0DmCYqBa7ByUJNWprDbk19Wko/ETxGQBfYqdXn0wMkZFmOauY60aq9Nco5Ew6co0jPnckT4Ql13D0Gw4W5AwMnTlz3wbXqeSbxqlpJvMIMaEp2w9bSiRbArV780b0pV8/5KKQJYZdP4=
   - secure: FH7/KP48PUmtD3nRAYD27n2H9UYbzu/1fi0wlnktizUDzf+18P1ozhHO/knPTJkM3DT2yqNsr/BZQxmO2X8FT0f3TexQtswXIsm0tR22BpBR38bqY9JJ9/NVgh5hB36UuOH/tE66kd6aFJhjW1b5QXouU4fHyT0IQ7PtXDyuVevF7iTsxD0fD1a60e1rC5TSxmrh1ZgjBlF6fWCbfdFGDSbkdN35ek87NmdY5+NsoD0SPKW38mEf7WoHbO6ldst+bpIAeYzLQq8EFRl8cRBqAi+A+Fl84Xpwu8vfMN9Pw3AkXZkWZEeAFgr1y/MD6CsZ6o4AqiG+AFbj36dYadASvTnc7JYpyAZOPF0aT9wdvcwU+zdaIiu1uo1KVm/4brFBD35aUgr0MuT1sRzr/fCuNEWZ/npn3sVPBQ+hGN7l2bPpV3EMtiQVL6557Pn43npCz20yDvxvYs7Elmj1eBwNxC2YDOtEIG/zO05dC4gNUOw0xJOzcuzh5U4S1RX6C9vZ6qdB3biIQ6nbiSbUZKKUI1Qfq+QNtfrnnsXvaXfNPlQ23TG2PENYh9du8UlLlVAuAdrPb5jDlDbDg0WyH81MsXOcHUtz6ecdSdKB2vefrFkvpK4VuNIgH2azRmSeYPycf1Pg1CI1h4bSGvc4W8p8XKMv2d9nm3/W7qJASsAZQAI=
+
