@@ -134,3 +134,7 @@ Subprojects in total:
 
 
 ![regionizer.png](https://github.com/wallerlab/yoink/blob/master/regionizer.png)
+
+# Contact us
+
+wallerlab@protonmail.com
