@@ -1,5 +1,6 @@
 # Yoink  
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.wallerlab/yoink/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.wallerlab/yoink)
+ [ ![Download](https://api.bintray.com/packages/wallerlab/releases/yoink/images/download.svg) ](https://bintray.com/wallerlab/releases/yoink/_latestVersion)
 [![Apache License](http://img.shields.io/badge/license-APACHE2-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 [![Build Status](https://travis-ci.org/wallerlab/yoink.svg?branch=master)](https://travis-ci.org/wallerlab/yoink)
 [![Coverage Status](https://coveralls.io/repos/github/wallerlab/yoink/badge.svg?branch=master)](https://coveralls.io/github/wallerlab/yoink?branch=master)
