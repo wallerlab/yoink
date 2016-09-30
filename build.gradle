@@ -196,7 +196,7 @@ buildscript {
 
 dependencies {
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter', version: '1.3.5.RELEASE'
-	compile("org.springframework.boot:spring-boot-starter-batch")
+	compile("org.springframework.boot:spring-boot-starter-batch:1.4.0.RELEASE")
      }
 
 configurations { all*.exclude module : 'spring-boot-starter-logging' }
