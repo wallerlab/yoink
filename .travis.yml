@@ -12,7 +12,7 @@ install: echo "skip 'gradle assemble' step"
 notifications:
   webhooks:
     urls:
-      - https://webhooks.gitter.im/e/8e96142440f75b65dabc
+      - https://webhooks.gitter.im/e/7f3bf0f7356e75902017
     on_success: always  # options: [always|never|change] default: always
     on_failure: always  # options: [always|never|change] default: always
     on_start: never     # options: [always|never|change] default: always
