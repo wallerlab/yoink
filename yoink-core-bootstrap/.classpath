@@ -1,23 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src/integration-test/java"/>
-	<classpathentry kind="src" path="src/integration-test/resources"/>
-	<classpathentry kind="src" path="src/main/java"/>
-	<classpathentry kind="src" path="src/main/resources"/>
-	<classpathentry kind="src" path="src/test/groovy"/>
-	<classpathentry kind="src" path="src/test/resources"/>
-	<classpathentry kind="src" path="/yoink-core-adaptive"/>
-	<classpathentry kind="src" path="/yoink-core-api"/>
-	<classpathentry kind="src" path="/yoink-core-clustering"/>
-	<classpathentry kind="src" path="/yoink-core-cube"/>
-	<classpathentry kind="src" path="/yoink-core-density"/>
-	<classpathentry kind="src" path="/yoink-core-math"/>
-	<classpathentry kind="src" path="/yoink-core-molecular"/>
-	<classpathentry kind="src" path="/yoink-core-regionizer"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="src/main/java">
+		<attributes>
+			<attribute name="FROM_GRADLE_MODEL" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="src/main/resources">
+		<attributes>
+			<attribute name="FROM_GRADLE_MODEL" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="src/test/groovy">
+		<attributes>
+			<attribute name="FROM_GRADLE_MODEL" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="src/test/resources">
+		<attributes>
+			<attribute name="FROM_GRADLE_MODEL" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="src/integration-test/java">
+		<attributes>
+			<attribute name="FROM_GRADLE_MODEL" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="src/integration-test/resources">
+		<attributes>
+			<attribute name="FROM_GRADLE_MODEL" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry exported="true" kind="src" path="/yoink-core-adaptive"/>
+	<classpathentry exported="true" kind="src" path="/yoink-core-api"/>
+	<classpathentry exported="true" kind="src" path="/yoink-core-clustering"/>
+	<classpathentry exported="true" kind="src" path="/yoink-core-cube"/>
+	<classpathentry exported="true" kind="src" path="/yoink-core-density"/>
+	<classpathentry exported="true" kind="src" path="/yoink-core-math"/>
+	<classpathentry exported="true" kind="src" path="/yoink-core-molecular"/>
+	<classpathentry exported="true" kind="src" path="/yoink-core-regionizer"/>
 	<classpathentry exported="true" kind="con" path="org.springsource.ide.eclipse.gradle.classpathcontainer"/>
-	<classpathentry kind="con" path="org.springsource.ide.eclipse.gradle.dsld.classpathcontainer"/>
-	<classpathentry kind="con" path="GROOVY_DSL_SUPPORT"/>
-	<classpathentry kind="con" path="GROOVY_SUPPORT"/>
+	<classpathentry exported="true" kind="con" path="org.springsource.ide.eclipse.gradle.dsld.classpathcontainer"/>
+	<classpathentry exported="true" kind="con" path="GROOVY_DSL_SUPPORT"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.buildship.core.gradleclasspathcontainer"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
