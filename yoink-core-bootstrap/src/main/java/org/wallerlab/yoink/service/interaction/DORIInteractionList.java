@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wallerlab.yoink.service.clustering;
+package org.wallerlab.yoink.service.interaction;
 
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -40,6 +40,7 @@ import org.wallerlab.yoink.api.model.regionizer.Region;
 import org.wallerlab.yoink.api.service.Calculator;
 import org.wallerlab.yoink.api.service.Computer;
 import org.wallerlab.yoink.api.service.Factory;
+import org.wallerlab.yoink.api.service.bootstrap.InteractionList;
 import org.wallerlab.yoink.api.service.molecular.FilesReader;
 import org.wallerlab.yoink.api.service.regionizer.Partitioner;
 import org.wallerlab.yoink.regionizer.partitioner.DensityPartitioner;
@@ -52,7 +53,7 @@ import org.wallerlab.yoink.regionizer.partitioner.DensityPartitioner;
  *
  */
 @Service
-public class InteractionSet {
+public class DORIInteractionList implements InteractionList{
 	@Resource
 	private Partitioner<List<GridPoint>, DensityType> cubePartitioner;
 
@@ -74,18 +75,18 @@ public class InteractionSet {
 	@Resource
 	private DensityPartitioner densityPartitioner;
 
-	public InteractionSet() {
-
+	public DORIInteractionList() {
+		
 	}
 
-	public void getDoriInteractionSet(Job job) {
+	public void getInteractionList(Job job) {
 		Map<JobParameter, Object> parameters = job.getParameters();
 		Map<Region.Name, Region> regions = job.getRegions();
 
 		List<List> interactionAndWeightLists = new ArrayList<List>();
 		Partitioner.Type partitionType = (Partitioner.Type) parameters
 				.get(JobParameter.PARTITIONER);
-		if (partitionType == Partitioner.Type.CLUSTER) {
+		if (partitionType == Partitioner.Type.INTERACTION) {
 			Region.Name cubeRegionName = (Region.Name) parameters
 					.get(JobParameter.REGION_CUBE);
 
@@ -98,7 +99,7 @@ public class InteractionSet {
 					parameters, gridPoints);
 
 		
-
+		
 		List<Double> weightList = new ArrayList<Double>();
 		if ((Boolean) parameters.get(JobParameter.INTERACTION_WEIGHT)) {
 			weightList = interactionAndWeightLists.get(1);
@@ -242,7 +243,7 @@ public class InteractionSet {
 			Map<JobParameter, Object> parameters, double doriTemp,
 			double density, List<Double> weightList,
 			Set<Set<Integer>> interactionSet) {
-
+	
 		// check dori
 		if (1 >= doriTemp
 				&& doriTemp >= (double) parameters.get(JobParameter.DORI)) {

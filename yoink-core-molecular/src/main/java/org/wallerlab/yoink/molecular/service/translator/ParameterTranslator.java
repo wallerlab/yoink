@@ -116,10 +116,9 @@ public class ParameterTranslator implements
 			break;
 		case NUMBER_QM:
 		case NUMBER_PARTITION:
-		case NUMBER_BUFFER:
-		case MAX_COMMS:	
+		case NUMBER_BUFFER:	
 			parameters.put(jobParameter, Integer.parseInt(value));
-			break;
+			break;			
 		case DORI_STEPSIZE:
 			double[] doriCubeStepSize = new double[3];
 			String[] splited = value.split("\\s+");

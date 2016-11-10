@@ -15,6 +15,8 @@
  */
 package org.wallerlab.yoink.regionizer.partitioner;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -34,6 +36,7 @@ import org.wallerlab.yoink.api.service.regionizer.Partitioner;
 import org.wallerlab.yoink.api.service.regionizer.Regionizer;
 import org.wallerlab.yoink.api.service.regionizer.RegionizerMath;
 import org.wallerlab.yoink.regionizer.domain.SimpleRegion;
+import org.wallerlab.yoink.math.set.SetDifference;
 
 /**
  * This class is to do density interaction analysis (dori/sedd ) for those grid
@@ -90,17 +93,23 @@ public class InteractionPartitioner implements
 	protected Region loopOverGridPoints(Map<Region.Name, Region> regions,
 			Region region, List<GridPoint> gridPoints,
 			Map<JobParameter, Object> parameters) {
+		//Set<Molecule> neighboursets = new HashSet<Molecule>();
+		//Set<Molecule> synneighboursets = Collections.synchronizedSet(neighboursets);
+		
 		gridPoints.parallelStream().forEach(gridPoint -> {
 			Set<Molecule> neighbours = gridPoint.getTwoClosestMolecules();
-			// if the two closest molecules of a grid point
-			// already
-			// in the region, skip
-			// this grid point
+			//synneighboursets.addAll(neighbours);
+
 				if (!region.containsAll(neighbours)) {
 					checkCriteria(regions, region, gridPoint, neighbours,
 							parameters);
 				}
 			});
+	//Set<Molecule>	neighbour_molecules = SetDifference.diff(synneighboursets,regions.get(Region.Name.QM_CORE).getMolecules());
+	//Set<Molecule> interacting_molecules = SetDifference.diff(region.getMolecules(),regions.get(Region.Name.QM_CORE).getMolecules());
+
+	//System.out.println("interacting_molecules/neighbour_molecules  "+ interacting_molecules.size()  + "/"+neighbour_molecules.size() );
+
 		return region;
 	}
 

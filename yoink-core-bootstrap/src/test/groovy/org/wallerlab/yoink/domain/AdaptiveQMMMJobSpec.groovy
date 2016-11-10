@@ -16,9 +16,7 @@
 package org.wallerlab.yoink.domain
 
 import org.xml_cml.schema.ObjectFactory
-
 import spock.lang.Specification;
-
 import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
 
 class AdaptiveQMMMJobSpec extends Specification{

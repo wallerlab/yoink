@@ -19,15 +19,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import javax.xml.bind.JAXBElement;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
 import org.wallerlab.yoink.api.model.bootstrap.Job;
-import org.wallerlab.yoink.api.service.math.Vector;
-import org.wallerlab.yoink.api.service.molecular.FilesWriter;
+import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
 import org.wallerlab.yoink.api.model.molecular.Molecule;
 import org.wallerlab.yoink.api.model.regionizer.Region;
 import org.wallerlab.yoink.api.service.bootstrap.Wrapper;
+import org.wallerlab.yoink.api.service.math.Vector;
+import org.wallerlab.yoink.api.service.molecular.FilesWriter;
 import org.xml_cml.schema.Cml;
 import org.xml_cml.schema.Gradient;
 import org.xml_cml.schema.MoleculeList;
@@ -35,8 +39,6 @@ import org.xml_cml.schema.ObjectFactory;
 import org.xml_cml.schema.Property;
 import org.xml_cml.schema.PropertyList;
 import org.xml_cml.schema.Scalar;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
  * this class is to wrap adaptive qmmm result to JAXB element PropertyList
@@ -67,6 +69,7 @@ public class PropertyWrapper implements Wrapper<Job<JAXBElement>> {
 		changeMoleculeId(job, cmlElement);
 		putPartitioningResultInProperty(job, cmlElement, parameters, properties);
 		putSmoothingResultInProperty(job, cmlElement, parameters, properties);
+		putInteractionResultInProperty(job, cmlElement, parameters, properties);
 	}
 
 	private void changeMoleculeId(Job<JAXBElement> job,
@@ -99,6 +102,30 @@ public class PropertyWrapper implements Wrapper<Job<JAXBElement>> {
 		}
 	}
 
+	private void putInteractionResultInProperty(Job<JAXBElement> job,
+			JAXBElement<Cml> cmlElement, Map<JobParameter, Object> parameters,
+			Map<String, Object> properties) {
+		ObjectFactory objectFactory = new ObjectFactory();
+		PropertyList propertyList = objectFactory.createPropertyList();
+		propertyList.setTitle("Interaction result  : ");
+		Property property = wrapInteractionResult(job, properties, objectFactory,
+				propertyList);
+		JAXBElement propertyListJAXB = objectFactory
+				.createPropertyList(propertyList);
+		cmlElement.getValue().getAnyCmlOrAnyOrAny().add(propertyListJAXB);
+	}
+	private Property wrapInteractionResult(Job<JAXBElement> job,
+			Map<String, Object> properties, ObjectFactory objectFactory,
+			PropertyList propertyList) {
+		Property property = objectFactory.createProperty();
+		property.setTitle("DORI based interation pairs");
+		Scalar scalar = objectFactory.createScalar();
+		scalar.setDataType(" molecules");
+		scalar.setValue(String.valueOf(job.getInteractionList()));		
+		property.getAnyCmlOrAnyOrAny().add(scalar);	
+		propertyList.getAnyCmlOrAnyOrAny().add(property);
+		return property;
+	}
 	
 	private void putPartitioningResultInProperty(Job<JAXBElement> job,
 			JAXBElement<Cml> cmlElement, Map<JobParameter, Object> parameters,

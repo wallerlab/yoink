@@ -23,8 +23,6 @@ import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.bootstrap.Job;
 import org.wallerlab.yoink.api.service.molecular.FilesReader;
 import org.wallerlab.yoink.domain.AdaptiveQMMMJob;
-import org.xml_cml.schema.Cml;
-import org.xml_cml.schema.ObjectFactory;
 
 /**
  * this class is to read in all inputs (like molecular system and parameters)

@@ -30,6 +30,7 @@ import org.wallerlab.yoink.api.service.regionizer.RegionizerMath;
 import org.wallerlab.yoink.api.service.bootstrap.JobBuilder
 import org.wallerlab.yoink.api.service.bootstrap.Wrapper;
 import org.xml_cml.schema.ObjectFactory
+import org.wallerlab.yoink.api.service.bootstrap.InteractionList;
 
 class SerialAdaptiveQMMMProcessorSpec extends Specification{
 
@@ -43,11 +44,13 @@ class SerialAdaptiveQMMMProcessorSpec extends Specification{
 		def regionizerServiceStarting=Mock(RegionizerMath)
 		def regionizerServiceEnding=Mock(RegionizerMath)
 		def adaptiveQMMMRegionizer=Mock(Regionizer)
+		def interactionList = Mock(InteractionList)
 		List<Regionizer> adaptiveQMMMRegionizers=new ArrayList<Regionizer>();
 		adaptiveQMMMRegionizers.add(adaptiveQMMMRegionizer)
 		adaptiveQMMMRegionizers.add(adaptiveQMMMRegionizer)
 		jobBuilder.build(_)>>Mock(Job)
-
+	
+		
 		when:"set up a new AdaptiveQMMMProcessor"
 		def processor=new SerialAdaptiveQMMMProcessor()
 		processor.jobJaxbBuilderImpl=jobBuilder
@@ -56,7 +59,8 @@ class SerialAdaptiveQMMMProcessorSpec extends Specification{
 		processor.adaptiveQMMMRegionizers=adaptiveQMMMRegionizers
 		processor.propertyWrapper=propertyWrapper
 		processor.adaptiveQMMMSmoothnerRouter=adaptiveQMMMSmoothnerRouter
-
+        processor.interactionList = interactionList
+		
 		then:"nothing is asserted here, except that no error is not thrown"
 		processor.process(request)
 	}

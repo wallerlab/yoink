@@ -29,12 +29,14 @@ import org.wallerlab.yoink.api.service.regionizer.Regionizer
 import org.wallerlab.yoink.api.service.regionizer.RegionizerMath;
 import org.wallerlab.yoink.api.service.bootstrap.JobBuilder
 import org.wallerlab.yoink.api.service.bootstrap.Wrapper;
+import org.wallerlab.yoink.api.service.bootstrap.InteractionList;
 
 class AdaptiveQMMMProcessorSpec extends Specification{
 
 	def "test method process(List<File> requests)"(){
 		def file=new File("./src/test/resources/AdaptiveQMMMProcessorSpec.xml")
 		def requests=[file]
+		def interactionList = Mock(InteractionList)
 		def propertyWrapper=Mock(Wrapper)
 		def  adaptiveQMMMSmoothnerRouter=Mock(Smoothner)
 		def jobBuilder=Mock(JobBuilder)
@@ -45,7 +47,7 @@ class AdaptiveQMMMProcessorSpec extends Specification{
 		adaptiveQMMMRegionizers.add(adaptiveQMMMRegionizer)
 		adaptiveQMMMRegionizers.add(adaptiveQMMMRegionizer)
 		jobBuilder.build(_)>>Mock(Job)
-
+	
 		when:"set up a new AdaptiveQMMMProcessor"
 		def processor=new AdaptiveQMMMProcessor()
 		processor.jobBuilder=jobBuilder
@@ -54,7 +56,7 @@ class AdaptiveQMMMProcessorSpec extends Specification{
 		processor.adaptiveQMMMRegionizers=adaptiveQMMMRegionizers
 		processor.propertyWrapper=propertyWrapper
 		processor.adaptiveQMMMSmoothnerRouter=adaptiveQMMMSmoothnerRouter
-
+		processor.interactionList=interactionList
 		then:"nothing is asserted here, except that no error is not thrown"
 		processor.process(requests)
 	}

@@ -593,7 +593,7 @@
         </molecule>
         <molecule id="QM_CORE_FIXED">
             <atomArray>
-                <atom id="475" x3="30.139999999999997" z3="12.59" y3="15.95" elementType="Zn"/>
+                <atom id="475" x3="15.139999999999997" z3="19.59" y3="22.5" elementType="Zn"/>
             </atomArray>
         </molecule>
     </moleculeList>
@@ -612,16 +612,15 @@
         <parameter name="DISTANCE_BUFFER" value="0.9"/>
         <parameter name="DENSITY_BUFFER" value="1"/>
         <parameter name="DENSITY_QM" value="0.001"/>
-        <parameter name="REGION_CUBE" value="SYSTEM"/>
-        <parameter name="SEDD_STEPSIZE" value="0.3 0.3 0.3"/>
-        <parameter name="DORI_STEPSIZE" value="0.5 0.5 0.5"/>
-        <parameter name="PARTITIONER" value="CLUSTER"/>
+ <parameter name="REGION_CUBE" value="SYSTEM"/>  
+      <parameter name="SEDD_STEPSIZE" value="0.3 0.3 0.3"/>
+        <parameter name="DORI_STEPSIZE" value="0.9 0.9 0.9"/>
+        <parameter name="PARTITIONER" value="INTERACTION"/>
         <parameter name="SMOOTHNER" value="ABRUPT"/>
-        <parameter name="JOB_NAME" value="dori_abrupt"/>
+        <parameter name="JOB_NAME" value="dori_interaction"/>
         <parameter name="OUTPUT_FOLDER" value="./outputs"/>
-        <parameter name="DGRID" value="true"/>
-	<parameter name="MAX_COMMS" value="7"/>
-	<parameter name="INTERACTION_WEIGHT" value="true"/>
-        <parameter name="WFC_PATH" value="../yoink-core-molecular/dat"/>
+        <parameter name="DGRID" value="false"/>
+	 <parameter name="INTERACTION_WEIGHT" value="false"/>
+        <parameter name="WFC_PATH" value="./yoink-core-molecular/dat"/>
     </parameterList>
 </cml>

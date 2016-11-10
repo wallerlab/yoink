@@ -16,6 +16,7 @@
 package org.wallerlab.yoink.regionizer.domain;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +45,7 @@ public class SimpleRegion implements Region {
 
 	private Integer size;
 
-	private Map<Molecule, Integer> molecularMap = new HashMap<>();
+	private Map<Molecule, Integer> molecularMap = Collections.synchronizedMap(new HashMap<>());
 
 	private Computer<Coord, Set<Molecule>> centerOfMassComputer;
 

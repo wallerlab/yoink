@@ -2,7 +2,7 @@ package org.wallerlab.yoink.api.service.bootstrap;
 
 import org.wallerlab.yoink.api.model.bootstrap.Job;
 
-public interface Clustering {
+public interface InteractionList {
 	
-	void cluster(Job job);
+	void getInteractionList(Job job);
 }

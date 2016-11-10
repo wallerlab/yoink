@@ -32,6 +32,7 @@ import org.wallerlab.yoink.api.model.bootstrap.JobParameter
 import org.wallerlab.yoink.api.model.molecular.Atom
 import org.wallerlab.yoink.api.model.molecular.Element
 import org.wallerlab.yoink.api.model.molecular.RadialGrid
+
 class JobFileBuilderImplSpec extends Specification {
 
 	def "test method read(String inputfile,YoinkJob<JAXBElement> job)"(){

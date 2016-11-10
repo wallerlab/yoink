@@ -3,4 +3,4 @@ suffixProjectName(rootProject, "-core")
 def suffixProjectName(project, suffix) {
   project.name =   project.name +suffix
 }
-include "yoink-core-molecular","yoink-core-math","yoink-core-density","yoink-core-cube","yoink-core-adaptive","yoink-core-clustering","yoink-core-regionizer","yoink-core-bootstrap","yoink-core-api","yoink-core-adaptiveProcessor"
+include "yoink-core-molecular","yoink-core-math","yoink-core-density","yoink-core-cube","yoink-core-adaptive","yoink-core-regionizer","yoink-core-bootstrap","yoink-core-api","yoink-core-adaptiveProcessor"

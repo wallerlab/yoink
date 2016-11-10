@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wallerlab.yoink.api.model.bootstrap.Job;
@@ -27,9 +28,11 @@ import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
 import org.wallerlab.yoink.api.model.regionizer.Region;
 import org.wallerlab.yoink.api.model.regionizer.Region.Name;
 import org.wallerlab.yoink.api.service.adaptive.Smoothner;
+import org.wallerlab.yoink.api.service.bootstrap.InteractionList;
 import org.wallerlab.yoink.api.service.bootstrap.Wrapper;
 import org.wallerlab.yoink.api.service.regionizer.Regionizer;
 import org.wallerlab.yoink.api.service.regionizer.RegionizerMath;
+
 
 /**
  * This class is to set up and execute adaptive QM/MM partitioning.
@@ -53,12 +56,16 @@ public abstract class AbstractAdaptiveQMMMProcessor<I, O> implements ItemProcess
 	@Resource
 	protected Wrapper propertyWrapper;
 
+	@Resource
+	protected InteractionList interactionList;
+	
 	@Autowired
 	protected List<Regionizer<Map<Name, Region>, Map<JobParameter, Object>>> adaptiveQMMMRegionizers;
 
 	protected Job executeQMMMPartitioning(Job job) {
 		regionize(job);
 		smooth(job);
+		interactionList.getInteractionList(job);
 		wrapResult(job);
 		return job;
 	}

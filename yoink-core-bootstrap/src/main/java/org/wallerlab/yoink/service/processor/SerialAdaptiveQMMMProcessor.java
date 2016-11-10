@@ -15,8 +15,7 @@
  */
 package org.wallerlab.yoink.service.processor;
 
-import java.io.File;
-
+import javax.annotation.Resource;
 import javax.xml.bind.JAXBElement;
 
 import org.apache.commons.logging.Log;
@@ -26,7 +25,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.bootstrap.Job;
 import org.wallerlab.yoink.api.service.bootstrap.JobBuilder;
-import org.xml_cml.schema.Cml;
+
 
 
 /**
@@ -43,6 +42,7 @@ public class SerialAdaptiveQMMMProcessor extends AbstractAdaptiveQMMMProcessor<J
 	private JobBuilder<JAXBElement,JAXBElement> jobJaxbBuilderImpl;
 
 	protected static final Log log = LogFactory.getLog(AbstractAdaptiveQMMMProcessor.class);
+
 
 	/**
 	 * read in a list of requests and execute them.

@@ -16,21 +16,22 @@
 package org.wallerlab.yoink;
 import java.io.IOException;
 
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.core.env.StandardEnvironment;
-import org.springframework.core.io.support.ResourcePropertySource;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.StandardEnvironment;
+import org.springframework.core.io.support.ResourcePropertySource;
 import org.wallerlab.yoink.adaptive.config.AdaptiveConfig;
+import org.wallerlab.yoink.config.BatchConfig;
 import org.wallerlab.yoink.density.config.DensityConfig;
 import org.wallerlab.yoink.math.config.MathConfig;
 import org.wallerlab.yoink.molecular.config.MolecularConfig;
 import org.wallerlab.yoink.regionizer.config.RegionizerConfig;
-import org.wallerlab.yoink.config.BatchConfig;
-import org.wallerlab.yoink.service.jobbuilder.*;
 
 /**
  * This class is the main class of Yoink

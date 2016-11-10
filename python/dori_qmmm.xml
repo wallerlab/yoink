@@ -3366,4 +3366,37 @@
         <parameter name="DGRID" value="true"/>
         <parameter name="WFC_PATH" value="../yoink-core-molecular/dat"/>
     </parameterList>
+    <propertyList title="Partitioning result  : ">
+        <property title="QM and Buffer molecular indices">
+            <scalar dataType="QM molecules">[235, 102, 59, 23, 359, 320, 396, 2, 20]</scalar>
+            <scalar dataType="BUFFER molecules">[]</scalar>
+        </property>
+    </propertyList>
+    <propertyList title="Smoothing result  :">
+        <property title="weight and smooth factors "/>
+        <property/>
+        <property/>
+    </propertyList>
+    <propertyList title="Partitioning result  : ">
+        <property title="QM and Buffer molecular indices">
+            <scalar dataType="QM molecules">[235, 59, 359, 102, 23, 320, 396, 2, 20]</scalar>
+            <scalar dataType="BUFFER molecules">[]</scalar>
+        </property>
+    </propertyList>
+    <propertyList title="Smoothing result  :">
+        <property title="weight and smooth factors "/>
+        <property/>
+        <property/>
+    </propertyList>
+    <propertyList title="Partitioning result  : ">
+        <property title="QM and Buffer molecular indices">
+            <scalar dataType="QM molecules">[396, 102, 23, 59, 359, 320, 2, 235, 20]</scalar>
+            <scalar dataType="BUFFER molecules">[]</scalar>
+        </property>
+    </propertyList>
+    <propertyList title="Smoothing result  :">
+        <property title="weight and smooth factors "/>
+        <property/>
+        <property/>
+    </propertyList>
 </cml>

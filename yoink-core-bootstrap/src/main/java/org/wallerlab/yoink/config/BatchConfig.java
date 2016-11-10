@@ -21,15 +21,6 @@ import java.util.List;
 
 import javax.xml.bind.JAXBElement;
 
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.core.env.StandardEnvironment;
-import org.springframework.core.io.support.ResourcePropertySource;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.*;
-import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -40,39 +31,28 @@ import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.file.MultiResourceItemReader;
 import org.springframework.batch.item.file.ResourceAwareItemReaderItemStream;
-import org.springframework.batch.item.jms.JmsItemReader;
 import org.springframework.batch.item.xml.StaxEventItemReader;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.Resource;
 import org.springframework.oxm.Unmarshaller;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.xml_cml.schema.Cml;
-
-import org.springframework.jms.core.JmsOperations;
-import org.springframework.jms.core.JmsTemplate;
-
-import javax.jms.ConnectionFactory;
-import org.springframework.batch.item.jms.JmsItemWriter;
-import org.springframework.batch.item.jms.JmsItemReader;
-import org.apache.activemq.ActiveMQConnectionFactory;
-import org.wallerlab.yoink.service.request.JmsRequestReader;
-import org.wallerlab.yoink.service.response.JmsJobItemWriter;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.wallerlab.yoink.adaptive.config.AdaptiveConfig;
 import org.wallerlab.yoink.density.config.DensityConfig;
 import org.wallerlab.yoink.math.config.MathConfig;
 import org.wallerlab.yoink.molecular.config.MolecularConfig;
 import org.wallerlab.yoink.regionizer.config.RegionizerConfig;
+import org.xml_cml.schema.Cml;
 
 
 
@@ -143,17 +123,6 @@ public class BatchConfig {
 				.build();
 	}
 
-	@Autowired
-	@Qualifier("clusteringStep")
-	private Step clusteringStep;
-	@Bean
-	public org.springframework.batch.core.Job importClusteringJob(JobBuilderFactory jobs) {
-		return jobs.get("clustering")
-				.incrementer(new RunIdIncrementer())
-				.flow(clusteringStep)
-				.end()
-				.build();
-	}
 
 
 	/**
@@ -207,16 +176,6 @@ public class BatchConfig {
 	}
 
 	
-	@Bean
-	public Step clusteringStep(StepBuilderFactory stepBuilderFactory, ItemReader<Cml> cmlFilereader,
-			ItemProcessor<JAXBElement, org.wallerlab.yoink.api.model.bootstrap.Job> serialClusteringProcessor,
-			ItemWriter<org.wallerlab.yoink.api.model.bootstrap.Job> cmlFileResponseWriter) {
-		return stepBuilderFactory
-				.get("clustering").<JAXBElement, org.wallerlab.yoink.api.model.bootstrap.Job> chunk(1)
-				.reader(cmlFilesReader())
-				.processor(serialClusteringProcessor)
-				.writer(cmlFileResponseWriter).build();
-	}
 
 	
 	/**
@@ -261,139 +220,7 @@ public class BatchConfig {
 		return (Unmarshaller) marshaller;
 	}
 	
-	
 
-	@Autowired
-	@Qualifier("jmsStep")
-	private Step jmsStep;
-	
-	/**
-	 * build a batch job using a JMS based approach.
-	 *
-	 * @param jobs
-	 *            -
-	 *            {@link org.springframework.batch.core.configuration.annotation.JobBuilderFactory}
-	 *
-	 * @return Job -{@link org.springframework.batch.core.Job}
-	 */
-	@Bean
-	public org.springframework.batch.core.Job importJmsJob(JobBuilderFactory jobs) {
-		return jobs.get("jms")
-				.incrementer(new RunIdIncrementer())
-				.flow(jmsStep)
-				.end()
-				.build();
-	}
-
-	/**
-	 * build executing steps
-	 *
-	 * @param stepBuilderFactory
-	 *            -
-	 *            {@link org.springframework.batch.core.configuration.annotation.StepBuilderFactory}
-	 * @return Step -{@link org.springframework.batch.core.Step}
-	 */
-	@Bean
-	public Step jmsStep(StepBuilderFactory stepBuilderFactory) {
-		return stepBuilderFactory.get("adaptiveQMMMJms").<String, org.wallerlab.yoink.api.model.bootstrap.Job> chunk(1)
-				.reader(jmsRequestReader())
-				.processor((ItemProcessor<String, org.wallerlab.yoink.api.model.bootstrap.Job>) appContext
-						.getBean("stringAdaptiveQMMMProcessor"))
-				.writer(jmsJobItemWriter()).build();
-	}
-
-	/**
-	 * This is a bean that wraps around the standard jmsItemReader. It converts
-	 * it to a long running service. I.e. it does not return null, because this 
-	 * would terminate the Spring Batch job. Instead, if no message is received 
-	 * it goes to sleep for some time and tries again later.
-	 * 
-	 * @return a self made bean that wraps a standard JMS bean 
-	 * 			-{@line org.wallerlab.yoink.service.request.JmsRequestReader}
-     *
-	 */
-	@Bean
-	ItemReader<String> jmsRequestReader() {
-		JmsRequestReader jmsRequestReader = new JmsRequestReader();
-		jmsRequestReader.setJmsItemReader(jmsItemReader());
-		return jmsRequestReader;
-	}
-
-	/**
-	 * Standard connection factory
-	 *   -{@link org.apache.activemq.spring.ActiveMQConnectionFactory}
-     *
-	 * 
-	 * Broker URL is where the ActiveMQ is running. 
-	 * 
-	 * The port used to be 61620 or so, now it is 61616 - careful.
-	 * 
-	 * @return
-	 */
-	@Bean
-	ConnectionFactory connectionFactory() {
-		ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory();
-		connectionFactory.setBrokerURL("tcp://localhost:61616");
-		return connectionFactory;
-	}
-
-	/**
-	 * Standard Spring Batch item reader for jms.
-	 * @return -{@link org.springframework.batch.item.jms.JmsItemReader<T>}
-	 */
-	@Bean
-	ItemReader<String> jmsItemReader() {
-		JmsItemReader<String> jmsItemReader = new JmsItemReader<String>();
-		jmsItemReader.setJmsTemplate(jmsRequestTemplate());
-		return jmsItemReader;
-	}
-
-	/**
-	 * Standard JMS template for sending request.
-	 * @return -{@link org.springframework.jms.core.JmsTemplate}
-	 */	
-	@Bean
-	JmsOperations jmsRequestTemplate() {
-		JmsTemplate jmsRequestTemplate = new JmsTemplate(connectionFactory());
-		jmsRequestTemplate.setDefaultDestinationName("yoink-request");
-		jmsRequestTemplate.setReceiveTimeout(2000l);
-		return jmsRequestTemplate;
-	}
-
-	/**
-	 * This bean delegates to a standard JMS item writer from Spring Batch,
-	 * after it has converted the job to a string containing the xml output.
-	 * @return a bean to write back to a jms queue
-	 */
-	@Bean
-	ItemWriter<org.wallerlab.yoink.api.model.bootstrap.Job> jmsJobItemWriter() {
-		ItemWriter jmsJobItemWriter = new JmsJobItemWriter();
-		return jmsJobItemWriter;
-	}
-
-	/**
-	 * Standard Spring Batch item writer for jms.
-	 * @return -{@link org.springframework.batch.item.jms.JmsItemWriter<T>}
-	 */
-	@Bean
-	ItemWriter<String> jmsItemWriter() {
-		JmsItemWriter<String> jmsItemWriter = new JmsItemWriter<String>();
-		jmsItemWriter.setJmsTemplate(jmsResponseTemplate());
-		return jmsItemWriter;
-	}
-
-	/**
-	 * Standard JMS template, used to respond.
-	 * @return -{@link org.springframework.jms.core.JmsTemplate}
-	 */	
-	@Bean
-	JmsOperations jmsResponseTemplate() {
-		JmsTemplate jmsResponseTemplate = new JmsTemplate(connectionFactory());
-		jmsResponseTemplate.setDefaultDestinationName("yoink-response");
-		jmsResponseTemplate.setReceiveTimeout(2000l);
-		return jmsResponseTemplate;
-	}
-	
 	@Bean
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
         return new PropertySourcesPlaceholderConfigurer();

@@ -16,16 +16,18 @@
 package org.wallerlab.yoink.service.response;
 
 import java.util.List;
+
 import javax.xml.bind.JAXBElement;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
-import org.wallerlab.yoink.api.model.bootstrap.Job;
-import org.wallerlab.yoink.api.service.molecular.FilesWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.wallerlab.yoink.api.model.bootstrap.Job;
+import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
+import org.wallerlab.yoink.api.service.molecular.FilesWriter;
 /**
  * This class is for job response, to write adaptive qmmm result into a cml
  * file.

@@ -17,7 +17,6 @@
 package org.wallerlab.yoink.processor;
 
 import java.io.File;
-import java.io.IOException;
 
 import junit.framework.Assert;
 
