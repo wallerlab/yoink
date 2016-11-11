@@ -61,7 +61,7 @@ class DistanceRegionizerSpec extends Specification{
 
 		def parameters=Mock(Map)
 		parameters.get(JobParameter.DISTANCE_QM)>>(double)2.5
-		parameters.get(JobParameter.DISTANCE_BUFFER)>>(double)1.0
+		parameters.get(JobParameter.DISTANCE_BUFFER)>>(double)4.0
 		parameters.get(JobParameter.PARTITIONER)>>Partitioner.Type.DISTANCE
 
 		def simpleRegionFactory=new SimpleRegionFactory()
@@ -76,5 +76,9 @@ class DistanceRegionizerSpec extends Specification{
 		regions.size()==5
 		regions.get(Region.Name.QM_ADAPTIVE).getSize()==2
 		regions.get(Region.Name.BUFFER).getSize()==1
+		when:" functional is true"
+		regionizer.functional=true
+		then:
+		regionizer.regionize(regions,parameters)
 	}
 }

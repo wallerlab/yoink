@@ -24,8 +24,6 @@ class PYoink(object):
         self.input_file=input_file   
 	self.out_file=out_file
 	self.system=system
-#	FileInteractionListProcessor=JClass("org.wallerlab.yoink.service.processor.FileInteractionListProcessor")
-#	self.interactionListProcessor=javaApplicationContext.getBean(FileInteractionListProcessor)
 	self.set_up()
 	
     def set_up(self):

@@ -27,6 +27,7 @@ import org.wallerlab.yoink.cube.domain.SimpleCube
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
 import org.wallerlab.yoink.molecular.domain.SimpleCoord
 import org.wallerlab.yoink.molecular.domain.SimpleCoordFactory
+import static org.wallerlab.yoink.api.model.density.DensityPoint.DensityType.*;
 
 import spock.lang.Specification;
 class CubeBuilderSpec extends Specification{

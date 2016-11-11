@@ -35,7 +35,7 @@ class DensityBasedRegionizerSpec extends Specification {
 		regionizer.adaptiveQMCoreRegionizer=Mock(RegionizerComponent)
 		regionizer.adaptiveQMRegionizer=Mock(RegionizerComponent)
 		regionizer.bufferRegionizer=Mock(RegionizerComponent)
-		
+		parameters.get(JobParameter.PARTITIONER)>>Partitioner.Type.DORI
 		then:"method regionize can be  executed  and return regions"
 		regionizer.regionize(regions, parameters)==regions
 	}

@@ -71,6 +71,7 @@ class ConfigurationAdaptiveProcessorSpec  extends Specification{
 
 		def list=Mock(List)
 		list.get(_)>>vector
+		list.size()>>1
 		qmmmProcessor.getForces()>>list
 
 		def mmProcessor =Mock(AdaptiveProcessor)

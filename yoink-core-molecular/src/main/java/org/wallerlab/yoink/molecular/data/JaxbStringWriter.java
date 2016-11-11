@@ -52,10 +52,4 @@ public class JaxbStringWriter extends AbstractJaxbWriter{
 		return output.toString();
 	}
 
-	public void setOutput(StringWriter output) {
-		this.output = output;
-	}
-
-	
-	
 }

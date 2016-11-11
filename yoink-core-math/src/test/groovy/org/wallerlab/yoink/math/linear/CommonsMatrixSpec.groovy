@@ -170,6 +170,19 @@ class CommonsMatrixSpec extends Specification{
 		m.dotProduct()==3
 	}
 
+	def"equal"(){
+		when:
+		double[][] d= [[1.0, 1.0, 1.0]]
+		Matrix m= new CommonsMatrix()
+		m.array2DRowRealMatrix(d)
+		
+		double[][] d2= [[1.0, 2.0, 1.0]]
+		Matrix m2= new CommonsMatrix()
+		m2.array2DRowRealMatrix(d2)
+		then:
+	 m.equals(m2)==false
+	}
+
 	def"get rew"(){
 		when:
 		double[][] d= [[1.0, 1.0, 1.0]]

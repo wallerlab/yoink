@@ -137,7 +137,6 @@ public class CubeBuilderImpl implements CubeBuilder<Set<Molecule>> {
 		cube.setNumberOfXYZSteps(numberOfXYZSteps);
 		cube.setSize(numberOfXYZSteps[0] * numberOfXYZSteps[1]
 				* numberOfXYZSteps[2]);
-
 	}
 
 	private void setOrigin(Cube cube, double[] xyzMinimumOfCube) {
@@ -159,15 +158,6 @@ public class CubeBuilderImpl implements CubeBuilder<Set<Molecule>> {
 		double xMaximumOfCube = Collections.max(xCoordOfAllMolecules);
 		double yMaximumOfCube = Collections.max(yCoordOfAllMolecules);
 		double zMaximumOfCube = Collections.max(zCoordOfAllMolecules);
-		// build a larger cube to write cube files
-		if (cube.getDensityTypes().size() != 0) {
-			xMinimumOfCube -= 2;
-			yMinimumOfCube -= 2;
-			zMinimumOfCube -= 2;
-			xMaximumOfCube += 2;
-			yMaximumOfCube += 2;
-			zMaximumOfCube += 2;
-		}
 		xyzMinimumOfCube[0] = xMinimumOfCube;
 		xyzMinimumOfCube[1] = yMinimumOfCube;
 		xyzMinimumOfCube[2] = zMinimumOfCube;

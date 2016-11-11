@@ -24,9 +24,19 @@ import org.wallerlab.yoink.api.service.math.Vector;
 class SimpleCoordSpec extends Specification{
 
 	def "test constructor   SimpleCoord(Vector coordVector) "(){
+		
 		when:"make a new SimpCoord using constructor"
 		def coordVector =Mock(Vector)
 		def coord= new  SimpleCoord(coordVector)
+		then:"assert the return type of getCoords()"
+		coord.getCoords() instanceof Vector
+	}
+	def "test constructor   SimpleCoord() "(){
+		
+		when:"make a new  SimpCoord "
+	    def coordVector =Mock(Vector)
+		def coord= new  SimpleCoord()
+		coord.setCoords(coordVector)
 		then:"assert the return type of getCoords()"
 		coord.getCoords() instanceof Vector
 	}

@@ -15,8 +15,13 @@
  */
 package org.wallerlab.yoink.domain
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.xml_cml.schema.ObjectFactory
+
 import spock.lang.Specification;
+
 import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
 
 class AdaptiveQMMMJobSpec extends Specification{
@@ -31,13 +36,14 @@ class AdaptiveQMMMJobSpec extends Specification{
 		def factory=new ObjectFactory()
 		def cml=factory.createCml()
 		def input=factory.createCml(cml)
-
+		def interactionWeight = new ArrayList<Double>()
 		when:  " when used as a javabean"
 		job.setInput(input)
 		job.setMolecularSystem(ms)
 		job.setParameters(parameters)
 		job.setProperties(properties)
 		job.setRegions(regions)
+		job.SetInteractionWeight(interactionWeight)
 
 		then: " check that no nulls are returned"
 		job.getInput()==input
@@ -45,5 +51,6 @@ class AdaptiveQMMMJobSpec extends Specification{
 		job.getParameters()==parameters
 		job.getProperties()==properties
 		job.getRegions()==regions
+		job.getInteractionWeight()==interactionWeight
 	}
 }

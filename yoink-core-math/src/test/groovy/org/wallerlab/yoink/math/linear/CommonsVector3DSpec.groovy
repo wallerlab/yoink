@@ -105,5 +105,20 @@ class CommonsVector3DSpec extends Specification{
 		v.internalVector.equals(new Vector3D(2,2,2))
 	}
 	
+	def "test method toArray()"(){
+		when:
+		def v1= new CommonsVector3D(1,1,1);
+		then:
+		v1.toArray()==[1.0,1.0,1.0]
+		
+	}
+	def "test method exp()"(){
+		when:
+		def v1= new CommonsVector3D(0,0,0);
+		def v2= new CommonsVector3D(1,1,1);
+		then:
+		v1.exp().equals(v2)
+		
+	}
 	
 }

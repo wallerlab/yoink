@@ -92,54 +92,18 @@ public class Subsets {
 			ArrayList<Integer> single = new ArrayList<Integer>();
 			single.add(S[i]);
 			temp.add(single);
-			
-			
-				result.addAll(temp);
-			
+
+			result.addAll(temp);
+
 		}
 		ArrayList<ArrayList<Integer>> sizeResult = new ArrayList<ArrayList<Integer>>();
-		for(int i=0;i<result.size();i++){
-			if(result.get(i).size()==size){
+		for (int i = 0; i < result.size(); i++) {
+			if (result.get(i).size() == size) {
 				sizeResult.add(result.get(i));
 			}
 		}
-		
+
 		return sizeResult;
 	}
-	
 
-	/**
-	 * 
-	 * @param S
-	 *            - an Double array
-	 * @return if the input S is empty,return null else return an list of
-	 *         Double lists
-	 */
-	public static ArrayList<ArrayList<Double>> splitDoubleArray(double[] S) {
-		if (S == null)
-			return null;
-		Arrays.sort(S);
-		ArrayList<ArrayList<Double>> result = new ArrayList<ArrayList<Double>>();
-		for (int i = 0; i < S.length; i++) {
-			ArrayList<ArrayList<Double>> temp = new ArrayList<ArrayList<Double>>();
-			// get sets that are already in result
-			for (ArrayList<Double> a : result) {
-				temp.add(new ArrayList<Double>(a));
-			}
-			// add S[i] to existing sets
-			for (ArrayList<Double> a : temp) {
-				a.add(S[i]);
-			}
-			// add S[i] only as a set
-			ArrayList<Double> single = new ArrayList<Double>();
-			single.add(S[i]);
-			temp.add(single);
-			result.addAll(temp);
-		}
-		// add empty set
-		result.add(new ArrayList<Double>());
-		return result;
-	}
-	
-	
 }

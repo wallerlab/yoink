@@ -13,24 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wallerlab.yoink.molecular.config;
 
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+package org.wallerlab.yoink.processor.service.chem
 
-/**
- * this class is to configure molecular project
- * 
- * @author Min Zheng
- *
- */
-@Configuration
-@ComponentScan("org.wallerlab.yoink")
-public class MolecularConfig {
+import spock.lang.Specification;
+import org.wallerlab.yoink.api.model.bootstrap.Job;
 
+class QMMMProcessorSpec  extends Specification {
 
-
+	def "test prototype QMMMProcessor"(){
+		when:
+			def processor = new QMMMProcessor()
+			def job = Mock(Job)
+		then:
+		processor.run(job)
+		processor.getEnergy()==0
+		processor.getForces()==null
+		
+		
+	}
 }
+

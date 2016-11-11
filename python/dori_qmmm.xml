@@ -3399,4 +3399,20 @@
         <property/>
         <property/>
     </propertyList>
+    <propertyList title="Partitioning result  : ">
+        <property title="QM and Buffer molecular indices">
+            <scalar dataType="QM molecules">[396, 102, 59, 23, 359, 320, 2, 235, 20]</scalar>
+            <scalar dataType="BUFFER molecules">[]</scalar>
+        </property>
+    </propertyList>
+    <propertyList title="Smoothing result  :">
+        <property title="weight and smooth factors "/>
+        <property/>
+        <property/>
+    </propertyList>
+    <propertyList title="Interaction result  : ">
+        <property title="DORI based interation pairs">
+            <scalar dataType=" molecules">[]</scalar>
+        </property>
+    </propertyList>
 </cml>

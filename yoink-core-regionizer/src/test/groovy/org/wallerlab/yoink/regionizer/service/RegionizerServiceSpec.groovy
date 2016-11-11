@@ -41,6 +41,7 @@ class RegionizerServiceSpec extends Specification{
 		Region.Name QM_CORE_FIXED = Region.Name.QM_CORE_FIXED;
 		Region.Name QM_CORE = Region.Name.QM_CORE;
 		Region.Name QM_ADAPTIVE = Region.Name.QM_ADAPTIVE;
+		Region.Name MM_NONBUFFER =  Region.Name.MM_NONBUFFER
 		List<Region.Name> regionNames =[
 			SYSTEM,
 			MM,
@@ -49,7 +50,8 @@ class RegionizerServiceSpec extends Specification{
 			NONQM_CORE_ADAPTIVE_SEARCH,
 			QM_CORE_FIXED,
 			QM_CORE,
-			QM_ADAPTIVE
+			QM_ADAPTIVE,
+			MM_NONBUFFER
 		]
 		def region=Mock(Region)
 		def m=Mock(Molecule)

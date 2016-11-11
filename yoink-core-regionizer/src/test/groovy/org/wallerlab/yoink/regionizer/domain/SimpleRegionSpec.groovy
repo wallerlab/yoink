@@ -51,6 +51,7 @@ class SimpleRegionSpec extends Specification{
 		region.getName()==Region.Name.MM
 		region.getSize()==1
 		region.getAtoms()==[a]
+		region.getMolecules() == [m] as Set
 		region.containsAll(ms)
 		region.addAll(molecularMap)
 

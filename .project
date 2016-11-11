@@ -6,7 +6,17 @@
 	</projects>
 	<buildSpec>
 		<buildCommand>
+			<name>com.atlassian.clover.eclipse.core.prejavabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
 			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>com.atlassian.clover.eclipse.core.postjavabuilder</name>
 			<arguments>
 			</arguments>
 		</buildCommand>
@@ -20,10 +30,11 @@
 		<nature>org.springsource.ide.eclipse.gradle.core.nature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.buildship.core.gradleprojectnature</nature>
+		<nature>com.atlassian.clover.eclipse.core.clovernature</nature>
 	</natures>
 	<filteredResources>
 		<filter>
-			<id>1478793890592</id>
+			<id>1478875239779</id>
 			<name></name>
 			<type>26</type>
 			<matcher>

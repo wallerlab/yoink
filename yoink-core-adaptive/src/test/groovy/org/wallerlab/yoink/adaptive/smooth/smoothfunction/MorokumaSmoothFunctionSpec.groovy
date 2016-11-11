@@ -26,12 +26,12 @@ class MorokumaSmoothFunctionSpec extends Specification{
 		def sf= new MorokumaSmoothFunction()
 
 		when:"current value is max"
-		currentValue=4.0
+		currentValue=4.2
 		then:"result value is 1.0"
 		sf.evaluate(currentValue, min, max)==1.0
 
 		when:"current value is  min"
-		currentValue=3.8
+		currentValue=3.2
 		then:"result value is 0.0"
 		sf.evaluate(currentValue, min, max)==0.0
 

@@ -13,24 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wallerlab.yoink.molecular.config;
 
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+package org.wallerlab.yoink.density.domain
 
-/**
- * this class is to configure molecular project
- * 
- * @author Min Zheng
- *
- */
-@Configuration
-@ComponentScan("org.wallerlab.yoink")
-public class MolecularConfig {
+import spock.lang.Specification;
 
+class SimpleDensityPointFactorySpec extends Specification{
 
-
+	
+	def "test  create()"(){
+		def factory = new SimpleDensityPointFactory()
+		when:
+		def result = factory.create()
+		then:
+		result.class.name=="org.wallerlab.yoink.density.domain.SimpleDensityPoint"
+		
+	}
 }
+

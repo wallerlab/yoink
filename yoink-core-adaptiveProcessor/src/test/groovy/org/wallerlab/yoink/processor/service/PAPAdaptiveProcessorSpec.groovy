@@ -16,8 +16,6 @@
 package org.wallerlab.yoink.processor.service
 
 import spock.lang.Specification
-import spock.lang.Specification
-import spock.lang.Specification
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +32,7 @@ import org.wallerlab.yoink.api.service.adaptiveProcessor.AdaptiveProcessor;
 import org.wallerlab.yoink.api.service.math.Vector;
 import org.wallerlab.yoink.api.service.math.Vector.Vector3DType;
 import org.wallerlab.yoink.api.service.Calculator;
+
 class PAPAdaptiveProcessorSpec  extends Specification{
 	def "test PAPAdaptiveProcessor smooth" (){
 		def job=Mock(Job)
@@ -48,12 +47,18 @@ class PAPAdaptiveProcessorSpec  extends Specification{
 		a.getCoordinate()>>c
 		def m=Mock(Molecule)
 		m.getAtoms()>>[a]
-		region.getAtoms()>>[a]
+		def m1=Mock(Molecule)
+		m1.getAtoms()>>[a]
+		def m2=Mock(Molecule)
+		m2.getAtoms()>>[a]
+		region.getAtoms()>>[a,a,a]
 		region.getCenterOfMass()>>Mock(Coord)
 
 
 		def molecularMap=new HashMap<Molecule, Integer>()
 		molecularMap.put(m,0)
+		molecularMap.put(m1,1)
+		molecularMap.put(m2,2)
 		region.getMolecularMap()>>molecularMap
 		regions.put(Region.Name.BUFFER,region)
 		
@@ -65,17 +70,17 @@ class PAPAdaptiveProcessorSpec  extends Specification{
 
 		def list=Mock(List)
 		list.get(_)>>vector
-		qmmmProcessor.getForces()>>list
+		qmmmProcessor.getForces()>>[vector,vector,vector,vector]
 
 		def mmProcessor =Mock(AdaptiveProcessor)
-		mmProcessor.getForces()>>list
+		mmProcessor.getForces()>>[vector,vector,vector,vector]
 
 		def distanceCalculator=Mock(Calculator)
 		distanceCalculator.calculate(_,_)>>(double)1.0
 
 		def properties=new HashMap<String,Object>()
 		ArrayList<Double> smoothfactors = new ArrayList<Double>(
-				Arrays.asList((double)0.1,(double)0.2));
+				Arrays.asList((double)0.1,(double)0.2,(double)0.3));
 		properties.put("smoothfactors",smoothfactors)
 		job.getProperties()>>properties
 		when:

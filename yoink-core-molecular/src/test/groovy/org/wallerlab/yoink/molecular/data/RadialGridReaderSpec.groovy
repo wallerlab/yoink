@@ -42,7 +42,8 @@ class RadialGridReaderSpec extends Specification {
 		Math.abs(grid.grid_values[0]-126.29792471)<=1.0E-1
 		Math.abs(grid.first_derivative_of_grid_values[0]+585.74940956)<=1.0E-1
 		Math.abs(grid.second_derivative_of_grid_values[0]+1178635.73819704)<=1.0E-1
-		 
+		Math.abs(grid.getSquare_position_max()-17.4308*17.4308) <=1.0E-1
+		 grid.getGrid_positions().size()==5326
 	}
 
 }

@@ -107,6 +107,7 @@ public class PAPAdaptiveProcessor implements Smoothner {
 				double v_temp = 0;
 				List<Vector> f_temp = new ArrayList<Vector>();
 				initializeForce(f_temp, forceSize);
+
 				if (i == 1) {
 					List<Integer> singleBuffer = new ArrayList<Integer>();
 					List<ArrayList<Integer>> combination_all = Subsets.split(
@@ -123,16 +124,20 @@ public class PAPAdaptiveProcessor implements Smoothner {
 
 							Vector tempForce = f_all.get(singleBuffer).get(n)
 									.subtract(f_qm.get(n));
-							f_temp.add(n, f_temp.get(n).add(tempForce));
+							f_temp.set(n, f_temp.get(n).add(tempForce));
 
 							Vector tempAF = f_temp.get(n).scalarMultiply(
 									current_factor);
-							f_adaptive.add(n, f_adaptive.get(n).add(tempAF));
+
+							f_adaptive.set(n, f_adaptive.get(n).add(tempAF));
+
 						}
 						f_temp_all.put(singleBuffer.get(0), f_temp);
 
 					}
+
 					for (Vector f : f_adaptive) {
+
 						f = f.add(f_qm.get(f_adaptive.indexOf(f)));
 					}
 					v_adaptive += v_qm;
@@ -159,13 +164,14 @@ public class PAPAdaptiveProcessor implements Smoothner {
 							}
 
 						}
-						mE = v_temp_all.get(buffer) - singleE;
 
+						mE = v_all.get(buffer) - singleE;
 						for (int n = 0; n < f_qm.size(); n++) {
 
-							mF.add(n,
-									f_temp_all.get(buffer).get(n)
+							mF.set(n,
+									f_all.get(buffer).get(n)
 											.subtract(singleF.get(n)));
+
 						}
 						for (int sizeSub = buffer.size() - 1; sizeSub > 1; sizeSub--) {
 							List<ArrayList<Integer>> combination_sub_all = Subsets
@@ -182,10 +188,10 @@ public class PAPAdaptiveProcessor implements Smoothner {
 												singleF_sub.indexOf(f)));
 									}
 								}
-								mE = v_temp_all.get(subBuffer) - singleE_sub;
+								mE = v_all.get(subBuffer) - singleE_sub;
 								for (int n = 0; n < f_qm.size(); n++) {
 
-									mF.add(n, f_temp_all.get(subBuffer).get(n)
+									mF.set(n, f_all.get(subBuffer).get(n)
 											.subtract(singleF_sub.get(n)));
 
 								}
@@ -197,7 +203,7 @@ public class PAPAdaptiveProcessor implements Smoothner {
 						v_adaptive = mE * current_factor;
 						for (int n = 0; n < f_qm.size(); n++) {
 
-							f_adaptive.add(n,
+							f_adaptive.set(n,
 									mF.get(n).scalarMultiply(current_factor));
 						}
 					}
@@ -211,6 +217,7 @@ public class PAPAdaptiveProcessor implements Smoothner {
 	private void initializeForce(List<Vector> forces, int size) {
 		for (int i = 0; i < size; i++) {
 			Vector v = myVector3D.create(0, 0, 0);
+
 			forces.add(i, v);
 		}
 	}

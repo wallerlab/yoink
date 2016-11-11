@@ -22,7 +22,6 @@ import org.wallerlab.yoink.api.service.molecular.Converter.UnitConverterType;
 import spock.lang.Specification;
 import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
 class ParameterTranslatorSpec extends Specification {
-
 	def "test method translate(JAXBElement<Cml> cml)"(){
 		when:"set up a new ParameterTranslator,read in a given file"
 		def parameterTranslator= new ParameterTranslator()

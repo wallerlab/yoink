@@ -35,13 +35,11 @@ import org.wallerlab.yoink.api.model.density.DensityPoint.DensityType;
 import org.wallerlab.yoink.api.model.molecular.Atom;
 import org.wallerlab.yoink.api.model.molecular.Coord;
 import org.wallerlab.yoink.api.model.molecular.Molecule;
-import org.wallerlab.yoink.api.model.molecular.RadialGrid;
 import org.wallerlab.yoink.api.model.regionizer.Region;
 import org.wallerlab.yoink.api.service.Calculator;
 import org.wallerlab.yoink.api.service.Computer;
 import org.wallerlab.yoink.api.service.Factory;
 import org.wallerlab.yoink.api.service.bootstrap.InteractionList;
-import org.wallerlab.yoink.api.service.molecular.FilesReader;
 import org.wallerlab.yoink.api.service.regionizer.Partitioner;
 import org.wallerlab.yoink.regionizer.partitioner.DensityPartitioner;
 
@@ -69,10 +67,7 @@ public class DORIInteractionList implements InteractionList{
 	@Autowired
 	private Computer<Double, DensityPoint> densityOverlapRegionsIndicatorComputer;
 
-	@Resource
-	protected FilesReader<RadialGrid, String> radialGridReader;
-
-	@Resource
+	@Autowired
 	private DensityPartitioner densityPartitioner;
 
 	public DORIInteractionList() {
@@ -95,6 +90,7 @@ public class DORIInteractionList implements InteractionList{
 							.get(JobParameter.REGION_CUBE)));
 			List<GridPoint> gridPoints = cubePartitioner.partition(regions,
 					parameters, DensityType.DORI);
+			
 			interactionAndWeightLists = calculateInteractionPairList(regions,
 					parameters, gridPoints);
 
@@ -138,6 +134,7 @@ public class DORIInteractionList implements InteractionList{
 		List<Double> weightList = Collections.synchronizedList(weightListTemp);
 		Set<Set<Integer>> interactionSet = Collections
 				.synchronizedSet(interactionSetTemp);
+		
 		gridPoints.parallelStream().forEach(
 				gridPoint -> {
 					Set<Molecule> neighbours = gridPoint
@@ -247,7 +244,7 @@ public class DORIInteractionList implements InteractionList{
 		// check dori
 		if (1 >= doriTemp
 				&& doriTemp >= (double) parameters.get(JobParameter.DORI)) {
-			// Boolean itemInList = checkItemInList(pairList, pair);
+		
 			Set<Integer> pairTemp = new HashSet<Integer>(pair);
 			if (!interactionSet.contains(pairTemp)) {
 				interactionSet.add(pairTemp);
@@ -262,17 +259,5 @@ public class DORIInteractionList implements InteractionList{
 		}
 	}
 
-	private Boolean checkItemInList(List<List<Integer>> interactionList,
-			List<Integer> pair) {
-		Boolean itemInList = false;
-		for (List list : interactionList) {
-			if (list.containsAll(pair)) {
-				itemInList = true;
-				break;
-			}
-
-		}
-		return itemInList;
-	}
 
 }

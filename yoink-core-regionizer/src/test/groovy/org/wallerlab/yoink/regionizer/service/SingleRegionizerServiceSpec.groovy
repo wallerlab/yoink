@@ -16,13 +16,15 @@
 package org.wallerlab.yoink.regionizer.service
 
 import spock.lang.Specification;
-
 import org.wallerlab.yoink.api.enums.*
 import org.wallerlab.yoink.api.model.*
 import org.wallerlab.yoink.api.model.molecular.Molecule;
 import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.model.regionizer.Region.Name
 import org.wallerlab.yoink.api.*
 import org.wallerlab.yoink.regionizer.domain.SimpleRegionFactory
+import org.wallerlab.yoink.api.service.Factory;
+import static org.wallerlab.yoink.api.model.regionizer.Region.Name.*
 
 class SingleRegionizerServiceSpec extends Specification{
 
@@ -55,7 +57,50 @@ class SingleRegionizerServiceSpec extends Specification{
 		regions.get(Region.Name.QM_CORE)>>region2
 		then:"QM_CORE_ADAPTIVE region is the difference between QM_CORE and QM_CORE_FIXED"
 		regionizerService.regionize(regions, name).getSize()==1
+	}
 
-		
+	def "test Region.Name in switch"(){
+		def regionizerService=new SingleRegionizerService()
+
+		def region2=Mock(Region)
+		def mMap2=new HashMap<Molecule,Integer>()
+		def m1=Mock(Molecule)
+		mMap2.put(m1, 0)
+		region2.getMolecularMap()>>mMap2
+		def regions=Mock(Map)
+		regions.get(_)>>region2
+		//def region = Mock(Region)
+		//region.get(_)>>
+		//region.addAll(_)>>
+		def simpleRegionFactory= Mock(Factory)
+		simpleRegionFactory.create()>>Mock(Region)
+		regionizerService.simpleRegionFactory=simpleRegionFactory
+
+		when:
+		def names = [
+			QM_CORE,
+			QM,
+			QM_CORE_ADAPTIVE,
+			QM_ADAPTIVE,
+			MM,
+			MM_NONBUFFER,
+			NONQM_CORE,
+			NONQM_CORE_ADAPTIVE_SEARCH,
+			BUFFER
+		]
+		then:
+		for (Name name : names){
+			regionizerService.regionize(regions, name)
+		}
+
+
+		try{
+			regionizerService.regionize(regions,SYSTEM)
+		}catch (IllegalArgumentException e) {
+
+			assert(e.getMessage().contains("invalid region name"));
+
+		}
+
 	}
 }

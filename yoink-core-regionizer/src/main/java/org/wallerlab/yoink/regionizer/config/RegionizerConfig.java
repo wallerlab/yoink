@@ -51,11 +51,11 @@ import org.wallerlab.yoink.regionizer.service.RegionizerService;
 @ComponentScan("org.wallerlab.yoink")
 public class RegionizerConfig {
 
-@Resource
-private Partitioner densityOverlapRegionsIndicatorPartitioner;
+	@Resource
+	private Partitioner densityOverlapRegionsIndicatorPartitioner;
 
-@Resource
-private Partitioner singleExponentialDecayDetectorPartitioner;
+	@Resource
+	private Partitioner singleExponentialDecayDetectorPartitioner;
 
 	/**
 	 * regionizer math service before adaptive partitioning
@@ -114,10 +114,10 @@ private Partitioner singleExponentialDecayDetectorPartitioner;
 	 */
 	@Bean
 	RegionizerComponent<Map<Region.Name, Region>, Map<String, Object>> adaptiveQMCoreRegionizer() {
-		Partitioner seddPartitioner =singleExponentialDecayDetectorPartitioner;
+		Partitioner seddPartitioner = singleExponentialDecayDetectorPartitioner;
 		RegionizerComponent adaptiveQMCoreRegionizer = new AdaptiveRegionizer(
 				DensityType.SEDD, seddPartitioner);
 		return adaptiveQMCoreRegionizer;
 	}
-	
+
 }
