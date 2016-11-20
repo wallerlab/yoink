@@ -3345,7 +3345,7 @@
         <parameter name="NUMBER_QM" value="8"/>
         <parameter name="NUMBER_BUFFER" value="5"/>
         <parameter name="DISTANCE_QM" value="5"/>
-        <parameter name="DENSITY_ASR_QM" value="0.000001"/>
+        <parameter name="DENSITY_ASR_QM" value="0.0000001"/>
         <parameter name="DENSITY_DORI" value="0.0001"/>
         <parameter name="DENSITY_SEDD" value="0.1"/>
         <parameter name="SEDD" value="2"/>
@@ -3366,53 +3366,4 @@
         <parameter name="DGRID" value="true"/>
         <parameter name="WFC_PATH" value="../yoink-core-molecular/dat"/>
     </parameterList>
-    <propertyList title="Partitioning result  : ">
-        <property title="QM and Buffer molecular indices">
-            <scalar dataType="QM molecules">[235, 102, 59, 23, 359, 320, 396, 2, 20]</scalar>
-            <scalar dataType="BUFFER molecules">[]</scalar>
-        </property>
-    </propertyList>
-    <propertyList title="Smoothing result  :">
-        <property title="weight and smooth factors "/>
-        <property/>
-        <property/>
-    </propertyList>
-    <propertyList title="Partitioning result  : ">
-        <property title="QM and Buffer molecular indices">
-            <scalar dataType="QM molecules">[235, 59, 359, 102, 23, 320, 396, 2, 20]</scalar>
-            <scalar dataType="BUFFER molecules">[]</scalar>
-        </property>
-    </propertyList>
-    <propertyList title="Smoothing result  :">
-        <property title="weight and smooth factors "/>
-        <property/>
-        <property/>
-    </propertyList>
-    <propertyList title="Partitioning result  : ">
-        <property title="QM and Buffer molecular indices">
-            <scalar dataType="QM molecules">[396, 102, 23, 59, 359, 320, 2, 235, 20]</scalar>
-            <scalar dataType="BUFFER molecules">[]</scalar>
-        </property>
-    </propertyList>
-    <propertyList title="Smoothing result  :">
-        <property title="weight and smooth factors "/>
-        <property/>
-        <property/>
-    </propertyList>
-    <propertyList title="Partitioning result  : ">
-        <property title="QM and Buffer molecular indices">
-            <scalar dataType="QM molecules">[396, 102, 59, 23, 359, 320, 2, 235, 20]</scalar>
-            <scalar dataType="BUFFER molecules">[]</scalar>
-        </property>
-    </propertyList>
-    <propertyList title="Smoothing result  :">
-        <property title="weight and smooth factors "/>
-        <property/>
-        <property/>
-    </propertyList>
-    <propertyList title="Interaction result  : ">
-        <property title="DORI based interation pairs">
-            <scalar dataType=" molecules">[]</scalar>
-        </property>
-    </propertyList>
 </cml>

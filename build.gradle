@@ -115,16 +115,6 @@ project(':yoink-core-regionizer'){
 	}
 }
 
-project(':yoink-core-adaptiveProcessor'){
-	dependencies {
-		compile project(':yoink-core-api')
-		compile project(':yoink-core-math')
-		compile project(':yoink-core-molecular')
-		compile project(':yoink-core-density')
-		compile project(':yoink-core-cube')
-		compile project(':yoink-core-regionizer')
-	}
-}
 
 project(':yoink-core-bootstrap'){
 	dependencies {
@@ -224,8 +214,7 @@ def exportedProjects= [
 	":yoink-core-cube",
 	":yoink-core-bootstrap",
 	":yoink-core-adaptive",
-	":yoink-core-regionizer",
-	":yoink-core-adaptiveProcessor"
+	":yoink-core-regionizer"
 ]
 task alljavadoc(type: Javadoc) {
 	exclude "**/xml_cml/**"

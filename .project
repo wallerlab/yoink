@@ -34,7 +34,7 @@
 	</natures>
 	<filteredResources>
 		<filter>
-			<id>1478875239779</id>
+			<id>1479648160423</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
@@ -43,10 +43,6 @@
 					<matcher>
 						<id>org.eclipse.ui.ide.multiFilter</id>
 						<arguments>1.0-projectRelativePath-equals-true-false-yoink-core-adaptive</arguments>
-					</matcher>
-					<matcher>
-						<id>org.eclipse.ui.ide.multiFilter</id>
-						<arguments>1.0-projectRelativePath-equals-true-false-yoink-core-adaptiveProcessor</arguments>
 					</matcher>
 					<matcher>
 						<id>org.eclipse.ui.ide.multiFilter</id>

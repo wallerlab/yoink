@@ -601,7 +601,7 @@
         <parameter name="NUMBER_QM" value="8"/>
         <parameter name="NUMBER_BUFFER" value="5"/>
         <parameter name="DISTANCE_QM" value="5"/>
-        <parameter name="DENSITY_ASR_QM" value="0.000001"/>
+        <parameter name="DENSITY_ASR_QM" value="0.0000001"/>
         <parameter name="DENSITY_DORI" value="0.0001"/>
         <parameter name="DENSITY_SEDD" value="0.1"/>
         <parameter name="SEDD" value="5"/>
