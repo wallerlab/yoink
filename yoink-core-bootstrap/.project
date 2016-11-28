@@ -6,17 +6,7 @@
 	</projects>
 	<buildSpec>
 		<buildCommand>
-			<name>com.atlassian.clover.eclipse.core.prejavabuilder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
-		<buildCommand>
 			<name>org.eclipse.jdt.core.javabuilder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
-		<buildCommand>
-			<name>com.atlassian.clover.eclipse.core.postjavabuilder</name>
 			<arguments>
 			</arguments>
 		</buildCommand>
@@ -25,6 +15,5 @@
 		<nature>org.springsource.ide.eclipse.gradle.core.nature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.jdt.groovy.core.groovyNature</nature>
-		<nature>com.atlassian.clover.eclipse.core.clovernature</nature>
 	</natures>
 </projectDescription>

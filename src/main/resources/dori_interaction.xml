@@ -617,10 +617,10 @@
         <parameter name="DORI_STEPSIZE" value="0.9 0.9 0.9"/>
         <parameter name="PARTITIONER" value="INTERACTION"/>
         <parameter name="SMOOTHNER" value="ABRUPT"/>
-        <parameter name="JOB_NAME" value="dori_interaction"/>
+        <parameter name="JOB_NAME" value="dori_graph"/>
         <parameter name="OUTPUT_FOLDER" value="./outputs"/>
-        <parameter name="DGRID" value="false"/>
+        <parameter name="DGRID" value="true"/>
 	 <parameter name="INTERACTION_WEIGHT" value="false"/>
-        <parameter name="WFC_PATH" value="./yoink-core-molecular/dat"/>
+        <parameter name="WFC_PATH" value="../yoink-core-molecular/dat"/>
     </parameterList>
 </cml>

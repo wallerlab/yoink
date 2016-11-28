@@ -144,6 +144,10 @@ public class ParameterTranslator implements
 		case JOB_NAME:
 		case WFC_PATH:
 		case OUTPUT_FOLDER:
+			value=value.trim();
+			if ( value==null){
+				value="./";
+			}
 			parameters.put(jobParameter, value);
 			break;
 		case DISTANCE_BUFFER:

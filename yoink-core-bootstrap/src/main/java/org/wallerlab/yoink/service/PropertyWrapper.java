@@ -29,6 +29,7 @@ import org.wallerlab.yoink.api.model.bootstrap.Job;
 import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
 import org.wallerlab.yoink.api.model.molecular.Molecule;
 import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.service.adaptive.Smoothner;
 import org.wallerlab.yoink.api.service.bootstrap.Wrapper;
 import org.wallerlab.yoink.api.service.math.Vector;
 import org.wallerlab.yoink.api.service.molecular.FilesWriter;
@@ -255,6 +256,14 @@ public class PropertyWrapper implements Wrapper<Job<JAXBElement>> {
 
 				propertyList.setTitle(propertyList.getTitle()
 						+ "   average smooth factor:  ");
+			}
+			else if ((Smoothner.Type)job.getParameters().get(JobParameter.SMOOTHNER)==Smoothner.Type.FIRES){				
+			Scalar scalar = objectFactory.createScalar();
+			scalar.setDataType("smooth function");
+			scalar.setValue(String.valueOf( job.getProperties()
+					.get("smoothfactors")));
+			scalar.setTitle("maximum radius of QM region in Angstrom:");
+			property.getAnyCmlOrAnyOrAny().add(scalar);
 			}
 		}
 	}

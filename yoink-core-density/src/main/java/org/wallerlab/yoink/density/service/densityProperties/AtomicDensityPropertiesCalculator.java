@@ -83,6 +83,13 @@ public class AtomicDensityPropertiesCalculator implements
 		double fac2 = 0;
 		double density = 0;
 		if(atom.getRadialGrid()==null){
+			if(atomName.atomNumber()>18){
+				System.out.println("please check the WFC_PATH is right");
+				System.out.println("please set  DGRID as true in the input file:");
+				System.out.println("	<parameter name=\"DGRID\" value=\"true\"/> ");
+				System.exit(1);
+			}
+			
 		double exp1 = Math.exp(-distance / atomName.z1());
 		double exp2 = Math.exp(-distance / atomName.z2());
 		double exp3 = Math.exp(-distance / atomName.z3());

@@ -15,6 +15,12 @@
  */
 package org.wallerlab.yoink.service.interaction;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -90,6 +96,7 @@ public class DORIInteractionList implements InteractionList{
 							.get(JobParameter.REGION_CUBE)));
 			List<GridPoint> gridPoints = cubePartitioner.partition(regions,
 					parameters, DensityType.DORI);
+					
 			
 			interactionAndWeightLists = calculateInteractionPairList(regions,
 					parameters, gridPoints);
@@ -118,7 +125,29 @@ public class DORIInteractionList implements InteractionList{
 		}
 		job.SetInteractionList(interactionAndWeightLists.get(0));
 		job.SetInteractionWeight(weightList);
+		writeInteractionList(job);
 		}
+	}
+
+	private void writeInteractionList(Job job) {
+		String name = (String) job.getParameters().get(
+				JobParameter.JOB_NAME);
+		String parentDirName = (String) job.getParameters().get(
+				JobParameter.OUTPUT_FOLDER)
+				+ "/";
+		String outputFileName = parentDirName + name + "-interaction.txt";
+		   try {       
+	            File statText = new File(outputFileName);
+	            FileOutputStream is = new FileOutputStream(statText);
+	            OutputStreamWriter osw = new OutputStreamWriter(is);    
+	            Writer w = new BufferedWriter(osw);
+	            for(List item:(List<List>)job.getInteractionList()){
+	            	 w.write(item.get(0).toString() +" "+ item.get(1).toString()+"\n");     	
+	            }	         
+	            w.close();
+	        } catch (IOException e) {
+	            System.err.println("Problem writing to the file: "+outputFileName);
+	        }
 	}
 
 	private List<List> calculateInteractionPairList(
@@ -210,6 +239,7 @@ public class DORIInteractionList implements InteractionList{
 			List<Double> weightList, Set<Set<Integer>> interactionSet) {
 		// check density
 		if (density >= (double) parameters.get(JobParameter.DENSITY_DORI)) {
+		
 
 			calculateAndCheckDori(atomsInCube, pairList, gridPoint, neighbours,
 					pair, parameters, density, weightList, interactionSet);
@@ -241,6 +271,7 @@ public class DORIInteractionList implements InteractionList{
 			double density, List<Double> weightList,
 			Set<Set<Integer>> interactionSet) {
 	
+
 		// check dori
 		if (1 >= doriTemp
 				&& doriTemp >= (double) parameters.get(JobParameter.DORI)) {

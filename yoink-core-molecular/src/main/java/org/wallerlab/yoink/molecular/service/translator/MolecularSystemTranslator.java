@@ -23,6 +23,7 @@ import java.util.Set;
 import javax.annotation.Resource;
 import javax.xml.bind.JAXBElement;
 
+import org.apache.commons.lang3.EnumUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.molecular.Atom;
@@ -44,6 +45,7 @@ import org.wallerlab.yoink.molecular.domain.SimpleMolecule;
 import org.xml_cml.schema.AtomArray;
 import org.xml_cml.schema.Cml;
 import org.xml_cml.schema.MoleculeList;
+
 
 /**
  * This class is to translate JAXB Cml to MolecularSystem model.
@@ -145,7 +147,11 @@ public class MolecularSystemTranslator implements
 		moleculeIndexCounter++;
 		List<Atom> atoms = parseAtoms(cmlMolecule);
 		Molecule molecule = new SimpleMolecule(moleculeIndexCounter, atoms);
-		Region.Name name = Region.Name.valueOf(cmlMolecule.getId());
+	    String id = "MM";
+		if(cmlMolecule.getId() != null && EnumUtils.isValidEnum(Region.Name.class, cmlMolecule.getId())){
+		id = cmlMolecule.getId();
+		}
+		Region.Name name = Region.Name.valueOf(id);
 		molecule.setName(name);
 		Set<Molecule> moleculeSet = new HashSet<>();
 		moleculeSet.add(molecule);

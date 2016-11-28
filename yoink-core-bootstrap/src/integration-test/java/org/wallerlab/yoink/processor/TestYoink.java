@@ -41,9 +41,14 @@ public class TestYoink {
 		yoink.main(args);
 		try {
 
-			if (files_in.list().length > 0 && files_out.list().length > 0) {
-				Assert.assertEquals(files_in.list().length,
-						files_out.list().length);
+			File input_dir = new File("./inputs");
+			File[] input_files = input_dir.listFiles((d, name) -> name.endsWith(".xml"));
+			
+			File output_dir = new File("./outputs");
+			File[] output_files = output_dir.listFiles((d, name) -> name.endsWith(".xml"));
+			if (input_files.length > 0 && output_files.length > 0) {
+				Assert.assertEquals(input_files.length,
+						output_files.length);
 				System.out.println("pass integration test");
 				deleteDirectory(files_in);
 				deleteDirectory(files_out);

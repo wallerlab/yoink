@@ -12,10 +12,10 @@ import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.bootstrap.Job;
 import org.wallerlab.yoink.api.model.molecular.Atom;
 import org.wallerlab.yoink.api.model.molecular.Coord;
-import org.wallerlab.yoink.api.model.molecular.Molecule;
 import org.wallerlab.yoink.api.model.regionizer.Region;
 import org.wallerlab.yoink.api.service.Calculator;
 import org.wallerlab.yoink.api.service.adaptive.Smoothner;
+import org.wallerlab.yoink.math.constants.Constants;
 
 @Service("firesSmoothner")
 public class FIRESmoothner implements Smoothner {
@@ -36,7 +36,7 @@ public class FIRESmoothner implements Smoothner {
 			double distance = distanceCalculator.calculate(qmCenter, atom);
 			distances.add(distance);
 		}
-		double smoothFactor = Collections.max(distances);
+		double smoothFactor = Collections.max(distances)* Constants.BOHR_TO_ANGTROM;
 		smoothFactors.add(smoothFactor);
 		job.getProperties().put("smoothfactors", smoothFactors);
 
