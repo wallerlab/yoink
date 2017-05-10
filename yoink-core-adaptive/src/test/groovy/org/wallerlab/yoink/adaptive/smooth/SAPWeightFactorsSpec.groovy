@@ -18,11 +18,11 @@ package org.wallerlab.yoink.adaptive.smooth
 import org.wallerlab.yoink.api.service.*
 import org.wallerlab.yoink.api.enums.*
 import org.wallerlab.yoink.api.model.*
-import org.wallerlab.yoink.api.model.molecular.Molecule
-import org.wallerlab.yoink.api.model.regionizer.Region
+import org.wallerlab.yoink.api.model.molecule.Molecule
+import org.wallerlab.yoink.api.model.region.Region
 import org.wallerlab.yoink.api.model.bootstrap.Job
 import spock.lang.Specification
-import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.model.molecule.Coord;
 class SAPWeightFactorsSpec extends Specification {
 
 	def "test method execute(YoinkJob<JAXBElement> job)"(){

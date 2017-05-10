@@ -18,8 +18,8 @@ package org.wallerlab.yoink.adaptive.smooth
 import org.wallerlab.yoink.api.*
 import org.wallerlab.yoink.api.enums.*
 import org.wallerlab.yoink.api.model.*
-import org.wallerlab.yoink.api.model.molecular.Molecule
-import org.wallerlab.yoink.api.model.regionizer.Region
+import org.wallerlab.yoink.api.model.molecule.Molecule
+import org.wallerlab.yoink.api.model.region.Region
 import org.wallerlab.yoink.api.model.bootstrap.Job
 import spock.lang.Specification
 

@@ -15,7 +15,7 @@
  */
 package org.wallerlab.yoink.api.model.density;
 
-import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.model.molecule.Coord;
 import org.wallerlab.yoink.api.service.math.Matrix;
 import org.wallerlab.yoink.api.service.math.Vector;
 
@@ -92,7 +92,7 @@ public interface DensityPoint {
 	/**
 	 * get the coordinate of the point
 	 * 
-	 * @return current coordinate -{@link org.wallerlab.yoink.api.model.molecular.Coord}
+	 * @return current coordinate -{@link org.wallerlab.yoink.api.model.molecule.Coord}
 	 */
 	 Coord getCurrentCoord();
 

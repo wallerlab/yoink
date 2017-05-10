@@ -18,15 +18,15 @@ package org.wallerlab.yoink.cube.service
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D
 import org.wallerlab.yoink.api.model.cube.Cube;
 import org.wallerlab.yoink.api.model.density.DensityPoint.DensityType;
-import org.wallerlab.yoink.api.model.molecular.Atom;
-import org.wallerlab.yoink.api.model.molecular.Coord;
-import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.molecule.Atom;
+import org.wallerlab.yoink.api.model.molecule.Coord;
+import org.wallerlab.yoink.api.model.molecule.Molecule;
 import org.wallerlab.yoink.api.service.Calculator;
 import org.wallerlab.yoink.api.service.math.Vector;
 import org.wallerlab.yoink.cube.domain.SimpleCube
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
-import org.wallerlab.yoink.molecular.domain.SimpleCoord
-import org.wallerlab.yoink.molecular.domain.SimpleCoordFactory
+import org.wallerlab.yoink.molecule.domain.SimpleCoord
+import org.wallerlab.yoink.molecule.domain.SimpleCoordFactory
 import static org.wallerlab.yoink.api.model.density.DensityPoint.DensityType.*;
 
 import spock.lang.Specification;

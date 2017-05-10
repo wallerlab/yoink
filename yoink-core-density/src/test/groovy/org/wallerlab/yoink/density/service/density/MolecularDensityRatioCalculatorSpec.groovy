@@ -3,9 +3,9 @@ package org.wallerlab.yoink.density.service.density
 
 import org.wallerlab.yoink.density.service.density.MolecularDensityRatioCalculator
 import org.wallerlab.yoink.math.linear.CommonsMatrix
-import org.wallerlab.yoink.api.model.molecular.Atom;
-import org.wallerlab.yoink.api.model.molecular.Coord;
-import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.molecule.Atom;
+import org.wallerlab.yoink.api.model.molecule.Coord;
+import org.wallerlab.yoink.api.model.molecule.Molecule;
 import org.wallerlab.yoink.api.service.Calculator;
 
 import spock.lang.Specification

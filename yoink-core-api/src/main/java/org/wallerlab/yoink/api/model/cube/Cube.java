@@ -19,9 +19,9 @@ import java.util.List;
 import java.util.Set;
 
 import org.wallerlab.yoink.api.model.density.DensityPoint.DensityType;
-import org.wallerlab.yoink.api.model.molecular.Atom;
-import org.wallerlab.yoink.api.model.molecular.Coord;
-import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.molecule.Atom;
+import org.wallerlab.yoink.api.model.molecule.Coord;
+import org.wallerlab.yoink.api.model.molecule.Molecule;
 
 /**
  * this interface is for domain model cube
@@ -34,7 +34,7 @@ public interface Cube {
 	/**
 	 * get the value of origin coordinate of the cube
 	 * 
-	 * @return {@link org.wallerlab.yoink.api.model.molecular.Coord}
+	 * @return {@link org.wallerlab.yoink.api.model.molecule.Coord}
 	 */
 	Coord getGridOrigin();
 
@@ -42,7 +42,7 @@ public interface Cube {
 	 * set the value of origin coordinate of the cube
 	 * 
 	 * @param gridOrigin
-	 *            -{@link org.wallerlab.yoink.api.model.molecular.Coord}
+	 *            -{@link org.wallerlab.yoink.api.model.molecule.Coord}
 	 */
 	void setGridOrigin(Coord gridOrigin);
 
@@ -72,7 +72,7 @@ public interface Cube {
 	 * get the molecules in the cube
 	 * 
 	 * @return a Set of molecules. -
-	 *         {@link org.wallerlab.yoink.api.model.molecular.Molecule}
+	 *         {@link org.wallerlab.yoink.api.model.molecule.Molecule}
 	 */
 	Set<Molecule> getMolecules();
 
@@ -80,7 +80,7 @@ public interface Cube {
 	 * get the atoms in the cube
 	 * 
 	 * @return a Set of atoms.-
-	 *         {@link org.wallerlab.yoink.api.model.molecular.Atom}
+	 *         {@link org.wallerlab.yoink.api.model.molecule.Atom}
 	 */
 	 Set<Atom> getAtoms();
 
@@ -89,7 +89,7 @@ public interface Cube {
 	 * 
 	 * @param molecules
 	 *            -a Set of molecules.
-	 *            {@link org.wallerlab.yoink.api.model.molecular.Molecule}
+	 *            {@link org.wallerlab.yoink.api.model.molecule.Molecule}
 	 */
 	void setMolecules(Set<Molecule> molecules);
 
@@ -145,7 +145,7 @@ public interface Cube {
 	/**
 	 * get the coordinates of grid points in the cube
 	 * 
-	 * @return a {@link org.wallerlab.yoink.api.model.molecular.Coord} List
+	 * @return a {@link org.wallerlab.yoink.api.model.molecule.Coord} List
 	 */
 	List<Coord> getCoordinates();
 
@@ -153,7 +153,7 @@ public interface Cube {
 	 * set the coordinates of grid points in the cube
 	 * 
 	 * @param coordinates
-	 *            , a {@link org.wallerlab.yoink.api.model.molecular.Coord} List
+	 *            , a {@link org.wallerlab.yoink.api.model.molecule.Coord} List
 	 */
 	void setCoordinates(List<Coord> coordinates);
 

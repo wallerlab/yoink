@@ -24,9 +24,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.api.model.molecular.Atom;
-import org.wallerlab.yoink.api.model.molecular.Coord;
-import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.molecule.Atom;
+import org.wallerlab.yoink.api.model.molecule.Coord;
+import org.wallerlab.yoink.api.model.molecule.Molecule;
 import org.wallerlab.yoink.api.service.Calculator;
 import org.wallerlab.yoink.math.constants.Constants;
 
@@ -53,10 +53,10 @@ public class DensityCalculator implements
 	 * calculation, the density parameters are in the format of Vector
 	 * 
 	 * @param currentCoord
-	 *            -{@link org.wallerlab.yoink.api.model.molecular.Coord}
+	 *            -{@link org.wallerlab.yoink.api.model.molecule.Coord}
 	 * @param molecules
 	 *            -a Set of molecules
-	 *            {@link org.wallerlab.yoink.api.model.molecular.Molecule}
+	 *            {@link org.wallerlab.yoink.api.model.molecule.Molecule}
 	 * @return the density of a point from molecules
 	 */
 	public Double calculate(Coord currentCoord, Set<Molecule> molecules) {

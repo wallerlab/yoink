@@ -18,9 +18,9 @@ package org.wallerlab.yoink.api.model.cube;
 import java.util.Map;
 import java.util.Set;
 
-import org.wallerlab.yoink.api.model.molecular.Atom;
-import org.wallerlab.yoink.api.model.molecular.Coord;
-import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.molecule.Atom;
+import org.wallerlab.yoink.api.model.molecule.Coord;
+import org.wallerlab.yoink.api.model.molecule.Molecule;
 
 /**
  * this interface is for a grid point in the cube
@@ -55,7 +55,7 @@ public interface GridPoint<String, V> {
 	/**
 	 * get the value of coordinate
 	 * 
-	 * @return Coord {@link org.wallerlab.yoink.api.model.molecular.Coord}
+	 * @return Coord {@link org.wallerlab.yoink.api.model.molecule.Coord}
 	 */
 	Coord getCoordinate();
 
@@ -63,7 +63,7 @@ public interface GridPoint<String, V> {
 	 * set the coordinate of a grid point
 	 * 
 	 * @param coordinate
-	 *            {@link org.wallerlab.yoink.api.model.molecular.Coord}
+	 *            {@link org.wallerlab.yoink.api.model.molecule.Coord}
 	 */
 	void setCoordinate(Coord coordinate);
 
@@ -102,7 +102,7 @@ public interface GridPoint<String, V> {
 	 * get two closest atoms in properties
 	 * 
 	 * @return a Set {@link java.util.Set} of Atoms
-	 *         {@link org.wallerlab.yoink.api.model.molecular.Atom}
+	 *         {@link org.wallerlab.yoink.api.model.molecule.Atom}
 	 */
 	 Set<Atom> getTwoClosestAtoms();
 
@@ -110,7 +110,7 @@ public interface GridPoint<String, V> {
 	 * get two closest molecules in properties
 	 * 
 	 * @return a Set {@link java.util.Set} of Molecules
-	 *         {@link org.wallerlab.yoink.api.model.molecular.Molecule}
+	 *         {@link org.wallerlab.yoink.api.model.molecule.Molecule}
 	 */
 	Set<Molecule> getTwoClosestMolecules();
 
@@ -118,7 +118,7 @@ public interface GridPoint<String, V> {
 	 * get atoms of two closest molecules of a grid point
 	 * 
 	 * @return a Set {@link java.util.Set} of Atoms
-	 *         {@link org.wallerlab.yoink.api.model.molecular.Atom}
+	 *         {@link org.wallerlab.yoink.api.model.molecule.Atom}
 	 */
 	 Set<Atom> getAtomsInTwoClosestMolecules();
 

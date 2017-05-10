@@ -18,8 +18,8 @@ package org.wallerlab.yoink.density.service.density;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.api.model.molecular.Atom;
-import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.model.molecule.Atom;
+import org.wallerlab.yoink.api.model.molecule.Coord;
 import org.wallerlab.yoink.api.service.Calculator;
 
 /**
@@ -39,10 +39,10 @@ public class AtomicDensityRatioCalculator implements
 	 * the density ratio of two atoms on a grid point.
 	 * 
 	 * @param coordinate
-	 *            -{@link org.wallerlab.yoink.api.model.molecular.Coord}
+	 *            -{@link org.wallerlab.yoink.api.model.molecule.Coord}
 	 * @param neighbours
 	 *            - an array of two atoms
-	 *            {@link org.wallerlab.yoink.api.model.molecular.Atom}.
+	 *            {@link org.wallerlab.yoink.api.model.molecule.Atom}.
 	 * @return the density ratio of two atoms in neighbours
 	 */
 	public Double calculate(Coord coordinate, Atom[] neighbours) {

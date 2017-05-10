@@ -25,7 +25,7 @@ import org.wallerlab.yoink.api.model.*
 import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
 import org.springframework.batch.item.ItemWriter;
 import org.wallerlab.yoink.api.model.bootstrap.Job
-import org.wallerlab.yoink.api.service.molecular.FilesWriter;
+import org.wallerlab.yoink.api.service.molecule.FilesWriter;
 
 class CmlFilesResponseSpec extends Specification{
 

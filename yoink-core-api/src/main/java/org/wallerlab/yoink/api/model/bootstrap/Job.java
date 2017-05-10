@@ -20,8 +20,9 @@ import java.util.Map;
 import java.util.List;
 import java.util.Set;
 
-import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
-import org.wallerlab.yoink.api.model.regionizer.Region;
+import org.wallerlab.yoink.api.model.graph.Graph;
+import org.wallerlab.yoink.api.model.molecule.MolecularSystem;
+import org.wallerlab.yoink.api.model.region.Region;
 
 /**
  * this interface is for the Job domain model
@@ -36,7 +37,7 @@ public interface Job<T> {
 	 * get the value of molecular system in the job
 	 * 
 	 * @return molecularSystem -
-	 *         {@link org.wallerlab.yoink.api.model.molecular.MolecularSystem }
+	 *         {@link org.wallerlab.yoink.api.model.molecule.MolecularSystem }
 	 */
 	MolecularSystem getMolecularSystem();
 
@@ -45,7 +46,7 @@ public interface Job<T> {
 	 * 
 	 * @param molecularSystem
 	 *            -
-	 *            {@link org.wallerlab.yoink.api.model.molecular.MolecularSystem }
+	 *            {@link org.wallerlab.yoink.api.model.molecule.MolecularSystem }
 	 */
 	void setMolecularSystem(MolecularSystem molecularSystem);
 
@@ -72,8 +73,8 @@ public interface Job<T> {
 	 * get the value of regions in the job
 	 * 
 	 * @return a Map. -
-	 *         {@link org.wallerlab.yoink.api.model.regionizer.Region.Name} as
-	 *         key,{@link org.wallerlab.yoink.api.model.regionizer.Region} as
+	 *         {@link org.wallerlab.yoink.api.model.region.Region.Name} as
+	 *         key,{@link org.wallerlab.yoink.api.model.region.Region} as
 	 *         value.
 	 * 
 	 */
@@ -84,8 +85,8 @@ public interface Job<T> {
 	 * 
 	 * @param regions
 	 *            ,a Map. -
-	 *            {@link org.wallerlab.yoink.api.model.regionizer.Region.Name}
-	 *            as key,{@link org.wallerlab.yoink.api.model.regionizer.Region}
+	 *            {@link org.wallerlab.yoink.api.model.region.Region.Name}
+	 *            as key,{@link org.wallerlab.yoink.api.model.region.Region}
 	 *            as value.
 	 */
 	void setRegions(Map<Region.Name, Region> regions);
@@ -150,5 +151,19 @@ public interface Job<T> {
 	 * @param interactionWeight weight of interaction
 	 */
 	void SetInteractionWeight(List<Double> interactionWeight);
+	
+	/**
+	 * get the weight(strength) of the interaction
+	 * 
+	 * @return list of weights
+	 */
+	Graph getGraph();
+
+	/**
+	 * set the weight(strength) of the interaction
+	 * 
+	 * @param interactionWeight weight of interaction
+	 */
+	void setGraph(Graph graph);
 
 }

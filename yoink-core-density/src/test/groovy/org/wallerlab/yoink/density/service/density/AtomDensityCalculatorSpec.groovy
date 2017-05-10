@@ -15,15 +15,15 @@
  */
 package org.wallerlab.yoink.density.service.density
 
-import org.wallerlab.yoink.api.model.molecular.Atom;
-import org.wallerlab.yoink.api.model.molecular.Coord;
-import org.wallerlab.yoink.api.model.molecular.Element;
+import org.wallerlab.yoink.api.model.molecule.Atom;
+import org.wallerlab.yoink.api.model.molecule.Coord;
+import org.wallerlab.yoink.api.model.molecule.Element;
 import org.wallerlab.yoink.api.service.Calculator;
 import org.wallerlab.yoink.density.service.density.AtomDensityCalculator
 import org.wallerlab.yoink.math.config.MathConfig;
 import org.wallerlab.yoink.math.linear.SimpleMatrixFactory
-import org.wallerlab.yoink.molecular.data.RadialGridReader
-import org.wallerlab.yoink.molecular.domain.SimpleRadialGrid
+import org.wallerlab.yoink.molecule.data.RadialGridReader
+import org.wallerlab.yoink.molecule.domain.SimpleRadialGrid
 import org.wallerlab.yoink.api.service.math.Matrix;
 import spock.lang.Specification
 

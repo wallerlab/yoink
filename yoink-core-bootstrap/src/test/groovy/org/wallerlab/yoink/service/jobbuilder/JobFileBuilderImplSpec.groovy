@@ -23,15 +23,15 @@ import spock.lang.Specification;
 import org.wallerlab.yoink.api.*
 import org.wallerlab.yoink.api.enums.*
 import org.wallerlab.yoink.api.model.*
-import org.wallerlab.yoink.api.service.molecular.FilesReader;
-import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
-import org.wallerlab.yoink.api.service.molecular.Translator
+import org.wallerlab.yoink.api.service.molecule.FilesReader;
+import org.wallerlab.yoink.api.model.molecule.MolecularSystem;
+import org.wallerlab.yoink.api.service.molecule.Translator
 import org.wallerlab.yoink.service.jobbuilder.JobFileBuilderImpl;
 import org.wallerlab.yoink.api.model.bootstrap.Job
 import org.wallerlab.yoink.api.model.bootstrap.JobParameter
-import org.wallerlab.yoink.api.model.molecular.Atom
-import org.wallerlab.yoink.api.model.molecular.Element
-import org.wallerlab.yoink.api.model.molecular.RadialGrid
+import org.wallerlab.yoink.api.model.molecule.Atom
+import org.wallerlab.yoink.api.model.molecule.Element
+import org.wallerlab.yoink.api.model.molecule.RadialGrid
 
 class JobFileBuilderImplSpec extends Specification {
 

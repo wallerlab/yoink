@@ -19,12 +19,12 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.cube.Cube;
-import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.model.molecule.Coord;
 import org.wallerlab.yoink.api.service.Calculator;
 import org.wallerlab.yoink.api.service.Factory;
 import org.wallerlab.yoink.api.service.math.Vector;
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory;
-import org.wallerlab.yoink.molecular.domain.SimpleCoord;
+import org.wallerlab.yoink.molecule.domain.SimpleCoord;
 
 /**
  * this class is to get the coordinate of a grid point in cube
@@ -51,7 +51,7 @@ public class CoordInCubeCalculator implements Calculator<Coord, int[], Cube> {
 	 *            -{@link org.wallerlab.yoink.api.model.cube.Cube } contains the
 	 *            values of x/y/z stepsizes and the grid origin
 	 * @return gridPointCoord -
-	 *         {@link org.wallerlab.yoink.api.model.molecular.Coord}
+	 *         {@link org.wallerlab.yoink.api.model.molecule.Coord}
 	 */
 	public Coord calculate(int[] xyzCurrentStep, Cube cube) {
 		Vector originCoordMatrix = cube.getGridOrigin().getCoords();

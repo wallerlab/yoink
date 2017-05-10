@@ -25,9 +25,9 @@ import org.wallerlab.yoink.api.model.bootstrap.JobParameter
 import org.wallerlab.yoink.api.*
 import org.wallerlab.yoink.api.enums.*
 import org.wallerlab.yoink.api.model.*
-import org.wallerlab.yoink.api.service.molecular.FilesReader;
-import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
-import org.wallerlab.yoink.api.service.molecular.Translator
+import org.wallerlab.yoink.api.service.molecule.FilesReader;
+import org.wallerlab.yoink.api.model.molecule.MolecularSystem;
+import org.wallerlab.yoink.api.service.molecule.Translator
 import org.wallerlab.yoink.service.jobbuilder.JobFileBuilderImpl;
 import org.wallerlab.yoink.api.model.bootstrap.Job
 

@@ -26,9 +26,9 @@ import java.util.Set;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
-import org.wallerlab.yoink.api.model.molecular.Atom;
-import org.wallerlab.yoink.api.model.molecular.Coord;
-import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.molecule.Atom;
+import org.wallerlab.yoink.api.model.molecule.Coord;
+import org.wallerlab.yoink.api.model.molecule.Molecule;
 import org.wallerlab.yoink.api.service.Calculator;
 
 /**
@@ -48,10 +48,10 @@ public class VoronoiCalculator implements
 	 * 
 	 * @param tempCoord
 	 *            -the coordinate of the grid point,
-	 *            {@link org.wallerlab.yoink.api.model.molecular.Coord}
+	 *            {@link org.wallerlab.yoink.api.model.molecule.Coord}
 	 * @param molecules
 	 *            - a Set of molecules,
-	 *            {@link org.wallerlab.yoink.api.model.molecular.Molecule}
+	 *            {@link org.wallerlab.yoink.api.model.molecule.Molecule}
 	 * @return properties, a Map, String as key, Object as value
 	 */
 	@Override

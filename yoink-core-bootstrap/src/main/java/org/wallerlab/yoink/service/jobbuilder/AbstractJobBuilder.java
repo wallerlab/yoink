@@ -23,9 +23,9 @@ import javax.xml.bind.JAXBElement;
 
 import org.wallerlab.yoink.api.model.bootstrap.Job;
 import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
-import org.wallerlab.yoink.api.model.molecular.MolecularSystem;
+import org.wallerlab.yoink.api.model.molecule.MolecularSystem;
 import org.wallerlab.yoink.api.service.bootstrap.JobBuilder;
-import org.wallerlab.yoink.api.service.molecular.Translator;
+import org.wallerlab.yoink.api.service.molecule.Translator;
 import org.xml_cml.schema.Cml;
 
 /**

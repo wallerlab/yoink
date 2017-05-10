@@ -34,7 +34,7 @@
 	</natures>
 	<filteredResources>
 		<filter>
-			<id>1479998757568</id>
+			<id>1494392704996</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
@@ -62,15 +62,19 @@
 					</matcher>
 					<matcher>
 						<id>org.eclipse.ui.ide.multiFilter</id>
+						<arguments>1.0-projectRelativePath-equals-true-false-yoink-core-graph</arguments>
+					</matcher>
+					<matcher>
+						<id>org.eclipse.ui.ide.multiFilter</id>
 						<arguments>1.0-projectRelativePath-equals-true-false-yoink-core-math</arguments>
 					</matcher>
 					<matcher>
 						<id>org.eclipse.ui.ide.multiFilter</id>
-						<arguments>1.0-projectRelativePath-equals-true-false-yoink-core-molecular</arguments>
+						<arguments>1.0-projectRelativePath-equals-true-false-yoink-core-molecule</arguments>
 					</matcher>
 					<matcher>
 						<id>org.eclipse.ui.ide.multiFilter</id>
-						<arguments>1.0-projectRelativePath-equals-true-false-yoink-core-regionizer</arguments>
+						<arguments>1.0-projectRelativePath-equals-true-false-yoink-core-region</arguments>
 					</matcher>
 				</arguments>
 			</matcher>

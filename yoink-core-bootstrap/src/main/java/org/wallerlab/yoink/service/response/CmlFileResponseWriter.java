@@ -27,7 +27,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.bootstrap.Job;
 import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
-import org.wallerlab.yoink.api.service.molecular.FilesWriter;
+import org.wallerlab.yoink.api.service.molecule.FilesWriter;
 /**
  * This class is almost identical to CmlFilesResponse, except it is not
  * processing a list of a list of jobs.

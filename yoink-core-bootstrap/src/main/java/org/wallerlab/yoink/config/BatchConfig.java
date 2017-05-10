@@ -50,8 +50,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.wallerlab.yoink.adaptive.config.AdaptiveConfig;
 import org.wallerlab.yoink.density.config.DensityConfig;
 import org.wallerlab.yoink.math.config.MathConfig;
-import org.wallerlab.yoink.molecular.config.MolecularConfig;
-import org.wallerlab.yoink.regionizer.config.RegionizerConfig;
+import org.wallerlab.yoink.molecule.config.MolecularConfig;
+import org.wallerlab.yoink.region.config.RegionizerConfig;
 import org.xml_cml.schema.Cml;
 
 

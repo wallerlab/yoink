@@ -26,7 +26,7 @@ public interface CubeBuilder<T> {
 	 *            , a double array for step size along x/y/z axes
 	 * @param t
 	 *            , it contains the molecular information to build the cube. eg.
-	 *            a Set of molecules, {@link org.wallerlab.yoink.api.model.molecular.Molecule}
+	 *            a Set of molecules, {@link org.wallerlab.yoink.api.model.molecule.Molecule}
 	 * @return cube {@link org.wallerlab.yoink.api.model.cube.Cube}
 	 */
 	 Cube build(double[] xyzStepSize, T t);

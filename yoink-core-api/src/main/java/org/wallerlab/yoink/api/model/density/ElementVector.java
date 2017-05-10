@@ -15,7 +15,7 @@
  */
 package org.wallerlab.yoink.api.model.density;
 
-import org.wallerlab.yoink.api.model.molecular.Element;
+import org.wallerlab.yoink.api.model.molecule.Element;
 import org.wallerlab.yoink.api.service.math.Vector;
 
 /**
@@ -28,7 +28,7 @@ public interface ElementVector {
 
 	/**
 	 * get the value of inverse of zVector. zVector contains z1,z2,z3 of an
-	 * element {@link org.wallerlab.yoink.api.model.molecular.Element}.
+	 * element {@link org.wallerlab.yoink.api.model.molecule.Element}.
 	 * 
 	 * @return inverse of zVector -
 	 *         {@link org.wallerlab.yoink.api.service.math.Vector}
@@ -37,7 +37,7 @@ public interface ElementVector {
 
 	/**
 	 * get value of the cVector. cVector contains c1,c2,c3 of an element
-	 * {@link org.wallerlab.yoink.api.model.molecular.Element}.
+	 * {@link org.wallerlab.yoink.api.model.molecule.Element}.
 	 * 
 	 * @return cVector - {@link org.wallerlab.yoink.api.service.math.Vector}
 	 */
@@ -47,14 +47,14 @@ public interface ElementVector {
 	 * set the value of element.
 	 * 
 	 * @param element
-	 *            -{@link org.wallerlab.yoink.api.model.molecular.Element}
+	 *            -{@link org.wallerlab.yoink.api.model.molecule.Element}
 	 */
 	void setElementType(Element element);
 
 	/**
 	 * get the value of element.
 	 * 
-	 * @return element -{@link org.wallerlab.yoink.api.model.molecular.Element}
+	 * @return element -{@link org.wallerlab.yoink.api.model.molecule.Element}
 	 */
 	Element getElementType();
 }

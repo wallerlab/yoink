@@ -18,9 +18,9 @@ import org.wallerlab.yoink.api.model.Atom
 import org.wallerlab.yoink.api.model.Coord
 import org.wallerlab.yoink.api.model.DensityPoint;
 import org.wallerlab.yoink.api.model.density.DensityPoint;
-import org.wallerlab.yoink.api.model.molecular.Atom;
-import org.wallerlab.yoink.api.model.molecular.Coord;
-import org.wallerlab.yoink.api.model.molecular.Element;
+import org.wallerlab.yoink.api.model.molecule.Atom;
+import org.wallerlab.yoink.api.model.molecule.Coord;
+import org.wallerlab.yoink.api.model.molecule.Element;
 import org.wallerlab.yoink.api.service.Calculator;
 import org.wallerlab.yoink.api.service.math.Matrix;
 import org.wallerlab.yoink.api.service.math.Vector;
@@ -28,10 +28,10 @@ import org.wallerlab.yoink.density.domain.SimpleDensityPoint
 import org.wallerlab.yoink.density.service.densityProperties.AtomicDensityPropertiesCalculator
 import org.wallerlab.yoink.math.linear.CommonsVector3D
 import org.wallerlab.yoink.math.linear.SimpleVector3DFactory
-import org.wallerlab.yoink.molecular.data.RadialGridReader
-import org.wallerlab.yoink.molecular.domain.SimpleCoord
-import org.wallerlab.yoink.molecular.domain.SimpleCoordFactory
-import org.wallerlab.yoink.molecular.domain.SimpleRadialGrid
+import org.wallerlab.yoink.molecule.data.RadialGridReader
+import org.wallerlab.yoink.molecule.domain.SimpleCoord
+import org.wallerlab.yoink.molecule.domain.SimpleCoordFactory
+import org.wallerlab.yoink.molecule.domain.SimpleRadialGrid
 import org.wallerlab.yoink.math.linear.SimpleMatrixFactory
 import spock.lang.Specification;
 

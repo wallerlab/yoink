@@ -21,8 +21,8 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.density.DensityPoint;
-import org.wallerlab.yoink.api.model.molecular.Atom;
-import org.wallerlab.yoink.api.model.molecular.Coord;
+import org.wallerlab.yoink.api.model.molecule.Atom;
+import org.wallerlab.yoink.api.model.molecule.Coord;
 import org.wallerlab.yoink.api.service.Calculator;
 import org.wallerlab.yoink.api.service.Factory;
 import org.wallerlab.yoink.api.service.math.Matrix;
@@ -59,10 +59,10 @@ public class DensityPropertiesCalculator implements
 	 * 
 	 * @param atoms
 	 *            -a Set of atoms
-	 *            {@link org.wallerlab.yoink.api.model.molecular.Atom}
+	 *            {@link org.wallerlab.yoink.api.model.molecule.Atom}
 	 * @param currentCoord
 	 *            , the coordinate of the density point,
-	 *            {@link org.wallerlab.yoink.api.model.molecular.Coord}
+	 *            {@link org.wallerlab.yoink.api.model.molecule.Coord}
 	 * @return densityPoint -
 	 *         {@link org.wallerlab.yoink.api.model.density.DensityPoint}
 	 */

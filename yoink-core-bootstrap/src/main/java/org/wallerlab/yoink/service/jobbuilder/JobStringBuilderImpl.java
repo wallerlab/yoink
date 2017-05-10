@@ -21,8 +21,8 @@ import javax.xml.bind.JAXBElement;
 
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.bootstrap.Job;
-import org.wallerlab.yoink.api.service.molecular.FilesReader;
-import org.wallerlab.yoink.domain.AdaptiveQMMMJob;
+import org.wallerlab.yoink.api.service.molecule.FilesReader;
+import org.wallerlab.yoink.domain.YoinkJob;
 import org.xml_cml.schema.Cml;
 /**
  * this class is to read in all inputs (like molecular system and parameters)
@@ -47,7 +47,7 @@ public class JobStringBuilderImpl extends AbstractJobBuilder<String,JAXBElement>
 	 */
 	@Override
 	public Job<JAXBElement> build(String inputfile) {
-		Job<JAXBElement> job= new AdaptiveQMMMJob();
+		Job<JAXBElement> job= new YoinkJob();
 		JAXBElement<Cml> cmlElement = (JAXBElement<Cml>) jaxbStringReader.read(
 				inputfile, new Cml());
 		job.setInput(cmlElement);

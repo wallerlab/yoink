@@ -26,15 +26,15 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.cube.Cube;
-import org.wallerlab.yoink.api.model.molecular.Atom;
-import org.wallerlab.yoink.api.model.molecular.Coord;
-import org.wallerlab.yoink.api.model.molecular.Molecule;
+import org.wallerlab.yoink.api.model.molecule.Atom;
+import org.wallerlab.yoink.api.model.molecule.Coord;
+import org.wallerlab.yoink.api.model.molecule.Molecule;
 import org.wallerlab.yoink.api.service.Calculator;
 import org.wallerlab.yoink.api.service.Factory;
 import org.wallerlab.yoink.api.service.cube.CubeBuilder;
 import org.wallerlab.yoink.cube.domain.SimpleCube;
-import org.wallerlab.yoink.molecular.domain.SimpleCoord;
-import org.wallerlab.yoink.molecular.domain.SimpleCoordFactory;
+import org.wallerlab.yoink.molecule.domain.SimpleCoord;
+import org.wallerlab.yoink.molecule.domain.SimpleCoordFactory;
 
 /**
  * This class is to calculate the grid origin and the number of steps along XYZ
@@ -59,7 +59,7 @@ public class CubeBuilderImpl implements CubeBuilder<Set<Molecule>> {
 	 *            - a double array for step sizes along x/y/z axes
 	 * @param molecules
 	 *            - a Set of molecules -
-	 *            {@link org.wallerlab.yoink.api.model.molecular.Molecule}
+	 *            {@link org.wallerlab.yoink.api.model.molecule.Molecule}
 	 * 
 	 * @return cube -{@link org.wallerlab.yoink.api.model.cube.Cube}
 	 */

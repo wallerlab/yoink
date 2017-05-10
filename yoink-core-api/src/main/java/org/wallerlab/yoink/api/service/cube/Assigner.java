@@ -26,12 +26,12 @@ import java.util.Map;
  *
  * @param <T>
  *            ,the type of the object will be assigned. eg.
- *            {@link org.wallerlab.yoink.api.model.molecular.Coord}
+ *            {@link org.wallerlab.yoink.api.model.molecule.Coord}
  * @param <K>, the type of argument one. eg. , a Map,
- *        {@link org.wallerlab.yoink.api.model.regionizer.Region.Name} as Key,
- *        {@link org.wallerlab.yoink.api.model.regionizer.Region} as Value
+ *        {@link org.wallerlab.yoink.api.model.region.Region.Name} as Key,
+ *        {@link org.wallerlab.yoink.api.model.region.Region} as Value
  * @param <V>, the type of argument two, eg.
- *        {@link org.wallerlab.yoink.api.model.regionizer.Region.Name}
+ *        {@link org.wallerlab.yoink.api.model.region.Region.Name}
  */
 public interface Assigner<T, K, V> {
 
