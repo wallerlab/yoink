@@ -119,6 +119,8 @@ project(':yoink-core-graph'){
 	dependencies {
 		compile project(':yoink-core-api')
 		compile project(':yoink-core-region')
+		compile files("libs/ujmp-complete-0.2.5.jar")
+		compile files("libs/CONCLUDE.jar")
 		
 	}
 }

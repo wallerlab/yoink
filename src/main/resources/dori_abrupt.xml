@@ -3369,7 +3369,7 @@
 <parameter name="JOB_NAME" value="dori_abrupt" />
 <parameter name="OUTPUT_FOLDER" value="./outputs" />
 <parameter name="DGRID" value="false" />
-<parameter name="WFC_PATH" value="./yoink-core-molecular/dat" />
+<parameter name="WFC_PATH" value="./libs/wfc_data" />
 </parameterList>
 	
 </cml>

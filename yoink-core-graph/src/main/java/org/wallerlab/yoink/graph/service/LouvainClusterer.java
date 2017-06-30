@@ -21,6 +21,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -50,6 +53,9 @@ import org.wallerlab.yoink.api.service.graph.Clusterer;
 import org.wallerlab.yoink.api.service.graph.Grapher;
 import org.wallerlab.yoink.api.service.region.Partitioner;
 import org.wallerlab.yoink.region.partitioner.DensityPartitioner;
+import org.ujmp.core.matrix.*;
+import org.ujmp.core.Matrix;
+
 
 /**
  * This class is to get all pairs having interaction(yes or no) base on DORI
@@ -74,7 +80,7 @@ public class LouvainClusterer implements Clusterer {
 		String parentDirName = (String) job.getParameters().get(
 				JobParameter.OUTPUT_FOLDER)
 				+ "/";
-		String graphFileName = parentDirName + name + "-graph.txt";
+		String graphFileName = parentDirName + name + "-graph.csv";
 		Boolean includeWeights = false;
 		graph.writeGraphFile(graphFileName, includeWeights);
 		// call external code for clustering
@@ -83,15 +89,61 @@ public class LouvainClusterer implements Clusterer {
 				+ graphFileName
 				+ " conclude-clustered \" \""
 				+ "  > conclude-clustered.log&";
-		try {
+		//String[] args = new String[3];
+		//args[0] = graphFileName;
+		//args[1] =" conclude-clustered";
+		//args[2] = "\" \"";
+	
+		String[] args ={graphFileName,name+".conclude-clustered","," };
+		
+      Class fkcdClass = null;
+     
+                try {
+					fkcdClass = Class.forName("fkcd");
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+                System.out.println(fkcdClass.getName());
+    
+        Method fkcdMethod = null;
+       
+             //  Class[] paramTypes = new Class[1];
+             //   paramTypes[0]=String[].class;
+                Class<?>[] paramTypes = {String[].class};
+            
+                try {
+                    fkcdMethod = fkcdClass.getMethod("main",  String[].class );
+					//fkcdClass.getDeclaredMethod("main",  paramTypes);
+				} catch (NoSuchMethodException | SecurityException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+                System.out.println(fkcdMethod.getParameters());
+                System.out.println(fkcdMethod.getParameterTypes());
+                System.out.println(fkcdMethod.getParameterCount());
+  
+                try {
+					fkcdMethod.invoke(fkcdClass.newInstance(), (Object)args);
+				} catch (IllegalAccessException | IllegalArgumentException
+						| InvocationTargetException | InstantiationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+ 
+		
+		
+	
+/*		try {
 			// Runtime rt = Runtime.getRuntime();
 			// Process p = rt.exec(command);
 			// p.waitFor();
 			Runtime.getRuntime().exec(command);
+		
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 
 	}
 

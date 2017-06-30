@@ -61,11 +61,12 @@ public class SimpleGraph implements Graph {
 			Writer w = new BufferedWriter(osw);
 			for (int i = 0; i < weights.size(); i++) {
 				List<Integer> edge = this.edges.get(i);
-				w.write(edge.get(0).toString() + "  " + edge.get(1).toString());
+				w.write(edge.get(0).toString() + "," + edge.get(1).toString());
 				if (includeWeights) {
 					w.write("  " + weights.get(i).toString());
 				}
-				w.write(" \n");
+				w.flush();
+				w.write("\n");
 			}
 			w.close();
 		} catch (IOException e) {

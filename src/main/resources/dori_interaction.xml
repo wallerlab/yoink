@@ -621,6 +621,6 @@
         <parameter name="OUTPUT_FOLDER" value="./outputs"/>
         <parameter name="DGRID" value="true"/>
 	 <parameter name="INTERACTION_WEIGHT" value="false"/>
-        <parameter name="WFC_PATH" value="../yoink-core-molecular/dat"/>
+        <parameter name="WFC_PATH" value="./libs/wfc_data"/>
     </parameterList>
 </cml>
