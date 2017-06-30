@@ -56,11 +56,12 @@ import org.wallerlab.yoink.region.partitioner.DensityPartitioner;
 import org.ujmp.core.matrix.*;
 import org.ujmp.core.Matrix;
 
-
 /**
- * This class is to get all pairs having interaction(yes or no) base on DORI
- * analysis.
- * 
+ * This class is to write  all pairs having interaction in a file,
+ * then pass the file to CONCLUDE for clustering
+ * CONCLUDE reference:
+ * Generalized Louvain method for community detection in large networks.
+ * P De Meo, E Ferrara, G Fiumara, and A Provetti. 
  * 
  * @author Min Zheng
  *
@@ -84,66 +85,37 @@ public class LouvainClusterer implements Clusterer {
 		Boolean includeWeights = false;
 		graph.writeGraphFile(graphFileName, includeWeights);
 		// call external code for clustering
-		// TODO: the command could not be executed
-		String command = "/usr/bin/java -jar ./libs/jar/CONCLUDE/CONCLUDE.jar  "
-				+ graphFileName
-				+ " conclude-clustered \" \""
-				+ "  > conclude-clustered.log&";
-		//String[] args = new String[3];
-		//args[0] = graphFileName;
-		//args[1] =" conclude-clustered";
-		//args[2] = "\" \"";
-	
-		String[] args ={graphFileName,name+".conclude-clustered","," };
-		
-      Class fkcdClass = null;
-     
-                try {
-					fkcdClass = Class.forName("fkcd");
-				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-                System.out.println(fkcdClass.getName());
-    
-        Method fkcdMethod = null;
-       
-             //  Class[] paramTypes = new Class[1];
-             //   paramTypes[0]=String[].class;
-                Class<?>[] paramTypes = {String[].class};
-            
-                try {
-                    fkcdMethod = fkcdClass.getMethod("main",  String[].class );
-					//fkcdClass.getDeclaredMethod("main",  paramTypes);
-				} catch (NoSuchMethodException | SecurityException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-                System.out.println(fkcdMethod.getParameters());
-                System.out.println(fkcdMethod.getParameterTypes());
-                System.out.println(fkcdMethod.getParameterCount());
-  
-                try {
-					fkcdMethod.invoke(fkcdClass.newInstance(), (Object)args);
-				} catch (IllegalAccessException | IllegalArgumentException
-						| InvocationTargetException | InstantiationException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
- 
-		
-		
-	
-/*		try {
-			// Runtime rt = Runtime.getRuntime();
-			// Process p = rt.exec(command);
-			// p.waitFor();
-			Runtime.getRuntime().exec(command);
-		
-		} catch (IOException e) {
+
+		String[] args = { graphFileName, name + ".conclude-clustered", "," };
+
+		Class fkcdClass = null;
+
+		try {
+			fkcdClass = Class.forName("fkcd");
+		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}*/
+		}
+
+		Method fkcdMethod = null;
+
+		Class<?>[] paramTypes = { String[].class };
+
+		try {
+			fkcdMethod = fkcdClass.getMethod("main", String[].class);
+
+		} catch (NoSuchMethodException | SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		try {
+			fkcdMethod.invoke(fkcdClass.newInstance(), (Object) args);
+		} catch (IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException | InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 

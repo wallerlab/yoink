@@ -92,6 +92,8 @@ public class DORIGrapher implements Grapher {
 
 		Partitioner.Type partitionType = (Partitioner.Type) parameters
 				.get(JobParameter.PARTITIONER);
+		simpleGraph.setEdges(new ArrayList<List<Integer>>());
+		simpleGraph.setWeights(new ArrayList<Double>());
 		if (partitionType == Partitioner.Type.INTERACTION) {
 			List<List> interactionPairsAndWeightsList = getEdgesAndWeights(
 					parameters, regions);
@@ -103,7 +105,7 @@ public class DORIGrapher implements Grapher {
 		}
 
 		job.setGraph(simpleGraph);
-		System.out.println(job.getGraph());
+	
 	}
 
 	private List<List> getEdgesAndWeights(Map<JobParameter, Object> parameters,

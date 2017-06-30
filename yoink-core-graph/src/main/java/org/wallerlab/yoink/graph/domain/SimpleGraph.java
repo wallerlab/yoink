@@ -31,7 +31,7 @@ import org.wallerlab.yoink.api.model.graph.Graph;
 @Component
 public class SimpleGraph implements Graph {
 
-	private List<List<Integer>> edges = new ArrayList<List<Integer>>();;
+	private List<List<Integer>> edges = new ArrayList<List<Integer>>();
 
 	private List<Double> weights = new ArrayList<Double>();
 
@@ -51,10 +51,8 @@ public class SimpleGraph implements Graph {
 
 	@Override
 	public void writeGraphFile(String graphFilePath, Boolean includeWeights) {
-		System.out.println("graphFilePath: " + graphFilePath);
 		List<Double> weights = this.weights;
 		try {
-			System.out.println("graphFilePath: " + graphFilePath);
 			File statText = new File(graphFilePath);
 			FileOutputStream is = new FileOutputStream(statText);
 			OutputStreamWriter osw = new OutputStreamWriter(is);
