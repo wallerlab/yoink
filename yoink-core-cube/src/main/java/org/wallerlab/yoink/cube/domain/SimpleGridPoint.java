@@ -37,6 +37,8 @@ public class SimpleGridPoint<String, V> implements GridPoint<String, V> {
 
 	private int indexInCube;
 
+	private Set<Molecule> molecules;
+
 	private Map<String, V> properties = new HashMap<String, V>();
 
 	@Override
@@ -96,6 +98,27 @@ public class SimpleGridPoint<String, V> implements GridPoint<String, V> {
 		Set<Atom> atoms = new HashSet<Atom>();
 		for (Molecule molecule : molecules) {
 			atoms.addAll(molecule.getAtoms());
+		}
+		return atoms;
+	}
+
+	@Override
+	public Set<Molecule> getMolecules() {
+		// TODO Auto-generated method stub
+		return this.molecules;
+	}
+
+	@Override
+	public void setMolecules(Set<Molecule> molecules) {
+		this.molecules = molecules;
+
+	}
+
+	@Override
+	public Set<Atom> getAtoms() {
+		Set<Atom> atoms = new HashSet<Atom>();
+		for (Molecule m : this.molecules) {
+			atoms.addAll(m.getAtoms());
 		}
 		return atoms;
 	}

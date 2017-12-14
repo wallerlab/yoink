@@ -25,11 +25,14 @@ import java.util.Set;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.wallerlab.yoink.api.model.cube.GridPoint;
 import org.wallerlab.yoink.api.model.molecule.Atom;
 import org.wallerlab.yoink.api.model.molecule.Coord;
 import org.wallerlab.yoink.api.model.molecule.Molecule;
 import org.wallerlab.yoink.api.service.Calculator;
+import org.wallerlab.yoink.api.service.molecule.Converter.UnitConverterType;
 
 /**
  * This class assigns a grid point to two molecules and two atoms it is closest
@@ -42,6 +45,16 @@ public class VoronoiCalculator implements
 
 	@Resource
 	private Calculator<Double, Coord, Atom> distanceCalculator;
+
+	@Resource
+	private Calculator<Double, Coord, Molecule> closestDistanceToMoleculeCalculator;
+
+	@Value("${yoink.job.dis_cutoff}")
+	private double dis_cutoff = 10.0;
+
+	
+	@Value("${yoink.job.debug}")
+	private boolean debug = false;
 
 	/**
 	 * find two closest atoms and molecules for a grid point
@@ -61,9 +74,11 @@ public class VoronoiCalculator implements
 		List<Double> neighbourDistances = new ArrayList<Double>();
 		List<Atom> twoAtoms = new ArrayList<Atom>();
 		List<Molecule> twoMolecules = new ArrayList<Molecule>();
+		
 		loopOverAllMoleculesInRegion(twoAtoms, neighbourDistances, tempCoord,
 				molecules, twoMolecules);
-		// put two closest atoms and moleucles in a list
+
+		// put two closest atoms and molecules in a list
 		Map<String, Object> properties = packResults(twoAtoms, twoMolecules);
 		return properties;
 	}
@@ -89,12 +104,16 @@ public class VoronoiCalculator implements
 	private void loopOverAllMoleculesInRegion(List<Atom> twoNeighbours,
 			List<Double> neighbourDistances, Coord tempCoord,
 			Set<Molecule> molecules, List<Molecule> twoMolecules) {
+
 		for (Molecule molecule : molecules) {
 			for (Atom atom : molecule.getAtoms()) {
 				double distance = distanceBetweenGridPointToAtom(tempCoord,
 						atom);
-				getTwoClosestNeighbours(twoNeighbours, neighbourDistances,
-						atom, distance, twoMolecules, molecule);
+				if (distance < dis_cutoff) {
+					getTwoClosestNeighbours(twoNeighbours, neighbourDistances,
+							atom, distance, twoMolecules, molecule);
+				}
+
 			}
 		}
 	}

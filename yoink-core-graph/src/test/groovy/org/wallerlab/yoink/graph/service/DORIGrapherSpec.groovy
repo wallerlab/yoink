@@ -70,7 +70,7 @@ class DORIGrapherSpec extends Specification{
 		m2.getIndex()>>2
 		region.getAtoms()>>[a, a, a]
 		region.getCenterOfMass()>>Mock(Coord)
-
+        region.getMolecules()>>[m, m1, m2]
 
 		def molecularMap=new HashMap<Molecule, Integer>()
 		molecularMap.put(m,0)
@@ -112,8 +112,14 @@ class DORIGrapherSpec extends Specification{
 		def densityOverlapRegionsIndicatorComputer= Mock(Computer)
 		densityOverlapRegionsIndicatorComputer.calculate(_)>>(double)0.91
 		def densityPartitioner = new DensityPartitioner()
+		
+		Calculator<Double, Coord, Molecule> closestDistanceToMoleculeCalculator=Mock(Calculator)
+		closestDistanceToMoleculeCalculator.calculate(_,_)>>(double)3.0
+		
 		when:
 		def doriInteractionList = new DORIGrapher ()
+		doriInteractionList.debug=false
+		doriInteractionList.closestDistanceToMoleculeCalculator=closestDistanceToMoleculeCalculator
 		doriInteractionList.cubePartitioner=cubePartitioner
 		doriInteractionList.densityCalculator=densityCalculator
 		doriInteractionList.densityOverlapRegionsIndicatorComputer=densityOverlapRegionsIndicatorComputer

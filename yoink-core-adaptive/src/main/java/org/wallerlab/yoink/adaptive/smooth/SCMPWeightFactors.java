@@ -28,6 +28,7 @@ import javax.annotation.Resource;
 import javax.xml.bind.JAXBElement;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.bootstrap.Job;
 import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
@@ -66,6 +67,9 @@ public class SCMPWeightFactors implements Smoothner {
 	private SmoothFunction scmpSmoothFunction;// for MM
 
 	private Map<List<Integer>, Double> sigmaIndexMap;
+	
+	@Value("${yoink.job.debug}")
+	private boolean debug = false;
 
 	/**
 	 * use smooth factors to calculate the weight factors.
@@ -122,6 +126,9 @@ public class SCMPWeightFactors implements Smoothner {
 			double s_qm_out, double t_qm_out, double s_qm_in, double t_qm_in,
 			double s_mm_out, double t_mm_out, double s_mm_in, double t_mm_in,
 			int number_qmInBuffer, Coord centerCoord) {
+		if(debug){
+			System.out.println("before: SCMPWeightFactors Subsets.split(Ints.toArray(bufferIndices), number_qmInBuffer))"+System.currentTimeMillis());
+		}
 		Subsets.split(Ints.toArray(bufferIndices), number_qmInBuffer)
 				.parallelStream()
 				.forEach(
@@ -137,6 +144,9 @@ public class SCMPWeightFactors implements Smoothner {
 							sigmaIndexMap.put(qmSet, sigma);
 
 						});
+		if(debug){
+			System.out.println("before: SCMPWeightFactors Subsets.split(Ints.toArray(bufferIndices), number_qmInBuffer))"+System.currentTimeMillis());
+		}
 	}
 
 	private Map<List<Integer>, Double> getWeightForSelectedPartitioningConfiguration(

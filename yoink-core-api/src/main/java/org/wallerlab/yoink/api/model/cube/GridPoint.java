@@ -96,7 +96,7 @@ public interface GridPoint<String, V> {
 	 * @param indexInCube
 	 *            , {@link java.lang.Integer}
 	 */
-	 void setIndexInCube(int indexInCube);
+	void setIndexInCube(int indexInCube);
 
 	/**
 	 * get two closest atoms in properties
@@ -104,7 +104,7 @@ public interface GridPoint<String, V> {
 	 * @return a Set {@link java.util.Set} of Atoms
 	 *         {@link org.wallerlab.yoink.api.model.molecule.Atom}
 	 */
-	 Set<Atom> getTwoClosestAtoms();
+	Set<Atom> getTwoClosestAtoms();
 
 	/**
 	 * get two closest molecules in properties
@@ -120,6 +120,12 @@ public interface GridPoint<String, V> {
 	 * @return a Set {@link java.util.Set} of Atoms
 	 *         {@link org.wallerlab.yoink.api.model.molecule.Atom}
 	 */
-	 Set<Atom> getAtomsInTwoClosestMolecules();
+	Set<Atom> getAtomsInTwoClosestMolecules();
+
+	Set<Molecule> getMolecules();
+
+	Set<Atom> getAtoms();
+
+	void setMolecules(Set<Molecule> molecules);
 
 }

@@ -23,7 +23,6 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -35,6 +34,7 @@ import java.util.Set;
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.bootstrap.Job;
 import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
@@ -68,6 +68,9 @@ import org.ujmp.core.Matrix;
  */
 @Service
 public class LouvainClusterer implements Clusterer {
+	
+	@Value("${yoink.job.external_clustering}")
+	private boolean external_clustering = false;
 
 	public LouvainClusterer() {
 
@@ -75,10 +78,17 @@ public class LouvainClusterer implements Clusterer {
 
 	@Override
 	public void clustering(Job job) {
+		
+		Map<JobParameter, Object> parameters = job.getParameters();
+	
+
+		Partitioner.Type partitionType = (Partitioner.Type) parameters
+				.get(JobParameter.PARTITIONER);
+		if (partitionType == Partitioner.Type.INTERACTION && !external_clustering) {
 		// write the graph file
 		Graph graph = job.getGraph();
-		String name = (String) job.getParameters().get(JobParameter.JOB_NAME);
-		String parentDirName = (String) job.getParameters().get(
+		String name = (String) parameters.get(JobParameter.JOB_NAME);
+		String parentDirName = (String) parameters.get(
 				JobParameter.OUTPUT_FOLDER)
 				+ "/";
 		String graphFileName = parentDirName + name + "-graph.csv";
@@ -119,4 +129,5 @@ public class LouvainClusterer implements Clusterer {
 
 	}
 
+}
 }

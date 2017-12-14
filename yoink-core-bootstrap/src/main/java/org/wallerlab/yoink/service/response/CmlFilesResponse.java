@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.bootstrap.Job;
 import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
 import org.wallerlab.yoink.api.service.molecule.FilesWriter;
+
 /**
  * This class is for job response, to write adaptive qmmm result into a cml
  * file.
@@ -60,9 +61,11 @@ public class CmlFilesResponse implements ItemWriter<List<Job<JAXBElement>>> {
 				String name = (String) job.getParameters().get(
 						JobParameter.JOB_NAME);
 				String parentDirName = (String) job.getParameters().get(
-						JobParameter.OUTPUT_FOLDER)
-						+ "/";
-				String outputFileName = parentDirName + name + "-out.xml";
+						JobParameter.OUTPUT_FOLDER);
+				if (parentDirName == null) {
+					name = ".";
+				}
+				String outputFileName = parentDirName + "/" + name + "-out.xml";
 				jaxbWriter.write(outputFileName, job.getInput().getValue());
 			}
 		}

@@ -18,7 +18,7 @@ package org.wallerlab.yoink.region.partitioner
 
 
 import spock.lang.Specification;
-
+import org.wallerlab.yoink.api.service.Calculator;
 import org.wallerlab.yoink.api.enums.*
 import org.wallerlab.yoink.api.model.*
 import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
@@ -74,10 +74,12 @@ class CubePartitionerSpec extends Specification{
 		def cubeBuilder=Mock(CubeBuilder)
 		cube.getCoordinates()>>[Mock(Coord)]
 		cubeBuilder.build(_,_)>>cube
-
+		def closestDistanceToMoleculeCalculator = Mock(Calculator)
+		closestDistanceToMoleculeCalculator.calculate(_,_) >>(double)3.0
 		when:"set up a new  CubePartitioner, gridPointAssigner returns empty"
 		def partitioner= new  CubePartitioner()
 		partitioner.cubeBuilder=cubeBuilder
+		partitioner.closestDistanceToMoleculeCalculator=closestDistanceToMoleculeCalculator
 		gridPointAssigner.assign(_,_,_)>>new HashMap<String, Object>()
 		partitioner.gridPointAssigner=gridPointAssigner
 		then:"method partition is executable and returns right result"
@@ -102,12 +104,14 @@ class CubePartitionerSpec extends Specification{
 		def cubeBuilder=Mock(CubeBuilder)
 		cube.getCoordinates()>>[Mock(Coord)]
 		cubeBuilder.build(_,_)>>cube
-
+		def closestDistanceToMoleculeCalculator = Mock(Calculator)
+		closestDistanceToMoleculeCalculator.calculate(_,_) >>(double)3.0
 		when:"set up a new  CubePartitioner, gridPointAssigner returns not empty"
 		def partitioner= new  CubePartitioner()
 		gridPointAssigner.assign(_,_,_)>>Mock(Map)
 		partitioner.cubeBuilder=cubeBuilder
 		partitioner.gridPointAssigner=gridPointAssigner
+		partitioner.closestDistanceToMoleculeCalculator=closestDistanceToMoleculeCalculator
 		then:"method partition is executable and returns right result"
 		partitioner.partition(regions,parameters, DensityType.DORI).size()==1
 	}

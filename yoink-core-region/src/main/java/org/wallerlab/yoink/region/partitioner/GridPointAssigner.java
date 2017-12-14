@@ -21,6 +21,7 @@ import java.util.Set;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
+import org.wallerlab.yoink.api.model.cube.GridPoint;
 import org.wallerlab.yoink.api.model.molecule.Coord;
 import org.wallerlab.yoink.api.model.molecule.Molecule;
 import org.wallerlab.yoink.api.model.region.Region;
@@ -36,60 +37,60 @@ import org.wallerlab.yoink.api.service.cube.Assigner;
  */
 @Component
 public class GridPointAssigner implements
-		Assigner<Coord, Map<Region.Name, Region>, Region.Name> {
+Assigner<GridPoint, Map<Region.Name, Region>, Region.Name> {
 
-	@Resource
-	private Calculator<Map<String, Object>, Coord, Set<Molecule>> voronoiCalculator;
+@Resource
+private Calculator<Map<String, Object>, Coord, Set<Molecule>> voronoiCalculator;
 
-	/**
-	 * for a grid point, get its two neighbours from Voronoi partitioning, if it
-	 * satisfies the criteria(two neighbours are different, not both in QM core
-	 * region or in non-QM core adaptive search region.), it will be used for
-	 * following calculation of density interaction analysis(like DORI and
-	 * SEDD).
-	 * 
-	 * @param tempCoord
-	 *            -{@link org.wallerlab.yoink.api.model.molecule.Coord}, the
-	 *            coordinate of the grid point
-	 * @param regions
-	 *            - a Map, Region.Name
-	 *            {@link org.wallerlab.yoink.api.model.region.Region.Name }
-	 *            as key, Region
-	 *            {@link org.wallerlab.yoink.api.model.region.Region} as
-	 *            value
-	 * @param cubeRegionName
-	 *            {@link org.wallerlab.yoink.api.model.region.Region.Name}
-	 * @return properties - a Map, String {@link java.lang.String} as Key,
-	 *         Object {@link java.lang.Object} as value
-	 */
-	public Map assign(Coord tempCoord, Map<Region.Name, Region> regions,
-			Region.Name cubeRegionName) {
-		Region qmCoreRegion = regions.get(Region.Name.QM_CORE);
-		Region nonQmCoreRegion = regions
-				.get(Region.Name.NONQM_CORE_ADAPTIVE_SEARCH);
-		Map<String, Object> properties = voronoiCalculator.calculate(tempCoord,
-				regions.get(cubeRegionName).getMolecules());
-		Set<Molecule> moleculeSet = (Set<Molecule>) properties
-				.get("twoClosestMolecules");
-		boolean notNeighbourPair = (boolean) (moleculeSet.size() != 2);
-		switch (cubeRegionName) {
-		case SYSTEM:
-			if (notNeighbourPair) {
-				properties.clear();
-				
-			}
-			break;
-		default:
-			boolean bothNeighboursAreInNonQmCore = nonQmCoreRegion
-					.containsAll(moleculeSet);
-			boolean bothNeighboursAreInQmCore = qmCoreRegion
-					.containsAll(moleculeSet);
-			if (notNeighbourPair || bothNeighboursAreInNonQmCore
-					|| bothNeighboursAreInQmCore) {
-				properties.clear();
-			}
-		}
-		return properties;
-	}
+/**
+* for a grid point, get its two neighbours from Voronoi partitioning, if it
+* satisfies the criteria(two neighbours are different, not both in QM core
+* region or in non-QM core adaptive search region.), it will be used for
+* following calculation of density interaction analysis(like DORI and
+* SEDD).
+* 
+* @param tempCoord
+*            -{@link org.wallerlab.yoink.api.model.molecule.Coord}, the
+*            coordinate of the grid point
+* @param regions
+*            - a Map, Region.Name
+*            {@link org.wallerlab.yoink.api.model.region.Region.Name }
+*            as key, Region
+*            {@link org.wallerlab.yoink.api.model.region.Region} as
+*            value
+* @param cubeRegionName
+*            {@link org.wallerlab.yoink.api.model.region.Region.Name}
+* @return properties - a Map, String {@link java.lang.String} as Key,
+*         Object {@link java.lang.Object} as value
+*/
+public Map assign(GridPoint gp, Map<Region.Name, Region> regions,
+        Region.Name cubeRegionName) {
+Region qmCoreRegion = regions.get(Region.Name.QM_CORE);
+Region nonQmCoreRegion = regions
+                .get(Region.Name.NONQM_CORE_ADAPTIVE_SEARCH);
+Map<String, Object> properties = voronoiCalculator.calculate(gp.getCoordinate(),
+                gp.getMolecules());
+Set<Molecule> moleculeSet = (Set<Molecule>) properties
+                .get("twoClosestMolecules");
+boolean notNeighbourPair = (boolean) (moleculeSet.size() != 2);
+switch (cubeRegionName) {
+case SYSTEM:
+        if (notNeighbourPair) {
+                properties.clear();
+
+        }
+        break;
+default:
+        boolean bothNeighboursAreInNonQmCore = nonQmCoreRegion
+                        .containsAll(moleculeSet);
+        boolean bothNeighboursAreInQmCore = qmCoreRegion
+                        .containsAll(moleculeSet);
+        if (notNeighbourPair || bothNeighboursAreInNonQmCore
+                        || bothNeighboursAreInQmCore) {
+                properties.clear();
+        }
+}
+return properties;
+}
 
 }

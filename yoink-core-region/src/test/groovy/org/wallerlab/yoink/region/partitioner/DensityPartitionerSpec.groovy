@@ -94,8 +94,13 @@ class DensityPartitionerSpec extends Specification{
 		
 		def radialGridReader= Mock(FilesReader)
 		radialGridReader.read(_,_)>>Mock(RadialGrid)
+		
+		Calculator<Double, Coord, Atom> distanceCalculator=Mock(Calculator)
+		distanceCalculator.calculate(_,_)>>(double)3
+		
 		when:"set up a new DensityPartitioner"
 		def partitioner= new DensityPartitioner()
+		partitioner.distanceCalculator=distanceCalculator
 		partitioner.densityCalculator=densityCalculator
 		partitioner.singleRegionizerService=singleRegionizerService
 		partitioner.simpleRegionFactory=simpleRegionFactory

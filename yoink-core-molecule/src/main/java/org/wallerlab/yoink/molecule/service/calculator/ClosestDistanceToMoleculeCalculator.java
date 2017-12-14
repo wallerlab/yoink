@@ -21,6 +21,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.molecule.Atom;
 import org.wallerlab.yoink.api.model.molecule.Coord;
@@ -29,17 +30,20 @@ import org.wallerlab.yoink.api.service.Calculator;
 import org.wallerlab.yoink.api.service.math.Vector;
 
 /**
- * This class is to calculate the closest distance between one point in space and a molecule
+ * This class is to calculate the closest distance between one point in space
+ * and a molecule
  * 
  * @author Min Zheng
  *
  */
 
 @Service
-public class ClosestDistanceToMoleculeCalculator implements Calculator<Double, Coord, Molecule> {
+public class ClosestDistanceToMoleculeCalculator implements
+		Calculator<Double, Coord, Molecule> {
 
 	@Resource
 	private Calculator<Double, Coord, Atom> distanceCalculator;
+
 
 	/**
 	 * calculate the distance minimum between a coordinate and a molecule.
@@ -53,12 +57,16 @@ public class ClosestDistanceToMoleculeCalculator implements Calculator<Double, C
 	 */
 	public Double calculate(Coord gridCoord, Molecule molecule) {
 		List<Double> distances = new ArrayList<Double>();
-		for (Atom atom : molecule.getAtoms()) {
-			double tempdistance = distanceCalculator.calculate(gridCoord,
-					atom);
-			distances.add(tempdistance);
-		}
-		double distance = Collections.min(distances);
+		double distance=100;// a large starting value
+	
+			for (Atom atom : molecule.getAtoms()) {
+				double tempdistance = distanceCalculator.calculate(gridCoord,
+						atom);
+				if(distance > tempdistance){
+					distance=tempdistance;
+				}
+			}
+	
 		return distance;
 	}
 }

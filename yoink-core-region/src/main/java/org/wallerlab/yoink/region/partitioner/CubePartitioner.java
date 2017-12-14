@@ -16,13 +16,17 @@
 package org.wallerlab.yoink.region.partitioner;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.IntStream;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
 import org.wallerlab.yoink.api.model.cube.Cube;
@@ -36,6 +40,9 @@ import org.wallerlab.yoink.api.service.cube.CubeBuilder;
 import org.wallerlab.yoink.api.service.region.Partitioner;
 import org.wallerlab.yoink.cube.domain.SimpleCube;
 import org.wallerlab.yoink.cube.domain.SimpleGridPoint;
+import org.wallerlab.yoink.molecule.domain.SimpleCoord;
+import org.wallerlab.yoink.molecule.domain.SimpleMolecule;
+import org.wallerlab.yoink.api.service.Calculator;
 
 /**
  * This class is to get those grid points that belong to the intersection region
@@ -52,7 +59,16 @@ public class CubePartitioner implements
 	private CubeBuilder<Set<Molecule>> cubeBuilder;
 
 	@Resource
-	private Assigner<Coord, Map<Region.Name, Region>, Region.Name> gridPointAssigner;
+	private Assigner<GridPoint, Map<Region.Name, Region>, Region.Name> gridPointAssigner;
+
+	@Resource
+	private Calculator<Double, Coord, Molecule> closestDistanceToMoleculeCalculator;
+
+	@Value("${yoink.job.debug}")
+	private boolean debug = false;
+
+	@Value("${yoink.job.dis_cutoff}")
+	private double dis_cutoff = 10.0;
 
 	/**
 	 * loop over all grid points in the cube, find the grid points whose two
@@ -61,10 +77,9 @@ public class CubePartitioner implements
 	 * 
 	 * @param regions
 	 *            - a Map, Region.Name
-	 *            {@link org.wallerlab.yoink.api.model.region.Region.Name }
-	 *            as key, Region
-	 *            {@link org.wallerlab.yoink.api.model.region.Region} as
-	 *            value
+	 *            {@link org.wallerlab.yoink.api.model.region.Region.Name } as
+	 *            key, Region
+	 *            {@link org.wallerlab.yoink.api.model.region.Region} as value
 	 * @param parameters
 	 *            - a Map, JobParameter
 	 *            {@link org.wallerlab.yoink.api.model.bootstrap.JobParameter}
@@ -83,7 +98,7 @@ public class CubePartitioner implements
 		// Cube cube = new SimpleCube(xyzStepSize);
 		Region.Name cubeRegionName = (Region.Name) parameters
 				.get(JobParameter.REGION_CUBE);
-	
+
 		Set<Molecule> moleculesInCube = regions.get(cubeRegionName)
 				.getMolecules();
 		Cube cube = cubeBuilder.build(xyzStepSize, moleculesInCube);
@@ -116,30 +131,104 @@ public class CubePartitioner implements
 	private List<GridPoint> getGridPointsWillBeCalculated(
 			Map<Region.Name, Region> regions, Cube cube,
 			Region.Name cubeRegionName) {
+
+		List<Coord> coordinates = cube.getCoordinates();
+		List<GridPoint> gridPointsTemp = checkEveryGridPoint(regions,
+				cubeRegionName, coordinates);
+		return gridPointsTemp;
+	}
+
+	private List<GridPoint> checkEveryGridPoint(
+			Map<Region.Name, Region> regions, Region.Name cubeRegionName,
+			List<Coord> coordinates) {
+		if (debug) {
+			System.out.println("before: coordinates.parallelStream().forEach"
+					+ System.currentTimeMillis());
+
+		}
+	    // get molecules within dis_cutoff for each coordinate
+		Set<Molecule> molecules = regions.get(cubeRegionName).getMolecules();
+		Set[] initialValues = new Set[coordinates.size()];
+		List<Set> msl = Arrays.asList(initialValues);
+		IntStream
+				.range(0, coordinates.size())
+				.parallel()
+				.forEach(
+
+						nCoord -> {		
+							Set<Molecule> ms = Collections
+									.synchronizedSet(new HashSet<Molecule>());
+
+							molecules
+									.parallelStream()
+									.forEach(
+											m -> {
+												double distance = closestDistanceToMoleculeCalculator.calculate(
+														coordinates.get(nCoord),
+														m);
+												if (distance < dis_cutoff) {
+													ms.add(m);
+												}
+
+											});
+							
+							msl.set(nCoord, ms);
+
+						});
+
+		if (debug) {
+			System.out
+					.println("start: cube partitioner ridPointsTemp.parallelStream().forEach("
+							+ System.currentTimeMillis());
+
+		}
+		// generate grid point for each coordinate
+
+		List<GridPoint> gridPointsTemp = Collections
+				.synchronizedList(new ArrayList<GridPoint>());
+		IntStream.range(0, coordinates.size()).parallel().forEach(
+
+		nCoord -> {
+			if (msl.get(nCoord).size() > 1) {
+
+				SimpleGridPoint gridPoint = new SimpleGridPoint();
+
+				gridPoint.setCoordinate(coordinates.get(nCoord));
+				gridPoint.setIndexInCube(nCoord);
+				gridPoint.setMolecules(msl.get(nCoord));
+
+				gridPointsTemp.add(gridPoint);
+
+			}
+		});
+		if (debug) {
+			System.out
+					.println("middle: cube partitioner gridPointsTemp.parallelStream().forEach("
+							+ System.currentTimeMillis());
+
+		}
+       // get gridPoints needing further analysis
 		List<GridPoint> gridPoints = Collections
 				.synchronizedList(new ArrayList<GridPoint>());
-		List<Coord> coordinates = cube.getCoordinates();
-		checkEveryGridPoint(regions, cubeRegionName, gridPoints, coordinates);
-		return gridPoints;
-	}
-
-	private void checkEveryGridPoint(Map<Region.Name, Region> regions,
-			Region.Name cubeRegionName, List<GridPoint> gridPoints,
-			List<Coord> coordinates) {
-		coordinates.parallelStream().forEach(
-				currentCoord -> {
+		gridPointsTemp.parallelStream().forEach(
+				gpt -> {
 					Map<String, Object> properties = gridPointAssigner.assign(
-							currentCoord, regions, cubeRegionName);
+							gpt, regions, cubeRegionName);
 					if (!properties.isEmpty()) {
-						SimpleGridPoint gridPoint = new SimpleGridPoint();
-						gridPoint.setCoordinate(currentCoord);
-						gridPoint.setIndexInCube(coordinates
-								.indexOf(currentCoord));
-						gridPoint.setProperties(properties);
-						gridPoints.add(gridPoint);
-						
+						gpt.setProperties(properties);
+
+						gridPoints.add(gpt);
+
 					}
 				});
-	}
 
+		if (debug) {
+			System.out
+					.println("after: cube partitioner ridPointsTemp.parallelStream().forEach("
+							+ System.currentTimeMillis());
+			System.out.println("grid points for analysis"+gridPointsTemp.size());
+
+		}
+		return gridPoints;
+	}
 }

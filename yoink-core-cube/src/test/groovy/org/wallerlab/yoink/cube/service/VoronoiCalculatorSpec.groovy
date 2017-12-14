@@ -40,10 +40,14 @@ class VoronoiCalculatorSpec extends Specification {
 		distanceCalculator.calculate(tempCoord, a1)>>(double)1
 		distanceCalculator.calculate(tempCoord, a2)>>(double)2
 		distanceCalculator.calculate(tempCoord, a3)>>(double)3
-
+        def closestDistanceToMoleculeCalculator=Mock(Calculator)
+		
+		closestDistanceToMoleculeCalculator.calculate(_,_)>>(double)3
 		when:"make a new VoronoiCalculator"
 		def vp= new VoronoiCalculator()
+		vp.dis_cutoff=10.0
 		vp.distanceCalculator=distanceCalculator
+		vp.closestDistanceToMoleculeCalculator=closestDistanceToMoleculeCalculator
 
 		then:"call method calculate and check the return value"
 		def map=vp.calculate(tempCoord, mSet)

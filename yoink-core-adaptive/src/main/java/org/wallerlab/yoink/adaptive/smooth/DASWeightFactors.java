@@ -25,6 +25,7 @@ import java.util.Set;
 
 import javax.xml.bind.JAXBElement;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.bootstrap.Job;
 import org.wallerlab.yoink.api.model.molecule.Molecule;
@@ -45,6 +46,9 @@ import com.google.common.primitives.Ints;
 @Service("dasWeightFactors")
 public class DASWeightFactors implements Smoothner {
 
+	@Value("${yoink.job.debug}")
+	private boolean debug = false;
+	
 	/**
 	 * use smooth factors to calculate the weight factors.
 	 * @param job -parameters and results in job
@@ -72,6 +76,9 @@ public class DASWeightFactors implements Smoothner {
 	private void loopOverAllQMMMConfigurationsInBuffer(List<Double> lambda,
 			List<Integer> bufferIndices,
 			Map<List<Integer>, Double> molecularIndicesAndWeightFactor) {
+		if(debug){
+			System.out.println("before: DASWeightFactors Subsets.split(Ints.toArray(bufferIndices))"+System.currentTimeMillis());
+		}
 		Subsets.split(Ints.toArray(bufferIndices))
 				.parallelStream()
 				.forEach(
@@ -83,6 +90,9 @@ public class DASWeightFactors implements Smoothner {
 									molecularIndicesAndWeightFactor, qmSet,
 									mmSet);
 						});
+		if(debug){
+			System.out.println("after: DASWeightFactors Subsets.split(Ints.toArray(bufferIndices))"+System.currentTimeMillis());
+		}
 	}
 
 	private void findTheRightConfigurations(List<Double> lambda,

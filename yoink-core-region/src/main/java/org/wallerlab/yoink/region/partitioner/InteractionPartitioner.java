@@ -23,6 +23,7 @@ import java.util.Set;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
 import org.wallerlab.yoink.api.model.cube.GridPoint;
 import org.wallerlab.yoink.api.model.density.DensityPoint;
@@ -63,6 +64,9 @@ public class InteractionPartitioner implements
 	protected Region.Name regionName;
 
 	protected Region.Name adaptiveRegionName;
+	
+	@Value("${yoink.job.debug}")
+	private boolean debug = false;
 
 	public Map<Region.Name, Region> partition(Map<Region.Name, Region> regions,
 			Map<JobParameter, Object> parameters, List<GridPoint> gridPoints) {
@@ -95,7 +99,11 @@ public class InteractionPartitioner implements
 			Map<JobParameter, Object> parameters) {
 		//Set<Molecule> neighboursets = new HashSet<Molecule>();
 		//Set<Molecule> synneighboursets = Collections.synchronizedSet(neighboursets);
-		
+		if (debug) {
+			System.out.println("before:  interaction partitioner"
+					+ System.currentTimeMillis());
+
+		}
 		gridPoints.parallelStream().forEach(gridPoint -> {
 			Set<Molecule> neighbours = gridPoint.getTwoClosestMolecules();
 			//synneighboursets.addAll(neighbours);
@@ -109,7 +117,10 @@ public class InteractionPartitioner implements
 	//Set<Molecule> interacting_molecules = SetDifference.diff(region.getMolecules(),regions.get(Region.Name.QM_CORE).getMolecules());
 
 	//System.out.println("interacting_molecules/neighbour_molecules  "+ interacting_molecules.size()  + "/"+neighbour_molecules.size() );
-
+		if (debug) {
+			System.out.println("after: interaction partitioner"
+					+ System.currentTimeMillis());
+		}
 		return region;
 	}
 

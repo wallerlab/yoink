@@ -51,6 +51,9 @@ public class DistanceRegionizer extends ParameterRegionizer {
 	@Value("${yoink.job.functional}")
 	private boolean functional=false;
 	
+	@Value("${yoink.job.debug}")
+	private boolean debug = false;
+	
 	public Map<Region.Name, Region> regionize(Map<Region.Name, Region> regions,
 			Map<JobParameter, Object> parameters) {
 		Partitioner.Type partitionType = (Partitioner.Type) parameters

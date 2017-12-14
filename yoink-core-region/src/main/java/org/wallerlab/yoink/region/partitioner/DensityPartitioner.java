@@ -20,9 +20,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.IntStream;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
 import org.wallerlab.yoink.api.model.density.DensityPoint.DensityType;
@@ -62,7 +64,16 @@ public class DensityPartitioner implements
 	private Factory<Region, Region.Name> simpleRegionFactory;
 
 	@Resource
-	protected  FilesReader<RadialGrid, String> radialGridReader;
+	protected FilesReader<RadialGrid, String> radialGridReader;
+
+	@Resource
+	private Calculator<Double, Coord, Atom> distanceCalculator;
+
+	@Value("${yoink.job.dis_cutoff}")
+	private double dis_cutoff = 10.0;
+
+	@Value("${yoink.job.debug}")
+	private boolean debug = false;
 
 	/**
 	 * based on the density of QM core , define adaptive search region , the
@@ -70,10 +81,9 @@ public class DensityPartitioner implements
 	 * 
 	 * @param regions
 	 *            - a Map, Region.Name
-	 *            {@link org.wallerlab.yoink.api.model.region.Region.Name }
-	 *            as key, Region
-	 *            {@link org.wallerlab.yoink.api.model.region.Region} as
-	 *            value
+	 *            {@link org.wallerlab.yoink.api.model.region.Region.Name } as
+	 *            key, Region
+	 *            {@link org.wallerlab.yoink.api.model.region.Region} as value
 	 * @param parameters
 	 *            - a Map, JobParameter
 	 *            {@link org.wallerlab.yoink.api.model.bootstrap.JobParameter}
@@ -81,9 +91,9 @@ public class DensityPartitioner implements
 	 * @param densityType
 	 *            {@link org.wallerlab.yoink.api.model.density.DensityPoint.DensityType}
 	 * @return regions - a Map, Region.Name
-	 *         {@link org.wallerlab.yoink.api.model.region.Region.Name } as
-	 *         key, Region
-	 *         {@link org.wallerlab.yoink.api.model.region.Region} as value
+	 *         {@link org.wallerlab.yoink.api.model.region.Region.Name } as key,
+	 *         Region {@link org.wallerlab.yoink.api.model.region.Region} as
+	 *         value
 	 */
 	public Map<Region.Name, Region> partition(Map<Region.Name, Region> regions,
 			Map<JobParameter, Object> parameters, DensityType densityType) {
@@ -138,30 +148,46 @@ public class DensityPartitioner implements
 
 	}
 
-	public   void readWFC(Map<JobParameter, Object> parameters,
+	public void readWFC(Map<JobParameter, Object> parameters,
 			Region adaptiveSearchRegion) {
 		if ((boolean) parameters.get(JobParameter.DGRID) == true) {
 
 			List<Atom> atoms = adaptiveSearchRegion.getAtoms();
+			if (debug) {
+				System.out
+						.println("before: DensityPartitioner atoms.parallelStream().forEach("
+								+ System.currentTimeMillis());
 
-			atoms.parallelStream().forEach(
-					atom -> {
-						if (atom.getRadialGrid() == null) {
-							RadialGrid grid = new SimpleRadialGrid();
-							String wfc_name = atom.getElementType().toString()
-									.toLowerCase();
-							if (wfc_name.length() == 1) {
-								wfc_name = wfc_name + "_";
-							}
-							String wfc_file = parameters
-									.get(JobParameter.WFC_PATH)
-									+ "/"
-									+ wfc_name + "_lda.wfc";
-							grid = radialGridReader.read(wfc_file, grid);
-							atom.setRadialGrid(grid);
-						}
-					});
+			}
 
+			IntStream
+					.range(0, atoms.size())
+					.parallel()
+					.forEach(
+							nAtom -> {
+								//Atom atom = atoms.get(nAtom);
+								if (atoms.get(nAtom).getRadialGrid() == null) {
+									RadialGrid grid = new SimpleRadialGrid();
+									String wfc_name = atoms.get(nAtom).getElementType()
+											.toString().toLowerCase();
+									if (wfc_name.length() == 1) {
+										wfc_name = wfc_name + "_";
+									}
+									String wfc_file = parameters
+											.get(JobParameter.WFC_PATH)
+											+ "/"
+											+ wfc_name + "_lda.wfc";
+									grid = radialGridReader
+											.read(wfc_file, grid);
+									atoms.get(nAtom).setRadialGrid(grid);
+								}
+							});
+			if (debug) {
+				System.out
+						.println("after: DensityPartitioner atoms.parallelStream().forEach("
+								+ System.currentTimeMillis());
+
+			}
 		}
 	}
 
@@ -196,8 +222,15 @@ public class DensityPartitioner implements
 			List<Molecule> moleculesInAdaptiveSearch,
 			Set<Molecule> moleculesInNonQmCore, Set<Molecule> moleculesInQmCore) {
 
+		if (debug) {
+			System.out
+					.println("before: DensityPartitioner moleculesInNonQmCore.parallelStream().forEach("
+							+ System.currentTimeMillis());
+
+		}
 		moleculesInNonQmCore.parallelStream().forEach(
 				molecule -> {
+
 					Coord centerOfMass = molecule.getCenterOfMass();
 					double density = densityCalculator.calculate(centerOfMass,
 							moleculesInQmCore);
@@ -206,6 +239,13 @@ public class DensityPartitioner implements
 						moleculesInAdaptiveSearch.add(molecule);
 					}
 				});
+		if (debug) {
+			System.out
+					.println("after: DensityPartitioner moleculesInNonQmCore.parallelStream().forEach("
+							+ System.currentTimeMillis());
+			System.out.println("molecules inn non-qm-core from adaptive search:  "+moleculesInNonQmCore.size());
+
+		}
 	}
 
 	private void calculateBufferRegion(Map<Region.Name, Region> regions,

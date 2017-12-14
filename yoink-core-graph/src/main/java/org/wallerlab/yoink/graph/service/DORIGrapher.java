@@ -32,6 +32,8 @@ import java.util.Set;
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.bootstrap.Job;
 import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
@@ -47,6 +49,7 @@ import org.wallerlab.yoink.api.service.Calculator;
 import org.wallerlab.yoink.api.service.Computer;
 import org.wallerlab.yoink.api.service.Factory;
 import org.wallerlab.yoink.api.service.graph.Grapher;
+import org.wallerlab.yoink.api.service.molecule.FilesWriter;
 import org.wallerlab.yoink.api.service.region.Partitioner;
 import org.wallerlab.yoink.region.partitioner.DensityPartitioner;
 
@@ -79,7 +82,16 @@ public class DORIGrapher implements Grapher {
 	private DensityPartitioner densityPartitioner;
 
 	@Resource
+	private Calculator<Double, Coord, Molecule> closestDistanceToMoleculeCalculator;
+
+	@Resource
 	private Graph simpleGraph;
+
+	@Value("${yoink.job.debug}")
+	private boolean debug = false;
+
+	@Value("${yoink.job.dis_cutoff}")
+	private double dis_cutoff = 10.0;
 
 	public DORIGrapher() {
 
@@ -105,7 +117,7 @@ public class DORIGrapher implements Grapher {
 		}
 
 		job.setGraph(simpleGraph);
-	
+
 	}
 
 	private List<List> getEdgesAndWeights(Map<JobParameter, Object> parameters,
@@ -160,51 +172,75 @@ public class DORIGrapher implements Grapher {
 		Set<Set<Integer>> interactionSet = Collections
 				.synchronizedSet(interactionSetTemp);
 
-		gridPoints.parallelStream().forEach(
-				gridPoint -> {
-					Set<Molecule> neighbours = gridPoint
-							.getTwoClosestMolecules();
+		Region.Name cubeRegionName = (Region.Name) parameters
+				.get(JobParameter.REGION_CUBE);
 
-					List<Integer> pair = new ArrayList<Integer>();
-					for (Molecule m : neighbours) {
-						pair.add(m.getIndex());
+		Set<Molecule> moleculesInCube = (Set<Molecule>) regions.get(
+				cubeRegionName).getMolecules();
+		if (debug) {
+			System.out.println("before: DORIGrapher gridPoints.parallelStream().forEach"
+					+ System.currentTimeMillis());
+			System.out.println("gridPoints size: "+ gridPoints.size());
 
-					}
-					Collections.sort(pair);
-					Set<Integer> pairTemp = new HashSet<Integer>(pair);
+		}
+		gridPoints
+				.parallelStream()
+				.forEach(
+						gridPoint -> {
+							Set<Molecule> moleculesInCubeEff = gridPoint.getMolecules();
+							
+							Set<Atom> atomsInCubeEff = gridPoint.getAtoms();
 
-					if ((Boolean) parameters
-							.get(JobParameter.INTERACTION_WEIGHT)) {
-						checkCriteria(regions, interactionList, gridPoint,
-								neighbours, pair, parameters, weightList,
-								interactionSet);
-					} else {
-						if (!interactionSet.contains(pairTemp)) {
 
-							checkCriteria(regions, interactionList, gridPoint,
-									neighbours, pair, parameters, weightList,
-									interactionSet);
-						}
-					}
-				});
+								Set<Molecule> neighbours = gridPoint
+										.getTwoClosestMolecules();
+
+								List<Integer> pair = new ArrayList<Integer>();
+								for (Molecule m : neighbours) {
+									pair.add(m.getIndex());
+
+								}
+								Collections.sort(pair);
+								Set<Integer> pairTemp = new HashSet<Integer>(
+										pair);
+
+								if ((Boolean) parameters
+										.get(JobParameter.INTERACTION_WEIGHT)) {
+									checkCriteria(atomsInCubeEff,
+											interactionList, gridPoint,
+											neighbours, pair, parameters,
+											moleculesInCubeEff, weightList,
+											interactionSet);
+								} else {
+									if (!interactionSet.contains(pairTemp)) {
+
+										checkCriteria(atomsInCubeEff,
+												interactionList, gridPoint,
+												neighbours, pair, parameters,
+												moleculesInCubeEff, weightList,
+												interactionSet);
+									}
+								
+							}
+						});
+		if (debug) {
+			System.out.println("after: DORIGrapher system.currentTimeMillis( )"
+					+ System.currentTimeMillis());
+
+		}
 		List<List> interactionAndWeightLists = new ArrayList<List>();
 		interactionAndWeightLists.add(interactionList);
 		interactionAndWeightLists.add(weightList);
 		return interactionAndWeightLists;
 	}
 
-	protected void checkCriteria(Map<Region.Name, Region> regions,
+	protected void checkCriteria(Set<Atom> atomsInCube,
 			List<List<Integer>> pairList, GridPoint gridPoint,
 			Set<Molecule> neighbours, List<Integer> pair,
-			Map<JobParameter, Object> parameters, List<Double> weightList,
+			Map<JobParameter, Object> parameters,
+			Set<Molecule> moleculesInCube, List<Double> weightList,
 			Set<Set<Integer>> interactionSet) {
-		Region.Name cubeRegionName = (Region.Name) parameters
-				.get(JobParameter.REGION_CUBE);
 
-		Set<Atom> atomsInCube = (new HashSet<Atom>(regions.get(cubeRegionName)
-				.getAtoms()));
-		Set<Molecule> moleculesInCube = (Set<Molecule>) regions.get(
-				cubeRegionName).getMolecules();
 		calculateAndCheckDensity(atomsInCube, pairList, gridPoint, neighbours,
 				pair, parameters, moleculesInCube, weightList, interactionSet);
 

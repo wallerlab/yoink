@@ -24,6 +24,7 @@ import java.util.stream.IntStream;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.cube.Cube;
 import org.wallerlab.yoink.api.model.molecule.Atom;
@@ -51,6 +52,9 @@ public class CubeBuilderImpl implements CubeBuilder<Set<Molecule>> {
 
 	@Resource
 	private Factory<Coord, double[]> simpleCoordFactory;
+
+	@Value("${yoink.job.debug}")
+	private boolean debug = false;
 
 	/**
 	 * build a cube based on a Set of molecules
@@ -92,8 +96,15 @@ public class CubeBuilderImpl implements CubeBuilder<Set<Molecule>> {
 
 	private List<Coord> getAllCoordinates(Cube cube) {
 		Coord[] initialValues = new SimpleCoord[cube.getSize()];
-		List<Coord> coordinates = Collections.synchronizedList(Arrays
-				.asList(initialValues));
+
+		// List<Coord> coordinates = Collections.synchronizedList(Arrays
+		// .asList(initialValues));
+		List<Coord> coordinates = Arrays.asList(initialValues);
+		if (debug) {
+			System.out
+					.println("before: CubeBuilderImpl IntStream.range(0, cube.getNumberOfXYZSteps()[0])"
+							+ System.currentTimeMillis());
+		}
 		IntStream
 				.range(0, cube.getNumberOfXYZSteps()[0])
 				.parallel()
@@ -119,6 +130,11 @@ public class CubeBuilderImpl implements CubeBuilder<Set<Molecule>> {
 								}
 							}
 						});
+		if (debug) {
+			System.out
+					.println("after:  CubeBuilderImpl IntStream.range(0, cube.getNumberOfXYZSteps()[0])"
+							+ System.currentTimeMillis());
+		}
 		return coordinates;
 	}
 

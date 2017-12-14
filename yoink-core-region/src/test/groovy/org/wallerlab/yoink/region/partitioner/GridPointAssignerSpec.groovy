@@ -25,6 +25,7 @@ import org.wallerlab.yoink.api.model.region.Region;
 import org.wallerlab.yoink.api.service.Calculator;
 import org.wallerlab.yoink.api.*
 import org.wallerlab.yoink.region.partitioner.GridPointAssigner;
+import org.wallerlab.yoink.api.model.cube.GridPoint;
 
 class GridPointAssignerSpec extends Specification{
 
@@ -32,7 +33,7 @@ class GridPointAssignerSpec extends Specification{
 		def partitioner=new  GridPointAssigner()
 		def m1=Mock(Molecule)
 		def m2=Mock(Molecule)
-		def tempCoord=Mock(Coord)
+		def tempCoord=Mock(GridPoint)
 		def regions=Mock(Map)
 		def region=Mock(Region)
 		def cubeRegionName
@@ -60,7 +61,7 @@ class GridPointAssignerSpec extends Specification{
 	def "when not neighbour pair,test method  assign(),cube region name not system"(){
 		def partitioner=new  GridPointAssigner()
 		def m1=Mock(Molecule)
-		def tempCoord=Mock(Coord)
+		def tempCoord=Mock(GridPoint)
 		def regions=Mock(Map)
 		def region=Mock(Region)
 		def cubeRegionName
@@ -84,7 +85,7 @@ class GridPointAssignerSpec extends Specification{
 	def "when not neighbour pair,test method  assign(),cube region name is system"(){
 		def partitioner=new  GridPointAssigner()
 		def m1=Mock(Molecule)
-		def tempCoord=Mock(Coord)
+		def tempCoord=Mock(GridPoint)
 		def regions=Mock(Map)
 		def region=Mock(Region)
 		def cubeRegionName

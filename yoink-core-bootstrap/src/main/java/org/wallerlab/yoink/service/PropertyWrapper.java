@@ -64,7 +64,6 @@ public class PropertyWrapper implements Wrapper<Job<JAXBElement>> {
 	 *            parameters and stores results
 	 */
 	public void wrap(Job<JAXBElement> job) {
-		System.out.println("200");
 		JAXBElement<Cml> cmlElement = job.getInput();
 		Map<JobParameter, Object> parameters = job.getParameters();
 		Map<String, Object> properties = job.getProperties();
