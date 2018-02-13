@@ -20,6 +20,8 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wallerlab.yoink.api.model.bootstrap.Job;
@@ -67,20 +69,30 @@ public abstract class AbstractYoinkProcessor<I, O> implements
 
 	@Autowired
 	protected List<Regionizer<Map<Name, Region>, Map<JobParameter, Object>>> adaptiveQMMMRegionizers;
+	
+	protected static final Log log = LogFactory.getLog(AbstractYoinkProcessor.class);
 
 	protected Job executeQMMMPartitioning(Job job) {
+		log.debug("regionzie:...");
 		regionize(job);
+		log.debug("smooth:...");
 		smooth(job);
+		log.debug("graph:...");
 		graphing(job);
+		log.debug("cluster:...");
 		clustering(job);
+		log.debug("result:...");
 		wrapResult(job);
 		return job;
 	}
 
 	protected void regionize(Job job) {
 		Map<Region.Name, Region> regions = job.getRegions();
+		log.debug("regionizerServiceStarting");
 		regionizerServiceStarting.regionize(regions, job.getMolecularSystem());
+		log.debug("adaptiveQMMMRegionizers: "+ adaptiveQMMMRegionizers.size());
 		regions = adaptiveQMMMRegionizers(job, regions);
+		log.debug("regionizerServiceEnding");
 		regionizerServiceEnding.regionize(regions, job.getMolecularSystem());
 	}
 

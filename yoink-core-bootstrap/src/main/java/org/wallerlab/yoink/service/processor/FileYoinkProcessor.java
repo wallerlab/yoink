@@ -56,6 +56,8 @@ public class FileYoinkProcessor extends AbstractYoinkProcessor<String, org.walle
 
 	protected Job buildAndExecute(String input) {
 		Job job = jobFileBuilderImpl.build(input);
+		log.debug("job build done");
+		log.debug("start job execute");
 		job = executeQMMMPartitioning(job);
 		return job;
 	}

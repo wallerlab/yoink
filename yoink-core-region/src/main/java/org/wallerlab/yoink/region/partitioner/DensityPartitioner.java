@@ -155,7 +155,7 @@ public class DensityPartitioner implements
 			List<Atom> atoms = adaptiveSearchRegion.getAtoms();
 			if (debug) {
 				System.out
-						.println("before: DensityPartitioner atoms.parallelStream().forEach("
+						.println("before:readWFC DensityPartitioner atoms.parallelStream().forEach("
 								+ System.currentTimeMillis());
 
 			}
@@ -184,7 +184,7 @@ public class DensityPartitioner implements
 							});
 			if (debug) {
 				System.out
-						.println("after: DensityPartitioner atoms.parallelStream().forEach("
+						.println("after:readWFC DensityPartitioner atoms.parallelStream().forEach("
 								+ System.currentTimeMillis());
 
 			}

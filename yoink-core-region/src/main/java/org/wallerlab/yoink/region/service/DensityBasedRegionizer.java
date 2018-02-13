@@ -34,7 +34,7 @@ import org.wallerlab.yoink.api.service.region.RegionizerComponent;
 
 /**
  * this class is to find adaptive QM core region, adaptive QM region and buffer
- * region busing density based adaptive qm/mm partitioning.
+ * region using density based adaptive qm/mm partitioning.
  * 
  * @author Min Zheng
  *

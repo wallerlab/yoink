@@ -20,11 +20,14 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.wallerlab.yoink.api.model.bootstrap.JobParameter;
 import org.wallerlab.yoink.api.model.bootstrap.Job;
 import org.wallerlab.yoink.api.service.adaptive.Smoothner;
+
 
 /**
  * this class is to choose different smoothner to smooth the buffer region
@@ -70,9 +73,12 @@ public class AdaptiveQMMMSmoothnerRouter implements Smoothner {
 	@Qualifier("firesSmoothner")
 	private Smoothner firesSmoothner;
 	
+	protected static final Log log = LogFactory.getLog(AdaptiveQMMMSmoothnerRouter.class);
+	
 	public void smooth(Job job) {
 		List<Smoothner> smoothners = getSmoothers(job);
 		for (Smoothner smoothner : smoothners) {
+			log.debug("iterate smoother");
 			smoothner.smooth(job);
 		}
 	}
@@ -109,6 +115,8 @@ public class AdaptiveQMMMSmoothnerRouter implements Smoothner {
 			break;	
 		case ABRUPT:
 		case BUFFERED_FORCE:
+			break;
+		default:
 			break;
 		}
 		return smoothners;

@@ -32,7 +32,8 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Resource;
-
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -71,7 +72,7 @@ public class LouvainClusterer implements Clusterer {
 	
 	@Value("${yoink.job.external_clustering}")
 	private boolean external_clustering = false;
-
+	protected static final Log log = LogFactory.getLog(LouvainClusterer.class);
 	public LouvainClusterer() {
 
 	}
@@ -84,6 +85,7 @@ public class LouvainClusterer implements Clusterer {
 
 		Partitioner.Type partitionType = (Partitioner.Type) parameters
 				.get(JobParameter.PARTITIONER);
+		log.debug("external_clustering " + external_clustering);
 		if (partitionType == Partitioner.Type.INTERACTION && !external_clustering) {
 		// write the graph file
 		Graph graph = job.getGraph();

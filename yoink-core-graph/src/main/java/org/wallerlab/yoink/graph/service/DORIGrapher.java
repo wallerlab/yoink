@@ -24,6 +24,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,8 @@ import java.util.Set;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -92,6 +95,8 @@ public class DORIGrapher implements Grapher {
 
 	@Value("${yoink.job.dis_cutoff}")
 	private double dis_cutoff = 10.0;
+
+	protected static final Log log = LogFactory.getLog(DORIGrapher.class);
 
 	public DORIGrapher() {
 
@@ -161,100 +166,83 @@ public class DORIGrapher implements Grapher {
 	private List<List> calculateInteractionPairList(
 			Map<Region.Name, Region> regions,
 			Map<JobParameter, Object> parameters, List<GridPoint> gridPoints) {
-		List<List<Integer>> interactionListTemp = new ArrayList<List<Integer>>();
-		Set<Set<Integer>> interactionSetTemp = new HashSet<Set<Integer>>();
-		List<Double> weightListTemp = new ArrayList<Double>();
-
-		List<List<Integer>> interactionList = Collections
-				.synchronizedList(interactionListTemp);
-
-		List<Double> weightList = Collections.synchronizedList(weightListTemp);
-		Set<Set<Integer>> interactionSet = Collections
-				.synchronizedSet(interactionSetTemp);
+		
+		Map<List<Integer>, Double> pairDensityMapTemp = new HashMap<List<Integer>, Double>();
+		
+		Map<List<Integer>, Double> pairDensityMap = Collections
+				.synchronizedMap(pairDensityMapTemp);
 
 		Region.Name cubeRegionName = (Region.Name) parameters
 				.get(JobParameter.REGION_CUBE);
 
 		Set<Molecule> moleculesInCube = (Set<Molecule>) regions.get(
 				cubeRegionName).getMolecules();
-		if (debug) {
-			System.out.println("before: DORIGrapher gridPoints.parallelStream().forEach"
-					+ System.currentTimeMillis());
-			System.out.println("gridPoints size: "+ gridPoints.size());
 
-		}
-		gridPoints
-				.parallelStream()
+		log.debug("before: DORIGrapher gridPoints.parallelStream().forEach"
+				+ System.currentTimeMillis());
+		log.debug("gridPoints size: " + gridPoints.size());
+
+		gridPoints.parallelStream()
 				.forEach(
 						gridPoint -> {
-							Set<Molecule> moleculesInCubeEff = gridPoint.getMolecules();
-							
+							Set<Molecule> moleculesInCubeEff = gridPoint
+									.getMolecules();
+
 							Set<Atom> atomsInCubeEff = gridPoint.getAtoms();
 
+							Set<Molecule> neighbours = gridPoint
+									.getTwoClosestMolecules();
 
-								Set<Molecule> neighbours = gridPoint
-										.getTwoClosestMolecules();
+							List<Integer> pair = new ArrayList<Integer>();
+							for (Molecule m : neighbours) {
+								pair.add(m.getIndex());
 
-								List<Integer> pair = new ArrayList<Integer>();
-								for (Molecule m : neighbours) {
-									pair.add(m.getIndex());
-
-								}
-								Collections.sort(pair);
-								Set<Integer> pairTemp = new HashSet<Integer>(
-										pair);
-
-								if ((Boolean) parameters
-										.get(JobParameter.INTERACTION_WEIGHT)) {
-									checkCriteria(atomsInCubeEff,
-											interactionList, gridPoint,
-											neighbours, pair, parameters,
-											moleculesInCubeEff, weightList,
-											interactionSet);
-								} else {
-									if (!interactionSet.contains(pairTemp)) {
-
-										checkCriteria(atomsInCubeEff,
-												interactionList, gridPoint,
-												neighbours, pair, parameters,
-												moleculesInCubeEff, weightList,
-												interactionSet);
-									}
-								
 							}
-						});
-		if (debug) {
-			System.out.println("after: DORIGrapher system.currentTimeMillis( )"
-					+ System.currentTimeMillis());
+							Collections.sort(pair);
+							Set<Integer> pairTemp = new HashSet<Integer>(pair);
+							checkCriteria(atomsInCubeEff, 
+									gridPoint,  pair, parameters,
+									moleculesInCubeEff, pairDensityMap);
 
-		}
+						});
+
+		log.debug("after: DORIGrapher system.currentTimeMillis( )"
+				+ System.currentTimeMillis());
+
 		List<List> interactionAndWeightLists = new ArrayList<List>();
+		List<List<Integer>> interactionList= new ArrayList<List<Integer>>();
+		
+		List<Double> weightList = new ArrayList<Double>();
+	
+		for(List<Integer> pair : pairDensityMap.keySet()){
+			interactionList.add(pair);
+			weightList.add(pairDensityMap.get(pair));
+		}
 		interactionAndWeightLists.add(interactionList);
 		interactionAndWeightLists.add(weightList);
 		return interactionAndWeightLists;
 	}
 
 	protected void checkCriteria(Set<Atom> atomsInCube,
-			List<List<Integer>> pairList, GridPoint gridPoint,
-			Set<Molecule> neighbours, List<Integer> pair,
+			 GridPoint gridPoint, List<Integer> pair,
 			Map<JobParameter, Object> parameters,
-			Set<Molecule> moleculesInCube, List<Double> weightList,
-			Set<Set<Integer>> interactionSet) {
+			Set<Molecule> moleculesInCube, 
+			Map<List<Integer>, Double> pairDensityMap) {
 
-		calculateAndCheckDensity(atomsInCube, pairList, gridPoint, neighbours,
-				pair, parameters, moleculesInCube, weightList, interactionSet);
+		calculateAndCheckDensity(atomsInCube, gridPoint, 
+				pair, parameters, moleculesInCube, 
+				pairDensityMap);
 
 	}
 
 	private void calculateAndCheckDensity(Set<Atom> atomsInCube,
-			List<List<Integer>> pairList, GridPoint gridPoint,
-			Set<Molecule> neighbours, List<Integer> pair,
+			 GridPoint gridPoint,List<Integer> pair,
 			Map<JobParameter, Object> parameters,
-			Set<Molecule> moleculesInCube, List<Double> weightList,
-			Set<Set<Integer>> interactionSet) {
+			Set<Molecule> moleculesInCube, 
+			Map<List<Integer>, Double> pairDensityMap) {
 		double density = getDensity(moleculesInCube, gridPoint);
-		checkDensity(atomsInCube, pairList, gridPoint, neighbours, pair,
-				parameters, density, weightList, interactionSet);
+		checkDensity(atomsInCube,  gridPoint,  pair,
+				parameters, density, pairDensityMap);
 	}
 
 	private double getDensity(Set<Molecule> moleculesInCube, GridPoint gridPoint) {
@@ -265,26 +253,26 @@ public class DORIGrapher implements Grapher {
 	}
 
 	private void checkDensity(Set<Atom> atomsInCube,
-			List<List<Integer>> pairList, GridPoint gridPoint,
-			Set<Molecule> neighbours, List<Integer> pair,
+			GridPoint gridPoint,List<Integer> pair,
 			Map<JobParameter, Object> parameters, double density,
-			List<Double> weightList, Set<Set<Integer>> interactionSet) {
+			Map<List<Integer>, Double> pairDensityMap) {
 		// check density
 		if (density >= (double) parameters.get(JobParameter.DENSITY_DORI)) {
 
-			calculateAndCheckDori(atomsInCube, pairList, gridPoint, neighbours,
-					pair, parameters, density, weightList, interactionSet);
+			calculateAndCheckDori(atomsInCube,  gridPoint, 
+					pair, parameters, density,
+					pairDensityMap);
 		}
 	}
 
 	private void calculateAndCheckDori(Set<Atom> atomsInCube,
-			List<List<Integer>> pairList, GridPoint gridPoint,
-			Set<Molecule> neighbours, List<Integer> pair,
+			 GridPoint gridPoint,
+			 List<Integer> pair,
 			Map<JobParameter, Object> parameters, double density,
-			List<Double> weightList, Set<Set<Integer>> interactionSet) {
+			Map<List<Integer>, Double> pairDensityMap) {
 		double doriTemp = getDoriValue(atomsInCube, gridPoint);
-		checkDoriValue(pairList, neighbours, pair, parameters, doriTemp,
-				density, weightList, interactionSet);
+		checkDoriValue(  pair, parameters, doriTemp,
+				density, pairDensityMap);
 	}
 
 	private double getDoriValue(Set<Atom> atomsInCube, GridPoint gridPoint) {
@@ -296,28 +284,30 @@ public class DORIGrapher implements Grapher {
 		return doriTemp;
 	}
 
-	private void checkDoriValue(List<List<Integer>> pairList,
-			Set<Molecule> neighbours, List<Integer> pair,
+	private void checkDoriValue(
+			 List<Integer> pair,
 			Map<JobParameter, Object> parameters, double doriTemp,
-			double density, List<Double> weightList,
-			Set<Set<Integer>> interactionSet) {
+			double density, 
+			Map<List<Integer>, Double> pairDensityMap) {
 
 		// check dori
+
 		if (1 >= doriTemp
 				&& doriTemp >= (double) parameters.get(JobParameter.DORI)) {
-
-			Set<Integer> pairTemp = new HashSet<Integer>(pair);
-			if (!interactionSet.contains(pairTemp)) {
-				interactionSet.add(pairTemp);
-				pairList.add(pair);
-				weightList.add(density);
-			} else {
-
-				int index = pairList.indexOf(pair);
-				weightList.set(index, weightList.get(index) + density);
+			if (!pairDensityMap.containsKey(pair)) {
+				log.debug("pair: "+pair+"  keys: "+pairDensityMap.keySet() + System.currentTimeMillis());
+				pairDensityMap.put(pair, density);
+				
+			} else if ((Boolean) parameters
+					.get(JobParameter.INTERACTION_WEIGHT)) {
+				pairDensityMap.put(pair,
+						density + pairDensityMap.get(pair));
+				log.debug("calculating weight " + System.currentTimeMillis());
 			}
+			
 
 		}
+
 	}
 
 }
