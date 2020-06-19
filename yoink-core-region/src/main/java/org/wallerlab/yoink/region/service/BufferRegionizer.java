@@ -28,7 +28,7 @@ import org.wallerlab.yoink.api.service.region.Regionizer;
 import org.wallerlab.yoink.api.service.region.RegionizerComponent;
 
 /**
- * this class is to locate buffer region based on the densiyt of qm core
+ * this class is to locate buffer region based on the density of qm core
  * 
  * @author Min Zheng
  *
