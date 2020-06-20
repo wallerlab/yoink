@@ -13,21 +13,21 @@
 
 
 
-#Quickstart
+# Quickstart
 
-###1. Cloning
+### 1. Cloning
 To obtain a copy of the source code, please enter the following [git](https://git-scm.com/) command:
 
  `git clone https://github.com/wallerlab/yoink.git`
 
 ` cd yoink`
 
-###2. Building
+### 2. Building
 In order to build the yoink program please use the following [gradle ](https://gradle.org/) command:
 
 `./gradlew clean build`
 
-####Note: Yoink should be rebuilt using the above gradle command anytime changes are made to the source code.
+#### Note: Yoink should be rebuilt using the above gradle command anytime changes are made to the source code.
 
 After the building phase is completed, the executable jar file can be found in:
 
@@ -39,7 +39,7 @@ In order to read java documentation use the following command:
 
 then open file `build/docs/javadoc/index.html` with web browser
 
-###3. Input Preparation
+### 3. Input Preparation
 
 * The Yoink program scans all *.xml files in the folder inputs (default) to find any job requests that will be processed by Yoink.
 * There are some example xml input files in `./src/main/resources`
@@ -47,13 +47,13 @@ then open file `build/docs/javadoc/index.html` with web browser
 * For every molecular system, we can define specific parameters in the section of parameterList in xml file. 
 * #### Note: The `application.properties` file contains default parameters.
 
-###4. Run
+### 4. Run
 
 `java -jar  Yoink-{version}.jar`
 
 After it starts, it will keep looking for *.xml files in the input folder and execute corresponding jobs unless the user terminates it.
 
-###5. Result
+### 5. Result
 * The results will be written as *.xml files in the output folder. The ID of molecule represents the region to which it belongs.
 * The QM region includes molecules labelled as: QM_CORE_FIXED,QM_CORE_ADAPTIVE,QM_ADAPTIVE
 * The MM region includes molecules labelled as: MM_NOBUFFER, BUFFER
@@ -136,6 +136,4 @@ Subprojects in total:
 
 ![regionizer.png](https://github.com/wallerlab/yoink/blob/master/regionizer.png)
 
-# Contact us
 
-wallerlab@protonmail.com
