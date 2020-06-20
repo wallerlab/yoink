@@ -8,7 +8,7 @@
 
 *Yoink is a JAVA program for adaptive QM/MM partitioning. It enables one to identify QM and MM regions in a given system with a predefined fixed QM core. It is Licensed under [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0).*
 
-*Website: [`http://yoink.wallerlab.org`](http://yoink.wallerlab.org)*
+*Website: [`http://wallerlab.org`](http://wallerlab.org)*
 
 
 
