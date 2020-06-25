@@ -123,26 +123,28 @@ class AtomicDensityPropertiesCalculatorSpec extends Specification{
 
 		a.getCoordinate()>>aCoord
 		double[][]	h=[
-			[
-				3.3309016742003245E-4,
-				5.526679305394191E-4,
-				5.526679305394191E-4
-			],
-			[
-				5.526679305394191E-4,
-				3.3309016742003245E-4,
-				5.526679305394191E-4
-			],
-			[
-				5.526679305394191E-4,
-				5.526679305394191E-4,
-				3.3309016742003245E-4
-			]
+				[
+						-0.02470403096910824,
+						-0.014598478921506659,
+						-0.014598478921506659
+				],
+				[
+						-0.014598478921506659,
+						0.040550258097688224 ,
+						0.06837132094333855
+				],
+				[
+						-0.014598478921506659,
+						0.06837132094333855 ,
+						0.040550258097688224
+
+				]
 		]
+
 		double[] 	grad=[
-			8.32535337485744778E-003 ,
-			-3.89914189430043967E-002,
-			-3.89914189430043967E-002
+				-8.32535337485744778E-003 ,
+				3.89914189430043967E-002,
+				3.89914189430043967E-002
 		]
 		when:"make a new AtomicDensityPropertiesCalculator"
 		def calculator= new AtomicDensityPropertiesCalculator()
@@ -151,13 +153,13 @@ class AtomicDensityPropertiesCalculatorSpec extends Specification{
 
 		then:"assert gradient vector and hessian matrix"
 		calculator.calculate(dv, a)
-		Math.abs(dv.getDensity()-  2.74614659934315462E-002 )<=1.0E-4
+		assert Math.abs(dv.getDensity()-  2.74614659934315462E-002 )<=1.0E-4
 		for(int i=0;i<3;i++){
-			Math.abs(dv.getGradientVector().getEntry(i)-grad[i])<=1.0E-5
+			assert Math.abs(dv.getGradientVector().getEntry(i)-grad[i])<=1.0E-5
 		}
 		for(int i=0;i<3;i++){
 			for(int j=0;j<3;j++){
-				Math.abs(dv.getHessian().data[i][j]-h[i][j])<=1.0E-5
+				assert Math.abs(dv.getHessian().data[i][j]-h[i][j])<=1.0E-5
 			}
 		}
 	}
